@@ -1,4 +1,3 @@
-
 package org.cucina.email;
 
 import java.util.ArrayList;
@@ -9,17 +8,11 @@ import java.util.Locale;
 import javax.activation.DataSource;
 
 import org.springframework.mail.javamail.MimeMessagePreparator;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import org.cucina.email.EmailUser;
-import org.cucina.email.MailMessageChunkerImpl;
-import org.cucina.email.MimeMessagePreparatorFactory;
-import org.cucina.testassist.utils.LoggingEnabler;
 import org.junit.Before;
 import org.junit.Test;
-
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -54,7 +47,7 @@ public class MailMessageChunkerTest {
     @Before
     public void setUp()
         throws Exception {
-        LoggingEnabler.enableLog(MailMessageChunkerImpl.class);
+        //LoggingEnabler.enableLog(MailMessageChunkerImpl.class);
         ccs = new ArrayList<EmailUser>();
         tos = new ArrayList<EmailUser>();
 

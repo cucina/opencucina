@@ -1,4 +1,3 @@
-
 package org.cucina.email;
 
 import java.util.ArrayList;
@@ -9,6 +8,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.activation.DataSource;
+
 import javax.mail.Address;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -21,16 +21,13 @@ import org.springframework.ui.freemarker.FreeMarkerConfigurationFactory;
 import freemarker.template.Configuration;
 import static org.junit.Assert.fail;
 
-import org.cucina.email.EmailUser;
-import org.cucina.email.MimeMessagePreparatorImpl;
-import org.cucina.testassist.utils.LoggingEnabler;
 import org.junit.Before;
 import org.junit.Test;
-
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 
 /**
  * JAVADOC.
@@ -54,7 +51,7 @@ public class MimeMessagePreparatorImplTest {
     @Before
     public void setUp()
         throws Exception {
-        LoggingEnabler.enableLog(MimeMessagePreparatorImpl.class);
+        //        LoggingEnabler.enableLog(MimeMessagePreparatorImpl.class);
     }
 
     /**

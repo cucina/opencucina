@@ -1,28 +1,24 @@
 
 package org.cucina.email;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
 
-import org.springframework.mail.javamail.MimeMessagePreparator;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import org.cucina.email.EmailConstructorImpl;
-import org.cucina.email.EmailUser;
-import org.cucina.email.MailMessageChunker;
-import org.cucina.testassist.utils.LoggingEnabler;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-
-import static org.mockito.Mockito.*;
-
 import org.mockito.MockitoAnnotations;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 
 
 /**
@@ -51,7 +47,7 @@ public class ConstructEmailServiceImplTest {
     @Before
     public void setUp()
         throws Exception {
-        LoggingEnabler.enableLog(EmailConstructorImpl.class);
+//        LoggingEnabler.enableLog(EmailConstructorImpl.class);
         MockitoAnnotations.initMocks(this);
         activeWithEmailFrench = new LocalUser(true, "ajoffe@cucina.org", Locale.FRENCH, "a");
         disabledWithEmailFrench = new LocalUser(true, "thornton@cucina.org", Locale.FRENCH,

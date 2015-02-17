@@ -1,11 +1,4 @@
-
 package org.cucina.email;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -15,9 +8,13 @@ import java.util.Map;
 
 import javax.activation.DataSource;
 
-import org.cucina.testassist.utils.LoggingEnabler;
 import org.junit.Before;
 import org.junit.Test;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 /**
@@ -34,8 +31,7 @@ public class EmailEventSenderImplTest {
      */
     @Before
     public void setUp() {
-        LoggingEnabler.enableLog(EmailEventSenderImpl.class);
-
+        //        LoggingEnabler.enableLog(EmailEventSenderImpl.class);
         els = new EmailEventSenderImpl();
     }
 
@@ -49,7 +45,9 @@ public class EmailEventSenderImplTest {
         EmailUser u1 = mock(EmailUser.class);
 
         tos.add(u1);
+
         EmailUser u2 = mock(EmailUser.class);
+
         when(u2.getLocale()).thenReturn(Locale.SIMPLIFIED_CHINESE);
         tos.add(u2);
 
