@@ -19,6 +19,8 @@ import javax.mail.util.ByteArrayDataSource;
 import org.springframework.ui.freemarker.FreeMarkerConfigurationFactory;
 
 import freemarker.template.Configuration;
+
+import org.cucina.testassist.utils.LoggingEnabler;
 import static org.junit.Assert.fail;
 
 import org.junit.Before;
@@ -40,8 +42,8 @@ public class MimeMessagePreparatorImplTest {
     private static final String USER1_EMAIL = "ajoffe@cucina.org";
     private static final String SUFFIX = ".ftl";
     private static final String MIME_TYPE = "text/html";
-    private static final String LOCATION = "classpath:org/cucina/meringue/email/templates/";
-    private static final String FROM = "sprite@cucina.org";
+    private static final String LOCATION = "classpath:templates/";
+    private static final String FROM = "admin@cucina.org";
 
     /**
     * JAVADOC.
@@ -51,7 +53,7 @@ public class MimeMessagePreparatorImplTest {
     @Before
     public void setUp()
         throws Exception {
-        //        LoggingEnabler.enableLog(MimeMessagePreparatorImpl.class);
+        LoggingEnabler.enableLog(MimeMessagePreparatorImpl.class);
     }
 
     /**

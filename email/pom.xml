@@ -24,5 +24,11 @@
 			<artifactId>javax.mail</artifactId>
 			<version>1.5.2</version>
 		</dependency>
+		<dependency>
+			<groupId>cucina</groupId>
+			<artifactId>cucina-testassist</artifactId>
+			<version>0.1</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>
