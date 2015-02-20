@@ -5,13 +5,11 @@ import java.util.HashSet;
 import java.util.Locale;
 
 import org.apache.commons.collections.CollectionUtils;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationListener;
 import org.springframework.transaction.annotation.Transactional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**

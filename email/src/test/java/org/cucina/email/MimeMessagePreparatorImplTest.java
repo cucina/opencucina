@@ -1,5 +1,11 @@
 package org.cucina.email;
 
+import static org.junit.Assert.fail;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,7 +14,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.activation.DataSource;
-
 import javax.mail.Address;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -16,19 +21,12 @@ import javax.mail.internet.MimeMessage.RecipientType;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
+import org.cucina.testassist.utils.LoggingEnabler;
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.ui.freemarker.FreeMarkerConfigurationFactory;
 
 import freemarker.template.Configuration;
-
-import org.cucina.testassist.utils.LoggingEnabler;
-import static org.junit.Assert.fail;
-
-import org.junit.Before;
-import org.junit.Test;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 
 /**

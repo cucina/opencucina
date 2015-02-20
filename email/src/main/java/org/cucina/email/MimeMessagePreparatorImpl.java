@@ -2,13 +2,11 @@
 package org.cucina.email;
 
 import java.io.IOException;
-
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.activation.DataSource;
-
 import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -17,7 +15,8 @@ import javax.mail.internet.MimeMessage;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
@@ -25,9 +24,6 @@ import org.springframework.util.Assert;
 
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**

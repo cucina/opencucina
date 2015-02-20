@@ -13,11 +13,9 @@ import java.util.Set;
 import javax.activation.DataSource;
 
 import org.apache.commons.collections.CollectionUtils;
-
-import org.springframework.mail.javamail.MimeMessagePreparator;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 
 
 /**

@@ -6,13 +6,12 @@ import java.util.Map;
 
 import javax.activation.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**

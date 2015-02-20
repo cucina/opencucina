@@ -9,7 +9,6 @@ import java.util.Map;
 import javax.activation.DataSource;
 
 import org.apache.commons.collections.MapUtils;
-
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 

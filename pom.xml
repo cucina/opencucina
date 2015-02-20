@@ -55,9 +55,9 @@
 			<version>1.7.10</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.geronimo.specs</groupId>
-			<artifactId>geronimo-jpa_2.0_spec</artifactId>
-			<version>1.1</version>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.1-api</artifactId>
+			<version>1.0.0.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -114,9 +114,32 @@
 			<artifactId>spring-data-jpa</artifactId>
 			<version>1.7.2.RELEASE</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.integration</groupId>
+			<artifactId>spring-integration-core</artifactId>
+			<version>4.1.2.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.bval</groupId>
+			<artifactId>bval-jsr303</artifactId>
+			<version>0.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.bval</groupId>
+			<artifactId>bval-core</artifactId>
+			<version>0.5</version>
+		</dependency>
+		<dependency>
+			<groupId>au.com.bytecode</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>2.4</version>
+		</dependency>
+
 	</dependencies>
 	<modules>
 		<module>testassist</module>
 		<module>email</module>
+		<module>core</module>
+		<module>loader</module>
 	</modules>
 </project>

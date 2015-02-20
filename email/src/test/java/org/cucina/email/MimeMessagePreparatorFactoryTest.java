@@ -1,16 +1,14 @@
 
 package org.cucina.email;
 
-import java.util.Locale;
-
-import org.springframework.mail.javamail.MimeMessagePreparator;
-import org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean;
-
 import static org.junit.Assert.assertNotNull;
 
-import org.cucina.email.MimeMessagePreparatorFactory;
+import java.util.Locale;
+
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean;
 
 
 /**
