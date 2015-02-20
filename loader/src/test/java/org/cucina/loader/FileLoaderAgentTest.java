@@ -63,8 +63,9 @@ public class FileLoaderAgentTest {
 
         assertEquals(1, containers.size());
 
-        for (FileLoaderContainer container : containers) {
-            System.err.println(ToStringBuilder.reflectionToString(container));
-        }
+        /*        for (FileLoaderContainer container : containers) {
+                    System.err.println(ToStringBuilder.reflectionToString(container));
+                }
+        */
     }
 }
