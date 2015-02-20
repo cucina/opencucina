@@ -2,8 +2,6 @@ package org.cucina.loader;
 
 import java.util.Collection;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import org.cucina.core.service.ContextService;
 
 import org.cucina.loader.processor.Processor;

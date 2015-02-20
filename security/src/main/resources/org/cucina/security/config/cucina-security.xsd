@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://opencucina.org/schema/cucina-loader"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:meringue="http://opencucina.org/schema/cucina-loader"
+	targetNamespace="http://opencucina.org/schema/cucina-loader"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xsd:import namespace="http://www.springframework.org/schema/beans" />
+	<xsd:element name="preferenceRepository">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" />
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="privilegeRepository">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" />
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="roleRepository">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" />
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="userRepository">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" />
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="permissionRepository">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" />
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

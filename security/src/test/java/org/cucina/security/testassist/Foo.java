@@ -1,4 +1,4 @@
-package org.cucina.loader.testassist;
+package org.cucina.security.testassist;
 
 import java.util.Collection;
 import java.util.Date;
@@ -13,7 +13,6 @@ import javax.persistence.QueryHint;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -24,7 +23,6 @@ import org.cucina.core.model.PersistableEntity;
 import org.cucina.core.model.Versioned;
 import org.cucina.core.model.projection.ProjectionColumn;
 import org.cucina.core.model.projection.TranslatedColumns;
-
 import org.eclipse.persistence.annotations.Cache;
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
