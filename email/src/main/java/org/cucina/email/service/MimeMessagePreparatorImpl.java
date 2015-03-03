@@ -1,5 +1,5 @@
 
-package org.cucina.email;
+package org.cucina.email.service;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -281,7 +281,7 @@ public class MimeMessagePreparatorImpl
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("filename=" + filename);
-            LOG.debug("parameters for Velocity=" + parameters);
+            LOG.debug("parameters for freemarker=" + parameters);
         }
 
         try {

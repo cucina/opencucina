@@ -1,5 +1,5 @@
 
-package org.cucina.email;
+package org.cucina.email.service;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -9,8 +9,10 @@ import java.util.Map;
 import javax.activation.DataSource;
 
 import org.apache.commons.collections.MapUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.springframework.stereotype.Component;
 
 import freemarker.template.Configuration;
 
@@ -21,19 +23,21 @@ import freemarker.template.Configuration;
  * @author $Author: $
  * @version $Revision: $
   */
+@Component
 public class MimeMessagePreparatorFactory {
     private Configuration configuration;
 
     // Injected parameter map containing standard info for the email 
     private Map<String, String> standardParams;
-    private String from;
-    private String suffix;
+    private String from = "email@opencucina.org";
+    private String suffix = ".ftl";
 
     /**
      * @param configuration
      *            The configuration to set.
      */
     @Required
+	@Autowired
     public void setConfiguration(Configuration configuration) {
         this.configuration = configuration;
     }
@@ -42,7 +46,7 @@ public class MimeMessagePreparatorFactory {
      * @param from
      *            The from to set.
      */
-    @Required
+    //TODO @Required
     public void setFrom(String from) {
         this.from = from;
     }
@@ -110,7 +114,6 @@ public class MimeMessagePreparatorFactory {
      *
      * @param suffix String
      */
-    @Required
     public void setSuffix(String suffix) {
         this.suffix = suffix;
     }

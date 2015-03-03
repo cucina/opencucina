@@ -1,4 +1,4 @@
-package org.cucina.email;
+package org.cucina.email.service;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -51,7 +51,7 @@ public class EmailEventSenderImpl
     /**
      * @param event
      *            JAVADOC.
-     * @see org.org.cucina.email.meringue.email.EmailEventSender#processEvent(org.cucina.meringue.email.EmailEvent)
+     * @see org.cucina.email.service.org.cucina.email.meringue.email.EmailEventSender#processEvent(org.cucina.email.service.meringue.email.EmailEvent)
      */
     public void processEvent(EmailEvent event) {
         EmailDescriptor descriptor = event.getEmailDescriptor();

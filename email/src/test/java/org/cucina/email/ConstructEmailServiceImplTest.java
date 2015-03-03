@@ -14,6 +14,9 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
 
+import org.cucina.email.service.EmailConstructorImpl;
+import org.cucina.email.service.EmailUser;
+import org.cucina.email.service.MailMessageChunker;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

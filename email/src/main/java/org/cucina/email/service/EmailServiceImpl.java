@@ -1,5 +1,5 @@
 
-package org.cucina.email;
+package org.cucina.email.service;
 
 import java.util.Collection;
 import java.util.Map;
@@ -8,10 +8,12 @@ import javax.activation.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.springframework.stereotype.Component;
 
 
 /**
@@ -22,9 +24,11 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
  * @param <T>
  * @param <T>
  */
+@Component
 public class EmailServiceImpl
     implements EmailService {
     private static final Logger LOG = LoggerFactory.getLogger(EmailServiceImpl.class);
+    @Autowired
     private EmailConstructor emailConstructor;
     private JavaMailSender javaMailSender;
 
@@ -43,6 +47,7 @@ public class EmailServiceImpl
      * @param javaMailSender The javaMailSender to set.
      */
     @Required
+    @Autowired
     public void setJavaMailSender(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
     }

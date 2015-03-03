@@ -16,6 +16,8 @@ import java.util.Map;
 import javax.activation.DataSource;
 import javax.mail.internet.MimeMessage;
 
+import org.cucina.email.service.EmailConstructor;
+import org.cucina.email.service.EmailServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mail.MailSendException;

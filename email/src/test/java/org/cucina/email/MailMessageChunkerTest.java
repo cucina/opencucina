@@ -13,6 +13,9 @@ import java.util.Locale;
 
 import javax.activation.DataSource;
 
+import org.cucina.email.service.EmailUser;
+import org.cucina.email.service.MailMessageChunkerImpl;
+import org.cucina.email.service.MimeMessagePreparatorFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mail.javamail.MimeMessagePreparator;

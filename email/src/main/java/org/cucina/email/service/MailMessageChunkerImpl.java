@@ -1,5 +1,4 @@
-
-package org.cucina.email;
+package org.cucina.email.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,27 +12,33 @@ import java.util.Set;
 import javax.activation.DataSource;
 
 import org.apache.commons.collections.CollectionUtils;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.springframework.stereotype.Component;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.mail.javamail.MimeMessagePreparator;
 
 
 /**
  * Handles chunking of mail recipients to avoid issues with mail server
+ * limitation on number of addressees.
  *
- * @author $Author: ajoffe $
- * @version $Revision: 1.3 $
  */
+@Component
 public class MailMessageChunkerImpl
     implements MailMessageChunker {
     private static final Logger LOG = LoggerFactory.getLogger(MailMessageChunkerImpl.class);
+    @Autowired
     private MimeMessagePreparatorFactory messagePreparatorFactory;
     private int chunkSize = 100;
 
     /**
      * JAVADOC Method Level Comments
      *
-     * @param chunkSize JAVADOC.
+     * @param chunkSize
+     *            JAVADOC.
      */
     public void setChunkSize(int chunkSize) {
         this.chunkSize = chunkSize;
@@ -42,22 +47,29 @@ public class MailMessageChunkerImpl
     /**
      * JAVADOC Method Level Comments
      *
-     * @param messagePreparatorFactory JAVADOC.
+     * @param messagePreparatorFactory
+     *            JAVADOC.
      */
     public void setMessagePreparatorFactory(MimeMessagePreparatorFactory messagePreparatorFactory) {
         this.messagePreparatorFactory = messagePreparatorFactory;
     }
 
     /**
-     * Returns MimeMessagePreparator instances for the different locales and possibly
-     * chunks the email into separate ones
+     * Returns MimeMessagePreparator instances for the different locales and
+     * possibly chunks the email into separate ones
      *
-     * @param descriptor encapsulates email.
-     * @param locale current locale.
-     * @param tos to recipients.
-     * @param ccs cc recipients.
-     * @param bccs bcc recipients.
-     * @param csEmail direct tos (not User objects).
+     * @param descriptor
+     *            encapsulates email.
+     * @param locale
+     *            current locale.
+     * @param tos
+     *            to recipients.
+     * @param ccs
+     *            cc recipients.
+     * @param bccs
+     *            bcc recipients.
+     * @param csEmail
+     *            direct tos (not User objects).
      *
      * @return a set of MimeMessagePreparator objects ready to be sent.
      */
@@ -93,11 +105,16 @@ public class MailMessageChunkerImpl
     /**
      * Counts total number of recipients
      *
-     * @param locale JAVADOC.
-     * @param tos JAVADOC.
-     * @param ccs JAVADOC.
-     * @param bccs JAVADOC.
-     * @param csEmail JAVADOC.
+     * @param locale
+     *            JAVADOC.
+     * @param tos
+     *            JAVADOC.
+     * @param ccs
+     *            JAVADOC.
+     * @param bccs
+     *            JAVADOC.
+     * @param csEmail
+     *            JAVADOC.
      *
      * @return count.
      */

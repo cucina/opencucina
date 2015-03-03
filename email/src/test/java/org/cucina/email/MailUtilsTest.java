@@ -9,6 +9,7 @@ import java.util.Properties;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 
+import org.cucina.email.service.MailUtils;
 import org.junit.Before;
 import org.junit.Test;
 

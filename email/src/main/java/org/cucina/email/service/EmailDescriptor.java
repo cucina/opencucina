@@ -1,5 +1,5 @@
 
-package org.cucina.email;
+package org.cucina.email.service;
 
 import java.io.Serializable;
 import java.util.Collection;

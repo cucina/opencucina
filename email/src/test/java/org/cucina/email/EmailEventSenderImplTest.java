@@ -14,6 +14,11 @@ import java.util.Map;
 
 import javax.activation.DataSource;
 
+import org.cucina.email.service.EmailDescriptor;
+import org.cucina.email.service.EmailEvent;
+import org.cucina.email.service.EmailEventSenderImpl;
+import org.cucina.email.service.EmailService;
+import org.cucina.email.service.EmailUser;
 import org.junit.Before;
 import org.junit.Test;
 

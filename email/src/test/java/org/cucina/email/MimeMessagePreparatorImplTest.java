@@ -21,20 +21,14 @@ import javax.mail.internet.MimeMessage.RecipientType;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
-import org.cucina.testassist.utils.LoggingEnabler;
+import org.cucina.email.service.EmailUser;
+import org.cucina.email.service.MimeMessagePreparatorImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.ui.freemarker.FreeMarkerConfigurationFactory;
 
 import freemarker.template.Configuration;
 
-
-/**
- * JAVADOC.
- *
- * @author $author$
- * @version $Revision$
- */
 public class MimeMessagePreparatorImplTest {
     private static final String USER2_EMAIL = "vlevine@cucina.org";
     private static final String USER1_EMAIL = "ajoffe@cucina.org";
@@ -51,7 +45,6 @@ public class MimeMessagePreparatorImplTest {
     @Before
     public void setUp()
         throws Exception {
-        LoggingEnabler.enableLog(MimeMessagePreparatorImpl.class);
     }
 
     /**

@@ -1,5 +1,5 @@
 
-package org.cucina.email;
+package org.cucina.email.service;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -15,7 +15,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
@@ -28,9 +30,11 @@ import org.springframework.util.Assert;
  * @param <T>
  * @param <T>
  */
+@Component
 public class EmailConstructorImpl
     implements EmailConstructor {
     private static final Logger LOG = LoggerFactory.getLogger(EmailConstructorImpl.class);
+    @Autowired
     private MailMessageChunker mailMessageChunker;
 
     /**

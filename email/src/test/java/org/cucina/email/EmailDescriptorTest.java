@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.cucina.email.service.EmailDescriptor;
 import org.junit.Test;
 
 
