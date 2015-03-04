@@ -70,6 +70,7 @@ public class SchedulingServiceImpl
         if (sf != null) {
             sf.cancel(true);
             schedules.remove(name);
+            LOG.debug("Cancelled schedule '" + name + "'");
         } else {
             LOG.debug("No schedule for '" + name + "' found");
         }
@@ -88,7 +89,13 @@ public class SchedulingServiceImpl
         Object payload = message.getPayload();
 
         if (payload instanceof ScheduleRequest) {
-            schedule((ScheduleRequest) payload);
+            ScheduleRequest sr = (ScheduleRequest) payload;
+
+            if (StringUtils.isEmpty(sr.getDestination()) || (sr.getDelay() <= 0)) {
+                cancel(sr.getName());
+            } else {
+                schedule(sr);
+            }
         } else {
             LOG.warn("Payload is not a ScheduleRequest:" + payload);
         }
@@ -132,6 +139,7 @@ public class SchedulingServiceImpl
         String name = scheduleRequest.getName();
 
         if (StringUtils.isNotEmpty(name)) {
+            LOG.debug("Saving schedule for name '" + name + "'");
             schedules.put(name, sf);
         }
     }

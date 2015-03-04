@@ -50,7 +50,6 @@ public class ScheduleClient
     public void setUp()
         throws Exception {
         responseHandler.setHandler(this);
-        latch = new CountDownLatch(1);
     }
 
     /**
@@ -67,10 +66,37 @@ public class ScheduleClient
 
     /**
      * JAVADOC Method Level Comments
+     *
+     * @throws Exception JAVADOC.
      */
     @Test
-    public void test()
+    public void testRepeats()
         throws Exception {
+        latch = new CountDownLatch(5);
+
+        Request request = new Request();
+
+        request.setDelay(1);
+        request.setPeriod(1L);
+        request.setDestination("scheduled.call");
+        request.setMessage("wake up");
+        request.setName("name");
+
+        send(request);
+        latch.await();
+        // cancel
+        request.setDelay(0);
+        send(request);
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     */
+    @Test
+    public void testSingle()
+        throws Exception {
+        latch = new CountDownLatch(1);
+
         Request request = new Request();
 
         request.setDelay(5);
