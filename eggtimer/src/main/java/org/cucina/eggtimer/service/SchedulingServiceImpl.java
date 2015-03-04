@@ -140,6 +140,11 @@ public class SchedulingServiceImpl
         return new Runnable() {
                 @Override
                 public void run() {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Invoked for destination '" + destination + "' and message '" +
+                            messageText + "'");
+                    }
+
                     Message<String> message = MessageBuilder.withPayload(messageText)
                                                             .setHeader("destination", destination)
                                                             .build();
