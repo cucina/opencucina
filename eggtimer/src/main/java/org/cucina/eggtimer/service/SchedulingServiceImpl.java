@@ -11,6 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.MessageHandler;
+import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.util.Assert;
 
@@ -25,7 +27,7 @@ import org.slf4j.LoggerFactory;
  * @version $Revision: $
   */
 public class SchedulingServiceImpl
-    implements SchedulingService {
+    implements SchedulingService, MessageHandler {
     private static final Logger LOG = LoggerFactory.getLogger(SchedulingServiceImpl.class);
     private Map<String, ScheduledFuture<?>> schedules = new HashMap<String, ScheduledFuture<?>>();
     private MessageChannel channel;
@@ -70,6 +72,25 @@ public class SchedulingServiceImpl
             schedules.remove(name);
         } else {
             LOG.debug("No schedule for '" + name + "' found");
+        }
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @param message JAVADOC.
+     *
+     * @throws MessagingException JAVADOC.
+     */
+    @Override
+    public void handleMessage(Message<?> message)
+        throws MessagingException {
+        Object payload = message.getPayload();
+
+        if (payload instanceof ScheduleRequest) {
+            schedule((ScheduleRequest) payload);
+        } else {
+            LOG.warn("Payload is not a ScheduleRequest:" + payload);
         }
     }
 

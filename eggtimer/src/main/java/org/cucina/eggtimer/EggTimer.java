@@ -2,12 +2,13 @@ package org.cucina.eggtimer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.jms.annotation.EnableJms;
-import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
-import org.springframework.jms.support.destination.DestinationResolver;
-import org.springframework.jms.support.destination.JndiDestinationResolver;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -15,50 +16,33 @@ import org.springframework.jms.support.destination.JndiDestinationResolver;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 @EnableAutoConfiguration
 @ComponentScan
 @EnableJms
+@ImportResource(value = "classpath:/eggtimer.xml")
 public class EggTimer {
+    private static final Logger LOG = LoggerFactory.getLogger(EggTimer.class);
+
     /**
      * JAVADOC Method Level Comments
      *
-     * @param args JAVADOC.
+     * @param args
+     *            JAVADOC.
      *
-     * @throws Exception JAVADOC.
+     * @throws Exception
+     *             JAVADOC.
      */
     public static void main(String[] args)
         throws Exception {
-        SpringApplication.run(EggTimer.class, args);
-    }
+        ApplicationContext ac = SpringApplication.run(EggTimer.class, args);
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    @Bean
-    public DestinationResolver destinationResolver() {
-    	//TODO provide optional mapping in properties 
-        JndiDestinationResolver destinationResolver = new JndiDestinationResolver();
+        if (LOG.isDebugEnabled()) {
+            String[] names = ac.getBeanDefinitionNames();
 
-        destinationResolver.setFallbackToDynamicDestination(true);
-
-        return destinationResolver;
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    @Bean
-    public DefaultJmsListenerContainerFactory myJmsListenerContainerFactory() {
-        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-
-        factory.setDestinationResolver(destinationResolver());
-        factory.setConcurrency("5");
-
-        return factory;
+            for (int i = 0; i < names.length; i++) {
+            	LOG.debug(names[i]);
+            }
+        }
     }
 }
