@@ -5,7 +5,6 @@ import javax.persistence.ManyToOne;
 
 import org.cucina.core.model.PersistableEntity;
 
-
 /**
  * JAVADOC for Class Level
  *

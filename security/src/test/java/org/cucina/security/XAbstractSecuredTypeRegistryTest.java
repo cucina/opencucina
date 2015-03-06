@@ -4,15 +4,15 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.cucina.core.InstanceFactory;
-
-import org.cucina.security.access.AbstractSecuredTypeRegistry;
 import org.cucina.security.testassist.Foo;
+import org.cucina.security.access.AbstractSecuredTypeRegistry;
+
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
-
 import org.mockito.Mock;
+
 import static org.mockito.Mockito.when;
 
 import org.mockito.MockitoAnnotations;
