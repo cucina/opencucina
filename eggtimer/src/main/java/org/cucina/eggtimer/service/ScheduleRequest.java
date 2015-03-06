@@ -2,6 +2,10 @@ package org.cucina.eggtimer.service;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 
@@ -11,6 +15,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @author $Author: $
  * @version $Revision: $
   */
+@Entity
 public class ScheduleRequest {
     private Long period;
     private String destination;
@@ -18,6 +23,7 @@ public class ScheduleRequest {
     private String name;
     private TimeUnit timeUnit;
     private long delay;
+    private long id;
 
     /**
     * JAVADOC Method Level Comments
@@ -53,6 +59,26 @@ public class ScheduleRequest {
      */
     public String getDestination() {
         return destination;
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @param id JAVADOC.
+     */
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @return JAVADOC.
+     */
+    @Id
+    @GeneratedValue
+    public long getId() {
+        return id;
     }
 
     /**

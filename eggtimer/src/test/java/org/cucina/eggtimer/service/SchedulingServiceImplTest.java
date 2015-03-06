@@ -33,6 +33,8 @@ public class SchedulingServiceImplTest {
     @Mock
     private MessageChannel channel;
     @Mock
+    private ScheduleRepository scheduleRepository;
+    @Mock
     private ScheduledExecutorService executorService;
     private SchedulingServiceImpl service;
 
@@ -47,6 +49,7 @@ public class SchedulingServiceImplTest {
         MockitoAnnotations.initMocks(this);
         service = new SchedulingServiceImpl(channel);
         service.setExecutorService(executorService);
+        service.setScheduleRepository(scheduleRepository);
     }
 
     /**

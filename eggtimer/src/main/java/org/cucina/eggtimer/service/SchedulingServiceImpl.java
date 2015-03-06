@@ -9,6 +9,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
@@ -29,8 +31,9 @@ import org.slf4j.LoggerFactory;
 public class SchedulingServiceImpl
     implements SchedulingService, MessageHandler {
     private static final Logger LOG = LoggerFactory.getLogger(SchedulingServiceImpl.class);
-    private Map<String, ScheduledFuture<?>> schedules = new HashMap<String, ScheduledFuture<?>>();
+    private Map<String, ScheduledFuture<?>> runningSchedules = new HashMap<String, ScheduledFuture<?>>();
     private MessageChannel channel;
+    private ScheduleRepository scheduleRepository;
     private ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
     /**
@@ -55,6 +58,17 @@ public class SchedulingServiceImpl
     /**
      * JAVADOC Method Level Comments
      *
+     * @param scheduleRepository JAVADOC.
+     */
+    @Autowired
+    @Required
+    public void setScheduleRepository(ScheduleRepository scheduleRepository) {
+        this.scheduleRepository = scheduleRepository;
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
      * @param name JAVADOC.
      */
     @Override
@@ -65,11 +79,13 @@ public class SchedulingServiceImpl
             return;
         }
 
-        ScheduledFuture<?> sf = schedules.get(name);
+        scheduleRepository.removeByName(name);
+
+        ScheduledFuture<?> sf = runningSchedules.get(name);
 
         if (sf != null) {
             sf.cancel(true);
-            schedules.remove(name);
+            runningSchedules.remove(name);
             LOG.debug("Cancelled schedule '" + name + "'");
         } else {
             LOG.debug("No schedule for '" + name + "' found");
@@ -138,10 +154,12 @@ public class SchedulingServiceImpl
 
         String name = scheduleRequest.getName();
 
-        if (StringUtils.isNotEmpty(name)) {
+        if (LOG.isDebugEnabled()) {
             LOG.debug("Saving schedule for name '" + name + "'");
-            schedules.put(name, sf);
         }
+
+        scheduleRepository.save(scheduleRequest);
+        runningSchedules.put(name, sf);
     }
 
     private Runnable createCommand(final String destination, final String messageText) {

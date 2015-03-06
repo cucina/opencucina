@@ -12,7 +12,7 @@
 		</constructor-arg>
 	</bean>
 	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate"
-		c:connectionFactory-ref="connectionFactory" p:defaultDestinationName="cucina.eggtimer.delay"
+		c:connectionFactory-ref="connectionFactory" p:defaultDestinationName="eggtimer.schedule"
 		p:pubSubDomain="false" />
 	<bean id="responseContainer"
 		class="org.springframework.jms.listener.DefaultMessageListenerContainer"
