@@ -1,17 +1,5 @@
-
 package org.cucina.security;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import org.cucina.core.spring.SingletonBeanFactory;
-import org.cucina.security.authentication.AuthenticationService;
-import org.cucina.security.model.User;
-import org.cucina.testassist.utils.LoggingEnabler;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -21,6 +9,20 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
+import org.cucina.core.spring.SingletonBeanFactory;
+
+import org.cucina.security.authentication.AuthenticationService;
+import org.cucina.security.model.User;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import org.mockito.MockitoAnnotations;
 
 
 /**
@@ -53,7 +55,6 @@ public class CurrentUserChannelInterceptorTest {
     @Before
     public void setUp()
         throws Exception {
-        LoggingEnabler.enableLog(CurrentUserChannelInterceptor.class);
         MockitoAnnotations.initMocks(this);
         interceptor = new CurrentUserChannelInterceptor(authenticationService, systemUserService);
 

@@ -3,8 +3,6 @@ package org.cucina.security.crypto;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
-import org.junit.Test;
 import org.springframework.security.crypto.keygen.KeyGenerators;
 
 

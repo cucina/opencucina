@@ -1,22 +1,24 @@
 package org.cucina.security;
 
+import java.util.Collection;
+import java.util.Collections;
+
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+import org.cucina.security.model.User;
+import org.cucina.security.repository.UserRepository;
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import org.mockito.Mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Collection;
-import java.util.Collections;
-
-import org.cucina.security.model.User;
-import org.cucina.security.repository.UserRepository;
-import org.cucina.testassist.utils.LoggingEnabler;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 
 /**
@@ -37,7 +39,6 @@ public class SystemUserServiceImplTest {
      */
     @Before
     public void setup() {
-        LoggingEnabler.enableLog(SystemUserServiceImpl.class);
         MockitoAnnotations.initMocks(this);
         systemUserServiceImpl = new SystemUserServiceImpl(userRepository);
     }

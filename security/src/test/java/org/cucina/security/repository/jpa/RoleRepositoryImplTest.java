@@ -9,8 +9,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.cucina.security.model.Role;
-
-import org.cucina.testassist.utils.LoggingEnabler;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -51,7 +49,6 @@ public class RoleRepositoryImplTest {
     public void setUp()
         throws Exception {
         MockitoAnnotations.initMocks(this);
-        LoggingEnabler.enableLog(RoleRepositoryImpl.class);
         repo = new RoleRepositoryImpl();
         repo.setEntityManager(em);
         when(em.getCriteriaBuilder()).thenReturn(cb);

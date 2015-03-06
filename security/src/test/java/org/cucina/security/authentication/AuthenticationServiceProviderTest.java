@@ -1,16 +1,17 @@
-
 package org.cucina.security.authentication;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
+import org.cucina.security.model.User;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import org.mockito.Mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import org.cucina.security.model.User;
-import org.cucina.testassist.utils.LoggingEnabler;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 
 /**
@@ -30,7 +31,6 @@ public class AuthenticationServiceProviderTest {
      */
     @Before
     public void setup() {
-        LoggingEnabler.enableLog(AuthenticationServiceProvider.class);
         MockitoAnnotations.initMocks(this);
     }
 

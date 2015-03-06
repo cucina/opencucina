@@ -31,7 +31,7 @@ import org.cucina.core.model.projection.ProjectionColumn;
 import org.cucina.core.spring.SingletonBeanFactory;
 import org.cucina.core.validation.Create;
 import org.cucina.core.validation.Update;
-import org.cucina.email.EmailUser;
+import org.cucina.email.service.EmailUser;
 import org.cucina.security.crypto.Encryptor;
 import org.cucina.security.validation.ValidUsername;
 import org.eclipse.persistence.annotations.Cache;

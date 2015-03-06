@@ -1,8 +1,6 @@
 package org.cucina.core;
 
 import org.cucina.core.testassist.Foo;
-import org.cucina.testassist.utils.LoggingEnabler;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -30,7 +28,6 @@ public class PackageBasedInstanceFactoryTest {
     @Before
     public void before()
         throws Exception {
-        LoggingEnabler.enableLog(InstanceFactory.class);
         instanceFactory = new PackageBasedInstanceFactory(Foo.class.getPackage().getName());
     }
 

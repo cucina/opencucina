@@ -1,20 +1,23 @@
 package org.cucina.cluster;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.util.Collections;
 import java.util.Map;
 
 import org.cucina.cluster.event.ClusterNotificationEvent;
 import org.cucina.cluster.repository.ClusterControlRepository;
+
 import org.cucina.core.spring.integration.MessagePublisher;
+
 import org.cucina.loader.agent.AgentRunner;
-import org.cucina.testassist.utils.LoggingEnabler;
+
 import org.junit.Before;
 import org.junit.Test;
+import static org.mockito.Matchers.any;
+
 import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.mockito.MockitoAnnotations;
 
 
@@ -27,9 +30,9 @@ import org.mockito.MockitoAnnotations;
 public class ActiveClusterNodeServiceImplTest {
     private ActiveClusterNodeServiceImpl service;
     @Mock
-    private ClusterControlRepository clusterControlRepository;
-    @Mock
     private AgentRunner executorRunner;
+    @Mock
+    private ClusterControlRepository clusterControlRepository;
     @Mock
     private HeartbeatService heartbeatService;
     @Mock
@@ -41,7 +44,6 @@ public class ActiveClusterNodeServiceImplTest {
     @Before
     public void before() {
         MockitoAnnotations.initMocks(this);
-        LoggingEnabler.enableLog(ActiveClusterNodeServiceImpl.class);
         service = new ActiveClusterNodeServiceImpl(clusterControlRepository, executorRunner,
                 heartbeatService, messagePublisher);
     }
@@ -51,8 +53,6 @@ public class ActiveClusterNodeServiceImplTest {
     */
     @Test
     public void testExecuteActive() {
-        LoggingEnabler.enableLog(ActiveClusterNodeServiceImpl.class);
-
         when(clusterControlRepository.complete("eventName", "nodeId")).thenReturn(true);
 
         Map<Object, Object> props = Collections.singletonMap(new Object(), new Object());

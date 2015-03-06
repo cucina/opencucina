@@ -1,5 +1,12 @@
 package org.cucina.loader.agent;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -9,28 +16,15 @@ import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
-import org.springframework.transaction.support.TransactionTemplate;
-
 import org.cucina.core.concurrent.CompletionServiceFactory;
 import org.cucina.core.service.ContextService;
 import org.cucina.core.service.ThreadLocalContextService;
-
 import org.cucina.loader.processor.Processor;
-
-import org.cucina.testassist.utils.LoggingEnabler;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import org.mockito.Mock;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import org.mockito.MockitoAnnotations;
+import org.springframework.transaction.support.TransactionTemplate;
 
 
 /**
@@ -65,7 +59,6 @@ public class AbstractPagingParallelAgentTest {
     @Before
     public void asetup()
         throws Exception {
-        LoggingEnabler.enableLog(AbstractPagingParallelAgent.class);
         MockitoAnnotations.initMocks(this);
         contextService = new ThreadLocalContextService();
         items.add(item);

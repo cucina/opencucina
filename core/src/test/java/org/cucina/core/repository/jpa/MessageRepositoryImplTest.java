@@ -1,10 +1,5 @@
 package org.cucina.core.repository.jpa;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
@@ -17,16 +12,23 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.beans.factory.BeanFactory;
+
 import org.cucina.core.InstanceFactory;
 import org.cucina.core.model.Message;
 import org.cucina.core.model.MutableI18nMessage;
 import org.cucina.core.spring.SingletonBeanFactory;
-import org.cucina.testassist.utils.LoggingEnabler;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.Mock;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.BeanFactory;
 
 
 /**
@@ -54,7 +56,6 @@ public class MessageRepositoryImplTest {
     public void setUp()
         throws Exception {
         MockitoAnnotations.initMocks(this);
-        LoggingEnabler.enableLog(MessageRepositoryImpl.class);
         repo = new MessageRepositoryImpl(instanceFactory);
         repo.setEntityManager(em);
         when(em.getCriteriaBuilder()).thenReturn(cb);

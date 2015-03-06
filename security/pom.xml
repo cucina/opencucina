@@ -16,12 +16,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>cucina</groupId>
-			<artifactId>cucina-testassist</artifactId>
-			<version>0.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>cucina</groupId>
 			<artifactId>cucina-core</artifactId>
 			<version>0.1</version>
 		</dependency>

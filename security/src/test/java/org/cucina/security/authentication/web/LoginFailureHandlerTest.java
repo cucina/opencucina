@@ -1,18 +1,18 @@
-
 package org.cucina.security.authentication.web;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
-import org.junit.Test;
 import org.springframework.mock.web.DelegatingServletOutputStream;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 
 /**
  * Test <code>LoginFailureHandler</code>

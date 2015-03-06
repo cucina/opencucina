@@ -1,18 +1,15 @@
-
 package org.cucina.cluster;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.cucina.loader.agent.Agent;
-import org.cucina.testassist.utils.LoggingEnabler;
-import org.junit.Before;
+
 import org.junit.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 
 /**
@@ -22,17 +19,6 @@ import org.junit.Test;
  * @version $Revision: $
   */
 public class PassiveNotificationServiceImplTest {
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @throws Exception JAVADOC.
-     */
-    @Before
-    public void setUp()
-        throws Exception {
-        LoggingEnabler.enableLog(PassiveNotificationServiceImpl.class);
-    }
-
     /**
      * JAVADOC Method Level Comments
      */

@@ -1,16 +1,14 @@
-
 package org.cucina.loader.processor;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.cucina.loader.testassist.Foo;
-import org.cucina.testassist.utils.LoggingEnabler;
+
 import org.junit.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 /**
@@ -25,8 +23,6 @@ public class ProcessorFactoryImplTest {
      */
     @Test
     public void testProcessNoMatch() {
-        LoggingEnabler.enableLog(ProcessorFactory.class);
-
         ProcessorFactory factory = new ProcessorFactory();
 
         Map<Class<?>, Processor> processors = new HashMap<Class<?>, Processor>();
@@ -40,8 +36,6 @@ public class ProcessorFactoryImplTest {
      */
     @Test
     public void testProcessSuccess() {
-        LoggingEnabler.enableLog(ProcessorFactory.class);
-
         ProcessorFactory factory = new ProcessorFactory();
 
         Map<Class<?>, Processor> processors = new HashMap<Class<?>, Processor>();

@@ -11,7 +11,6 @@ import java.util.Map;
 
 import org.cucina.security.model.Privilege;
 import org.cucina.security.repository.PrivilegeRepository;
-import org.cucina.testassist.utils.LoggingEnabler;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -37,7 +36,6 @@ public class AccessRegistryImplTest {
     @Before
     public void setUp()
         throws Exception {
-        LoggingEnabler.enableLog(AccessRegistryImpl.class);
         MockitoAnnotations.initMocks(this);
         impl = new AccessRegistryImpl(privilegeRepository);
     }

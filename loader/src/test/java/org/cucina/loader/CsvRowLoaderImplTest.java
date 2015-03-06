@@ -15,22 +15,20 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.validation.BindException;
+
 import org.cucina.core.validation.Create;
+
 import org.cucina.loader.processor.Processor;
 import org.cucina.loader.testassist.Foo;
-import org.cucina.testassist.utils.LoggingEnabler;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
-
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 
 import org.mockito.Mock;
-
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -62,7 +60,6 @@ public class CsvRowLoaderImplTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        LoggingEnabler.enableLog(CsvRowLoaderImpl.class);
         rowProcessor = new CsvRowLoaderImpl(validator, conversionService);
         rowProcessor.setPropagateErrors(true);
         rowProcessor.setProcessor(processor);

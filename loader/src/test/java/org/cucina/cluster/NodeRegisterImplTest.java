@@ -1,13 +1,5 @@
 package org.cucina.cluster;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -16,10 +8,19 @@ import java.util.Map;
 
 import org.cucina.cluster.model.ClusterControl;
 import org.cucina.cluster.repository.ClusterControlRepository;
-import org.cucina.testassist.utils.LoggingEnabler;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.Mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.mockito.MockitoAnnotations;
 
 
@@ -39,7 +40,6 @@ public class NodeRegisterImplTest {
     */
     @Before
     public void before() {
-        LoggingEnabler.enableLog(NodeRegisterImpl.class);
         MockitoAnnotations.initMocks(this);
         nodeRegister = new NodeRegisterImpl(clusterControlRepository);
     }

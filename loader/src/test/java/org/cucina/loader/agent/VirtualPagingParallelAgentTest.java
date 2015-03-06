@@ -11,8 +11,6 @@ import org.cucina.core.service.ContextService;
 
 import org.cucina.loader.processor.Processor;
 
-import org.cucina.testassist.utils.LoggingEnabler;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -51,7 +49,6 @@ public class VirtualPagingParallelAgentTest {
     @Before
     public void onsetup()
         throws Exception {
-        LoggingEnabler.enableLog(VirtualPagingParallelAgent.class);
         MockitoAnnotations.initMocks(this);
 
         //ContextService contextService = new ThreadLocalContextService();

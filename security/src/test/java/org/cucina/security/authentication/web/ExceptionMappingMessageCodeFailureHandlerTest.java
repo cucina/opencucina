@@ -1,23 +1,20 @@
-
 package org.cucina.security.authentication.web;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
 
 import java.util.HashMap;
 
-import org.cucina.testassist.utils.LoggingEnabler;
-import org.junit.Before;
-import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.RedirectStrategy;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+import static org.mockito.Mockito.mock;
 
 
 /**
@@ -27,17 +24,6 @@ import org.springframework.security.web.RedirectStrategy;
  * @version $Revision: $
   */
 public class ExceptionMappingMessageCodeFailureHandlerTest {
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @throws Exception JAVADOC.
-     */
-    @Before
-    public void setUp()
-        throws Exception {
-        LoggingEnabler.enableLog(ExceptionMappingMessageCodeFailureHandler.class);
-    }
-
     /**
      * JAVADOC Method Level Comments
      *

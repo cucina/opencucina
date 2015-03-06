@@ -4,20 +4,20 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<artifactId>cucina</artifactId>
 		<groupId>cucina</groupId>
+		<artifactId>cucina</artifactId>
 		<version>0.1</version>
 	</parent>
-	<groupId>cucina</groupId>
 	<artifactId>cucina-core</artifactId>
-	<version>0.1</version>
 	<name>core</name>
-	<url>http://maven.apache.org</url>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>org.hibernate.javax.persistence</groupId>
-			<artifactId>hibernate-jpa-2.1-api</artifactId>
-			<version>1.0.0.Final</version>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
@@ -27,18 +27,10 @@
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-commons</artifactId>
-			<version>1.9.2.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-jpa</artifactId>
-			<version>1.7.2.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>cucina</groupId>
-			<artifactId>cucina-testassist</artifactId>
-			<version>0.1</version>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>

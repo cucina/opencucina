@@ -14,9 +14,7 @@ import javax.persistence.criteria.Root;
 import org.cucina.security.model.Permission;
 import org.cucina.security.model.Role;
 import org.cucina.security.model.User;
-
-import org.cucina.testassist.utils.LoggingEnabler;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -55,7 +53,6 @@ public class UserRepositoryImplTest {
     public void setUp()
         throws Exception {
         MockitoAnnotations.initMocks(this);
-        LoggingEnabler.enableLog(UserRepositoryImpl.class);
         repo = new UserRepositoryImpl();
         repo.setEntityManager(em);
         when(em.getCriteriaBuilder()).thenReturn(cb);

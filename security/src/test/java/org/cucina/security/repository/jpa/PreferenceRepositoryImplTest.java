@@ -1,10 +1,5 @@
 package org.cucina.security.repository.jpa;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -20,10 +15,16 @@ import javax.persistence.criteria.Root;
 import org.cucina.security.model.Preference;
 import org.cucina.security.model.User;
 import org.cucina.security.testassist.SecurityHelper;
-import org.cucina.testassist.utils.LoggingEnabler;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.Mock;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.mockito.MockitoAnnotations;
 
 
@@ -49,7 +50,6 @@ public class PreferenceRepositoryImplTest {
     @Before
     public void setUp()
         throws Exception {
-        LoggingEnabler.enableLog(PreferenceRepositoryImpl.class);
         MockitoAnnotations.initMocks(this);
         repo = new PreferenceRepositoryImpl();
         repo.setEntityManager(em);

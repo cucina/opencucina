@@ -7,8 +7,6 @@ import org.springframework.beans.factory.BeanFactory;
 
 import org.cucina.core.marshal.JacksonMarshaller;
 import org.cucina.core.spring.SingletonBeanFactory;
-
-import org.cucina.testassist.utils.LoggingEnabler;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -41,7 +39,6 @@ public class JsonMapConverterTest {
      */
     @Before
     public void setup() {
-        LoggingEnabler.enableLog(JsonMapConverter.class);
         MockitoAnnotations.initMocks(this);
         when(bf.getBean(JacksonMarshaller.class)).thenReturn(marshaller);
         ((SingletonBeanFactory) SingletonBeanFactory.getInstance()).setBeanFactory(bf);

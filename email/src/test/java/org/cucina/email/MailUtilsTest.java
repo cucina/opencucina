@@ -1,8 +1,4 @@
-
 package org.cucina.email;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 import java.util.Properties;
 
@@ -10,6 +6,9 @@ import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 
 import org.cucina.email.service.MailUtils;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,7 +31,6 @@ public class MailUtilsTest {
     @Before
     public void setUp()
         throws Exception {
-//        LoggingEnabler.enableLog(MailUtils.class);
         mimeMessage = new MimeMessage(Session.getInstance(new Properties()));
     }
 

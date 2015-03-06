@@ -1,34 +1,48 @@
 package org.cucina.cluster;
 
-import static org.mockito.Mockito.verify;
-
 import org.cucina.cluster.event.ClusterAttemptCompleteEvent;
+
 import org.cucina.loader.agent.AgentRunner;
-import org.cucina.testassist.utils.LoggingEnabler;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+
 import org.mockito.MockitoAnnotations;
 
-public class AttemptCompleteRunServiceTest  {
 
-	@Mock
-	AgentRunner executorRunner;
-	
-	@Before
-	public void setUp() throws Exception {
-		MockitoAnnotations.initMocks(this);
-		LoggingEnabler.enableLog(AttemptCompleteRunService.class);
-	}
+/**
+ * JAVADOC for Class Level
+ *
+ * @author $Author: $
+ * @version $Revision: $
+  */
+public class AttemptCompleteRunServiceTest {
+    @Mock
+    AgentRunner executorRunner;
 
-	@Test
-	public void testOnApplicationEvent() {
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @throws Exception JAVADOC.
+     */
+    @Before
+    public void setUp()
+        throws Exception {
+        MockitoAnnotations.initMocks(this);
+    }
 
-		AttemptCompleteRunService service = new AttemptCompleteRunService(executorRunner);
-		service.onApplicationEvent(new ClusterAttemptCompleteEvent("eventName"));
-		
-		verify(executorRunner).run("eventName", null);
-	
-	}
+    /**
+     * JAVADOC Method Level Comments
+     */
+    @Test
+    public void testOnApplicationEvent() {
+        AttemptCompleteRunService service = new AttemptCompleteRunService(executorRunner);
 
+        service.onApplicationEvent(new ClusterAttemptCompleteEvent("eventName"));
+
+        verify(executorRunner).run("eventName", null);
+    }
 }

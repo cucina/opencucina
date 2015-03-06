@@ -1,26 +1,23 @@
 package org.cucina.audit;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
 import org.cucina.security.testassist.Bar;
-
 import org.eclipse.persistence.descriptors.ClassDescriptor;
 import org.eclipse.persistence.history.HistoryPolicy;
 import org.eclipse.persistence.mappings.DatabaseMapping;
 import org.eclipse.persistence.mappings.ManyToManyMapping;
 import org.eclipse.persistence.sessions.Project;
 import org.eclipse.persistence.sessions.Session;
-
 import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.Matchers.any;
-
 import org.mockito.Mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import org.mockito.MockitoAnnotations;
 
 

@@ -1,18 +1,20 @@
 package org.cucina.security;
 
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
-
 import java.util.Collection;
 import java.util.Collections;
 
 import org.cucina.core.InstanceFactory;
+
 import org.cucina.security.access.AbstractSecuredTypeRegistry;
 import org.cucina.security.testassist.Foo;
-import org.cucina.testassist.utils.LoggingEnabler;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.Mock;
+import static org.mockito.Mockito.when;
+
 import org.mockito.MockitoAnnotations;
 
 
@@ -35,7 +37,6 @@ public class XAbstractSecuredTypeRegistryTest {
     public void setUp()
         throws Exception {
         MockitoAnnotations.initMocks(this);
-        LoggingEnabler.enableLog(AbstractSecuredTypeRegistry.class);
     }
 
     /**

@@ -1,26 +1,29 @@
 package org.cucina.security;
 
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.lang.reflect.Method;
 
-import org.cucina.core.spring.SingletonBeanFactory;
-import org.cucina.security.authentication.AuthenticationService;
-import org.cucina.security.model.User;
-import org.cucina.testassist.utils.LoggingEnabler;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
+import org.cucina.core.spring.SingletonBeanFactory;
+
+import org.cucina.security.authentication.AuthenticationService;
+import org.cucina.security.model.User;
+
+import org.junit.Before;
+import org.junit.Test;
+import static org.mockito.Matchers.anyString;
+
+import org.mockito.Mock;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import org.mockito.MockitoAnnotations;
 
 
 /**
@@ -42,7 +45,6 @@ public class CurrentUserSetAdviceTest {
      */
     @Before
     public void setup() {
-        LoggingEnabler.enableLog(CurrentUserSetAdvice.class);
         MockitoAnnotations.initMocks(this);
         clearSecurity();
     }

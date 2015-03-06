@@ -50,7 +50,6 @@ public class ConstructEmailServiceImplTest {
     @Before
     public void setUp()
         throws Exception {
-//        LoggingEnabler.enableLog(EmailConstructorImpl.class);
         MockitoAnnotations.initMocks(this);
         activeWithEmailFrench = new LocalUser(true, "ajoffe@cucina.org", Locale.FRENCH, "a");
         disabledWithEmailFrench = new LocalUser(true, "thornton@cucina.org", Locale.FRENCH,

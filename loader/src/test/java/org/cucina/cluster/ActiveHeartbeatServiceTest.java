@@ -1,20 +1,18 @@
-
 package org.cucina.cluster;
 
+import java.util.Map;
+
+import org.cucina.cluster.event.ClusterHeartbeatEvent;
+
+import org.cucina.core.service.ScheduleService;
+import org.cucina.core.spring.integration.MessagePublisher;
+
+import org.junit.Test;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
-
-import java.util.Map;
-
-import org.cucina.cluster.event.ClusterHeartbeatEvent;
-import org.cucina.core.service.ScheduleService;
-import org.cucina.core.spring.integration.MessagePublisher;
-import org.cucina.testassist.utils.LoggingEnabler;
-import org.junit.Before;
-import org.junit.Test;
 
 
 /**
@@ -27,9 +25,17 @@ public class ActiveHeartbeatServiceTest {
     /**
      * JAVADOC Method Level Comments
      */
-    @Before
-    public void before() {
-        LoggingEnabler.enableLog(ActiveHeartbeatService.class);
+    @Test
+    public void stopAllDoesNothing() {
+        MessagePublisher messagePublisher = mock(MessagePublisher.class);
+
+        ScheduleService scheduleService = mock(ScheduleService.class);
+        ActiveHeartbeatService service = new ActiveHeartbeatService(5);
+
+        service.setMessagePublisher(messagePublisher);
+        service.setScheduleService(scheduleService);
+        service.stopAll();
+        verifyZeroInteractions(scheduleService);
     }
 
     /**
@@ -37,11 +43,11 @@ public class ActiveHeartbeatServiceTest {
      */
     @Test
     public void testStart() {
-
         ScheduleService scheduleService = mock(ScheduleService.class);
         MessagePublisher messagePublisher = mock(MessagePublisher.class);
 
-        ActiveHeartbeatService service = new ActiveHeartbeatService( 5);
+        ActiveHeartbeatService service = new ActiveHeartbeatService(5);
+
         service.setMessagePublisher(messagePublisher);
         service.setScheduleService(scheduleService);
 
@@ -53,7 +59,7 @@ public class ActiveHeartbeatServiceTest {
 
         verify(messagePublisher).publish(new ClusterHeartbeatEvent("eventName", "nodeId"));
         verify(scheduleService)
-            .start(eq("eventName"), eq(ActiveHeartbeatService.ACTIVE), eq(5000l),
+            .start(eq("eventName"), eq(ActiveHeartbeatService.ACTIVE), eq(5000L),
             any(ActiveHeartbeatService.Heartbeat.class), eq("sendNotification"),
             eq((Map<String, Object>) null));
     }
@@ -66,23 +72,11 @@ public class ActiveHeartbeatServiceTest {
         MessagePublisher messagePublisher = mock(MessagePublisher.class);
 
         ScheduleService scheduleService = mock(ScheduleService.class);
-        ActiveHeartbeatService service = new ActiveHeartbeatService( 5);
+        ActiveHeartbeatService service = new ActiveHeartbeatService(5);
+
         service.setMessagePublisher(messagePublisher);
         service.setScheduleService(scheduleService);
         service.stop("eventName");
         verify(scheduleService).stop("eventName", ActiveHeartbeatService.ACTIVE);
-    }
-    
-    @Test
-    public void stopAllDoesNothing() {
-        MessagePublisher messagePublisher = mock(MessagePublisher.class);
-
-        ScheduleService scheduleService = mock(ScheduleService.class);
-        ActiveHeartbeatService service = new ActiveHeartbeatService( 5);
-        service.setMessagePublisher(messagePublisher);
-        service.setScheduleService(scheduleService);
-        service.stopAll();
-        verifyZeroInteractions(scheduleService);    
-        		
     }
 }

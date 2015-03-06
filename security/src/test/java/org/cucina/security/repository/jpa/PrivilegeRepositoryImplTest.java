@@ -1,11 +1,5 @@
 package org.cucina.security.repository.jpa;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -15,10 +9,17 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.cucina.security.model.Privilege;
-import org.cucina.testassist.utils.LoggingEnabler;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.Mock;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.mockito.MockitoAnnotations;
 
 
@@ -48,7 +49,6 @@ public class PrivilegeRepositoryImplTest {
     public void setUp()
         throws Exception {
         MockitoAnnotations.initMocks(this);
-        LoggingEnabler.enableLog(PrivilegeRepositoryImpl.class);
         repo = new PrivilegeRepositoryImpl();
         repo.setEntityManager(em);
         when(em.getCriteriaBuilder()).thenReturn(cb);

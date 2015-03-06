@@ -1,22 +1,24 @@
-
 package org.cucina.cluster;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.verify;
-
 import java.io.Serializable;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import org.cucina.cluster.event.ClusterBroadcastEvent;
 import org.cucina.cluster.event.SendBroadcastClusterEvent;
+
 import org.cucina.core.spring.integration.MessagePublisher;
-import org.cucina.testassist.utils.LoggingEnabler;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+
 import org.mockito.MockitoAnnotations;
 
 
@@ -27,7 +29,6 @@ import org.mockito.MockitoAnnotations;
  * @version $Revision: $
   */
 public class ClusterBroadcastServiceImplTest {
-
     @Mock
     private MessagePublisher messagePublisher;
 
@@ -36,7 +37,6 @@ public class ClusterBroadcastServiceImplTest {
      */
     @Before
     public void before() {
-        LoggingEnabler.enableLog(ClusterBroadcastServiceImpl.class);
         MockitoAnnotations.initMocks(this);
     }
 
@@ -49,6 +49,7 @@ public class ClusterBroadcastServiceImplTest {
         String eventName = "event";
 
         ClusterBroadcastServiceImpl impl = new ClusterBroadcastServiceImpl(nodeId);
+
         impl.setMessagePublisher(messagePublisher);
 
         impl.handle(new SendBroadcastClusterEvent(eventName));
@@ -71,6 +72,7 @@ public class ClusterBroadcastServiceImplTest {
         String eventName = "event";
 
         ClusterBroadcastServiceImpl impl = new ClusterBroadcastServiceImpl(nodeId);
+
         impl.setMessagePublisher(messagePublisher);
 
         impl.broadcast(eventName);
@@ -92,6 +94,7 @@ public class ClusterBroadcastServiceImplTest {
         String eventName = "event";
 
         ClusterBroadcastServiceImpl impl = new ClusterBroadcastServiceImpl(nodeId);
+
         impl.setMessagePublisher(messagePublisher);
 
         impl.broadcast(eventName, null);
@@ -115,8 +118,8 @@ public class ClusterBroadcastServiceImplTest {
 
         properties.put("1", 2L);
 
-
         ClusterBroadcastServiceImpl impl = new ClusterBroadcastServiceImpl(nodeId);
+
         impl.setMessagePublisher(messagePublisher);
 
         impl.broadcast(eventName, properties);
@@ -138,8 +141,8 @@ public class ClusterBroadcastServiceImplTest {
         String nodeId = "NODE";
         String eventName = "event";
 
-
         ClusterBroadcastServiceImpl impl = new ClusterBroadcastServiceImpl(nodeId);
+
         impl.setMessagePublisher(messagePublisher);
 
         impl.onApplicationEvent(new SendBroadcastClusterEvent(eventName));

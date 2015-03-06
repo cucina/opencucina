@@ -5,8 +5,6 @@ import java.util.Collection;
 import org.cucina.core.service.ContextService;
 
 import org.cucina.loader.processor.Processor;
-
-import org.cucina.testassist.utils.LoggingEnabler;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
@@ -40,7 +38,6 @@ public class FileLoaderAgentTest {
     @Before
     public void setUp()
         throws Exception {
-        LoggingEnabler.enableLog(FileLoaderAgent.class);
         MockitoAnnotations.initMocks(this);
     }
 

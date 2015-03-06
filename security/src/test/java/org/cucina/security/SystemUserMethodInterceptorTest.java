@@ -1,19 +1,5 @@
-
 package org.cucina.security;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import org.aopalliance.intercept.MethodInvocation;
-import org.cucina.core.spring.SingletonBeanFactory;
-import org.cucina.security.authentication.AuthenticationService;
-import org.cucina.security.model.User;
-import org.cucina.testassist.utils.LoggingEnabler;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +8,23 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+
+import org.aopalliance.intercept.MethodInvocation;
+
+import org.cucina.core.spring.SingletonBeanFactory;
+
+import org.cucina.security.authentication.AuthenticationService;
+import org.cucina.security.model.User;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import org.mockito.MockitoAnnotations;
 
 
 /**
@@ -50,7 +53,6 @@ public class SystemUserMethodInterceptorTest {
     @Before
     public void setUp()
         throws Exception {
-        LoggingEnabler.enableLog(SystemUserMethodInterceptor.class);
         MockitoAnnotations.initMocks(this);
         clearSecurity();
     }

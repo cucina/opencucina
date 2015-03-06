@@ -1,10 +1,5 @@
 package org.cucina.core.repository.jpa;
 
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -21,10 +16,16 @@ import javax.persistence.criteria.Root;
 import org.cucina.core.model.ListNode;
 import org.cucina.core.model.Message;
 import org.cucina.core.service.I18nService;
-import org.cucina.testassist.utils.LoggingEnabler;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.Mock;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.mockito.MockitoAnnotations;
 
 
@@ -51,7 +52,6 @@ public class ListNodeRepositoryImplTest {
     @Before
     public void setUp()
         throws Exception {
-        LoggingEnabler.enableLog(ListNodeRepositoryImpl.class);
         MockitoAnnotations.initMocks(this);
         repo = new ListNodeRepositoryImpl(i18nService);
         repo.setEntityManager(em);

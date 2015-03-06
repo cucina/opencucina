@@ -1,32 +1,36 @@
-
 package org.cucina.loader;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintWriter;
+
+import java.util.Locale;
+
+import org.springframework.context.MessageSource;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindException;
+
+import org.cucina.cluster.ChangeNotifier;
+
+import org.cucina.core.InstanceFactory;
+import org.cucina.core.model.PersistableEntity;
+import org.cucina.core.service.I18nService;
+
+import org.cucina.loader.testassist.Foo;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import org.junit.Before;
+import org.junit.Test;
 import static org.mockito.Matchers.any;
+
+import org.mockito.Mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintWriter;
-import java.util.Locale;
-
-import org.cucina.cluster.ChangeNotifier;
-import org.cucina.core.InstanceFactory;
-import org.cucina.core.model.PersistableEntity;
-import org.cucina.core.service.I18nService;
-import org.cucina.loader.testassist.Foo;
-import org.cucina.testassist.utils.LoggingEnabler;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.context.MessageSource;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindException;
 
 
 /**
@@ -37,6 +41,8 @@ import org.springframework.validation.BindException;
  */
 public class CsvLoaderTest {
     @Mock
+    private ChangeNotifier changeNotifier;
+    @Mock
     private HeadersModifier headersModifier;
     @Mock
     private I18nService i18nService;
@@ -46,9 +52,6 @@ public class CsvLoaderTest {
     private LoaderExceptionFactory loaderExceptionFactory;
     @Mock
     private MessageSource messageSource;
-    @Mock
-    private ChangeNotifier changeNotifier;
-    
 
     /**
      * JAVADOC Method Level Comments
@@ -59,7 +62,6 @@ public class CsvLoaderTest {
     @Before
     public void setUp()
         throws Exception {
-        LoggingEnabler.enableLog(CsvLoader.class);
         MockitoAnnotations.initMocks(this);
     }
 
@@ -84,7 +86,8 @@ public class CsvLoaderTest {
                 }
             };
 
-        CsvLoader loader = new CsvLoader(instanceFactory, rowProcessor, loaderExceptionFactory, changeNotifier);
+        CsvLoader loader = new CsvLoader(instanceFactory, rowProcessor, loaderExceptionFactory,
+                changeNotifier);
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         PrintWriter pw = new PrintWriter(baout);
 
@@ -124,7 +127,8 @@ public class CsvLoaderTest {
                 }
             };
 
-        CsvLoader loader = new CsvLoader(instanceFactory, rowProcessor, loaderExceptionFactory,changeNotifier);
+        CsvLoader loader = new CsvLoader(instanceFactory, rowProcessor, loaderExceptionFactory,
+                changeNotifier);
 
         when(headersModifier.modifyHeaders(new String[] { "VALUE BLAAH", "name", "BLAAAH BLAAH" },
                 Annointed.class)).thenReturn(new String[] { "value", "name", "aNumber" });
@@ -138,7 +142,7 @@ public class CsvLoaderTest {
         pw.flush();
         loader.loadCollection("SpriteUser", baout.toByteArray());
         verify(instanceFactory).getBean("SpriteUser");
-        
+
         verify(changeNotifier).setProgrammatic();
         verify(changeNotifier).sendEvent();
     }
@@ -179,7 +183,8 @@ public class CsvLoaderTest {
                 }
             };
 
-        CsvLoader loader = new CsvLoader(instanceFactory, rowProcessor, loaderExceptionFactory,changeNotifier);
+        CsvLoader loader = new CsvLoader(instanceFactory, rowProcessor, loaderExceptionFactory,
+                changeNotifier);
 
         try {
             loader.loadCollection("SpriteUser", baout.toByteArray());
@@ -189,7 +194,7 @@ public class CsvLoaderTest {
         }
 
         verify(instanceFactory).getBean("SpriteUser");
-        
+
         verify(changeNotifier).setProgrammatic();
         verify(changeNotifier).sendEvent();
     }
@@ -219,7 +224,7 @@ public class CsvLoaderTest {
                         final int lineNo)
                         throws BindException {
                     }
-                }, loaderExceptionFactory,changeNotifier);
+                }, loaderExceptionFactory, changeNotifier);
 
         try {
             loader.loadCollection(type, target);
@@ -228,7 +233,7 @@ public class CsvLoaderTest {
             assertTrue(e.getErrors().length > 0);
             assertEquals("loader.applicationType.translated", e.getErrors()[0]);
         }
-        
+
         verify(changeNotifier, times(0)).setProgrammatic();
         verify(changeNotifier, times(0)).sendEvent();
     }
@@ -258,7 +263,7 @@ public class CsvLoaderTest {
                         final int lineNo)
                         throws BindException {
                     }
-                }, loaderExceptionFactory,changeNotifier);
+                }, loaderExceptionFactory, changeNotifier);
 
         try {
             loader.loadCollection(type, new byte[0]);
@@ -269,7 +274,7 @@ public class CsvLoaderTest {
         }
 
         verify(instanceFactory).getBean(type);
-        
+
         verify(changeNotifier, times(1)).setProgrammatic();
         verify(changeNotifier, times(1)).sendEvent();
     }
@@ -298,7 +303,8 @@ public class CsvLoaderTest {
                 }
             };
 
-        CsvLoader loader = new CsvLoader(instanceFactory, rowProcessor, loaderExceptionFactory,changeNotifier);
+        CsvLoader loader = new CsvLoader(instanceFactory, rowProcessor, loaderExceptionFactory,
+                changeNotifier);
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         PrintWriter pw = new PrintWriter(baout);
 
@@ -307,7 +313,7 @@ public class CsvLoaderTest {
         pw.flush();
         loader.loadCollection("SpriteUser", baout.toByteArray());
         verify(instanceFactory).getBean("SpriteUser");
-        
+
         verify(changeNotifier, times(1)).setProgrammatic();
         verify(changeNotifier, times(1)).sendEvent();
     }
@@ -345,7 +351,8 @@ public class CsvLoaderTest {
                 }
             };
 
-        CsvLoader loader = new CsvLoader(instanceFactory, processor, loaderExceptionFactory,changeNotifier);
+        CsvLoader loader = new CsvLoader(instanceFactory, processor, loaderExceptionFactory,
+                changeNotifier);
 
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
 
@@ -355,7 +362,7 @@ public class CsvLoaderTest {
         pw.println(data);
         pw.flush();
         loader.loadCollection(applicationType, baout.toByteArray());
-        
+
         verify(changeNotifier, times(1)).setProgrammatic();
         verify(changeNotifier, times(1)).sendEvent();
     }

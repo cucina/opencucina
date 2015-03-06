@@ -1,24 +1,5 @@
-
 package org.cucina.security;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import org.cucina.core.spring.ActiveProfilesAccessor;
-import org.cucina.core.spring.SingletonBeanFactory;
-import org.cucina.security.model.User;
-import org.cucina.security.testassist.Foo;
-import org.cucina.testassist.utils.LoggingEnabler;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
@@ -26,6 +7,28 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
+import org.cucina.core.spring.ActiveProfilesAccessor;
+import org.cucina.core.spring.SingletonBeanFactory;
+
+import org.cucina.security.model.User;
+import org.cucina.security.testassist.Foo;
+
+import org.junit.After;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import org.mockito.MockitoAnnotations;
 
 
 /**
@@ -52,7 +55,6 @@ public class ContextUserAccessorTest {
     @Before
     public void setUp()
         throws Exception {
-        LoggingEnabler.enableLog(ContextUserAccessor.class);
         MockitoAnnotations.initMocks(this);
         when(beanFactory.getBean(ContextUserAccessor.USER_ACCESSOR_ID)).thenReturn(userAccesor);
         when(beanFactory.getBean(ActiveProfilesAccessor.PROFILES_ACCESSOR_ID))
@@ -160,7 +162,8 @@ public class ContextUserAccessorTest {
         assertFalse("Oops, there should not be an authenticated user!",
             ContextUserAccessor.isUserAuthenticated());
         setSecurityContext();
-        assertTrue("Oops, there is no authenticated user!", ContextUserAccessor.isUserAuthenticated());
+        assertTrue("Oops, there is no authenticated user!",
+            ContextUserAccessor.isUserAuthenticated());
     }
 
     /**

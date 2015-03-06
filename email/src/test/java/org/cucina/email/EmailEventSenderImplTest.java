@@ -37,7 +37,6 @@ public class EmailEventSenderImplTest {
      */
     @Before
     public void setUp() {
-        //        LoggingEnabler.enableLog(EmailEventSenderImpl.class);
         els = new EmailEventSenderImpl();
     }
 

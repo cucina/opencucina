@@ -1,18 +1,19 @@
 package org.cucina.security.bean;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
-
 import java.util.Collection;
 
 import org.cucina.security.model.Permission;
 import org.cucina.security.repository.PermissionRepository;
-import org.cucina.testassist.utils.LoggingEnabler;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.Mock;
+import static org.mockito.Mockito.when;
+
 import org.mockito.MockitoAnnotations;
 
 
@@ -89,7 +90,6 @@ public class PermissionsEditorTest {
     @Before
     public void onsetup() {
         MockitoAnnotations.initMocks(this);
-        LoggingEnabler.enableLog(PermissionsEditor.class);
         editor = new PermissionsEditor(permissionRepository);
         permission1 = new Permission();
         permission1.setId(11L);

@@ -1,12 +1,11 @@
-
 package org.cucina.loader;
 
-import static org.mockito.Mockito.verify;
-
-import org.cucina.testassist.utils.LoggingEnabler;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+
 import org.mockito.MockitoAnnotations;
 
 
@@ -28,7 +27,6 @@ public class CsvRowLoaderProcessorTest {
     @Before
     public void setUp()
         throws Exception {
-        LoggingEnabler.enableLog(CsvRowLoaderProcessor.class);
         MockitoAnnotations.initMocks(this);
     }
 

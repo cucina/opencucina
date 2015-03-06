@@ -3,15 +3,13 @@ package org.cucina.core.validation;
 import org.cucina.core.model.Message;
 import org.cucina.core.repository.MessageRepository;
 import org.cucina.core.testassist.Foo;
-import org.cucina.testassist.utils.LoggingEnabler;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 
+import org.mockito.Mock;
 import static org.mockito.Mockito.when;
 
 import org.mockito.MockitoAnnotations;
@@ -36,7 +34,6 @@ public class UniqueMessageCodeValidatorTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        LoggingEnabler.enableLog(UniqueMessageCodeValidator.class);
         validator = new UniqueMessageCodeValidator();
 
         validator.setMessageRepository(messageRepository);

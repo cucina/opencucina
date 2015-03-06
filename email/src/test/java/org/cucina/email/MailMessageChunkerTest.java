@@ -1,11 +1,5 @@
 package org.cucina.email;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -13,12 +7,19 @@ import java.util.Locale;
 
 import javax.activation.DataSource;
 
+import org.springframework.mail.javamail.MimeMessagePreparator;
+
 import org.cucina.email.service.EmailUser;
 import org.cucina.email.service.MailMessageChunkerImpl;
 import org.cucina.email.service.MimeMessagePreparatorFactory;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.mail.javamail.MimeMessagePreparator;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 /**
@@ -50,7 +51,6 @@ public class MailMessageChunkerTest {
     @Before
     public void setUp()
         throws Exception {
-        //LoggingEnabler.enableLog(MailMessageChunkerImpl.class);
         ccs = new ArrayList<EmailUser>();
         tos = new ArrayList<EmailUser>();
 

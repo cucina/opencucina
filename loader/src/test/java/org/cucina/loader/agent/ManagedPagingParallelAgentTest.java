@@ -1,17 +1,17 @@
-
 package org.cucina.loader.agent;
-
-import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cucina.core.service.ContextService;
+
 import org.cucina.loader.processor.Processor;
 import org.cucina.loader.testassist.Foo;
-import org.cucina.testassist.utils.LoggingEnabler;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -24,16 +24,15 @@ import org.mockito.MockitoAnnotations;
   */
 public class ManagedPagingParallelAgentTest {
     @Mock
-    private Processor processor;
-    @Mock
     private ContextService contextService;
+    @Mock
+    private Processor processor;
 
     /**
      * JAVADOC Method Level Comments
      */
     @Before
     public void setup() {
-        LoggingEnabler.enableLog(ManagedPagingParallelAgent.class);
         MockitoAnnotations.initMocks(this);
     }
 

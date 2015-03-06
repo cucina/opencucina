@@ -1,12 +1,4 @@
-
 package org.cucina.security.authentication.web;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 
@@ -14,12 +6,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.cucina.testassist.utils.LoggingEnabler;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.springframework.mock.web.MockFilterChain;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -29,6 +15,21 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+
+import org.junit.After;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+
+import org.junit.Before;
+import org.junit.Test;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import org.mockito.invocation.InvocationOnMock;
+
+import org.mockito.stubbing.Answer;
 
 
 /**
@@ -122,14 +123,6 @@ public class RequestHeaderRedirectAuthenticationFilterTest {
         assertNotNull(SecurityContextHolder.getContext().getAuthentication());
         assertEquals("cat", SecurityContextHolder.getContext().getAuthentication().getName());
         assertEquals("N/A", SecurityContextHolder.getContext().getAuthentication().getCredentials());
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Before
-    public void logging() {
-        LoggingEnabler.enableLog(RequestHeaderRedirectProcessingFilter.class);
     }
 
     /**

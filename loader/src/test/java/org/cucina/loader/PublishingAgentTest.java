@@ -3,8 +3,6 @@ package org.cucina.loader;
 import java.util.UUID;
 
 import org.cucina.core.spring.integration.MessagePublisher;
-
-import org.cucina.testassist.utils.LoggingEnabler;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -43,7 +41,6 @@ public class PublishingAgentTest {
     public void setUp()
         throws Exception {
         MockitoAnnotations.initMocks(this);
-        LoggingEnabler.enableLog(PublishingAgent.class);
         executor = new PublishingAgent(fileLoader, messagePublisher);
     }
 

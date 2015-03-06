@@ -1,12 +1,5 @@
 package org.cucina.cluster.repository.jpa;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,11 +15,20 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.cucina.cluster.model.ClusterControl;
+
 import org.cucina.core.InstanceFactory;
-import org.cucina.testassist.utils.LoggingEnabler;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.Mock;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.mockito.MockitoAnnotations;
 
 
@@ -51,7 +53,6 @@ public class ClusterControlRepositoryImplTest {
     @Before
     public void before() {
         MockitoAnnotations.initMocks(this);
-        LoggingEnabler.enableLog(ClusterControlRepositoryImpl.class);
         repo = new ClusterControlRepositoryImpl(instanceFactory);
         repo.setEntityManager(em);
         when(em.getCriteriaBuilder()).thenReturn(cb);

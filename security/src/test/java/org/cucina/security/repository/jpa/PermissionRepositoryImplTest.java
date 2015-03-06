@@ -19,8 +19,6 @@ import org.cucina.security.model.Permission;
 import org.cucina.security.model.Privilege;
 import org.cucina.security.model.Role;
 import org.cucina.security.model.User;
-
-import org.cucina.testassist.utils.LoggingEnabler;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -60,7 +58,6 @@ public class PermissionRepositoryImplTest {
     public void setUp()
         throws Exception {
         MockitoAnnotations.initMocks(this);
-        LoggingEnabler.enableLog(PermissionRepositoryImpl.class);
         repo = new PermissionRepositoryImpl();
         repo.setEntityManager(em);
         when(em.getCriteriaBuilder()).thenReturn(cb);
