@@ -52,7 +52,7 @@ public class JsonValueExternFactoryTest {
      */
     @Test
     public void testFromString() {
-        assertEquals(searchBean, JsonValueExternFactory.fromString(YOHOHO, Foo.class));
+        assertEquals(searchBean, JsonMarshallerFactory.fromString(YOHOHO, Foo.class));
     }
 
     /**
@@ -61,7 +61,7 @@ public class JsonValueExternFactoryTest {
     @Test(expected = RuntimeException.class)
     public void testFromStringException() {
         when(marshaller.unmarshall(YOHOHO + "\n", Foo.class)).thenThrow(new IOException());
-        JsonValueExternFactory.fromString(YOHOHO, Foo.class);
+        JsonMarshallerFactory.fromString(YOHOHO, Foo.class);
     }
 
     /**
@@ -69,7 +69,7 @@ public class JsonValueExternFactoryTest {
      */
     @Test
     public void testFromStringNull() {
-        assertNull("Should return null", JsonValueExternFactory.fromString(null, null));
+        assertNull("Should return null", JsonMarshallerFactory.fromString(null, null));
     }
 
     /**
@@ -77,7 +77,7 @@ public class JsonValueExternFactoryTest {
      */
     @Test
     public void testToStringNull() {
-        assertNull("Should return null", JsonValueExternFactory.toString(null));
+        assertNull("Should return null", JsonMarshallerFactory.toString(null));
     }
 
     /**
@@ -85,6 +85,6 @@ public class JsonValueExternFactoryTest {
      */
     @Test
     public void testToStringSearchBean() {
-        assertEquals(YOHOHO, JsonValueExternFactory.toString(searchBean));
+        assertEquals(YOHOHO, JsonMarshallerFactory.toString(searchBean));
     }
 }

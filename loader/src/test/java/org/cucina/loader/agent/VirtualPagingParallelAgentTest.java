@@ -1,5 +1,9 @@
 package org.cucina.loader.agent;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.CompletionService;
@@ -8,17 +12,10 @@ import java.util.concurrent.Future;
 
 import org.cucina.core.concurrent.CompletionServiceFactory;
 import org.cucina.core.service.ContextService;
-
 import org.cucina.loader.processor.Processor;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import org.mockito.Mock;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import org.mockito.MockitoAnnotations;
 
 

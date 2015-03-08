@@ -1,17 +1,15 @@
 package org.cucina.cluster.spring;
 
-import org.springframework.messaging.Message;
-
-import org.cucina.cluster.event.ClusterControlEvent;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
-import org.junit.Before;
-import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import org.cucina.cluster.event.ClusterControlEvent;
+import org.junit.Before;
+import org.junit.Test;
 import org.mockito.MockitoAnnotations;
+import org.springframework.messaging.Message;
 
 
 /**

@@ -21,7 +21,5 @@ public class NamespaceHandler
         registerBeanDefinitionParser("singletonBeanFactory",
             new SingletonBeanFactoryDefinitionParser());
         registerBeanDefinitionParser("contextService", new ContextServiceDefinitionParser());
-        registerBeanDefinitionParser(ListNodeRepositoryDefinitionParser.DEFAULT_ID,
-            new ListNodeRepositoryDefinitionParser());
     }
 }

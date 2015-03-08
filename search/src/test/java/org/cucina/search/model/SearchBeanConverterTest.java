@@ -1,0 +1,91 @@
+package org.cucina.search.model;
+
+import org.springframework.beans.factory.BeanFactory;
+
+import org.cucina.core.marshal.JacksonMarshaller;
+import org.cucina.core.spring.SingletonBeanFactory;
+
+import org.cucina.search.query.SearchBean;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import org.mockito.MockitoAnnotations;
+
+
+/**
+ * JAVADOC for Class Level
+ *
+ * @author $Author: $
+ * @version $Revision: $
+  */
+public class SearchBeanConverterTest {
+    private static final String SEARCH_MARSHALLED = "blahblahblah";
+    @Mock
+    private BeanFactory bf;
+    @Mock
+    private JacksonMarshaller marshaller;
+    private SearchBeanConverter handler = new SearchBeanConverter();
+
+    /**
+     * JAVADOC Method Level Comments
+     */
+    @Before
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        when(bf.getBean(JacksonMarshaller.class)).thenReturn(marshaller);
+        ((SingletonBeanFactory) SingletonBeanFactory.getInstance()).setBeanFactory(bf);
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     */
+    @Test
+    public void testToDatasetValue()
+        throws Exception {
+        SearchBean bean = new SearchBean();
+
+        when(marshaller.marshall(bean)).thenReturn(SEARCH_MARSHALLED);
+
+        assertEquals("Incorrect value", SEARCH_MARSHALLED,
+            handler.convertObjectValueToDataValue(bean, null));
+        verify(marshaller).marshall(bean);
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     */
+    @Test
+    public void testToDatasetValueNull()
+        throws Exception {
+        assertNull("Incorrect value", handler.convertObjectValueToDataValue(null, null));
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     */
+    @Test
+    public void testToObjectValue()
+        throws Exception {
+        SearchBean bean = new SearchBean();
+
+        when(marshaller.unmarshall(SEARCH_MARSHALLED + "\n", SearchBean.class)).thenReturn(bean);
+        assertEquals("Should have returned bean", bean,
+            handler.convertDataValueToObjectValue(SEARCH_MARSHALLED, null));
+        verify(marshaller).unmarshall(SEARCH_MARSHALLED + "\n", SearchBean.class);
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     */
+    @Test
+    public void toObjectValueNull() {
+        assertNull(handler.convertDataValueToObjectValue(null, null));
+    }
+}

@@ -56,7 +56,7 @@ public class CompositeInstanceFactory
      * @return JAVADOC.
      */
     @Override
-    public boolean isI18nProperty(String className, String property) {
+    public boolean isTranslatedProperty(String className, String property) {
         String cacheKey = I18N_KEY + NameUtils.concat(className, property);
         Boolean isI18n = attrCache.get(cacheKey);
 
@@ -64,7 +64,7 @@ public class CompositeInstanceFactory
             isI18n = false;
 
             for (InstanceFactory instfac : instanceFactories) {
-                isI18n = instfac.isI18nProperty(className, property);
+                isI18n = instfac.isTranslatedProperty(className, property);
 
                 if (isI18n) {
                     break;

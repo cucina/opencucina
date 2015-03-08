@@ -8,15 +8,17 @@
 		<groupId>cucina</groupId>
 		<version>0.1</version>
 	</parent>
-	<groupId>cucina</groupId>
 	<artifactId>cucina-loader</artifactId>
-	<version>0.1</version>
 	<name>loader</name>
-	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
 			<groupId>cucina</groupId>
 			<artifactId>cucina-core</artifactId>
+			<version>0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>cucina</groupId>
+			<artifactId>cucina-i18n</artifactId>
 			<version>0.1</version>
 		</dependency>
 	</dependencies>

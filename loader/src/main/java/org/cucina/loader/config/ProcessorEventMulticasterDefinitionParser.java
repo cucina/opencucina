@@ -1,9 +1,7 @@
 package org.cucina.loader.config;
 
 import org.cucina.core.config.AbstractDefaultIdBeanDefinitionParser;
-
 import org.cucina.loader.processor.ProcessorEventMulticaster;
-
 import org.w3c.dom.Element;
 
 

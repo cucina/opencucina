@@ -1,26 +1,31 @@
 package org.cucina.loader;
 
+import java.util.Locale;
+
+import org.springframework.beans.factory.BeanFactory;
+
+import org.cucina.core.InstanceFactory;
+import org.cucina.core.spring.SingletonBeanFactory;
+
+import org.cucina.i18n.model.ListNode;
+import org.cucina.i18n.model.Message;
+import org.cucina.i18n.model.MutableI18nMessage;
+import org.cucina.i18n.repository.MessageRepository;
+import org.cucina.i18n.service.I18nService;
+
+import org.cucina.loader.testassist.Foo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
 
-import java.util.Locale;
-
-import org.cucina.core.InstanceFactory;
-import org.cucina.core.model.ListNode;
-import org.cucina.core.model.Message;
-import org.cucina.core.model.MutableI18nMessage;
-import org.cucina.core.repository.MessageRepository;
-import org.cucina.core.service.I18nService;
-import org.cucina.core.spring.SingletonBeanFactory;
-import org.cucina.loader.testassist.Foo;
 import org.junit.Before;
 import org.junit.Test;
+import static org.mockito.Matchers.any;
+
 import org.mockito.Mock;
+import static org.mockito.Mockito.when;
+
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.BeanFactory;
 
 
 /**

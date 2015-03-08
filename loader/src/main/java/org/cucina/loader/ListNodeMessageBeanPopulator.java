@@ -3,10 +3,10 @@ package org.cucina.loader;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cucina.core.message.MessageHelper;
-import org.cucina.core.model.ListNode;
-import org.cucina.core.model.Message;
 import org.cucina.core.service.BeanPopulator;
+import org.cucina.i18n.model.ListNode;
+import org.cucina.i18n.model.Message;
+import org.cucina.i18n.service.MessageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

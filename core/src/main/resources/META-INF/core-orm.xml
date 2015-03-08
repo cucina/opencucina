@@ -5,7 +5,4 @@
 
         <entity class="org.cucina.core.model.PersistableEntity"/>
         <entity class="org.cucina.core.model.Attachment"/>
-        <entity class="org.cucina.core.model.ListNode"/>
-        <entity class="org.cucina.core.model.Message"/>
-        <entity class="org.cucina.core.model.MutableI18nMessage"/>
 </entity-mappings>

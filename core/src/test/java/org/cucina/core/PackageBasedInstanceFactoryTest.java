@@ -72,8 +72,8 @@ public class PackageBasedInstanceFactoryTest {
      */
     @Test
     public void testInternationalised() {
-        assertTrue("Should be internationalised", instanceFactory.isI18nProperty("Foo", "name"));
-        assertFalse("Should not be internationalised", instanceFactory.isI18nProperty("Foo", "fred"));
+        assertTrue("Should be internationalised", instanceFactory.isTranslatedProperty("Foo", "name"));
+        assertFalse("Should not be internationalised", instanceFactory.isTranslatedProperty("Foo", "fred"));
     }
 
     /**

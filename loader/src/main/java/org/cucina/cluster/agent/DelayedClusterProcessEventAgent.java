@@ -1,15 +1,12 @@
 package org.cucina.cluster.agent;
 
+import org.cucina.cluster.event.ClusterProcessEvent;
+import org.cucina.loader.agent.Agent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.Assert;
-
-import org.cucina.cluster.event.ClusterProcessEvent;
-
-import org.cucina.loader.agent.Agent;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**

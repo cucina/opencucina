@@ -1,14 +1,15 @@
 package org.cucina.loader.agent;
 
-import java.util.Arrays;
-import java.util.Collections;
-
-import org.junit.Test;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
+import java.util.Collections;
+
+import org.junit.Test;
 
 
 /**

@@ -7,7 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Locale;
 
-import org.cucina.core.service.I18nService;
+import org.cucina.i18n.service.I18nService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

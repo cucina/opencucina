@@ -1,15 +1,15 @@
 package org.cucina.cluster;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.cucina.loader.agent.Agent;
-
 import org.junit.Test;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 
 
 /**

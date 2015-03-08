@@ -1,7 +1,6 @@
 package org.cucina.audit;
 
 import java.sql.Timestamp;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,16 +13,9 @@ import javax.persistence.PersistenceContext;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
-import org.springframework.beans.factory.annotation.Required;
-import org.springframework.jdbc.core.JdbcTemplate;
-
 import org.cucina.core.InstanceFactory;
-import org.cucina.core.model.Message;
 import org.cucina.core.model.PersistableEntity;
-
+import org.cucina.i18n.model.Message;
 import org.eclipse.persistence.descriptors.ClassDescriptor;
 import org.eclipse.persistence.history.AsOfClause;
 import org.eclipse.persistence.history.HistoryPolicy;
@@ -31,9 +23,12 @@ import org.eclipse.persistence.jpa.JpaEntityManager;
 import org.eclipse.persistence.sessions.Project;
 import org.eclipse.persistence.sessions.Session;
 import org.eclipse.persistence.sessions.server.ClientSession;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 
 /**

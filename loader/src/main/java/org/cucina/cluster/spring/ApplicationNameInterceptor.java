@@ -1,11 +1,10 @@
 package org.cucina.cluster.spring;
 
+import org.cucina.cluster.event.ClusterControlEvent;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.ChannelInterceptorAdapter;
 import org.springframework.util.Assert;
-
-import org.cucina.cluster.event.ClusterControlEvent;
 
 
 /**

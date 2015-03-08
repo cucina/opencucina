@@ -46,7 +46,7 @@ public interface InstanceFactory {
      *
      * @return true/false if property internationalised.
      */
-    boolean isI18nProperty(String className, String property);
+    boolean isTranslatedProperty(String className, String property);
 
     /**
      * * Map property names to application types.

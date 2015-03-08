@@ -18,11 +18,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.cucina.core.model.Message;
 import org.cucina.core.model.PersistableEntity;
 import org.cucina.core.model.Versioned;
 import org.cucina.core.model.projection.ProjectionColumn;
 import org.cucina.core.model.projection.TranslatedColumns;
+import org.cucina.i18n.model.Message;
 import org.eclipse.persistence.annotations.Cache;
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;

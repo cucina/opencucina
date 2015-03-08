@@ -13,7 +13,8 @@ import org.cucina.cluster.ChangeNotifier;
 
 import org.cucina.core.InstanceFactory;
 import org.cucina.core.model.PersistableEntity;
-import org.cucina.core.service.I18nService;
+
+import org.cucina.i18n.service.I18nService;
 
 import org.cucina.loader.testassist.Foo;
 import static org.junit.Assert.assertArrayEquals;

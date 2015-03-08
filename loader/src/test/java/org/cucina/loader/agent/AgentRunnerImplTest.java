@@ -1,14 +1,14 @@
 package org.cucina.loader.agent;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+
 import java.util.Collections;
 import java.util.Map;
 
 import org.cucina.core.service.ContextService;
-
 import org.junit.Test;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 
 /**
  * JAVADOC for Class Level

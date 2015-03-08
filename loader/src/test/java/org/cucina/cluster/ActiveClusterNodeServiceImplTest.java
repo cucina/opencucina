@@ -1,23 +1,19 @@
 package org.cucina.cluster;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.Collections;
 import java.util.Map;
 
 import org.cucina.cluster.event.ClusterNotificationEvent;
 import org.cucina.cluster.repository.ClusterControlRepository;
-
 import org.cucina.core.spring.integration.MessagePublisher;
-
 import org.cucina.loader.agent.AgentRunner;
-
 import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.Matchers.any;
-
 import org.mockito.Mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import org.mockito.MockitoAnnotations;
 
 

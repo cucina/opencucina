@@ -1,11 +1,10 @@
 package org.cucina.loader;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import org.mockito.Mock;
 import static org.mockito.Mockito.verify;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 

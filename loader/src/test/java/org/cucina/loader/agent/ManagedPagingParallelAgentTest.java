@@ -1,17 +1,15 @@
 package org.cucina.loader.agent;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cucina.core.service.ContextService;
-
 import org.cucina.loader.processor.Processor;
 import org.cucina.loader.testassist.Foo;
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 

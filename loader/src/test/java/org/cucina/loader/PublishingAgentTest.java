@@ -1,19 +1,17 @@
 package org.cucina.loader;
 
-import java.util.UUID;
-
-import org.cucina.core.spring.integration.MessagePublisher;
 import static org.junit.Assert.assertTrue;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.UUID;
+
+import org.cucina.core.spring.integration.MessagePublisher;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 

@@ -1,9 +1,11 @@
 package org.cucina.core.utils;
 
 import java.beans.PropertyDescriptor;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -11,16 +13,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.groups.Default;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.util.ClassUtils;
+
 import org.cucina.core.model.projection.DefaultGroup;
 import org.cucina.core.model.projection.ExternalProjectionColumns;
 import org.cucina.core.model.projection.PostProcessProjections;
 import org.cucina.core.model.projection.TranslatedColumns;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.util.ClassUtils;
 
 
 /**
@@ -83,6 +90,11 @@ public class ClassDescriptor {
         // defaults
         if ((requiredGroup != null) && (currentGroup != null) && (requiredGroup.length == 0) &&
                 (currentGroup.length == 0)) {
+            return true;
+        }
+
+        if ((requiredGroup != null) && (requiredGroup.length == 1) &&
+                (requiredGroup[0] == Default.class) && (currentGroup.length == 0)) {
             return true;
         }
 

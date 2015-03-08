@@ -1,5 +1,8 @@
 package org.cucina.loader.agent;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doAnswer;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -7,15 +10,9 @@ import java.util.concurrent.FutureTask;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.Matchers.any;
-
 import org.mockito.Mock;
-import static org.mockito.Mockito.doAnswer;
-
 import org.mockito.MockitoAnnotations;
-
 import org.mockito.invocation.InvocationOnMock;
-
 import org.mockito.stubbing.Answer;
 
 

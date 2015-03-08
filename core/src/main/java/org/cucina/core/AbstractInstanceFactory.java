@@ -80,7 +80,7 @@ public abstract class AbstractInstanceFactory
      * @return true/false if property internationalised.
      */
     @Override
-    public boolean isI18nProperty(String className, String property) {
+    public boolean isTranslatedProperty(String className, String property) {
         Class<?> t = getClassType(className);
 
         return (t == null) ? false : ClassDescriptor.isTranslatedProperty(t, property);

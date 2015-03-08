@@ -1,24 +1,20 @@
 package org.cucina.cluster;
 
-import java.io.Serializable;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.verify;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.cucina.cluster.event.ClusterBroadcastEvent;
 import org.cucina.cluster.event.SendBroadcastClusterEvent;
-
 import org.cucina.core.spring.integration.MessagePublisher;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import static org.mockito.Mockito.verify;
-
 import org.mockito.MockitoAnnotations;
 
 

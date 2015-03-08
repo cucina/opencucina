@@ -1,13 +1,13 @@
 package org.cucina.cluster;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
 import org.cucina.cluster.ClusterServiceImpl.WakeupEvent;
 import org.cucina.cluster.event.ClusterHeartbeatEvent;
 import org.cucina.cluster.event.ClusterNotificationEvent;
 import org.cucina.cluster.event.ClusterRefreshEvent;
-
 import org.junit.Test;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 
 /**

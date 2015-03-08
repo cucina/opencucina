@@ -1,18 +1,17 @@
 package org.cucina.cluster;
 
-import java.util.Map;
-
-import org.cucina.cluster.event.ClusterHeartbeatEvent;
-
-import org.cucina.core.service.ScheduleService;
-import org.cucina.core.spring.integration.MessagePublisher;
-
-import org.junit.Test;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
+
+import java.util.Map;
+
+import org.cucina.cluster.event.ClusterHeartbeatEvent;
+import org.cucina.core.service.ScheduleService;
+import org.cucina.core.spring.integration.MessagePublisher;
+import org.junit.Test;
 
 
 /**

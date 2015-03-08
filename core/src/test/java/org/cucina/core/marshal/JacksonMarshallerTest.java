@@ -5,7 +5,6 @@ import java.util.HashSet;
 
 import org.cucina.core.testassist.Bar;
 import org.cucina.core.testassist.Foo;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -20,7 +19,7 @@ import org.junit.Test;
  * @version $Revision: $
  */
 public class JacksonMarshallerTest {
-    private static final String MARSHALLED_FOO = "{\"id\":null,\"bars\":null,\"bazs\":null,\"date\":null,\"message\":null,\"name\":\"Mikes\",\"value\":0,\"version\":0}";
+    private static final String MARSHALLED_FOO = "{\"id\":null,\"bars\":null,\"bazs\":null,\"date\":null,\"name\":\"Mikes\",\"value\":0,\"version\":0}";
     private JacksonMarshaller marshaller;
 
     /**

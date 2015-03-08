@@ -40,7 +40,7 @@ public class CompositeInstanceFactoryTest {
 
         InstanceFactory if1 = mock(InstanceFactory.class);
 
-        when(if1.isI18nProperty("Foo", "name")).thenReturn(true);
+        when(if1.isTranslatedProperty("Foo", "name")).thenReturn(true);
         when(if1.getPropertyType("Foo", "bla")).thenReturn("Bla");
 
         Collection<String> blaProperties = new HashSet<String>();
@@ -98,7 +98,7 @@ public class CompositeInstanceFactoryTest {
      */
     @Test
     public void testInternationalised() {
-        assertTrue("Should be internationalised", instanceFactory.isI18nProperty("Foo", "name"));
+        assertTrue("Should be internationalised", instanceFactory.isTranslatedProperty("Foo", "name"));
     }
 
     /**
@@ -106,6 +106,6 @@ public class CompositeInstanceFactoryTest {
      */
     @Test
     public void testNotInternationalised() {
-        assertFalse("Should not be internationalised", instanceFactory.isI18nProperty("Foo", "fred"));
+        assertFalse("Should not be internationalised", instanceFactory.isTranslatedProperty("Foo", "fred"));
     }
 }

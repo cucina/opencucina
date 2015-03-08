@@ -1,12 +1,9 @@
 package org.cucina.loader.config;
 
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-
 import org.cucina.core.config.AbstractDefaultIdBeanDefinitionParser;
 import org.cucina.core.config.BuilderHelper;
-
 import org.cucina.loader.processor.ProcessorEventListener;
-
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.w3c.dom.Element;
 
 
