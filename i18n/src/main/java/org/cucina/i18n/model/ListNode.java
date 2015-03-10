@@ -101,6 +101,7 @@ public class ListNode
      * @return JAVADOC.
      */
     @Lob
+    @Column(columnDefinition="blob")
     @Converter(converterClass = JsonMapConverter.class, name = "mapConverter")
     @Convert("mapConverter")
     public Map<String, Object> getAttributes() {

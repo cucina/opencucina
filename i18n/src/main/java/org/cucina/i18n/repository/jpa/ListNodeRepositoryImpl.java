@@ -16,6 +16,7 @@ import org.cucina.i18n.repository.ListNodeRepository;
 import org.cucina.i18n.service.I18nService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
 
@@ -37,6 +38,7 @@ public class ListNodeRepositoryImpl
      *
      * @param i18nService JAVADOC.
      */
+    @Autowired
     public ListNodeRepositoryImpl(I18nService i18nService) {
         Assert.notNull(i18nService, "i18nService is null");
         this.i18nService = i18nService;

@@ -10,17 +10,21 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.lang3.time.StopWatch;
-import org.cucina.core.concurrent.CompletionServiceFactory;
-import org.cucina.core.service.ContextService;
-import org.cucina.loader.processor.Processor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.Assert;
+
+import org.cucina.core.concurrent.CompletionServiceFactory;
+import org.cucina.core.service.ContextService;
+
+import org.cucina.loader.processor.Processor;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -57,6 +61,19 @@ public abstract class AbstractPagingParallelAgent<T>
         this.contextService = contextService;
         Assert.notNull(processor, "processor is null");
         this.processor = processor;
+    }
+
+    /**
+     * Default implementation simply submits the item to processor.
+     *
+     * @param item
+     *            JAVADOC.
+     */
+    @Override
+    public final void processItem(T item) {
+        // contextService.put(MeasuringDelegatingExecutorService.EXECUTION_CONTEXT,
+        // this.getClass().getName() + ".processItem()");
+        doProcessItem(item);
     }
 
     /**
@@ -170,7 +187,7 @@ public abstract class AbstractPagingParallelAgent<T>
 
         stopWatch.start();
 
-        CompletionService<Collection<Long>> completionService = buildCompletionService();
+        CompletionService<Void> completionService = buildCompletionService();
 
         int global = 0;
 
@@ -210,29 +227,6 @@ public abstract class AbstractPagingParallelAgent<T>
             LOG.debug("Completed " + getClass().getName() + " in " + stopWatch.getTime() + "ms");
         }
     }
-
-    /**
-     * Default implementation simply submits the item to processor.
-     *
-     * @param item
-     *            JAVADOC.
-     */
-    @Override
-    public final Collection<Long> processItem(T item) {
-        // contextService.put(MeasuringDelegatingExecutorService.EXECUTION_CONTEXT,
-        // this.getClass().getName() + ".processItem()");
-        return doProcessItem(item);
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param pageSize
-     *            JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    protected abstract Collection<T> obtainNextPage();
 
     /**
      * JAVADOC Method Level Comments
@@ -278,17 +272,27 @@ public abstract class AbstractPagingParallelAgent<T>
      *
      * @return JAVADOC.
      */
-    protected Collection<Long> doProcessItem(T item) {
-        return processor.process(item);
+    protected void doProcessItem(T item) {
+        processor.process(item);
     }
 
-    private CompletionService<Collection<Long>> buildCompletionService() {
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @param pageSize
+     *            JAVADOC.
+     *
+     * @return JAVADOC.
+     */
+    protected abstract Collection<T> obtainNextPage();
+
+    private CompletionService<Void> buildCompletionService() {
         return ((completionServiceFactory != null)
-        ? completionServiceFactory.<Collection<Long>>create(executorService)
-        : new ExecutorCompletionService<Collection<Long>>(executorService));
+        ? completionServiceFactory.<Void>create(executorService)
+        : new ExecutorCompletionService<Void>(executorService));
     }
 
-    private void waitUntilLast(CompletionService<Collection<Long>> completionService, int size) {
+    private void waitUntilLast(CompletionService<Void> completionService, int size) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Waiting for executors to finish. " + size + " items were submitted in " +
                 getClass().getSimpleName());
@@ -296,13 +300,9 @@ public abstract class AbstractPagingParallelAgent<T>
 
         for (int i = 0; i < size; i++) {
             try {
-                Future<Collection<Long>> future = completionService.take();
+                Future<Void> future = completionService.take();
 
-                Collection<Long> result = future.get(timeoutSecs, TimeUnit.SECONDS);
-
-                if (LOG.isTraceEnabled()) {
-                    LOG.trace("Processed:" + result);
-                }
+                future.get(timeoutSecs, TimeUnit.SECONDS);
             } catch (TimeoutException e) {
                 LOG.error("Executor processing timed out.");
                 throw new RuntimeException(
@@ -315,7 +315,7 @@ public abstract class AbstractPagingParallelAgent<T>
     }
 
     private class CallableWrapper
-        implements Callable<Collection<Long>> {
+        implements Callable<Void> {
         private ParallelAgent<T> exec;
         private T item;
 
@@ -325,12 +325,14 @@ public abstract class AbstractPagingParallelAgent<T>
         }
 
         @Override
-        public Collection<Long> call()
+        public Void call()
             throws Exception {
             try {
-                return transactionTemplate.execute(new TransactionCallback<Collection<Long>>() {
-                        public Collection<Long> doInTransaction(TransactionStatus status) {
-                            return exec.processItem(item);
+                return transactionTemplate.execute(new TransactionCallback<Void>() {
+                        public Void doInTransaction(TransactionStatus status) {
+                            exec.processItem(item);
+
+                            return null;
                         }
                     });
             } catch (Exception e) {

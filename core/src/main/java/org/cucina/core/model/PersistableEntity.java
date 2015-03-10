@@ -33,7 +33,7 @@ import org.eclipse.persistence.annotations.ObjectTypeConverter;
     , @ConversionValue(dataValue = "0", objectValue = "false")
 }
 )
-@SequenceGenerator(name = "IdSeq", sequenceName = PersistableEntity.SEQUENCE_NAME, allocationSize = 10)
+//@SequenceGenerator(name = "IdSeq", sequenceName = PersistableEntity.SEQUENCE_NAME, allocationSize = 10)
 public abstract class PersistableEntity
     implements Persistable<Long> {
     private static final long serialVersionUID = 1L;
@@ -71,7 +71,8 @@ public abstract class PersistableEntity
      * @return JAVADOC.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "IdSeq")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "IdSeq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ProjectionColumn
     public Long getId() {
         return id;
@@ -84,6 +85,7 @@ public abstract class PersistableEntity
      */
     @Override
     @JsonIgnore
+    @Transient
     public boolean isNew() {
         return id == null;
     }

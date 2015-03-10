@@ -54,8 +54,8 @@ public class ListNodeMessageBeanPopulatorTest {
         when(messageRepository.getDefaultLocale()).thenReturn(Locale.ENGLISH);
         when(beanFactory.getBean(SingletonBeanFactory.INSTANCE_FACTORY_ID))
             .thenReturn(instanceFactory);
-        when(beanFactory.getBean(SingletonBeanFactory.I18N_SERVICE_ID)).thenReturn(i18nService);
-        when(beanFactory.getBean(SingletonBeanFactory.MESSAGE_REPOSITORY_ID))
+        when(beanFactory.getBean(I18nService.I18N_SERVICE_ID)).thenReturn(i18nService);
+        when(beanFactory.getBean(MessageRepository.MESSAGE_REPOSITORY_ID))
             .thenReturn(messageRepository);
         ((SingletonBeanFactory) SingletonBeanFactory.getInstance()).setBeanFactory(beanFactory);
     }

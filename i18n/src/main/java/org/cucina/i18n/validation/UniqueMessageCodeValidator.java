@@ -116,7 +116,7 @@ public class UniqueMessageCodeValidator
         if (null == messageRepository) {
             LOG.debug("Failed to autowire, attempting to hotwire byName");
             messageRepository = (MessageRepository) SingletonBeanFactory.getInstance()
-                                                                        .getBean(SingletonBeanFactory.MESSAGE_REPOSITORY_ID);
+                                                                        .getBean(MessageRepository.MESSAGE_REPOSITORY_ID);
 
             if (messageRepository == null) {
                 // this may not bring back the desired result

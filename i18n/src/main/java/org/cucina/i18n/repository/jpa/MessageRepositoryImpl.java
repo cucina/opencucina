@@ -17,6 +17,8 @@ import org.cucina.i18n.model.Message;
 import org.cucina.i18n.repository.MessageRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 
@@ -26,6 +28,7 @@ import org.springframework.util.Assert;
  * @author $Author: $
  * @version $Revision: $
   */
+@Repository
 public class MessageRepositoryImpl
     implements MessageRepository {
     private static final Logger LOG = LoggerFactory.getLogger(MessageRepositoryImpl.class);
@@ -39,6 +42,7 @@ public class MessageRepositoryImpl
      *
      * @param instanceFactory JAVADOC.
      */
+    @Autowired
     public MessageRepositoryImpl(InstanceFactory instanceFactory) {
         Assert.notNull(instanceFactory, "instanceFactory is null");
         this.instanceFactory = instanceFactory;

@@ -15,24 +15,11 @@ import org.springframework.util.Assert;
   */
 public class SingletonBeanFactory
     implements BeanFactory, BeanFactoryAware {
-    /*
-     * common bean names
-     */
-
-    /** persistenceService. */
-    public static final String PERSISTENCE_SERVICE_ID = "persistenceService";
-
     /** contextService. */
     public static final String CONTEXT_SERVICE_ID = "contextService";
 
     /** instanceFactory */
     public static final String INSTANCE_FACTORY_ID = "instanceFactory";
-
-    /** i18nService */
-    public static final String I18N_SERVICE_ID = "i18nService";
-
-    /** messageRepository */
-    public static final String MESSAGE_REPOSITORY_ID = "messageRepository";
 
     /**
      * Singleton instance.

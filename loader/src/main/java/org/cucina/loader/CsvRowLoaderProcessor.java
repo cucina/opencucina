@@ -1,13 +1,12 @@
-
 package org.cucina.loader;
 
-import java.util.Collection;
-
-import org.cucina.loader.processor.Processor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindException;
+
+import org.cucina.loader.processor.Processor;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -42,11 +41,11 @@ public class CsvRowLoaderProcessor
      * @return JAVADOC.
      */
     @Override
-    public Collection<Long> process(Object object) {
+    public void process(Object object) {
         if (!(object instanceof FileLoaderContainer)) {
             LOG.warn("Invalid call to this processor with object:" + object);
 
-            return null;
+            return;
         }
 
         FileLoaderContainer container = (FileLoaderContainer) object;
@@ -57,7 +56,5 @@ public class CsvRowLoaderProcessor
         } catch (BindException e) {
             LOG.error("Oops", e);
         }
-
-        return null;
     }
 }

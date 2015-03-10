@@ -1,13 +1,13 @@
-
 package org.cucina.loader.processor;
 
-import java.util.Collection;
 import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import org.springframework.util.Assert;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
 
 
 /**
@@ -55,16 +55,18 @@ public class ProcessorFactory
      *            JAVADOC.
      */
     @Override
-    public Collection<Long> process(Object subject) {
+    public void process(Object subject) {
         Assert.notNull(subject, "Subject is null");
 
         Processor processor = processors.get(subject.getClass());
 
         if (processor != null) {
-            return processor.process(subject);
+            processor.process(subject);
+
+            return;
         }
 
-        return fallback.process(subject);
+        fallback.process(subject);
     }
 
     static class LoggingProcessor
@@ -78,11 +80,9 @@ public class ProcessorFactory
          * @return JAVADOC.
          */
         @Override
-        public Collection<Long> process(Object object) {
+        public void process(Object object) {
             LOG.info("No matching processor found for: " +
                 ToStringBuilder.reflectionToString(object));
-
-            return null;
         }
     }
 }

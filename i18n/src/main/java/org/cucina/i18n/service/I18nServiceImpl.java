@@ -8,6 +8,8 @@ import java.util.TimeZone;
 
 import org.cucina.core.service.ContextService;
 import org.cucina.i18n.repository.MessageRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
@@ -17,6 +19,7 @@ import org.springframework.util.StringUtils;
  * current <code>User</code>'s locale info.
  *
  */
+@Service
 public class I18nServiceImpl
     implements I18nService {
     private ContextService contextService;
@@ -28,6 +31,7 @@ public class I18nServiceImpl
      * @param messageRepository JAVADOC.
      * @param contextService JAVADOC.
      */
+    @Autowired
     public I18nServiceImpl(MessageRepository messageRepository, ContextService contextService) {
         Assert.notNull(messageRepository, "messageRepository is null");
         this.messageRepository = messageRepository;

@@ -1,14 +1,7 @@
 package org.cucina.audit;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.argThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.sql.Timestamp;
+
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,12 +10,18 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.jdbc.core.JdbcTemplate;
+
 import org.cucina.core.InstanceFactory;
 import org.cucina.core.spring.SingletonBeanFactory;
+
 import org.cucina.i18n.model.Message;
 import org.cucina.i18n.model.MutableI18nMessage;
 import org.cucina.i18n.repository.MessageRepository;
+
 import org.cucina.security.testassist.Foo;
+
 import org.eclipse.persistence.descriptors.ClassDescriptor;
 import org.eclipse.persistence.history.AsOfClause;
 import org.eclipse.persistence.history.HistoryPolicy;
@@ -32,13 +31,22 @@ import org.eclipse.persistence.sessions.Project;
 import org.eclipse.persistence.sessions.Session;
 import org.eclipse.persistence.sessions.server.ClientSession;
 import org.eclipse.persistence.sessions.server.ServerSession;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.ArgumentMatcher;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.argThat;
+
 import org.mockito.Mock;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 
 /**
@@ -81,7 +89,7 @@ public class AuditServiceImplTest {
             .thenReturn(instanceFactory);
 
         //   when(beanFactory.getBean(SingletonBeanFactory.I18N_SERVICE_ID)).thenReturn(i18nService);
-        when(beanFactory.getBean(SingletonBeanFactory.MESSAGE_REPOSITORY_ID))
+        when(beanFactory.getBean(MessageRepository.MESSAGE_REPOSITORY_ID))
             .thenReturn(messageRepository);
         ((SingletonBeanFactory) SingletonBeanFactory.getInstance()).setBeanFactory(beanFactory);
     }

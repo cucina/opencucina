@@ -1,7 +1,4 @@
-
 package org.cucina.loader.processor;
-
-import java.util.Collection;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -44,11 +41,9 @@ public class ProcessorEventMulticaster
      * @return null.
      */
     @Override
-    public Collection<Long> process(Object subject) {
+    public void process(Object subject) {
         Assert.notNull(subject, "Cannot provide null subject");
 
         applicationContext.publishEvent(new ProcessorEvent(subject));
-
-        return null;
     }
 }

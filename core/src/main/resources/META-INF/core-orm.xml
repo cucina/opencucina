@@ -2,7 +2,6 @@
 <entity-mappings version="2.1"
     xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/orm"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-
         <entity class="org.cucina.core.model.PersistableEntity"/>
         <entity class="org.cucina.core.model.Attachment"/>
 </entity-mappings>

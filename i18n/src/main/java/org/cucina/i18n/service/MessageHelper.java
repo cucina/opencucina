@@ -5,9 +5,12 @@ import java.util.Locale;
 
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.cucina.core.spring.SingletonBeanFactory;
-import org.cucina.i18n.repository.MessageRepository;
+
 import org.springframework.util.Assert;
+
+import org.cucina.core.spring.SingletonBeanFactory;
+
+import org.cucina.i18n.repository.MessageRepository;
 
 
 /**
@@ -23,7 +26,7 @@ public final class MessageHelper {
      */
     public static Locale getDefaultLocale() {
         MessageRepository messageRepository = (MessageRepository) SingletonBeanFactory.getInstance()
-                                                                                      .getBean(SingletonBeanFactory.MESSAGE_REPOSITORY_ID);
+                                                                                      .getBean(MessageRepository.MESSAGE_REPOSITORY_ID);
 
         Assert.notNull(messageRepository, "messageRepository is null");
 
@@ -55,7 +58,7 @@ public final class MessageHelper {
      */
     public static String bestMsgJpql(String basename, String code, boolean includeCd) {
         Locale locale = ((I18nService) SingletonBeanFactory.getInstance()
-                                                           .getBean(SingletonBeanFactory.I18N_SERVICE_ID)).getLocale();
+                                                           .getBean(I18nService.I18N_SERVICE_ID)).getLocale();
         Locale defaultLocale = MessageHelper.getDefaultLocale();
 
         StringBuilder selectClause = new StringBuilder("SELECT\n");

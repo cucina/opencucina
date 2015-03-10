@@ -1,19 +1,21 @@
 package org.cucina.i18n.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import java.util.List;
 import java.util.Locale;
 
+import org.springframework.beans.factory.BeanFactory;
+
 import org.cucina.core.spring.SingletonBeanFactory;
+
 import org.cucina.i18n.repository.MessageRepository;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.BeanFactory;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 /**
@@ -42,7 +44,7 @@ public class MessageHelperTest {
 
         BeanFactory beanFactory = mock(BeanFactory.class);
 
-        when(beanFactory.getBean(SingletonBeanFactory.MESSAGE_REPOSITORY_ID))
+        when(beanFactory.getBean(MessageRepository.MESSAGE_REPOSITORY_ID))
             .thenReturn(messageRepository);
 
         ((SingletonBeanFactory) SingletonBeanFactory.getInstance()).setBeanFactory(beanFactory);

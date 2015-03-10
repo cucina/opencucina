@@ -1,21 +1,25 @@
 package org.cucina.i18n.model;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
-
 import java.util.Locale;
+
+import org.springframework.beans.factory.BeanFactory;
 
 import org.cucina.core.InstanceFactory;
 import org.cucina.core.spring.SingletonBeanFactory;
+
 import org.cucina.i18n.repository.MessageRepository;
 import org.cucina.i18n.service.I18nService;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.Mock;
+import static org.mockito.Mockito.when;
+
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.BeanFactory;
 
 
 /**
@@ -43,8 +47,8 @@ public class MessageTest {
         when(i18nService.getLocale()).thenReturn(Locale.ENGLISH);
         when(messageRepository.getDefaultLocale()).thenReturn(Locale.JAPANESE);
         when(instanceFactory.getBean(MutableI18nMessage.TYPE)).thenReturn(new MutableI18nMessage());
-        when(bf.getBean(SingletonBeanFactory.I18N_SERVICE_ID)).thenReturn(i18nService);
-        when(bf.getBean(SingletonBeanFactory.MESSAGE_REPOSITORY_ID)).thenReturn(messageRepository);
+        when(bf.getBean(I18nService.I18N_SERVICE_ID)).thenReturn(i18nService);
+        when(bf.getBean(MessageRepository.MESSAGE_REPOSITORY_ID)).thenReturn(messageRepository);
         when(bf.getBean(SingletonBeanFactory.INSTANCE_FACTORY_ID)).thenReturn(instanceFactory);
         ((SingletonBeanFactory) SingletonBeanFactory.getInstance()).setBeanFactory(bf);
     }

@@ -26,5 +26,5 @@ public interface ParallelAgent<T> {
      * @param item
      *            JAVADOC.
      */
-    Collection<Long> processItem(T item);
+    void processItem(T item);
 }

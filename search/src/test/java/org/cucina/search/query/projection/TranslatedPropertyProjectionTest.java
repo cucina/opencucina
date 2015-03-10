@@ -1,21 +1,25 @@
 package org.cucina.search.query.projection;
 
+import java.util.Collections;
+import java.util.Locale;
+
+import org.springframework.beans.factory.BeanFactory;
+
+import org.cucina.core.spring.SingletonBeanFactory;
+
+import org.cucina.i18n.repository.MessageRepository;
+import org.cucina.i18n.service.I18nService;
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import org.mockito.Mock;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Collections;
-import java.util.Locale;
-
-import org.cucina.core.spring.SingletonBeanFactory;
-import org.cucina.i18n.repository.MessageRepository;
-import org.cucina.i18n.service.I18nService;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.BeanFactory;
 
 
 /**
@@ -63,8 +67,8 @@ public class TranslatedPropertyProjectionTest {
 
         BeanFactory beanFactory = mock(BeanFactory.class);
 
-        when(beanFactory.getBean(SingletonBeanFactory.I18N_SERVICE_ID)).thenReturn(i18nService);
-        when(beanFactory.getBean(SingletonBeanFactory.MESSAGE_REPOSITORY_ID))
+        when(beanFactory.getBean(I18nService.I18N_SERVICE_ID)).thenReturn(i18nService);
+        when(beanFactory.getBean(MessageRepository.MESSAGE_REPOSITORY_ID))
             .thenReturn(messageRepository);
 
         ((SingletonBeanFactory) SingletonBeanFactory.getInstance()).setBeanFactory(beanFactory);

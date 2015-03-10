@@ -355,7 +355,7 @@ public class Message
     private I18nService getI18nService() {
         if (i18nService == null) {
             i18nService = (I18nService) SingletonBeanFactory.getInstance()
-                                                            .getBean(SingletonBeanFactory.I18N_SERVICE_ID);
+                                                            .getBean(I18nService.I18N_SERVICE_ID);
         }
 
         return i18nService;

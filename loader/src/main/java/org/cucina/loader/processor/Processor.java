@@ -1,9 +1,6 @@
 
 package org.cucina.loader.processor;
 
-import java.util.Collection;
-
-
 /**
  * JAVADOC Interface Level
  *
@@ -11,13 +8,7 @@ import java.util.Collection;
  * @version $Revision: $
   */
 public interface Processor {
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param object JAVADOC.
-     *
-     * @return JAVADOC.
-     */
+   
     /**
      * JAVADOC Method Level Comments
      *
@@ -25,5 +16,5 @@ public interface Processor {
      *
      * @return collection of ids of newly created objects if any or null.
      */
-    Collection<Long> process(Object object);
+    void process(Object object);
 }
