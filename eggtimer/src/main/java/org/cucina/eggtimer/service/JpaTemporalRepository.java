@@ -8,8 +8,9 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-
 import javax.transaction.Transactional;
+
+import org.springframework.stereotype.Repository;
 
 
 /**
@@ -18,6 +19,7 @@ import javax.transaction.Transactional;
  * @author $Author: $
  * @version $Revision: $
   */
+@Repository
 public class JpaTemporalRepository
     implements TemporalRepository {
     @PersistenceContext
