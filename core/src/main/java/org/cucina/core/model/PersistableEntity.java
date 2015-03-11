@@ -33,6 +33,9 @@ public abstract class PersistableEntity
 
     /** id */
     public static final String ID_PROPERTY = "id";
+
+    /** This is a field JAVADOC */
+    public static final String APPLICATION_TYPE = "applicationType";
     private Long id;
 
     /**
