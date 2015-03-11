@@ -14,8 +14,8 @@ import org.springframework.orm.jpa.EntityManagerHolder;
 import org.springframework.orm.jpa.JpaDialect;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.EclipseLinkJpaDialect;
-import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
+import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import static org.junit.Assert.fail;
@@ -49,12 +49,14 @@ public class HsqlDb {
     }
 
     /**
-     * JAVADOC Method Level Comments
+     * Returns the EntityManager associated with the current transaction.
      *
-     * @return JAVADOC.
+     * @return
      */
-    public boolean isInitialized() {
-        return initialized;
+    public EntityManager getEntityManager() {
+        EntityManagerHolder holder = (EntityManagerHolder) TransactionSynchronizationManager.getResource(entityManagerFactory);
+
+        return holder.getEntityManager();
     }
 
     /**
@@ -71,14 +73,12 @@ public class HsqlDb {
     }
 
     /**
-     * Returns the EntityManager associated with the current transaction.
+     * JAVADOC Method Level Comments
      *
-     * @return
+     * @return JAVADOC.
      */
-    public EntityManager getEntityManager() {
-        EntityManagerHolder holder = (EntityManagerHolder) TransactionSynchronizationManager.getResource(entityManagerFactory);
-
-        return holder.getEntityManager();
+    public boolean isInitialized() {
+        return initialized;
     }
 
     /**
@@ -119,11 +119,11 @@ public class HsqlDb {
             dataSource.setUsername("sa");
             dataSource.setPassword("");
 
-            JpaDialect dialect = new EclipseLinkJpaDialect();
+            JpaDialect dialect = new HibernateJpaDialect();
             LocalContainerEntityManagerFactoryBean localEMFactory = new LocalContainerEntityManagerFactoryBean();
 
             localEMFactory.setJpaDialect(dialect);
-            localEMFactory.setJpaVendorAdapter(new EclipseLinkJpaVendorAdapter());
+            localEMFactory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
             localEMFactory.setDataSource(dataSource);
             localEMFactory.setPackagesToScan(packagesToScan);
 
@@ -132,16 +132,12 @@ public class HsqlDb {
 
             properties.put("eclipselink.logging.level", "FINE");
             properties.put("eclipselink.logging.level.sql", "FINE");
-            properties.put("eclipselink.ddl-generation", "drop-and-create-tables");
+            properties.put("hibernate.hbm2ddl.auto", "create-drop");
+            properties.put("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
             properties.put("PersistenceVersion", "2.1");
-            properties.put("eclipselink.weaving", "false");
             localEMFactory.setJpaPropertyMap(properties);
 
-            try {
-                localEMFactory.afterPropertiesSet();
-            } catch (Exception ex) {
-                fail("Failed to initialize sessionFactory: " + ex);
-            }
+            localEMFactory.afterPropertiesSet();
 
             entityManagerFactory = localEMFactory.getObject();
             jdbcTemplate = new JdbcTemplate(dataSource);

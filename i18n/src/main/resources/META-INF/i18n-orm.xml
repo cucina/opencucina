@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<entity-mappings version="2.1"
-    xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/orm"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <entity class="org.cucina.i18n.model.Message"/>
-    <entity class="org.cucina.i18n.model.MutableI18nMessage"/>
-    <entity class="org.cucina.i18n.model.ListNode"/>
-</entity-mappings>

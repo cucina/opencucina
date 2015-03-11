@@ -5,9 +5,13 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
 
+import javax.persistence.AttributeConverter;
 import javax.persistence.Basic;
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Converter;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -15,6 +19,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.validation.groups.Default;
@@ -23,7 +28,13 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Transformer;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.cucina.audit.Historised;
+
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import org.cucina.core.model.PersistableEntity;
 import org.cucina.core.model.Versioned;
 import org.cucina.core.model.projection.PostProcessProjections;
@@ -31,22 +42,11 @@ import org.cucina.core.model.projection.ProjectionColumn;
 import org.cucina.core.spring.SingletonBeanFactory;
 import org.cucina.core.validation.Create;
 import org.cucina.core.validation.Update;
+
 import org.cucina.email.service.EmailUser;
+
 import org.cucina.security.crypto.Encryptor;
 import org.cucina.security.validation.ValidUsername;
-import org.eclipse.persistence.annotations.Cache;
-import org.eclipse.persistence.annotations.CacheCoordinationType;
-import org.eclipse.persistence.annotations.Convert;
-import org.eclipse.persistence.annotations.Converter;
-import org.eclipse.persistence.annotations.Customizer;
-import org.eclipse.persistence.mappings.DatabaseMapping;
-import org.eclipse.persistence.mappings.foundation.AbstractDirectMapping;
-import org.eclipse.persistence.sessions.Session;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 
 /**
@@ -56,12 +56,9 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @author thornton
  * @author vlevine
  */
-
-// @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @PostProcessProjections
 @Entity
-@Cache(coordinationType = CacheCoordinationType.INVALIDATE_CHANGED_OBJECTS)
-@Customizer(Historised.class)
+@Cacheable
 @Table(name = "UserTable")
 public class User
     extends PersistableEntity
@@ -82,40 +79,6 @@ public class User
     private boolean enabled = true;
     private boolean system;
     private int version;
-
-    /**
-     * Using encryptor defined in SpringContext.
-     *
-     * @param password
-     *
-     * @return encrypted or plain if encryptor is not set.
-     */
-    public static String decrypt(String password) {
-        Encryptor encryptor = findEncryptor();
-
-        if (encryptor == null) {
-            return password;
-        }
-
-        return encryptor.decrypt(password);
-    }
-
-    /**
-     * Using encryptor defined in SpringContext.
-     *
-     * @param password
-     *
-     * @return encrypted or plain if encryptor is not set.
-     */
-    public static String encrypt(String password) {
-        Encryptor encryptor = findEncryptor();
-
-        if (encryptor == null) {
-            return password;
-        }
-
-        return encryptor.encrypt(password);
-    }
 
     /**
      * JAVADOC Method Level Comments
@@ -287,8 +250,7 @@ public class User
      *
      * @return JAVADOC.
      */
-    @Converter(converterClass = LocaleConverter.class, name = "localeConverter")
-    @Convert("localeConverter")
+    @Convert(converter = LocaleConverter.class)
     @Override
     public Locale getLocale() {
         return locale;
@@ -328,8 +290,7 @@ public class User
      *
      * @return password String.
      */
-    @Converter(converterClass = PasswordConverter.class, name = "passwordConverter")
-    @Convert("passwordConverter")
+    @Convert(converter = PasswordConverter.class)
     @Override
     public String getPassword() {
         return password;
@@ -435,6 +396,40 @@ public class User
     }
 
     /**
+     * Using encryptor defined in SpringContext.
+     *
+     * @param password
+     *
+     * @return encrypted or plain if encryptor is not set.
+     */
+    public static String decrypt(String password) {
+        Encryptor encryptor = findEncryptor();
+
+        if (encryptor == null) {
+            return password;
+        }
+
+        return encryptor.decrypt(password);
+    }
+
+    /**
+     * Using encryptor defined in SpringContext.
+     *
+     * @param password
+     *
+     * @return encrypted or plain if encryptor is not set.
+     */
+    public static String encrypt(String password) {
+        Encryptor encryptor = findEncryptor();
+
+        if (encryptor == null) {
+            return password;
+        }
+
+        return encryptor.encrypt(password);
+    }
+
+    /**
      * JAVADOC Method Level Comments
      *
      * @return JAVADOC.
@@ -454,68 +449,37 @@ public class User
     }
 
     public static class LocaleConverter
-        implements org.eclipse.persistence.mappings.converters.Converter {
-        private static final long serialVersionUID = 1L;
-
+        implements AttributeConverter<Locale, String> {
         @Override
-        public boolean isMutable() {
-            return true;
-        }
-
-        @Override
-        public Object convertDataValueToObjectValue(Object arg0, Session arg1) {
-            return LocaleUtils.toLocale((String) arg0);
-        }
-
-        @Override
-        public Object convertObjectValueToDataValue(Object arg0, Session arg1) {
+        public String convertToDatabaseColumn(Locale arg0) {
             return (arg0 == null) ? null : arg0.toString();
         }
 
         @Override
-        public void initialize(DatabaseMapping mapping, Session session) {
-            if (mapping.isAbstractDirectMapping()) {
-                AbstractDirectMapping directMapping = (AbstractDirectMapping) mapping;
-
-                directMapping.setFieldClassification(String.class);
-            }
+        public Locale convertToEntityAttribute(String arg0) {
+            return LocaleUtils.toLocale(arg0);
         }
     }
 
+    @Converter
     public static class PasswordConverter
-        implements org.eclipse.persistence.mappings.converters.Converter {
-        private static final long serialVersionUID = 1L;
-
+        implements AttributeConverter<String, String> {
         @Override
-        public boolean isMutable() {
-            return true;
-        }
-
-        @Override
-        public Object convertDataValueToObjectValue(Object arg0, Session arg1) {
+        public String convertToDatabaseColumn(String arg0) {
             if (arg0 == null) {
                 return null;
             }
 
-            return User.decrypt((String) arg0);
+            return User.encrypt(arg0);
         }
 
         @Override
-        public Object convertObjectValueToDataValue(Object arg0, Session arg1) {
+        public String convertToEntityAttribute(String arg0) {
             if (arg0 == null) {
                 return null;
             }
 
-            return User.encrypt((String) arg0);
-        }
-
-        @Override
-        public void initialize(DatabaseMapping mapping, Session session) {
-            if (mapping.isAbstractDirectMapping()) {
-                AbstractDirectMapping directMapping = (AbstractDirectMapping) mapping;
-
-                directMapping.setFieldClassification(String.class);
-            }
+            return User.decrypt(arg0);
         }
     }
 }

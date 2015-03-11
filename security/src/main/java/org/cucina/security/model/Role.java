@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import javax.persistence.Basic;
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,8 +19,6 @@ import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import org.cucina.audit.Historised;
-
 import org.cucina.core.model.PersistableEntity;
 import org.cucina.core.model.Versioned;
 import org.cucina.core.model.projection.PostProcessProjections;
@@ -30,10 +29,6 @@ import org.cucina.loader.LoaderColumnLookup;
 
 import org.cucina.security.validation.UniqueRole;
 
-import org.eclipse.persistence.annotations.Cache;
-import org.eclipse.persistence.annotations.CacheCoordinationType;
-import org.eclipse.persistence.annotations.Customizer;
-
 
 /**
  * Permission object which contains {@link Privilege}s.
@@ -43,8 +38,7 @@ import org.eclipse.persistence.annotations.Customizer;
  * @version $Revision: 1.4 $
   */
 @Entity
-@Cache(coordinationType = CacheCoordinationType.INVALIDATE_CHANGED_OBJECTS)
-@Customizer(Historised.class)
+@Cacheable
 @PostProcessProjections
 public class Role
     extends PersistableEntity

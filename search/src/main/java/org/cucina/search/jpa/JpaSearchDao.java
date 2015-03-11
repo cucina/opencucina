@@ -1,4 +1,3 @@
-
 package org.cucina.search.jpa;
 
 import java.util.ArrayList;
@@ -13,15 +12,16 @@ import javax.persistence.Query;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
+
+import org.springframework.dao.DataAccessException;
+import org.springframework.util.Assert;
+
 import org.cucina.search.SearchDao;
 import org.cucina.search.query.NamedQuery;
 import org.cucina.search.query.SearchQuery;
-import org.eclipse.persistence.config.QueryHints;
-import org.eclipse.persistence.config.ResultType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataAccessException;
-import org.springframework.util.Assert;
 
 
 /**
@@ -142,6 +142,12 @@ public class JpaSearchDao
     }
 
     @Override
+    public <T> List<T> findByNamedQuery(NamedQuery namedQuery)
+        throws DataAccessException {
+        return find(namedQuery);
+    }
+
+    @Override
     public <T, V> List<Map<T, V>> findByNamedQueryMap(String namedQuery, Object... values)
         throws DataAccessException {
         return findMap(new NamedQuery(namedQuery, values));
@@ -153,19 +159,12 @@ public class JpaSearchDao
         throws DataAccessException {
         return findMap(new NamedQuery(namedQuery, Arrays.asList(paramNames), Arrays.asList(values)));
     }
-    
-    @Override
-	public <T, V> List<Map<T, V>> findByNamedQueryMap(NamedQuery query)
-			throws DataAccessException {
-        return findMap(query);
-	}
 
-	@Override
-	public <T> List<T> findByNamedQuery(NamedQuery namedQuery)
-			throws DataAccessException {
-		return find(namedQuery);
-	}
-    
+    @Override
+    public <T, V> List<Map<T, V>> findByNamedQueryMap(NamedQuery query)
+        throws DataAccessException {
+        return findMap(query);
+    }
 
     @Override
     public <T> List<T> findByNativeQuery(SearchQuery query) {
@@ -180,8 +179,8 @@ public class JpaSearchDao
 
         return doFind(jpaQuery);
     }
-    
-	@Override
+
+    @Override
     public <T, V> List<Map<T, V>> findMap(SearchQuery query, int firstResult, int maxResult) {
         query.setSelectMap(true);
 
@@ -204,11 +203,11 @@ public class JpaSearchDao
     }
 
     private void setReadOnlyHint(Query query, boolean isReadOnly) {
-        query.setHint(QueryHints.READ_ONLY, isReadOnly);
+        // TODO portable across JPA       query.setHint(QueryHints.READ_ONLY, isReadOnly);
     }
 
     private void setReturnMapHint(Query query) {
-        query.setHint(QueryHints.RESULT_TYPE, ResultType.Map);
+        // TODO ditto       query.setHint(QueryHints.RESULT_TYPE, ResultType.Map);
     }
 
     private void addParameters(Query jpaQuery, List<String> paramNames, List<?> values) {
@@ -264,12 +263,14 @@ public class JpaSearchDao
         if (LOG.isDebugEnabled()) {
             LOG.debug("Find by query [" + query + "]");
         }
+
         Query jpaQuery = null;
-        if ( query instanceof NamedQuery ){
-        	jpaQuery = entityManager.createNamedQuery(query.getQuery());
+
+        if (query instanceof NamedQuery) {
+            jpaQuery = entityManager.createNamedQuery(query.getQuery());
         } else {
-        	jpaQuery = entityManager.createQuery(query.getQuery());
-        } 
+            jpaQuery = entityManager.createQuery(query.getQuery());
+        }
 
         addParameters(jpaQuery, query.getParamNames(), query.getValues());
 
@@ -280,7 +281,7 @@ public class JpaSearchDao
         }
 
         setReadOnlyHint(jpaQuery, query.isReadOnly());
-        
+
         if (query.isSelectMap()) {
             setReturnMapHint(jpaQuery);
         }

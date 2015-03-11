@@ -3,13 +3,11 @@ package org.cucina.i18n.testassist;
 import java.util.Collection;
 import java.util.Date;
 
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.QueryHint;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
@@ -26,28 +24,19 @@ import org.cucina.core.model.projection.TranslatedColumns;
 
 import org.cucina.i18n.model.Message;
 
-import org.eclipse.persistence.annotations.Cache;
-import org.eclipse.persistence.config.HintValues;
-import org.eclipse.persistence.config.QueryHints;
-
 
 /**
+ * JAVADOC for Class Level
  *
- * @author ajoffe
- */
+ * @author $Author: $
+ * @version $Revision: $
+  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "foo")
 @XmlRootElement(name = "foo")
 @Entity(name = Foo.TYPE)
 @TranslatedColumns("name")
-@NamedQueries(value =  {
-    @NamedQuery(name = "allFoo", query = "select foo from Foo foo where foo.name = ?1", hints =  {
-        @QueryHint(name = QueryHints.QUERY_RESULTS_CACHE, value = HintValues.TRUE)
-    }
-    )
-}
-)
-@Cache()
+@Cacheable
 public class Foo
     extends PersistableEntity
     implements Versioned {

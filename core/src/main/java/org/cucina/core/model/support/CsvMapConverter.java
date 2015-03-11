@@ -1,15 +1,14 @@
-
-package org.cucina.core.model.eclipselink;
+package org.cucina.core.model.support;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
+
 import org.apache.commons.collections.MapUtils;
-import org.eclipse.persistence.mappings.DatabaseMapping;
-import org.eclipse.persistence.mappings.converters.Converter;
-import org.eclipse.persistence.mappings.foundation.AbstractDirectMapping;
-import org.eclipse.persistence.sessions.Session;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,58 +34,43 @@ import org.slf4j.LoggerFactory;
  * @author $Author: $
  * @version $Revision: $
  */
+@SuppressWarnings("rawtypes")
+@Converter
 public class CsvMapConverter
-    implements Converter {
-    private static final long serialVersionUID = -4544057848189055214L;
+    implements AttributeConverter<Map, String> {
     private static final Logger LOG = LoggerFactory.getLogger(CsvMapConverter.class);
 
     /**
      * JAVADOC Method Level Comments
      *
+     * @param val JAVADOC.
+     *
      * @return JAVADOC.
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public boolean isMutable() {
-        return true;
+    public String convertToDatabaseColumn(Map val) {
+        if (val == null) {
+            return null;
+        }
+
+        return toString(val);
     }
 
     /**
      * JAVADOC Method Level Comments
      *
      * @param val JAVADOC.
-     * @param session JAVADOC.
      *
      * @return JAVADOC.
      */
     @Override
-    public Object convertDataValueToObjectValue(Object val, Session session) {
+    public Map convertToEntityAttribute(String val) {
         if (val == null) {
             return null;
         }
 
         return fromString(val.toString());
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param val JAVADOC.
-     * @param session JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    @SuppressWarnings("unchecked")
-    public Object convertObjectValueToDataValue(Object val, Session session) {
-        if (val == null) {
-            return null;
-        }
-
-        if (!(val instanceof Map<?, ?>)) {
-            return "Not a Map";
-        }
-
-        return toString((Map<String, String>) val);
     }
 
     /**
@@ -120,21 +104,6 @@ public class CsvMapConverter
         }
 
         return result;
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param mapping JAVADOC.
-     * @param session JAVADOC.
-     */
-    @Override
-    public void initialize(DatabaseMapping mapping, Session session) {
-        if (mapping.isAbstractDirectMapping()) {
-            AbstractDirectMapping directMapping = (AbstractDirectMapping) mapping;
-
-            directMapping.setFieldClassification(String.class);
-        }
     }
 
     /**

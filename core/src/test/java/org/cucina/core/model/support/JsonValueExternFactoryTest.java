@@ -1,9 +1,10 @@
-package org.cucina.core.model.eclipselink;
+package org.cucina.core.model.support;
 
 import java.io.IOException;
 
 import org.springframework.beans.factory.BeanFactory;
 import org.cucina.core.marshal.JacksonMarshaller;
+import org.cucina.core.model.support.JsonMarshallerFactory;
 import org.cucina.core.spring.SingletonBeanFactory;
 import org.cucina.core.testassist.Foo;
 

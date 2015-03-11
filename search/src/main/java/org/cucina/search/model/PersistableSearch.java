@@ -1,20 +1,18 @@
 package org.cucina.search.model;
 
 import javax.persistence.Basic;
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import org.cucina.core.model.PersistableEntity;
+import org.cucina.core.model.support.BooleanConverter;
 
 import org.cucina.search.SavedSearch;
 import org.cucina.search.query.SearchBean;
-
-import org.eclipse.persistence.annotations.Cache;
-import org.eclipse.persistence.annotations.CacheCoordinationType;
-import org.eclipse.persistence.annotations.Convert;
-import org.eclipse.persistence.annotations.Converter;
 
 
 /**
@@ -24,7 +22,7 @@ import org.eclipse.persistence.annotations.Converter;
  * @version $Revision: $
  */
 @Entity
-@Cache(coordinationType = CacheCoordinationType.INVALIDATE_CHANGED_OBJECTS)
+@Cacheable
 @Table(name = "SAVED_SEARCH")
 public class PersistableSearch
     extends PersistableEntity
@@ -89,7 +87,7 @@ public class PersistableSearch
      *
      * @return isPublic.
      */
-    @Convert("booleanConverter")
+    @Convert(converter = BooleanConverter.class)
     @Column(name = "IS_PUBLIC", columnDefinition = "CHAR(1) not null")
     public boolean isPublic() {
         return isPublic;
@@ -111,8 +109,7 @@ public class PersistableSearch
      */
     @Lob
     @Column(name = "MARSHALLED_SEARCH")
-    @Converter(converterClass = SearchBeanConverter.class, name = "searchBeanConverter")
-    @Convert("searchBeanConverter")
+    @Convert(converter = SearchBeanConverter.class)
     public SearchBean getSearchBean() {
         return searchBean;
     }

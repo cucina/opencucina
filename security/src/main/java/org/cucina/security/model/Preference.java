@@ -1,6 +1,7 @@
 package org.cucina.security.model;
 
 import javax.persistence.Basic;
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -8,9 +9,8 @@ import javax.persistence.ManyToOne;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import org.cucina.core.model.PersistableEntity;
-import org.eclipse.persistence.annotations.Cache;
-import org.eclipse.persistence.annotations.CacheCoordinationType;
 
 
 /**
@@ -21,7 +21,7 @@ import org.eclipse.persistence.annotations.CacheCoordinationType;
  * @version $Revision: 1.1 $
  */
 @Entity
-@Cache(coordinationType = CacheCoordinationType.INVALIDATE_CHANGED_OBJECTS)
+@Cacheable
 public class Preference
     extends PersistableEntity {
     private static final long serialVersionUID = -2407283406513275282L;

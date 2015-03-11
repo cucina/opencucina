@@ -42,30 +42,7 @@
 	</dependencies>
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>de.empulse.eclipselink</groupId>
-				<artifactId>staticweave-maven-plugin</artifactId>
-				<version>1.0.0</version>
-				<executions>
-					<execution>
-						<phase>process-classes</phase>
-						<goals>
-							<goal>weave</goal>
-						</goals>
-						<configuration>
-							<persistenceXMLLocation>jpa/persistence.xml</persistenceXMLLocation>
-							<logLevel>FINE</logLevel>
-						</configuration>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>org.eclipse.persistence</groupId>
-						<artifactId>org.eclipse.persistence.jpa</artifactId>
-						<version>2.5.1</version>
-					</dependency>
-				</dependencies>
-			</plugin>
+			
 		</plugins>
 	</build>
 </project>

@@ -15,11 +15,6 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>org.eclipse.persistence</groupId>
-			<artifactId>org.eclipse.persistence.jpa</artifactId>
-			<version>2.5.2</version>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-commons</artifactId>
 		</dependency>
@@ -32,11 +27,11 @@
 			<artifactId>cucina-core</artifactId>
 			<version>0.1</version>
 		</dependency>
-	<!-- 	<dependency>
+	 	<dependency>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
 			<scope>test</scope>
-		</dependency> -->
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -61,30 +56,6 @@
 	</dependencies>
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>de.empulse.eclipselink</groupId>
-				<artifactId>staticweave-maven-plugin</artifactId>
-				<version>1.0.0</version>
-				<executions>
-					<execution>
-						<phase>process-classes</phase>
-						<goals>
-							<goal>weave</goal>
-						</goals>
-						<configuration>
-							<persistenceXMLLocation>jpa/persistence.xml</persistenceXMLLocation>
-							<logLevel>FINE</logLevel>
-						</configuration>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>org.eclipse.persistence</groupId>
-						<artifactId>org.eclipse.persistence.jpa</artifactId>
-						<version>2.5.1</version>
-					</dependency>
-				</dependencies>
-			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

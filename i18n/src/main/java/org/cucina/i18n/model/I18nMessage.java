@@ -1,5 +1,5 @@
 
-package org.cucina.i18n;
+package org.cucina.i18n.model;
 
 
 /**

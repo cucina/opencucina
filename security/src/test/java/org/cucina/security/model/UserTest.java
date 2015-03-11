@@ -1,18 +1,21 @@
-
 package org.cucina.security.model;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 
 import java.util.Locale;
 
+import org.springframework.beans.factory.BeanFactory;
+
 import org.cucina.core.spring.SingletonBeanFactory;
+
 import org.cucina.security.crypto.Encryptor;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.Mock;
+import static org.mockito.Mockito.when;
+
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.BeanFactory;
 
 
 /**
@@ -73,8 +76,8 @@ public class UserTest {
     public void testLocaleConverter() {
         User.LocaleConverter converter = new User.LocaleConverter();
 
-        assertEquals(Locale.ENGLISH, converter.convertDataValueToObjectValue("en", null));
-        assertEquals("en", converter.convertObjectValueToDataValue(Locale.ENGLISH, null));
+        assertEquals(Locale.ENGLISH, converter.convertToEntityAttribute("en"));
+        assertEquals("en", converter.convertToDatabaseColumn(Locale.ENGLISH));
     }
 
     /**
@@ -84,7 +87,7 @@ public class UserTest {
     public void testPasswordConverter() {
         User.PasswordConverter converter = new User.PasswordConverter();
 
-        assertEquals("password", converter.convertDataValueToObjectValue("password", null));
-        assertEquals("password", converter.convertObjectValueToDataValue("password", null));
+        assertEquals("password", converter.convertToEntityAttribute("password"));
+        assertEquals("password", converter.convertToDatabaseColumn("password"));
     }
 }

@@ -1,5 +1,6 @@
 package org.cucina.i18n.model;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -9,13 +10,11 @@ import javax.persistence.Version;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.cucina.core.model.PersistableEntity;
-import org.cucina.core.model.Versioned;
-import org.cucina.i18n.I18nMessage;
-import org.eclipse.persistence.annotations.Cache;
-import org.eclipse.persistence.annotations.CacheCoordinationType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import org.cucina.core.model.PersistableEntity;
+import org.cucina.core.model.Versioned;
 
 
 /**
@@ -25,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @version $Revision: 1.4 $
   */
 @Entity(name = MutableI18nMessage.TABLE)
-@Cache(coordinationType = CacheCoordinationType.INVALIDATE_CHANGED_OBJECTS)
+@Cacheable
 public class MutableI18nMessage
     extends PersistableEntity
     implements Versioned, I18nMessage {

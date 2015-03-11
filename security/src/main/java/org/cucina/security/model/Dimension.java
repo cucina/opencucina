@@ -1,7 +1,7 @@
-
 package org.cucina.security.model;
 
 import javax.persistence.Basic;
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -9,15 +9,11 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
-import org.cucina.audit.Historised;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.cucina.core.model.PersistableEntity;
 import org.cucina.core.model.Versioned;
 import org.cucina.core.validation.NotBlank;
-import org.eclipse.persistence.annotations.Cache;
-import org.eclipse.persistence.annotations.CacheCoordinationType;
-import org.eclipse.persistence.annotations.Customizer;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 /**
@@ -27,8 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * @version $Revision: $
   */
 @Entity
-@Cache(coordinationType=CacheCoordinationType.INVALIDATE_CHANGED_OBJECTS)
-@Customizer(Historised.class)
+@Cacheable
 @Table(name = "Dimension")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Dimension

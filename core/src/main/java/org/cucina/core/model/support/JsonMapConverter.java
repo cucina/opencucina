@@ -1,12 +1,12 @@
-package org.cucina.core.model.eclipselink;
+package org.cucina.core.model.support;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
-
 import java.util.Map;
 
-import org.eclipse.persistence.sessions.Session;
+import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,31 +18,43 @@ import org.slf4j.LoggerFactory;
  * @author $Author: $
  * @version $Revision: $
  */
+@SuppressWarnings("rawtypes")
+@Converter
 public class JsonMapConverter
-    extends AbstractJsonConverter {
-    private static final long serialVersionUID = -8777532729909911944L;
+    implements AttributeConverter<Map, String> {
     private static final Logger LOG = LoggerFactory.getLogger(JsonMapConverter.class);
 
     /**
      * JAVADOC Method Level Comments
      *
      * @param val JAVADOC.
-     * @param session JAVADOC.
      *
      * @return JAVADOC.
      */
     @Override
-    public Object convertDataValueToObjectValue(Object val, Session session) {
+    public String convertToDatabaseColumn(Map val) {
+        return JsonMarshallerFactory.toString(val);
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @param val JAVADOC.
+     *
+     * @return JAVADOC.
+     */
+    @Override
+    public Map convertToEntityAttribute(String val) {
         if (val == null) {
             return null;
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Converting value to Map [" + val.toString() + "]");
+            LOG.debug("Converting value to Map [" + val + "]");
         }
 
         StringBuffer sb = new StringBuffer();
-        BufferedReader reader = new BufferedReader(new StringReader(val.toString()));
+        BufferedReader reader = new BufferedReader(new StringReader(val));
         String line;
 
         try {

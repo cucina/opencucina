@@ -8,18 +8,23 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.LocaleUtils;
-import org.cucina.core.InstanceFactory;
-import org.cucina.i18n.model.Message;
-import org.cucina.i18n.repository.MessageRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
+
+import org.cucina.core.InstanceFactory;
+
+import org.cucina.i18n.model.Message;
+import org.cucina.i18n.repository.MessageRepository;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -28,7 +33,7 @@ import org.springframework.util.Assert;
  * @author $Author: $
  * @version $Revision: $
   */
-@Repository
+@Repository(value = "messageRepository")
 public class MessageRepositoryImpl
     implements MessageRepository {
     private static final Logger LOG = LoggerFactory.getLogger(MessageRepositoryImpl.class);
@@ -89,13 +94,16 @@ public class MessageRepositoryImpl
     /**
      * JAVADOC Method Level Comments
      *
-     * @param id JAVADOC.
-     *
      * @return JAVADOC.
      */
     @Override
-    public Message find(Long id) {
-        return entityManager.find(Message.class, id);
+    public Collection<Message> findAll() {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Message> cq = cb.createQuery(Message.class);
+
+        cq.from(Message.class);
+
+        return entityManager.createQuery(cq).getResultList();
     }
 
     /**
@@ -110,7 +118,14 @@ public class MessageRepositoryImpl
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Message> cq = cb.createQuery(Message.class);
         Root<Message> root = cq.from(Message.class);
-        Predicate preb = cb.equal(root.get("baseName"), basename);
+        Path<Object> pb = root.get("baseName");
+        Predicate preb;
+
+        if (basename == null) {
+            preb = cb.isNull(pb);
+        } else {
+            preb = cb.equal(pb, basename);
+        }
 
         return entityManager.createQuery(cq.where(preb)).getResultList();
     }
@@ -128,10 +143,24 @@ public class MessageRepositoryImpl
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Message> cq = cb.createQuery(Message.class);
         Root<Message> root = cq.from(Message.class);
-        Predicate preb = cb.equal(root.get("baseName"), basename);
+        Path<Object> pb = root.get("baseName");
+        Predicate preb;
+
+        if (basename == null) {
+            preb = cb.isNull(pb);
+        } else {
+            preb = cb.equal(pb, basename);
+        }
+
         Predicate prec = cb.equal(root.get("messageCd"), code);
 
-        return entityManager.createQuery(cq.where(cb.and(preb, prec))).getSingleResult();
+        try {
+            return entityManager.createQuery(cq.where(cb.and(preb, prec))).getSingleResult();
+        } catch (NoResultException e) {
+            LOG.info("No record found for basename='" + basename + "' and code='" + code + "'");
+
+            return null;
+        }
     }
 
     /**
@@ -168,6 +197,18 @@ public class MessageRepositoryImpl
         Predicate prec = cb.equal(root.get("messageCd"), code);
 
         return entityManager.createQuery(cq.where(prec)).getResultList();
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @param id JAVADOC.
+     *
+     * @return JAVADOC.
+     */
+    @Override
+    public Message findById(Long id) {
+        return entityManager.find(Message.class, id);
     }
 
     /**

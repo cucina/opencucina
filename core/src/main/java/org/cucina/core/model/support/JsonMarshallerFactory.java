@@ -1,4 +1,4 @@
-package org.cucina.core.model.eclipselink;
+package org.cucina.core.model.support;
 
 import java.io.BufferedReader;
 import java.io.IOException;

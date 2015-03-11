@@ -63,7 +63,7 @@ public class MessageRepositoryImplTest {
      */
     @Test
     public void testFind() {
-        repo.find(11L);
+        repo.findById(11L);
     }
 
     /**

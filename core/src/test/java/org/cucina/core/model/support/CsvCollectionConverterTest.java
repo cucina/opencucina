@@ -1,21 +1,16 @@
+package org.cucina.core.model.support;
 
-package org.cucina.core.model.eclipselink;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import org.eclipse.persistence.mappings.foundation.AbstractDirectMapping;
-import org.eclipse.persistence.sessions.Session;
+import org.cucina.core.model.support.CsvCollectionConverter;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 
@@ -26,11 +21,7 @@ import org.mockito.MockitoAnnotations;
  * @version $Revision: $
   */
 public class CsvCollectionConverterTest {
-    @Mock
-    private AbstractDirectMapping mapping;
     private CsvCollectionConverter converter;
-    @Mock
-    private Session session;
 
     /**
      * JAVADOC Method Level Comments
@@ -49,7 +40,7 @@ public class CsvCollectionConverterTest {
      */
     @Test
     public void testConvertDataValueToObjectValue() {
-        Object result = converter.convertDataValueToObjectValue("a, b,c", session);
+        Object result = converter.convertToEntityAttribute("a, b,c");
 
         assertTrue("Not an instanceof Collection", result instanceof Collection<?>);
 
@@ -67,8 +58,7 @@ public class CsvCollectionConverterTest {
      */
     @Test
     public void testConvertDataValueToObjectValueNull() {
-        assertNull("Shouldn't have converted anything",
-            converter.convertDataValueToObjectValue(null, session));
+        assertNull("Shouldn't have converted anything", converter.convertToEntityAttribute(null));
     }
 
     /**
@@ -82,7 +72,7 @@ public class CsvCollectionConverterTest {
         coll.add("b");
         coll.add("a");
 
-        Object result = converter.convertObjectValueToDataValue(coll, session);
+        Object result = converter.convertToDatabaseColumn(coll);
 
         assertNotNull("result is null", result);
 
@@ -95,42 +85,13 @@ public class CsvCollectionConverterTest {
      * JAVADOC Method Level Comments
      */
     @Test
-    public void testConvertObjectValueToDataValueNotCollection() {
-        assertEquals("Shouldn't have converted", "Not a Collection",
-            converter.convertObjectValueToDataValue(new Object(), session));
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
     public void testConvertObjectValueToDataValueNull() {
-        assertNull("Shouldn't have converted anything",
-            converter.convertObjectValueToDataValue(null, session));
+        assertNull("Shouldn't have converted anything", converter.convertToDatabaseColumn(null));
     }
 
     /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    public void testInitialize() {
-        when(mapping.isAbstractDirectMapping()).thenReturn(true);
-
-        converter.initialize(mapping, session);
-        verify(mapping).setFieldClassification(String.class);
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    public void testIsMutable() {
-        assertTrue(converter.isMutable());
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     */
+    * JAVADOC Method Level Comments
+    */
     @Test
     public void toStringNull() {
         assertNull(CsvCollectionConverter.toString(null));

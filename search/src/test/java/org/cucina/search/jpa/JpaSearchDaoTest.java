@@ -1,12 +1,5 @@
 package org.cucina.search.jpa;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,12 +12,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.cucina.search.query.SearchQuery;
-import org.eclipse.persistence.config.HintValues;
-import org.eclipse.persistence.config.QueryHints;
-import org.eclipse.persistence.config.ResultType;
-import org.eclipse.persistence.internal.jpa.EJBQueryImpl;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+
 import org.junit.Before;
 import org.junit.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 /**
@@ -95,7 +90,7 @@ public class JpaSearchDaoTest {
      */
     @Test
     public void findByNamedQueryMap() {
-        EJBQueryImpl<?> query = mock(EJBQueryImpl.class);
+        Query query = mock(Query.class);
 
         when(em.createNamedQuery("myQuery")).thenReturn(query);
         when(query.getResultList()).thenReturn(results);
@@ -107,7 +102,8 @@ public class JpaSearchDaoTest {
             retResults.iterator().next().get(RESULT_KEY));
 
         verify(query).setParameter(1, 1);
-        verify(query).setHint(QueryHints.RESULT_TYPE, ResultType.Map);
+
+        //        verify(query).setHint(QueryHints.RESULT_TYPE, ResultType.Map);
     }
 
     /**
@@ -141,7 +137,7 @@ public class JpaSearchDaoTest {
      */
     @Test
     public void findByNamedQueryWithNamedParamsMap() {
-        EJBQueryImpl<?> query = mock(EJBQueryImpl.class);
+        Query query = mock(Query.class);
 
         when(em.createNamedQuery("myQuery")).thenReturn(query);
         when(query.setParameter(NAMED_PARAMS[0], IDS_COLL)).thenReturn(query);
@@ -156,7 +152,8 @@ public class JpaSearchDaoTest {
         verify(query).setParameter(NAMED_PARAMS[0], IDS_COLL);
         verify(query).setParameter(NAMED_PARAMS[1], IDS_ARRAY);
         verify(query).setParameter(NAMED_PARAMS[2], ID);
-        verify(query).setHint(QueryHints.RESULT_TYPE, ResultType.Map);
+
+        //        verify(query).setHint(QueryHints.RESULT_TYPE, ResultType.Map);
     }
 
     /**
@@ -222,14 +219,14 @@ public class JpaSearchDaoTest {
      */
     @Test
     public void findByQueryMap() {
-        EJBQueryImpl<?> query = mock(EJBQueryImpl.class);
+        Query query = mock(Query.class);
 
         when(em.createQuery(QUERY)).thenReturn(query);
         when(query.getResultList()).thenReturn(results);
 
         assertEquals("Incorrect results", results, dao.findMap(new SearchQuery(QUERY, VALUES)));
 
-        verify(query).setHint(QueryHints.RESULT_TYPE, ResultType.Map);
+        //        verify(query).setHint(QueryHints.RESULT_TYPE, ResultType.Map);
     }
 
     /**
@@ -237,7 +234,7 @@ public class JpaSearchDaoTest {
      */
     @Test
     public void findByQueryMapRestrictResults() {
-        EJBQueryImpl<?> query = mock(EJBQueryImpl.class);
+        Query query = mock(Query.class);
 
         when(em.createQuery(QUERY)).thenReturn(query);
         when(query.getResultList()).thenReturn(results);
@@ -245,7 +242,7 @@ public class JpaSearchDaoTest {
         assertEquals("Incorrect results", results,
             dao.findMap(new SearchQuery(QUERY, VALUES), 10, 20));
 
-        verify(query).setHint(QueryHints.RESULT_TYPE, ResultType.Map);
+        //        verify(query).setHint(QueryHints.RESULT_TYPE, ResultType.Map);
         verify(query).setMaxResults(20);
         verify(query).setFirstResult(10);
     }
@@ -308,7 +305,8 @@ public class JpaSearchDaoTest {
 
         assertEquals("Incorrect results", results,
             dao.find(new SearchQuery(QUERY, true, (Object[]) null)));
-        verify(query).setHint(QueryHints.READ_ONLY, true);
+
+        //        verify(query).setHint(QueryHints.READ_ONLY, true);
     }
 
     /**
@@ -320,6 +318,7 @@ public class JpaSearchDaoTest {
         when(query.getResultList()).thenReturn(results);
 
         assertEquals("Incorrect results", results, dao.find(new SearchQuery(QUERY, (Object[]) null)));
-        verify(query, never()).setHint(QueryHints.READ_ONLY, HintValues.TRUE);
+
+        //       verify(query, never()).setHint(QueryHints.READ_ONLY, HintValues.TRUE);
     }
 }

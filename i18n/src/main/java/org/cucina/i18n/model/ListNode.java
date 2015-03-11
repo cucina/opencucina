@@ -2,33 +2,33 @@ package org.cucina.i18n.model;
 
 import java.util.Map;
 
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Version;
+
 import javax.validation.constraints.NotNull;
 
 import org.cucina.core.model.PersistableEntity;
 import org.cucina.core.model.Versioned;
-import org.cucina.core.model.eclipselink.JsonMapConverter;
 import org.cucina.core.model.projection.PostProcessProjections;
 import org.cucina.core.model.projection.ProjectionColumn;
+import org.cucina.core.model.support.BooleanConverter;
+import org.cucina.core.model.support.JsonMapConverter;
 import org.cucina.core.validation.NotBlank;
+
 import org.cucina.i18n.validation.UniqueListNode;
 import org.cucina.i18n.validation.UniqueMessageCode;
-import org.eclipse.persistence.annotations.Cache;
-import org.eclipse.persistence.annotations.CacheCoordinationType;
-import org.eclipse.persistence.annotations.Convert;
-import org.eclipse.persistence.annotations.Converter;
 
 
 /**
  * A representation of a category node.
  */
 @Entity
-@Cache(coordinationType = CacheCoordinationType.INVALIDATE_CHANGED_OBJECTS)
+@Cacheable
 @UniqueListNode
 @UniqueMessageCode
 @PostProcessProjections
@@ -100,10 +100,9 @@ public class ListNode
      *
      * @return JAVADOC.
      */
-    @Lob
-    @Column(columnDefinition="blob")
-    @Converter(converterClass = JsonMapConverter.class, name = "mapConverter")
-    @Convert("mapConverter")
+
+    //    @Lob
+    @Convert(converter = JsonMapConverter.class)
     public Map<String, Object> getAttributes() {
         return attributes;
     }
@@ -120,7 +119,7 @@ public class ListNode
      * Gets the defaultValue flag on the object
      * @return Returns the defaultValue.
      */
-    @Convert("booleanConverter")
+    @Convert(converter = BooleanConverter.class)
     @Column(columnDefinition = "CHAR(1) not null")
     @ProjectionColumn
     public Boolean getDefaultValue() {
@@ -158,7 +157,7 @@ public class ListNode
      * @return Returns the retired.
      */
     @ProjectionColumn
-    @Convert("booleanConverter")
+    @Convert(converter = BooleanConverter.class)
     @Column(columnDefinition = "CHAR(1) not null")
     public Boolean getRetired() {
         return retired;

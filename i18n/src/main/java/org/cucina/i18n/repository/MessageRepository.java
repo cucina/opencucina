@@ -44,7 +44,7 @@ public interface MessageRepository {
      * noise here".
      */
     String MESSAGE = "MESSAGE_TX";
-    
+
     /**
      * Default id for the bean 'messageRepository'.
      */
@@ -62,7 +62,14 @@ public interface MessageRepository {
      * @param id
      * @return Message
      */
-    Message find(Long id);
+    Message findById(Long id);
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @return JAVADOC.
+     */
+    Collection<Message> findAll();
 
     /**
      * Load all the messages with the given basename.
@@ -120,21 +127,6 @@ public interface MessageRepository {
      * @return the message that was saved if successful, null otherwise
      */
     Message save(String basename, String locale, String code, String msg);
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param messages JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param messages JAVADOC.
-     *
-     * @return JAVADOC.
-     */
 
     /**
      * Save or update the messages in the input.

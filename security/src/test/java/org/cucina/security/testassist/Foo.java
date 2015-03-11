@@ -6,13 +6,11 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.QueryHint;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -22,29 +20,21 @@ import org.cucina.core.model.PersistableEntity;
 import org.cucina.core.model.Versioned;
 import org.cucina.core.model.projection.ProjectionColumn;
 import org.cucina.core.model.projection.TranslatedColumns;
+
 import org.cucina.i18n.model.Message;
-import org.eclipse.persistence.annotations.Cache;
-import org.eclipse.persistence.config.HintValues;
-import org.eclipse.persistence.config.QueryHints;
 
 
 /**
+ * JAVADOC for Class Level
  *
- * @author ajoffe
- */
+ * @author $Author: $
+ * @version $Revision: $
+  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "foo")
 @XmlRootElement(name = "foo")
 @Entity(name = Foo.TYPE)
 @TranslatedColumns("name")
-@NamedQueries(value =  {
-    @NamedQuery(name = "allFoo", query = "select foo from Foo foo where foo.name = ?1", hints =  {
-        @QueryHint(name = QueryHints.QUERY_RESULTS_CACHE, value = HintValues.TRUE)
-    }
-    )
-}
-)
-@Cache()
 public class Foo
     extends PersistableEntity
     implements Versioned {

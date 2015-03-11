@@ -83,6 +83,14 @@ public class MessageRepositorySystemTest
     }
 
     /**
+     * JAVADOC Method Level Comments
+     */
+    @Test
+    public void testFindAll() {
+        repo.findAll();
+    }
+
+    /**
      * Can find by basename.
      */
     @Test
@@ -158,7 +166,7 @@ public class MessageRepositorySystemTest
      * Basename is required.
      */
     @Test
-    public void testNullBasename() {
+    public void testNullBasenameAll() {
         Collection<Message> mess = repo.findByBasename(null);
 
         assertEquals(1, mess.size());

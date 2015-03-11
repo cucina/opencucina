@@ -3,18 +3,18 @@ package org.cucina.cluster.model;
 import java.util.Date;
 import java.util.Map;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import org.cucina.core.model.PersistableEntity;
-import org.cucina.core.model.eclipselink.JsonMapConverter;
-import org.eclipse.persistence.annotations.Cache;
-import org.eclipse.persistence.annotations.Convert;
-import org.eclipse.persistence.annotations.Converter;
-import org.eclipse.persistence.config.CacheIsolationType;
+import org.cucina.core.model.support.BooleanConverter;
+import org.cucina.core.model.support.JsonMapConverter;
 
 
 /**
@@ -24,7 +24,7 @@ import org.eclipse.persistence.config.CacheIsolationType;
  * @version $Revision: $
  */
 @Entity
-@Cache(isolation = CacheIsolationType.ISOLATED)
+@Cacheable
 public class ClusterControl
     extends PersistableEntity {
     private static final long serialVersionUID = 7033138796227872025L;
@@ -68,7 +68,7 @@ public class ClusterControl
      *
      * @return JAVADOC.
      */
-    @Convert("booleanConverter")
+    @Convert(converter = BooleanConverter.class)
     @Column(columnDefinition = "CHAR(1) not null")
     public boolean isComplete() {
         return complete;
@@ -109,8 +109,7 @@ public class ClusterControl
      * @return JAVADOC.
      */
     @Column(length = 1000)
-    @Converter(converterClass = JsonMapConverter.class, name = "jsonMapConverter")
-    @Convert("jsonMapConverter")
+    @Convert(converter = JsonMapConverter.class)
     public Map<Object, Object> getProperties() {
         return properties;
     }

@@ -1,17 +1,16 @@
-
 package org.cucina.security.validation;
 
+import javax.validation.ConstraintValidatorContext;
+import javax.validation.ConstraintValidatorContext.ConstraintViolationBuilder;
+import javax.validation.ConstraintValidatorContext.ConstraintViolationBuilder.NodeBuilderCustomizableContext;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import javax.validation.ConstraintValidatorContext;
-import javax.validation.ConstraintValidatorContext.ConstraintViolationBuilder;
-import javax.validation.ConstraintValidatorContext.ConstraintViolationBuilder.NodeBuilderDefinedContext;
-
-import org.junit.Test;
 
 /**
  * JAVADOC for Class Level
@@ -26,7 +25,6 @@ public class UsernameValidatorTest {
     public void testInvalid() {
         UsernameValidator validator = new UsernameValidator();
         ValidUsername vu = mock(ValidUsername.class);
-        
 
         when(vu.message()).thenReturn("Oops");
         validator.initialize(vu);
@@ -41,9 +39,9 @@ public class UsernameValidatorTest {
 
         when(context.buildConstraintViolationWithTemplate("Oops")).thenReturn(cvb);
 
-        NodeBuilderDefinedContext nbdc = mock(NodeBuilderDefinedContext.class);
+        NodeBuilderCustomizableContext nbdc = mock(NodeBuilderCustomizableContext.class);
 
-        when(cvb.addNode("username")).thenReturn(nbdc);
+        when(cvb.addPropertyNode("username")).thenReturn(nbdc);
         when(nbdc.addConstraintViolation()).thenReturn(context);
         assertFalse("Should be unique", validator.isValid("username", context));
         verify(context).buildConstraintViolationWithTemplate("Oops");
@@ -58,6 +56,7 @@ public class UsernameValidatorTest {
         UsernameValidator validator = new UsernameValidator();
         UsernameValidatingPlugin plugin = mock(UsernameValidatingPlugin.class);
         ConstraintValidatorContext context = mock(ConstraintValidatorContext.class);
+
         when(plugin.isValid("username")).thenReturn(true);
         // TODO autowire plugin
         assertTrue("Should be unique", validator.isValid("username", context));
@@ -71,6 +70,7 @@ public class UsernameValidatorTest {
     public void testIsValidDefault() {
         UsernameValidator validator = new UsernameValidator();
         ConstraintValidatorContext context = mock(ConstraintValidatorContext.class);
+
         assertTrue("Should be unique", validator.isValid("username", context));
         verify(context).disableDefaultConstraintViolation();
     }

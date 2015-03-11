@@ -54,7 +54,7 @@ public class SearchBeanConverterTest {
         when(marshaller.marshall(bean)).thenReturn(SEARCH_MARSHALLED);
 
         assertEquals("Incorrect value", SEARCH_MARSHALLED,
-            handler.convertObjectValueToDataValue(bean, null));
+            handler.convertToDatabaseColumn(bean));
         verify(marshaller).marshall(bean);
     }
 
@@ -64,7 +64,7 @@ public class SearchBeanConverterTest {
     @Test
     public void testToDatasetValueNull()
         throws Exception {
-        assertNull("Incorrect value", handler.convertObjectValueToDataValue(null, null));
+        assertNull("Incorrect value", handler.convertToDatabaseColumn(null));
     }
 
     /**
@@ -77,7 +77,7 @@ public class SearchBeanConverterTest {
 
         when(marshaller.unmarshall(SEARCH_MARSHALLED + "\n", SearchBean.class)).thenReturn(bean);
         assertEquals("Should have returned bean", bean,
-            handler.convertDataValueToObjectValue(SEARCH_MARSHALLED, null));
+            handler.convertToEntityAttribute(SEARCH_MARSHALLED));
         verify(marshaller).unmarshall(SEARCH_MARSHALLED + "\n", SearchBean.class);
     }
 
@@ -86,6 +86,6 @@ public class SearchBeanConverterTest {
      */
     @Test
     public void toObjectValueNull() {
-        assertNull(handler.convertDataValueToObjectValue(null, null));
+        assertNull(handler.convertToEntityAttribute(null));
     }
 }

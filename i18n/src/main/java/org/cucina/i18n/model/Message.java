@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,17 +16,14 @@ import javax.persistence.Version;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.CompareToBuilder;
+import org.springframework.util.Assert;
 import org.cucina.core.InstanceFactory;
 import org.cucina.core.model.PersistableEntity;
 import org.cucina.core.model.Versioned;
 import org.cucina.core.spring.SingletonBeanFactory;
-import org.cucina.i18n.I18nMessage;
 import org.cucina.i18n.repository.MessageRepository;
 import org.cucina.i18n.service.I18nService;
 import org.cucina.i18n.service.MessageHelper;
-import org.eclipse.persistence.annotations.Cache;
-import org.eclipse.persistence.annotations.CacheCoordinationType;
-import org.springframework.util.Assert;
 
 
 /**
@@ -37,14 +35,14 @@ import org.springframework.util.Assert;
  * @version $Revision:$
  */
 @Entity
-@Cache(coordinationType = CacheCoordinationType.INVALIDATE_CHANGED_OBJECTS)
+@Cacheable
 public class Message
     extends PersistableEntity
     implements Comparable<Message>, Versioned {
     private static final long serialVersionUID = -1;
-    private Collection<MutableI18nMessage> internationalisedMessages = new HashSet<MutableI18nMessage>();
     private transient I18nService i18nService;
     private transient InstanceFactory instanceFactory;
+    private Collection<MutableI18nMessage> internationalisedMessages = new HashSet<MutableI18nMessage>();
     private String baseName;
     private String messageCd;
     private int version;

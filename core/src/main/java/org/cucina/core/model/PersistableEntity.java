@@ -4,7 +4,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -17,9 +16,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.cucina.core.model.projection.ProjectionColumn;
 
-import org.eclipse.persistence.annotations.ConversionValue;
-import org.eclipse.persistence.annotations.ObjectTypeConverter;
-
 
 /**
  * JAVADOC for Class Level
@@ -28,12 +24,6 @@ import org.eclipse.persistence.annotations.ObjectTypeConverter;
  * @version $Revision: $
   */
 @MappedSuperclass
-@ObjectTypeConverter(name = "booleanConverter", dataType = java.lang.String.class, objectType = java.lang.Boolean.class, conversionValues =  {
-    @ConversionValue(dataValue = "1", objectValue = "true")
-    , @ConversionValue(dataValue = "0", objectValue = "false")
-}
-)
-//@SequenceGenerator(name = "IdSeq", sequenceName = PersistableEntity.SEQUENCE_NAME, allocationSize = 10)
 public abstract class PersistableEntity
     implements Persistable<Long> {
     private static final long serialVersionUID = 1L;
@@ -71,7 +61,7 @@ public abstract class PersistableEntity
      * @return JAVADOC.
      */
     @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "IdSeq")
+    //    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "IdSeq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ProjectionColumn
     public Long getId() {

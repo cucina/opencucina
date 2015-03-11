@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -14,13 +15,16 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import org.cucina.core.InstanceFactory;
 
-import org.cucina.i18n.I18nMessage;
+import org.cucina.i18n.MessageDto;
+import org.cucina.i18n.model.I18nMessage;
 import org.cucina.i18n.model.Message;
 import org.cucina.i18n.repository.MessageRepository;
 
@@ -51,9 +55,10 @@ import org.slf4j.LoggerFactory;
  * @version $Revision: 1.7 $
  */
 @Service
-public class MessageLoaderImpl
-    implements MessageLoader {
-    private static final Logger LOG = LoggerFactory.getLogger(MessageLoaderImpl.class);
+public class MessageServiceImpl
+    implements MessageService {
+    private static final Logger LOG = LoggerFactory.getLogger(MessageServiceImpl.class);
+    private ConversionService conversionService;
     private InstanceFactory instanceFactory;
     private MessageRepository messageRepository;
 
@@ -66,11 +71,50 @@ public class MessageLoaderImpl
      *            JAVADOC.
      */
     @Autowired
-    public MessageLoaderImpl(InstanceFactory instanceFactory, MessageRepository messageRepository) {
+    public MessageServiceImpl(InstanceFactory instanceFactory, MessageRepository messageRepository,
+        @Qualifier(value = "integrationConversionService")
+    ConversionService conversionService) {
         Assert.notNull(instanceFactory, "instanceFactory is null");
         this.instanceFactory = instanceFactory;
         Assert.notNull(messageRepository, "messageRepository is null");
         this.messageRepository = messageRepository;
+        Assert.notNull(conversionService, "conversionService is null");
+        this.conversionService = conversionService;
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @return JAVADOC.
+     */
+    @Override
+    public Collection<MessageDto> loadAll() {
+        Collection<Message> messages = messageRepository.findAll();
+        Collection<MessageDto> result = new LinkedList<MessageDto>();
+
+        for (Message message : messages) {
+            @SuppressWarnings("unchecked")
+            Collection<MessageDto> dtos = conversionService.convert(message, Collection.class);
+
+            if (dtos != null) {
+                result.addAll(dtos);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @param id
+     *            JAVADOC.
+     *
+     * @return JAVADOC.
+     */
+    @Override
+    public Message loadById(Long id) {
+        return messageRepository.findById(id);
     }
 
     /**
@@ -84,7 +128,7 @@ public class MessageLoaderImpl
      *            JAVADOC.
      *
      * @return JAVADOC.
-     * @see com.ibm.algo.zest.message.MessageLoader#loadMessage(java.lang.String,
+     * @see com.MessageService.algo.zest.message.MessageLoader#loadMessage(java.lang.String,
      *      java.util.Locale, java.util.List)
      */
     @Transactional
@@ -168,20 +212,26 @@ public class MessageLoaderImpl
 
     @Override
     @Transactional
-    public boolean saveMessage(String text, String code, Locale locale, String applicationName) {
-        if (locale == null) {
+    public boolean saveMessage(MessageDto messageDto) {
+        Locale locale = messageDto.getLocale();
+
+        if (messageDto.getLocale() == null) {
             locale = Locale.getDefault();
         }
 
-        Message message = messageRepository.findByBasenameAndCode(applicationName, code);
+        // make sure that null is null
+        Message message = messageRepository.findByBasenameAndCode(StringUtils.isEmpty(
+                    messageDto.getApplication()) ? null : messageDto.getApplication(),
+                messageDto.getCode());
 
         if (message == null) {
             message = instanceFactory.getBean(Message.class.getSimpleName());
-            message.setBaseName(StringUtils.isEmpty(applicationName) ? null : applicationName);
-            message.setMessageCd(code);
+            message.setBaseName(StringUtils.isEmpty(messageDto.getApplication()) ? null
+                                                                                 : messageDto.getApplication());
+            message.setMessageCd(messageDto.getCode());
         }
 
-        message.setMessageTx(text, locale.toString());
+        message.setMessageTx(messageDto.getText(), locale.toString());
 
         messageRepository.save(message);
 

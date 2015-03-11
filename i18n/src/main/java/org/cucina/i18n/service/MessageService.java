@@ -1,6 +1,10 @@
 package org.cucina.i18n.service;
 
+import java.util.Collection;
 import java.util.Locale;
+
+import org.cucina.i18n.MessageDto;
+import org.cucina.i18n.model.Message;
 
 
 /**
@@ -9,7 +13,22 @@ import java.util.Locale;
  * @author $author$
  * @version $Revision: 1.4 $
  */
-public interface MessageLoader {
+public interface MessageService {
+    /**
+     * Load all messages
+     *
+     * @return JAVADOC.
+     */
+    Collection<MessageDto> loadAll();
+
+    /**
+     * JAVADOC Method Level Comments
+     * @param id 
+     *
+     * @return JAVADOC.
+     */
+    Message loadById(Long id);
+
     /**
      * Load message by its code, locale and basename. Attempts to find message
      * with nearest locale first, then nearest basename.
@@ -26,11 +45,9 @@ public interface MessageLoader {
 
     /**
      * Saves a new message
-     * @param text
-     * @param code
-     * @param locale
-     * @param applicationName
+     * @param messageDto
+     * 
      * @return
      */
-    boolean saveMessage(String text, String code, Locale locale, String applicationName);
+    boolean saveMessage(MessageDto messageDto);
 }

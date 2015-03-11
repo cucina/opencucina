@@ -4,24 +4,23 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import javax.persistence.Basic;
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import org.cucina.audit.Historised;
 import org.cucina.core.model.PersistableEntity;
 import org.cucina.core.model.projection.PostProcessProjections;
 import org.cucina.core.model.projection.ProjectionColumn;
 import org.cucina.core.validation.NotBlank;
+
 import org.cucina.security.validation.UniquePrivilege;
-import org.eclipse.persistence.annotations.Cache;
-import org.eclipse.persistence.annotations.CacheCoordinationType;
-import org.eclipse.persistence.annotations.Customizer;
 
 
 /**
@@ -31,8 +30,7 @@ import org.eclipse.persistence.annotations.Customizer;
  * @version $Revision: 1.4 $
   */
 @Entity
-@Cache(coordinationType = CacheCoordinationType.INVALIDATE_CHANGED_OBJECTS)
-@Customizer(Historised.class)
+@Cacheable
 @PostProcessProjections
 public class Privilege
     extends PersistableEntity {

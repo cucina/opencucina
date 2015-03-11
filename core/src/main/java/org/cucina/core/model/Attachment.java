@@ -1,15 +1,13 @@
 package org.cucina.core.model;
 
 import javax.persistence.Basic;
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Lob;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-
-import org.eclipse.persistence.annotations.Cache;
-import org.eclipse.persistence.annotations.CacheCoordinationType;
 
 
 /**
@@ -19,7 +17,7 @@ import org.eclipse.persistence.annotations.CacheCoordinationType;
  * @version $Revision: $
   */
 @Entity
-@Cache(coordinationType = CacheCoordinationType.INVALIDATE_CHANGED_OBJECTS)
+@Cacheable
 public class Attachment
     extends PersistableEntity {
     private static final long serialVersionUID = 2114088180516791908L;
@@ -42,7 +40,7 @@ public class Attachment
      * @return JAVADOC.
      */
     @Lob
-    @Column(length = 1024 * 1024, columnDefinition="blob")
+    @Column(length = 1024 * 1024, columnDefinition = "blob")
     @Basic(fetch = FetchType.LAZY)
     public byte[] getData() {
         return data;
