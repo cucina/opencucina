@@ -48,13 +48,11 @@ public class EggTimer {
         throws Exception {
         ApplicationContext ac = SpringApplication.run(EggTimer.class, args);
 
-        if (LOG.isDebugEnabled()) {
+        if (LOG.isTraceEnabled()) {
             String[] names = ac.getBeanDefinitionNames();
 
             for (int i = 0; i < names.length; i++) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug(names[i]);
-                }
+                LOG.trace(names[i]);
             }
         }
     }

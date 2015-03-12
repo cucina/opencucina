@@ -123,6 +123,6 @@
 		<module>security</module>
 		<module>search</module>
 		<module>i18n</module>
-		<!-- <module>engine</module> -->
+		<module>engine</module> 
 	</modules>
 </project>

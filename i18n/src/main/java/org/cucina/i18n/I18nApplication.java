@@ -17,6 +17,7 @@ import org.cucina.core.InstanceFactory;
 import org.cucina.core.PackageBasedInstanceFactory;
 import org.cucina.core.service.ContextService;
 import org.cucina.core.service.ThreadLocalContextService;
+import org.cucina.core.spring.ContextPrinter;
 import org.cucina.core.spring.SingletonBeanFactory;
 
 import org.cucina.i18n.model.Message;
@@ -39,34 +40,6 @@ public class I18nApplication {
     /**
      * JAVADOC Method Level Comments
      *
-     * @param args JAVADOC.
-     */
-    public static void main(String[] args) {
-        ConfigurableApplicationContext context = SpringApplication.run(I18nApplication.class, args);
-
-        ((SingletonBeanFactory) SingletonBeanFactory.getInstance()).setBeanFactory(context);
-
-        ConversionService conversionService = (ConversionService) context.getBean("integrationConversionService");
-
-        if (conversionService instanceof ConverterRegistry) {
-            ((ConverterRegistry) conversionService).addConverter(new MessageConverter());
-        }
-
-        if (LOG.isTraceEnabled()) {
-            String[] names = context.getBeanDefinitionNames();
-            List<String> list = Arrays.asList(names);
-
-            Collections.sort(list);
-
-            for (String string : list) {
-                LOG.trace(string);
-            }
-        }
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
      * @return JAVADOC.
      */
     @Bean
@@ -82,5 +55,27 @@ public class I18nApplication {
     @Bean
     public InstanceFactory instanceFactory() {
         return new PackageBasedInstanceFactory(ClassUtils.getPackageName(Message.class));
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @param args JAVADOC.
+     */
+    public static void main(String[] args) {
+        ConfigurableApplicationContext context = SpringApplication.run(I18nApplication.class, args);
+
+        ((SingletonBeanFactory) SingletonBeanFactory.getInstance()).setBeanFactory(context);
+
+        ConversionService conversionService = (ConversionService) context.getBean(
+                "integrationConversionService");
+
+        if (conversionService instanceof ConverterRegistry) {
+            ((ConverterRegistry) conversionService).addConverter(new MessageConverter());
+        }
+
+        if (LOG.isTraceEnabled()) {
+            ContextPrinter.traceBeanNames(context, LOG);
+        }
     }
 }
