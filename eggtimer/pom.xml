@@ -9,7 +9,7 @@
 		<version>0.1</version>
 	</parent>
 
-	<artifactId>eggtimer</artifactId>
+	<artifactId>cucina-eggtimer</artifactId>
 	<name>eggtimer</name>
 
 	<properties>
@@ -89,7 +89,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>org.cucina.email.EmailApplication</mainClass>
+					<mainClass>org.cucina.eggtimer.EggTimer</mainClass>
 				</configuration>
 				<executions>
 					<execution>

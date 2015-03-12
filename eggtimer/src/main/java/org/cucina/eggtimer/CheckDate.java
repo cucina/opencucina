@@ -18,7 +18,7 @@ import org.cucina.eggtimer.service.TemporalRepository;
  */
 @RestController
 @RequestMapping(value = "/checkDate")
-public class TemporalControl {
+public class CheckDate {
     private TemporalRepository temporalRepository;
 
     /**
@@ -28,7 +28,7 @@ public class TemporalControl {
      *            JAVADOC.
      */
     @Autowired
-    public TemporalControl(TemporalRepository temporalRepository) {
+    public CheckDate(TemporalRepository temporalRepository) {
         this.temporalRepository = temporalRepository;
     }
 
@@ -40,7 +40,7 @@ public class TemporalControl {
      *
      * @return JAVADOC.
      */
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.POST)
     public boolean checkDate(Date date) {
         return temporalRepository.beforeCurrentDate(date);
     }
