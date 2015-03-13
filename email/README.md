@@ -1,3 +1,5 @@
 # Email
 
-A simple microservice to provide an email function
+A simple microservice to provide an email function via JMS.
+
+##!Under Construction!

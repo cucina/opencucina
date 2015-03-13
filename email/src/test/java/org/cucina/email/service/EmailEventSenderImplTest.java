@@ -1,4 +1,4 @@
-package org.cucina.email;
+package org.cucina.email.service;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;

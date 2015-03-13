@@ -26,25 +26,34 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * JAVADOC for Class Level
+ * Handles JMS text message with body as a JSON document. Following are the
+ * properties:
+ * <ul>
+ * <li>'messageKey' - name of the template to use</li>
+ * <li>'to' - CSV list of addresses</li>
+ * <li>'cc' - CSV list of addresses</li>
+ * <li>'bcc' - CSV list of addresses</li>
+ * <li>'locale' - optional String representation of a locale in which the
+ * message is preferred to be</li>
+ * </ul>
  *
- * @author $Author: $
- * @version $Revision: $
-  */
+ * @author vlevine $
+ */
 @Component
-public class JmsEmailService {
-    private static final Logger LOG = LoggerFactory.getLogger(JmsEmailService.class);
+public class JmsEmailHandler {
+    private static final Logger LOG = LoggerFactory.getLogger(JmsEmailHandler.class);
     @Autowired
     private EmailService emailService;
     @Autowired
     private ObjectMapper objectMapper;
 
     /**
-     * JAVADOC Method Level Comments
+     * endpoint method
      *
-     * @param message JAVADOC.
+     * @param message
+     *            JAVADOC.
      */
-    @JmsListener(destination = "cucina.email")
+    @JmsListener(destination = "cucina.email", containerFactory="myJmsListenerContainerFactory")
     public void processMessage(Message message) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Received:" + message);

@@ -1,3 +1,5 @@
 # opencucina
 
-A collection of useful utilities, services, code fragments helping to build an enterprise application.  
+A collection of useful utilities, microservice, libraries etc. helping to build an enterprise application.
+
+##!Under construction!  

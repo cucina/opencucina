@@ -1,5 +1,6 @@
 package org.cucina.email;
 
+import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Session;
@@ -14,25 +15,33 @@ import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.support.destination.DestinationResolver;
 import org.springframework.jms.support.destination.DynamicDestinationResolver;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
- * JAVADOC for Class Level
+ * End point of the email handler. To configure the queue on which it listens
+ * for requests use property 'jms.destination.cucina.email' in
+ * application.properties or its equivalent.
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 @SpringBootApplication
 @EnableJms
 public class EmailApplication {
+    private static final Logger LOG = LoggerFactory.getLogger(EmailApplication.class);
     @Autowired
     private Environment environment;
 
     /**
      * JAVADOC Method Level Comments
      *
-     * @param args JAVADOC.
+     * @param args
+     *            JAVADOC.
      *
-     * @throws Exception JAVADOC.
+     * @throws Exception
+     *             JAVADOC.
      */
     public static void main(String[] args)
         throws Exception {
@@ -45,11 +54,13 @@ public class EmailApplication {
      * @return JAVADOC.
      */
     @Bean
-    public DefaultJmsListenerContainerFactory myJmsListenerContainerFactory() {
+    public DefaultJmsListenerContainerFactory myJmsListenerContainerFactory(
+        ConnectionFactory connectionFactory) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
 
         factory.setDestinationResolver(destinationResolver());
         factory.setConcurrency("5");
+        factory.setConnectionFactory(connectionFactory);
 
         return factory;
     }
@@ -69,6 +80,11 @@ public class EmailApplication {
                     throws JMSException {
                     String dname = environment.getProperty("jms.destination." + destinationName,
                             destinationName);
+
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Resolved destination '" + destinationName + "' to '" + dname +
+                            "'");
+                    }
 
                     return dynamicDestinationResolver.resolveDestinationName(session, dname,
                         pubSubDomain);
