@@ -12,8 +12,8 @@ import java.util.Set;
 import javax.activation.DataSource;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cucina.email.service.EmailDescriptor;
-import org.cucina.email.service.EmailEvent;
+import org.cucina.email.event.EmailEvent;
+import org.cucina.email.event.EmailWithAttachmentDto;
 import org.cucina.engine.ExecutionContext;
 import org.cucina.engine.definition.Operation;
 import org.cucina.engine.email.AcegiUserAccessorBean;
@@ -180,7 +180,7 @@ public class EmailOperation
             return;
         }
 
-        EmailDescriptor descriptor = new EmailDescriptor();
+        EmailWithAttachmentDto descriptor = new EmailWithAttachmentDto();
 
         descriptor.setToUsers(users);
         descriptor.setMessageKey(templateName);

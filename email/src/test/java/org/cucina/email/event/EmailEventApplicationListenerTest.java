@@ -1,10 +1,4 @@
-package org.cucina.email.service;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+package org.cucina.email.event;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,30 +8,35 @@ import java.util.Map;
 
 import javax.activation.DataSource;
 
-import org.cucina.email.service.EmailDescriptor;
-import org.cucina.email.service.EmailEvent;
-import org.cucina.email.service.EmailEventSenderImpl;
+import org.cucina.email.event.EmailEvent;
+import org.cucina.email.event.EmailEventApplicationListener;
+import org.cucina.email.event.EmailWithAttachmentDto;
 import org.cucina.email.service.EmailService;
 import org.cucina.email.service.EmailUser;
+
 import org.junit.Before;
 import org.junit.Test;
-
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
- * Tests for {@link EmailEventSenderImpl}
+ * Tests for {@link EmailEventApplicationListener}
  *
  * @author $Author: vlevine $
  * @version $Revision: 1.5 $
  */
-public class EmailEventSenderImplTest {
-    private EmailEventSenderImpl els;
+public class EmailEventApplicationListenerTest {
+    private EmailEventApplicationListener els;
 
     /**
      * Sets up test
      */
     @Before
     public void setUp() {
-        els = new EmailEventSenderImpl();
+        els = new EmailEventApplicationListener();
     }
 
     /**
@@ -61,7 +60,7 @@ public class EmailEventSenderImplTest {
         Map<Object, Object> parameters = new HashMap<Object, Object>();
         Collection<DataSource> attachments = new HashSet<DataSource>();
 
-        EmailDescriptor descriptor = new EmailDescriptor();
+        EmailWithAttachmentDto descriptor = new EmailWithAttachmentDto();
 
         descriptor.setToUsers(tos);
         descriptor.setCcUsers(ccs);
@@ -76,7 +75,7 @@ public class EmailEventSenderImplTest {
         els.processEvent(new EmailEvent(descriptor));
 
         verify(ces)
-            .sendMessages(eq("template"), any(Collection.class), eq(ccs), eq(bccs), eq(parameters),
-            eq(attachments));
+            .sendMessages((String) eq(null), (String) eq(null), any(Collection.class), eq(ccs),
+            eq(bccs), eq("template"), eq(parameters), eq(attachments));
     }
 }

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.activation.DataSource;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.mail.MailSendException;
@@ -25,7 +26,6 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 
 /**
  * Tests for {@link EmailServiceImpl}
@@ -64,9 +64,9 @@ public class EmailServiceImplTest {
         EmailConstructor ces = mock(EmailConstructor.class);
 
         when(ces.prepareMessages("template", tos, ccs, bccs, parameters, attachments)).thenReturn(new MimeMessagePreparator[] {
-                new MimeMessagePreparator() {
+                new MimeMessagePreparatorImpl() {
                     public void prepare(MimeMessage mimeMessage)
-                        throws Exception {
+                        throws MessagingException {
                         throw new UnsupportedOperationException("shouldn't be called");
                     }
 
@@ -76,7 +76,7 @@ public class EmailServiceImplTest {
                 }
             });
         els.setEmailConstructor(ces);
-        els.sendMessages("template", tos, ccs, bccs, parameters, attachments);
+        els.sendMessages("subject", "from", tos, ccs, bccs, "template", parameters, attachments);
 
         verify(ces).prepareMessages("template", tos, ccs, bccs, parameters, attachments);
     }
@@ -98,9 +98,9 @@ public class EmailServiceImplTest {
         EmailConstructor ces = mock(EmailConstructor.class);
 
         when(ces.prepareMessages(null, null, null, null, null, null)).thenReturn(new MimeMessagePreparator[] {
-                new MimeMessagePreparator() {
+                new MimeMessagePreparatorImpl() {
                     public void prepare(MimeMessage mimeMessage)
-                        throws Exception {
+                        throws MessagingException {
                         throw new UnsupportedOperationException("shouldn't be called");
                     }
 
@@ -112,7 +112,7 @@ public class EmailServiceImplTest {
         els.setEmailConstructor(ces);
 
         try {
-            els.sendMessages(null, null, null, null, null, null);
+            els.sendMessages(null, null, null, null, null, null, null, null);
         } catch (Exception e) {
             assertEquals(exceptionMessage, e.getMessage());
 

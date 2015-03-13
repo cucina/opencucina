@@ -1,5 +1,6 @@
 
-package org.cucina.email.service;
+package org.cucina.email.event;
+
 
 /**
  * JAVADOC.

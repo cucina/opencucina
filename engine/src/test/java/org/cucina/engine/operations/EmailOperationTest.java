@@ -8,33 +8,31 @@ import java.util.List;
 import java.util.Map;
 
 import javax.activation.DataSource;
-
 import javax.mail.util.ByteArrayDataSource;
 
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
-
 import org.cucina.core.spring.ExpressionExecutor;
-
-import org.cucina.email.service.EmailEvent;
-
+import org.cucina.email.event.EmailEvent;
 import org.cucina.engine.DefaultExecutionContext;
 import org.cucina.engine.ExecutionContext;
 import org.cucina.engine.ProcessDriverFactory;
 import org.cucina.engine.definition.Token;
 import org.cucina.engine.email.UserAccessorBean;
 import org.cucina.engine.testassist.Foo;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
-
 import org.mockito.ArgumentCaptor;
+
 import static org.mockito.Matchers.any;
 
 import org.mockito.Mock;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;

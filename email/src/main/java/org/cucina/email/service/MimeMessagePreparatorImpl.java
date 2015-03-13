@@ -1,12 +1,15 @@
-
 package org.cucina.email.service;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.StringReader;
+
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.activation.DataSource;
+
 import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -15,8 +18,7 @@ import javax.mail.internet.MimeMessage;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
@@ -24,6 +26,9 @@ import org.springframework.util.Assert;
 
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -41,13 +46,10 @@ public class MimeMessagePreparatorImpl
     private Locale locale;
     private Map<Object, Object> params;
     private String encoding = "UTF-8";
-
-    //config-y stuff
     private String from;
+    private String subject;
     private String suffix;
     private String templateLocation;
-
-    //descriptor
     private String templateName;
 
     /**
@@ -113,6 +115,15 @@ public class MimeMessagePreparatorImpl
     }
 
     /**
+     * JAVADOC Method Level Comments
+     *
+     * @param subject JAVADOC.
+     */
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    /**
      * Set suffix for template files
      *
      * @param suffix String
@@ -144,6 +155,7 @@ public class MimeMessagePreparatorImpl
     *
     * @throws Exception JAVADOC.
     */
+    @Override
     public void prepare(MimeMessage mimeMessage)
         throws MessagingException {
         Assert.notNull(templateName, "templateName is null");
@@ -162,6 +174,7 @@ public class MimeMessagePreparatorImpl
                 CollectionUtils.isNotEmpty(attachments), encoding);
 
         helper.setFrom(from);
+        helper.setSubject((subject == null) ? "" : subject);
 
         if (CollectionUtils.isNotEmpty(to)) {
             for (EmailUser user : to) {
@@ -246,7 +259,7 @@ public class MimeMessagePreparatorImpl
             LOG.debug("Message text:" + messageText);
         }
 
-        helper.setText(MailUtils.resolveSubjectAndBody(messageText, mimeMessage), true);
+        resolveSubjectAndBody(messageText, helper);
 
         if (CollectionUtils.isNotEmpty(attachments)) {
             for (DataSource attachment : attachments) {
@@ -294,5 +307,36 @@ public class MimeMessagePreparatorImpl
         }
 
         return null;
+    }
+
+    private static void resolveSubjectAndBody(String input, MimeMessageHelper helper)
+        throws MessagingException {
+        if (null == input) {
+            return;
+        }
+
+        BufferedReader sr = new BufferedReader(new StringReader(input));
+        String firstLine;
+
+        try {
+            firstLine = sr.readLine();
+        } catch (IOException e) {
+            LOG.error("Oops", e);
+
+            return;
+        }
+
+        String subject = null;
+
+        if (firstLine.contains("Subject:")) {
+            subject = StringUtils.substringAfter(firstLine, "Subject:");
+        }
+
+        if (StringUtils.isNotEmpty(subject)) {
+            helper.setSubject(subject);
+            helper.setText(StringUtils.substringAfter(input, firstLine), true);
+        } else {
+            helper.setText(input, true);
+        }
     }
 }

@@ -1,24 +1,28 @@
-package org.cucina.email.service;
+package org.cucina.email.event;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.cucina.email.service.AbstractEmailHandler;
+import org.cucina.email.service.EmailService;
+import org.cucina.email.service.EmailUser;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationListener;
 import org.springframework.transaction.annotation.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
- * Crossover point between generating emails and sending them.
+ * Implementation of ApplicationListener to handle events sent within the Spring
+ * application.
  *
  */
-public class EmailEventSenderImpl
-    implements EmailEventSender, ApplicationListener<EmailEvent> {
-    private static Logger LOG = LoggerFactory.getLogger(EmailEventSenderImpl.class);
+public class EmailEventApplicationListener extends AbstractEmailHandler
+    implements  ApplicationListener<EmailEvent> {
+    private static Logger LOG = LoggerFactory.getLogger(EmailEventApplicationListener.class);
     private EmailService emailService;
 
     /**
@@ -51,17 +55,17 @@ public class EmailEventSenderImpl
     /**
      * @param event
      *            JAVADOC.
-     * @see org.cucina.email.service.org.cucina.email.meringue.email.EmailEventSender#processEvent(org.cucina.email.service.meringue.email.EmailEvent)
+     * @see org.cucina.email.spring.org.cucina.email.meringue.email.EmailEventSender#processEvent(org.cucina.email.spring.meringue.email.EmailEvent)
      */
     public void processEvent(EmailEvent event) {
-        EmailDescriptor descriptor = event.getEmailDescriptor();
+        EmailWithAttachmentDto dto = event.getEmailDescriptor();
 
-        emailService.sendMessages(descriptor.getMessageKey(), wrapUsers(descriptor.getToUsers()),
-            wrapUsers(descriptor.getCcUsers()), wrapUsers(descriptor.getBccUsers()),
-            descriptor.getParameters(), descriptor.getAttachments());
+        emailService.sendMessages(dto.getSubject(), dto.getFrom(),  wrapUsers(dto.getToUsers()),
+            wrapUsers(dto.getCcUsers()), wrapUsers(dto.getBccUsers()),dto.getMessageKey(),
+            dto.getParameters(), dto.getAttachments());
     }
 
-    private Collection<EmailUser> wrapUsers(Collection<Object> users) {
+    private Collection<EmailUser> wrapUsers(Collection<EmailUser> users) {
         Collection<EmailUser> wrappedUsers = new HashSet<EmailUser>();
 
         if (CollectionUtils.isNotEmpty(users)) {

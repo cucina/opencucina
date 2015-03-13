@@ -2,32 +2,21 @@ package org.cucina.email.service;
 
 import java.util.Locale;
 
-import org.springframework.util.Assert;
 
-/**
- * Wrapper for User in order to implement specific methods.
- *
- * @author $Author: $
- * @version $Revision: $
- */
-public class EmailUserWrapper
+class SimpleEmailUser
     implements EmailUser {
-    private EmailUser user;
     private Locale locale;
+    private String email;
 
     /**
-     * Creates a new EmailUserWrapper object.
+     * Creates a new EmailUserImpl object.
      *
-     * @param user
-     *            JAVADOC.
-     * @param preferenceService
-     *            JAVADOC.
+     * @param email JAVADOC.
+     * @param slocale JAVADOC.
      */
-    public EmailUserWrapper(EmailUser user, Locale locale) {
-        super();
-        Assert.notNull(user, "user cannot be null");
-        this.user = user;
-        this.locale = locale;
+    public SimpleEmailUser(String email, Locale locale) {
+        this.email = email;
+        this.locale = (locale == null) ? Locale.getDefault() : locale;
     }
 
     /**
@@ -37,7 +26,7 @@ public class EmailUserWrapper
      */
     @Override
     public boolean isActive() {
-        return user.isActive();
+        return true;
     }
 
     /**
@@ -47,7 +36,7 @@ public class EmailUserWrapper
      */
     @Override
     public String getEmail() {
-        return user.getEmail();
+        return email;
     }
 
     /**
@@ -67,6 +56,6 @@ public class EmailUserWrapper
      */
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return null;
     }
 }

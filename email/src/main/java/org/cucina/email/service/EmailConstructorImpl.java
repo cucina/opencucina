@@ -48,7 +48,7 @@ public class EmailConstructorImpl
     }
 
     /**
-     * JAVADOC.
+     * Creates preparators for each Locale found in users.
      *
      * @param descriptor
      *            JAVADOC.

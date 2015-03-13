@@ -1,4 +1,3 @@
-
 package org.cucina.email.service;
 
 import java.util.Collection;
@@ -6,14 +5,15 @@ import java.util.Map;
 
 import javax.activation.DataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Component;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -63,17 +63,18 @@ public class EmailServiceImpl
      * @param attachments JAVADOC.
      */
     @Override
-    public void sendMessages(String messageKey, Collection<EmailUser> toUsers,
-        Collection<EmailUser> ccUsers, Collection<EmailUser> bccUsers,
+    public void sendMessages(String subject, String from, Collection<EmailUser> toUsers,
+        Collection<EmailUser> ccUsers, Collection<EmailUser> bccUsers, String messageKey,
         Map<Object, Object> parameters, Collection<DataSource> attachments) {
         MimeMessagePreparator[] preparators = emailConstructor.prepareMessages(messageKey, toUsers,
                 ccUsers, bccUsers, parameters, attachments);
 
-        if (LOG.isDebugEnabled()) {
-            for (int i = 0; i < preparators.length; i++) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("MessagePreparator=" + preparators[i]);
-                }
+        for (int i = 0; i < preparators.length; i++) {
+            ((MimeMessagePreparatorImpl) preparators[i]).setFrom(from);
+            ((MimeMessagePreparatorImpl) preparators[i]).setSubject(subject);
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("MessagePreparator=" + preparators[i]);
             }
         }
 

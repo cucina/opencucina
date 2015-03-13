@@ -1,12 +1,12 @@
 
-package org.cucina.email.service;
+package org.cucina.email.event;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.context.ApplicationEvent;
 
 
 /**
- * Spring ApplicationEvent which contains {@link EmailDescriptor}.
+ * Spring ApplicationEvent which contains {@link EmailWithAttachmentDto}.
  *
  * @author $author$
  * @version $Revision$
@@ -15,7 +15,7 @@ import org.springframework.context.ApplicationEvent;
 public class EmailEvent
     extends ApplicationEvent {
     private static final long serialVersionUID = 10L;
-    private EmailDescriptor emailDescriptor;
+    private EmailWithAttachmentDto emailDescriptor;
 
     /**
      * Creates a new EmailEvent object.
@@ -23,7 +23,7 @@ public class EmailEvent
      * @param emailDescriptor
      *            EmailDescriptor.
      */
-    public EmailEvent(EmailDescriptor emailDescriptor) {
+    public EmailEvent(EmailWithAttachmentDto emailDescriptor) {
         super(emailDescriptor);
         this.emailDescriptor = emailDescriptor;
     }
@@ -33,7 +33,7 @@ public class EmailEvent
      *
      * @return emailDescriptor EmailDescriptor.
      */
-    public EmailDescriptor getEmailDescriptor() {
+    public EmailWithAttachmentDto getEmailDescriptor() {
         return emailDescriptor;
     }
 

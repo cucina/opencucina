@@ -3,7 +3,9 @@ package org.cucina.email;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 import javax.jms.JMSException;
+import javax.jms.Message;
 import javax.jms.Session;
+import javax.jms.TextMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -12,8 +14,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
+import org.springframework.jms.support.converter.MessageConversionException;
+import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.destination.DestinationResolver;
 import org.springframework.jms.support.destination.DynamicDestinationResolver;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,12 +61,13 @@ public class EmailApplication {
      */
     @Bean
     public DefaultJmsListenerContainerFactory myJmsListenerContainerFactory(
-        ConnectionFactory connectionFactory) {
+        ConnectionFactory connectionFactory, ObjectMapper objectMapper) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
 
         factory.setDestinationResolver(destinationResolver());
         factory.setConcurrency("5");
         factory.setConnectionFactory(connectionFactory);
+        factory.setMessageConverter(messageConverter(objectMapper));
 
         return factory;
     }
@@ -88,6 +95,31 @@ public class EmailApplication {
 
                     return dynamicDestinationResolver.resolveDestinationName(session, dname,
                         pubSubDomain);
+                }
+            };
+    }
+
+    private MessageConverter messageConverter(final ObjectMapper objectMapper) {
+        return new MessageConverter() {
+                @Override
+                public Message toMessage(Object object, Session session)
+                    throws JMSException, MessageConversionException {
+                    // Unused
+                    return null;
+                }
+
+                @Override
+                public Object fromMessage(Message message)
+                    throws JMSException, MessageConversionException {
+                    String body = ((TextMessage) message).getText();
+
+                    try {
+                        return objectMapper.readValue(body, EmailDto.class);
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        LOG.error("Oops", e);
+                        throw new MessageConversionException("Failed to convert", e);
+                    }
                 }
             };
     }

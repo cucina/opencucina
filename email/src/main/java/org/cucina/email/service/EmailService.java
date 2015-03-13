@@ -1,4 +1,3 @@
-
 package org.cucina.email.service;
 
 import java.util.Collection;
@@ -21,7 +20,7 @@ public interface EmailService {
     *
     * @return JAVADOC.
     */
-    public void sendMessages(String messageKey, Collection<EmailUser> toUsers,
-        Collection<EmailUser> ccUsers, Collection<EmailUser> bccUsers,
+    public void sendMessages(String from, String subject, Collection<EmailUser> toUsers,
+        Collection<EmailUser> ccUsers, Collection<EmailUser> bccUsers, String messageKey,
         Map<Object, Object> parameters, Collection<DataSource> attachments);
 }
