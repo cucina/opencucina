@@ -73,6 +73,16 @@ public class MessageController {
         return messageService.loadAll();
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/all/{page}/{size}")
+    public Collection<MessageDto> allMessages(int page, int size) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("allMessages");
+        }
+
+        return messageService.loadAll(page, size);
+    }
+
+    
     /**
      * JAVADOC Method Level Comments
      *

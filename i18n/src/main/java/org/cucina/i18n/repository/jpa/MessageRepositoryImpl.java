@@ -6,6 +6,7 @@ import java.util.Locale;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
@@ -15,6 +16,7 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.LocaleUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
@@ -104,6 +106,28 @@ public class MessageRepositoryImpl
         cq.from(Message.class);
 
         return entityManager.createQuery(cq).getResultList();
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @param pageable JAVADOC.
+     *
+     * @return JAVADOC.
+     */
+    @Override
+    public Collection<Message> findAll(Pageable pageable) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Message> cq = cb.createQuery(Message.class);
+
+        cq.from(Message.class);
+
+        TypedQuery<Message> tq = entityManager.createQuery(cq);
+
+        tq.setFirstResult(pageable.getPageNumber());
+        tq.setMaxResults(pageable.getPageSize());
+
+        return tq.getResultList();
     }
 
     /**

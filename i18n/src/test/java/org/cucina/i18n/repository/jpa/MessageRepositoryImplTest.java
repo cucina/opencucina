@@ -1,10 +1,5 @@
 package org.cucina.i18n.repository.jpa;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
@@ -17,15 +12,25 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.data.domain.Pageable;
+
 import org.cucina.core.InstanceFactory;
 import org.cucina.core.spring.SingletonBeanFactory;
+
 import org.cucina.i18n.model.Message;
 import org.cucina.i18n.model.MutableI18nMessage;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.Mock;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.BeanFactory;
 
 
 /**
@@ -38,10 +43,14 @@ public class MessageRepositoryImplTest {
     @Mock
     private CriteriaBuilder cb;
     @Mock
+    private CriteriaQuery<Message> cq;
+    @Mock
     private EntityManager em;
     @Mock
     private InstanceFactory instanceFactory;
     private MessageRepositoryImpl repo;
+    @Mock
+    private TypedQuery<Message> tq;
 
     /**
      * JAVADOC Method Level Comments
@@ -56,14 +65,35 @@ public class MessageRepositoryImplTest {
         repo = new MessageRepositoryImpl(instanceFactory);
         repo.setEntityManager(em);
         when(em.getCriteriaBuilder()).thenReturn(cb);
+        when(cb.createQuery(Message.class)).thenReturn(cq);
+        when(em.createQuery(cq)).thenReturn(tq);
     }
 
     /**
      * JAVADOC Method Level Comments
      */
     @Test
-    public void testFind() {
-        repo.findById(11L);
+    public void testFindAll() {
+        repo.findAll();
+        verify(cq).from(Message.class);
+        verify(tq).getResultList();
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     */
+    @Test
+    public void testFindAllPage() {
+        Pageable pageable = mock(Pageable.class);
+
+        when(pageable.getPageNumber()).thenReturn(0);
+        when(pageable.getPageSize()).thenReturn(10);
+
+        repo.findAll(pageable);
+        verify(cq).from(Message.class);
+        verify(tq).setFirstResult(0);
+        verify(tq).setMaxResults(10);
+        verify(tq).getResultList();
     }
 
     /**
@@ -72,10 +102,6 @@ public class MessageRepositoryImplTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testFindByBasename() {
-        CriteriaQuery<Message> cq = mock(CriteriaQuery.class);
-
-        when(cb.createQuery(Message.class)).thenReturn(cq);
-
         Root<Message> root = mock(Root.class);
 
         when(cq.from(Message.class)).thenReturn(root);
@@ -89,9 +115,6 @@ public class MessageRepositoryImplTest {
         when(cb.equal(pathb, "basename")).thenReturn(preb);
         when(cq.where(preb)).thenReturn(cq);
 
-        TypedQuery<Message> tq = mock(TypedQuery.class);
-
-        when(em.createQuery(cq)).thenReturn(tq);
         repo.findByBasename("basename");
         verify(tq).getResultList();
     }
@@ -102,10 +125,6 @@ public class MessageRepositoryImplTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testFindByBasenameAndCode() {
-        CriteriaQuery<Message> cq = mock(CriteriaQuery.class);
-
-        when(cb.createQuery(Message.class)).thenReturn(cq);
-
         Root<Message> root = mock(Root.class);
 
         when(cq.from(Message.class)).thenReturn(root);
@@ -131,10 +150,6 @@ public class MessageRepositoryImplTest {
         when(cb.and(preb, prec)).thenReturn(and);
         when(cq.where(and)).thenReturn(cq);
 
-        TypedQuery<Message> tq = mock(TypedQuery.class);
-
-        when(em.createQuery(cq)).thenReturn(tq);
-
         repo.findByBasenameAndCode("basename", "code");
         verify(tq).getSingleResult();
     }
@@ -149,10 +164,6 @@ public class MessageRepositoryImplTest {
 
         basenames.add("a");
         basenames.add("b");
-
-        CriteriaQuery<Message> cq = mock(CriteriaQuery.class);
-
-        when(cb.createQuery(Message.class)).thenReturn(cq);
 
         Root<Message> root = mock(Root.class);
 
@@ -179,9 +190,6 @@ public class MessageRepositoryImplTest {
         when(cb.and(preb, prec)).thenReturn(and);
         when(cq.where(and)).thenReturn(cq);
 
-        TypedQuery<Message> tq = mock(TypedQuery.class);
-
-        when(em.createQuery(cq)).thenReturn(tq);
         repo.findByBasenamesAndCode(basenames, "code");
         verify(tq).getResultList();
     }
@@ -192,10 +200,6 @@ public class MessageRepositoryImplTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testFindByCode() {
-        CriteriaQuery<Message> cq = mock(CriteriaQuery.class);
-
-        when(cb.createQuery(Message.class)).thenReturn(cq);
-
         Root<Message> root = mock(Root.class);
 
         when(cq.from(Message.class)).thenReturn(root);
@@ -209,12 +213,17 @@ public class MessageRepositoryImplTest {
         when(cb.equal(pathb, "code")).thenReturn(preb);
         when(cq.where(preb)).thenReturn(cq);
 
-        TypedQuery<Message> tq = mock(TypedQuery.class);
-
-        when(em.createQuery(cq)).thenReturn(tq);
-
         repo.findByCode("code");
         verify(tq).getResultList();
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     */
+    @Test
+    public void testFindById() {
+        repo.findById(11L);
+        verify(em).find(Message.class, 11L);
     }
 
     /**
@@ -273,10 +282,6 @@ public class MessageRepositoryImplTest {
         when(instanceFactory.getBean(MutableI18nMessage.TYPE)).thenReturn(imess);
         ((SingletonBeanFactory) SingletonBeanFactory.getInstance()).setBeanFactory(beanFactory);
 
-        CriteriaQuery<Message> cq = mock(CriteriaQuery.class);
-
-        when(cb.createQuery(Message.class)).thenReturn(cq);
-
         Root<Message> root = mock(Root.class);
 
         when(cq.from(Message.class)).thenReturn(root);
@@ -301,10 +306,6 @@ public class MessageRepositoryImplTest {
 
         when(cb.and(preb, prec)).thenReturn(and);
         when(cq.where(and)).thenReturn(cq);
-
-        TypedQuery<Message> tq = mock(TypedQuery.class);
-
-        when(em.createQuery(cq)).thenReturn(tq);
 
         Message found = new Message();
 

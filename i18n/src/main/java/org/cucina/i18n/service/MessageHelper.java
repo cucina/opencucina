@@ -16,12 +16,11 @@ import org.cucina.i18n.repository.MessageRepository;
 /**
  * Helper class which allows to group useful message related functionality.
  *
- * @author $author$
- * @version $Revision: 1.7 $
-  */
+ */
 public final class MessageHelper {
     /**
      * Return the system's default <code>Locale</code>
+     *
      * @return
      */
     public static Locale getDefaultLocale() {
@@ -34,10 +33,12 @@ public final class MessageHelper {
     }
 
     /**
-     * Provides User with a List of derived locales starting at the most specific, and ending at
-     * the defaultLocale if it isn't already included in the list.
+     * Provides User with a List of derived locales starting at the most
+     * specific, and ending at the defaultLocale if it isn't already included in
+     * the list.
      *
-     * @param locale required field.
+     * @param locale
+     *            required field.
      *
      * @return JAVADOC.
      */
@@ -49,8 +50,9 @@ public final class MessageHelper {
 
     /**
      * Returns a query that can be used to fetch messages for user's Locale,
-     * degrades gracefully by returning the most specific message according to the
-     * user's Locale, eventually returning the default message.
+     * degrades gracefully by returning the most specific message according to
+     * the user's Locale, eventually returning the default message.
+     *
      * @param basename
      * @param code
      * @param includeCd

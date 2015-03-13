@@ -27,7 +27,7 @@
 			<artifactId>cucina-core</artifactId>
 			<version>0.1</version>
 		</dependency>
-	 	<dependency>
+		<dependency>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
 			<scope>test</scope>
@@ -72,6 +72,11 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.7.5-SNAPSHOT</version>
 			</plugin>
 		</plugins>
 	</build>

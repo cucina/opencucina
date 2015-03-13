@@ -12,24 +12,21 @@ import java.util.Map;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.functors.StringValueTransformer;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
-import org.cucina.core.InstanceFactory;
-
+import org.apache.commons.lang3.LocaleUtils;
 import org.cucina.i18n.MessageDto;
 import org.cucina.i18n.model.I18nMessage;
 import org.cucina.i18n.model.Message;
 import org.cucina.i18n.repository.MessageRepository;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 
 /**
@@ -59,7 +56,7 @@ public class MessageServiceImpl
     implements MessageService {
     private static final Logger LOG = LoggerFactory.getLogger(MessageServiceImpl.class);
     private ConversionService conversionService;
-    private InstanceFactory instanceFactory;
+    private I18nService i18nService;
     private MessageRepository messageRepository;
 
     /**
@@ -71,11 +68,11 @@ public class MessageServiceImpl
      *            JAVADOC.
      */
     @Autowired
-    public MessageServiceImpl(InstanceFactory instanceFactory, MessageRepository messageRepository,
-        @Qualifier(value = "integrationConversionService")
+    public MessageServiceImpl(I18nService i18nService, MessageRepository messageRepository,
+        @Qualifier(value = "myConversionService")
     ConversionService conversionService) {
-        Assert.notNull(instanceFactory, "instanceFactory is null");
-        this.instanceFactory = instanceFactory;
+        Assert.notNull(i18nService, "i18nService is null");
+        this.i18nService = i18nService;
         Assert.notNull(messageRepository, "messageRepository is null");
         this.messageRepository = messageRepository;
         Assert.notNull(conversionService, "conversionService is null");
@@ -90,6 +87,34 @@ public class MessageServiceImpl
     @Override
     public Collection<MessageDto> loadAll() {
         Collection<Message> messages = messageRepository.findAll();
+        Collection<MessageDto> result = new LinkedList<MessageDto>();
+
+        for (Message message : messages) {
+            @SuppressWarnings("unchecked")
+            Collection<MessageDto> dtos = conversionService.convert(message, Collection.class);
+
+            if (dtos != null) {
+                result.addAll(dtos);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @param page
+     *            JAVADOC.
+     * @param size
+     *            JAVADOC.
+     *
+     * @return JAVADOC.
+     */
+    @Override
+    public Collection<MessageDto> loadAll(int page, int size) {
+        Pageable pageable = new PageRequest(page, size);
+        Collection<Message> messages = messageRepository.findAll(pageable);
         Collection<MessageDto> result = new LinkedList<MessageDto>();
 
         for (Message message : messages) {
@@ -137,19 +162,19 @@ public class MessageServiceImpl
             locale = Locale.getDefault();
         }
 
-        // Great list of locales including default locales as a fall back
-        List<Locale> locales = MessageHelper.getDerivedLocales(locale);
+        // Create list of locales including default locale as a fall back
+        List<Locale> locales = LocaleUtils.localeLookupList(locale,
+                messageRepository.getDefaultLocale());
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Loading for code '" + code + "' for locales=" + locales + " and basenames=" +
-                basenames);
+                Arrays.toString(basenames));
         }
 
         List<String> localesNames = new ArrayList<String>();
 
         CollectionUtils.collect(locales, StringValueTransformer.getInstance(), localesNames);
 
-        Map<String, Map<String, I18nMessage>> orderedByLocale = new HashMap<String, Map<String, I18nMessage>>();
         Collection<Message> messages = null;
 
         if (ArrayUtils.isNotEmpty(basenames)) {
@@ -157,6 +182,8 @@ public class MessageServiceImpl
         } else {
             messages = messageRepository.findByCode(code);
         }
+
+        Map<String, Map<String, I18nMessage>> orderedByLocale = new HashMap<String, Map<String, I18nMessage>>();
 
         for (Message message : messages) {
             for (String localeName : localesNames) {
@@ -216,25 +243,18 @@ public class MessageServiceImpl
         Locale locale = messageDto.getLocale();
 
         if (messageDto.getLocale() == null) {
-            locale = Locale.getDefault();
+            locale = i18nService.getLocale();
         }
 
-        // make sure that null is null
-        Message message = messageRepository.findByBasenameAndCode(StringUtils.isEmpty(
-                    messageDto.getApplication()) ? null : messageDto.getApplication(),
-                messageDto.getCode());
+        try {
+            messageRepository.save(messageDto.getApplication(), locale.toString(),
+                messageDto.getCode(), messageDto.getText());
 
-        if (message == null) {
-            message = instanceFactory.getBean(Message.class.getSimpleName());
-            message.setBaseName(StringUtils.isEmpty(messageDto.getApplication()) ? null
-                                                                                 : messageDto.getApplication());
-            message.setMessageCd(messageDto.getCode());
+            return true;
+        } catch (Exception e) {
+            LOG.error("Oops", e);
+
+            return false;
         }
-
-        message.setMessageTx(messageDto.getText(), locale.toString());
-
-        messageRepository.save(message);
-
-        return true;
     }
 }

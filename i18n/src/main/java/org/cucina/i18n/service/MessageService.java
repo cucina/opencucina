@@ -22,8 +22,18 @@ public interface MessageService {
     Collection<MessageDto> loadAll();
 
     /**
+     * Load all with paging
+     *
+     * @param page JAVADOC.
+     * @param size JAVADOC.
+     *
+     * @return JAVADOC.
+     */
+    Collection<MessageDto> loadAll(int page, int size);
+
+    /**
      * JAVADOC Method Level Comments
-     * @param id 
+     * @param id
      *
      * @return JAVADOC.
      */
@@ -46,7 +56,7 @@ public interface MessageService {
     /**
      * Saves a new message
      * @param messageDto
-     * 
+     *
      * @return
      */
     boolean saveMessage(MessageDto messageDto);

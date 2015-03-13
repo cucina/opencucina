@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Locale;
 
 import org.cucina.i18n.model.Message;
+import org.springframework.data.domain.Pageable;
 
 
 /**
@@ -71,6 +72,12 @@ public interface MessageRepository {
      */
     Collection<Message> findAll();
 
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @return JAVADOC.
+     */
+    Collection<Message> findAll(Pageable pageable);
     /**
      * Load all the messages with the given basename.
      *
