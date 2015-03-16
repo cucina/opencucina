@@ -2,7 +2,9 @@ package org.cucina.email.repository;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
@@ -38,6 +40,7 @@ public class EmailTemplate
      *
      * @return JAVADOC.
      */
+    @Column(length = 100000)
     public String getBody() {
         return body;
     }

@@ -46,7 +46,7 @@ public class EmailJmsClient {
         //        dto.setMessageKey("NoSubject");
         dto.setMessageKey("new");
 
-        //        dto.setLocale("fr");
+        dto.setLocale("xxxxx");
         Map<String, Object> parameters = new HashMap<String, Object>();
 
         parameters.put("ObjectID", "Waste of time");

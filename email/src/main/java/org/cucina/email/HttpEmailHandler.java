@@ -2,6 +2,8 @@ package org.cucina.email;
 
 import java.nio.charset.StandardCharsets;
 
+import java.util.Locale;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,7 +47,8 @@ public class HttpEmailHandler
     @RequestMapping(value = "/addTemplate", method = RequestMethod.POST)
     @ResponseBody
     public String addTemplate(@RequestParam("name")
-    String name, @RequestParam("file")
+    String name, @RequestParam("locale")
+    Locale locale, @RequestParam("file")
     MultipartFile file) {
         if (!file.isEmpty()) {
             try {
@@ -54,7 +57,8 @@ public class HttpEmailHandler
                 EmailTemplate et = new EmailTemplate();
 
                 et.setBody(body);
-                et.setName(name + MimeMessagePreparatorFactory.TEMPLATE_SUFFIX);
+                et.setName(name + ((locale == null) ? "" : ("_" + locale.toString())) +
+                    MimeMessagePreparatorFactory.TEMPLATE_SUFFIX);
 
                 templateRepository.save(et);
 
