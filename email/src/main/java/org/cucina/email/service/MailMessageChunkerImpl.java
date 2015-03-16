@@ -74,7 +74,7 @@ public class MailMessageChunkerImpl
      * @return a set of MimeMessagePreparator objects ready to be sent.
      */
     public Set<MimeMessagePreparator> getPreparators(String templateName,
-        Map<Object, Object> params, Locale locale, Collection<?extends EmailUser> tos,
+        Map<String, Object> params, Locale locale, Collection<?extends EmailUser> tos,
         Collection<?extends EmailUser> ccs, Collection<?extends EmailUser> bccs,
         Collection<DataSource> attachments) {
         Set<MimeMessagePreparator> preparators = new HashSet<MimeMessagePreparator>();
@@ -196,7 +196,7 @@ public class MailMessageChunkerImpl
     }
 
     private Set<MimeMessagePreparator> chunkPreparators(String templateName,
-        Map<Object, Object> params, Locale locale, Collection<?extends EmailUser> tos,
+        Map<String, Object> params, Locale locale, Collection<?extends EmailUser> tos,
         Collection<?extends EmailUser> ccs, Collection<?extends EmailUser> bccs,
         Collection<DataSource> attachments) {
         Set<MimeMessagePreparator> ret = new HashSet<MimeMessagePreparator>();

@@ -25,11 +25,13 @@ import freemarker.template.Configuration;
   */
 @Component
 public class MimeMessagePreparatorFactory {
+    /** ftl. */
+    public static final String TEMPLATE_SUFFIX = ".ftl";
     private Configuration configuration;
 
     // Injected parameter map containing standard info for the email 
     private Map<String, String> standardParams;
-    private String suffix = ".ftl";
+    private String suffix = TEMPLATE_SUFFIX;
 
     /**
      * @param configuration
@@ -53,11 +55,11 @@ public class MimeMessagePreparatorFactory {
      *
      * @return JAVADOC.
      */
-    public MimeMessagePreparator getInstance(String templateName, Map<Object, Object> params,
+    public MimeMessagePreparator getInstance(String templateName, Map<String, Object> params,
         Locale locale, Collection<?extends EmailUser> tos, Collection<?extends EmailUser> ccs,
         Collection<?extends EmailUser> bccs, Collection<DataSource> attachments) {
         if (params == null) {
-            params = new HashMap<Object, Object>();
+            params = new HashMap<String, Object>();
         }
 
         if (MapUtils.isNotEmpty(getStandardParams())) {

@@ -19,6 +19,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import org.springframework.mail.MailPreparationException;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
@@ -44,7 +45,7 @@ public class MimeMessagePreparatorImpl
     private Collection<?extends EmailUser> to;
     private Configuration configuration;
     private Locale locale;
-    private Map<Object, Object> params;
+    private Map<String, Object> params;
     private String encoding = "UTF-8";
     private String from;
     private String subject;
@@ -110,7 +111,7 @@ public class MimeMessagePreparatorImpl
      *
      * @param params JAVADOC.
      */
-    public void setParams(Map<Object, Object> params) {
+    public void setParams(Map<String, Object> params) {
         this.params = params;
     }
 
@@ -285,30 +286,6 @@ public class MimeMessagePreparatorImpl
                                         .append("templateLocation", templateLocation).toString();
     }
 
-    private String constructByLocale(String messageKey, Map<Object, Object> parameters,
-        Locale locale) {
-        Assert.notNull(messageKey, "messageKey is null");
-        Assert.notNull(locale, "locale is null");
-
-        String filename = messageKey + suffix;
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("filename=" + filename);
-            LOG.debug("parameters for freemarker=" + parameters);
-        }
-
-        try {
-            return FreeMarkerTemplateUtils.processTemplateIntoString(configuration.getTemplate(
-                    filename, locale, encoding), parameters);
-        } catch (IOException e) {
-            LOG.warn("Got an IOexception", e);
-        } catch (TemplateException e) {
-            LOG.warn("Got a Freemarker template exception", e);
-        }
-
-        return null;
-    }
-
     private static void resolveSubjectAndBody(String input, MimeMessageHelper helper)
         throws MessagingException {
         if (null == input) {
@@ -337,6 +314,30 @@ public class MimeMessagePreparatorImpl
             helper.setText(StringUtils.substringAfter(input, firstLine), true);
         } else {
             helper.setText(input, true);
+        }
+    }
+
+    private String constructByLocale(String messageKey, Map<String, Object> parameters,
+        Locale locale) {
+        Assert.notNull(messageKey, "messageKey is null");
+        Assert.notNull(locale, "locale is null");
+
+        String filename = messageKey + suffix;
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("filename=" + filename);
+            LOG.debug("parameters for freemarker=" + parameters);
+        }
+
+        try {
+            return FreeMarkerTemplateUtils.processTemplateIntoString(configuration.getTemplate(
+                    filename, locale, encoding), parameters);
+        } catch (IOException e) {
+            LOG.warn("Got an IOexception", e);
+            throw new MailPreparationException(e);
+        } catch (TemplateException e) {
+            LOG.warn("Got a Freemarker template exception", e);
+            throw new MailPreparationException(e);
         }
     }
 }

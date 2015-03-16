@@ -1,5 +1,8 @@
 package org.cucina.email;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
@@ -40,9 +43,15 @@ public class EmailJmsClient {
         dto.setTo("cucina@opencucina.org");
         dto.setFrom("cucina@opencucina.org");
         dto.setSubject("Hello there");
-//        dto.setMessageKey("NoSubject");
-        dto.setMessageKey("Test");
-//        dto.setLocale("fr");
+        //        dto.setMessageKey("NoSubject");
+        dto.setMessageKey("new");
+
+        //        dto.setLocale("fr");
+        Map<String, Object> parameters = new HashMap<String, Object>();
+
+        parameters.put("ObjectID", "Waste of time");
+        parameters.put("URL", "http://localhost:8080");
+        dto.setParameters(parameters);
 
         final String text = om.writeValueAsString(dto);
 

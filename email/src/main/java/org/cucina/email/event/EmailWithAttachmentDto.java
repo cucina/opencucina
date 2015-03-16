@@ -3,7 +3,6 @@ package org.cucina.email.event;
 import java.io.Serializable;
 
 import java.util.Collection;
-import java.util.Map;
 
 import javax.activation.DataSource;
 
@@ -31,7 +30,6 @@ public class EmailWithAttachmentDto
     private Collection<EmailUser> bccUsers;
     private Collection<EmailUser> ccUsers;
     private Collection<EmailUser> toUsers;
-    private Map<Object, Object> parameters;
 
     /**
     * Set attachments
@@ -86,22 +84,6 @@ public class EmailWithAttachmentDto
      */
     public Collection<EmailUser> getCcUsers() {
         return ccUsers;
-    }
-
-    /**
-     * @param parameters
-     *            Arbitrary map of parameters usually required by email
-     *            template.
-     */
-    public void setParameters(Map<Object, Object> parameters) {
-        this.parameters = parameters;
-    }
-
-    /**
-     * @return Returns the parameters.
-     */
-    public Map<Object, Object> getParameters() {
-        return parameters;
     }
 
     /**

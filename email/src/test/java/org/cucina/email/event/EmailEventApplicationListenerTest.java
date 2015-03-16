@@ -57,7 +57,7 @@ public class EmailEventApplicationListenerTest {
 
         Collection ccs = new HashSet();
         Collection bccs = new HashSet();
-        Map<Object, Object> parameters = new HashMap<Object, Object>();
+        Map<String, Object> parameters = new HashMap<String, Object>();
         Collection<DataSource> attachments = new HashSet<DataSource>();
 
         EmailWithAttachmentDto descriptor = new EmailWithAttachmentDto();

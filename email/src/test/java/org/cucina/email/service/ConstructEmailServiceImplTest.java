@@ -1,12 +1,4 @@
-
 package org.cucina.email.service;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,14 +6,24 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
 
+import org.springframework.mail.javamail.MimeMessagePreparator;
+
 import org.cucina.email.service.EmailConstructorImpl;
 import org.cucina.email.service.EmailUser;
 import org.cucina.email.service.MailMessageChunker;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Before;
 import org.junit.Test;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+
 import org.mockito.Mock;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import org.mockito.MockitoAnnotations;
-import org.springframework.mail.javamail.MimeMessagePreparator;
 
 
 /**
@@ -52,12 +54,9 @@ public class ConstructEmailServiceImplTest {
         throws Exception {
         MockitoAnnotations.initMocks(this);
         activeWithEmailFrench = new LocalUser(true, "ajoffe@cucina.org", Locale.FRENCH, "a");
-        disabledWithEmailFrench = new LocalUser(true, "thornton@cucina.org", Locale.FRENCH,
-                "t");
-        activeWithoutEmailFrench = new LocalUser(true, "vlevine@cucina.org", Locale.FRENCH,
-                "v");
-        disabledWithoutEmailFrench = new LocalUser(true, "hkelsey@cucina.org", Locale.FRENCH,
-                "h");
+        disabledWithEmailFrench = new LocalUser(true, "thornton@cucina.org", Locale.FRENCH, "t");
+        activeWithoutEmailFrench = new LocalUser(true, "vlevine@cucina.org", Locale.FRENCH, "v");
+        disabledWithoutEmailFrench = new LocalUser(true, "hkelsey@cucina.org", Locale.FRENCH, "h");
         english = new LocalUser(true, "jnguyen@cucina.org", Locale.ENGLISH, "j");
 
         emailService = new EmailConstructorImpl();
@@ -76,7 +75,7 @@ public class ConstructEmailServiceImplTest {
         users.add(disabledWithEmailFrench);
         users.add(activeWithoutEmailFrench);
         users.add(disabledWithoutEmailFrench);
-        when(chunker.getPreparators(eq("APOverdue"), eq((Map<Object, Object>) null),
+        when(chunker.getPreparators(eq("APOverdue"), eq((Map<String, Object>) null),
                 eq(Locale.FRENCH), eq((Collection) null), eq((Collection) null),
                 any(Collection.class), eq((Collection) null)))
             .thenReturn(Collections.singleton(preparator));
@@ -101,7 +100,7 @@ public class ConstructEmailServiceImplTest {
         users.add(activeWithoutEmailFrench);
         users.add(disabledWithoutEmailFrench);
 
-        when(chunker.getPreparators(eq("APOverdue"), eq((Map<Object, Object>) null),
+        when(chunker.getPreparators(eq("APOverdue"), eq((Map<String, Object>) null),
                 eq(Locale.FRENCH), eq((Collection) null), any(Collection.class),
                 eq((Collection) null), eq((Collection) null)))
             .thenReturn(Collections.singleton(preparator));
@@ -123,11 +122,11 @@ public class ConstructEmailServiceImplTest {
 
         users.add(activeWithEmailFrench);
         users.add(english);
-        when(chunker.getPreparators(eq("APOverdue"), eq((Map<Object, Object>) null),
+        when(chunker.getPreparators(eq("APOverdue"), eq((Map<String, Object>) null),
                 eq(Locale.FRENCH), any(Collection.class), eq((Collection) null),
                 eq((Collection) null), eq((Collection) null)))
             .thenReturn(Collections.singleton(preparator));
-        when(chunker.getPreparators(eq("APOverdue"), eq((Map<Object, Object>) null),
+        when(chunker.getPreparators(eq("APOverdue"), eq((Map<String, Object>) null),
                 eq(Locale.ENGLISH), any(Collection.class), eq((Collection) null),
                 eq((Collection) null), eq((Collection) null)))
             .thenReturn(Collections.singleton(mock(MimeMessagePreparator.class)));
@@ -172,7 +171,7 @@ public class ConstructEmailServiceImplTest {
         users.add(disabledWithEmailFrench);
         users.add(activeWithoutEmailFrench);
         users.add(disabledWithoutEmailFrench);
-        when(chunker.getPreparators(eq("APOverdue"), eq((Map<Object, Object>) null),
+        when(chunker.getPreparators(eq("APOverdue"), eq((Map<String, Object>) null),
                 eq(Locale.FRENCH), any(Collection.class), eq((Collection) null),
                 eq((Collection) null), eq((Collection) null)))
             .thenReturn(Collections.singleton(preparator));

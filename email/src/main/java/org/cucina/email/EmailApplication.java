@@ -18,8 +18,11 @@ import org.springframework.jms.support.converter.MessageConversionException;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.destination.DestinationResolver;
 import org.springframework.jms.support.destination.DynamicDestinationResolver;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.cucina.email.repository.RepositoryTemplateLoader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +42,20 @@ public class EmailApplication {
     private static final Logger LOG = LoggerFactory.getLogger(EmailApplication.class);
     @Autowired
     private Environment environment;
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @return JAVADOC.
+     */
+    @Bean
+    public FreeMarkerConfigurer freeMarkerConfigurer() {
+        FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
+
+        configurer.setPreTemplateLoaders(repositoryTemplateLoader());
+
+        return configurer;
+    }
 
     /**
      * JAVADOC Method Level Comments
@@ -70,6 +87,16 @@ public class EmailApplication {
         factory.setMessageConverter(messageConverter(objectMapper));
 
         return factory;
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @return JAVADOC.
+     */
+    @Bean
+    public RepositoryTemplateLoader repositoryTemplateLoader() {
+        return new RepositoryTemplateLoader();
     }
 
     /**

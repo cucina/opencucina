@@ -58,7 +58,7 @@ public class EmailServiceImplTest {
         Collection tos = new HashSet();
         Collection ccs = new HashSet();
         Collection bccs = new HashSet();
-        Map<Object, Object> parameters = new HashMap<Object, Object>();
+        Map<String, Object> parameters = new HashMap<String, Object>();
         Collection<DataSource> attachments = new HashSet<DataSource>();
 
         EmailConstructor ces = mock(EmailConstructor.class);

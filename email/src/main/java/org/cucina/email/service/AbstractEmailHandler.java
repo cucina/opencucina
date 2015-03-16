@@ -3,7 +3,6 @@ package org.cucina.email.service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Locale;
 
 import org.apache.commons.lang3.LocaleUtils;
@@ -34,10 +33,14 @@ public abstract class AbstractEmailHandler {
      *            JAVADOC.
      */
     protected void sendEmail(EmailDto dto) {
-        emailService.sendMessages(dto.getSubject(), dto.getFrom(),
-            buildUsers(dto.getTo(), dto.getLocale()), buildUsers(dto.getCc(), dto.getLocale()),
-            buildUsers(dto.getBcc(), dto.getLocale()), dto.getMessageKey(),
-            new HashMap<Object, Object>(), null);
+        try {
+            emailService.sendMessages(dto.getSubject(), dto.getFrom(),
+                buildUsers(dto.getTo(), dto.getLocale()), buildUsers(dto.getCc(), dto.getLocale()),
+                buildUsers(dto.getBcc(), dto.getLocale()), dto.getMessageKey(),
+                dto.getParameters(), null);
+        } catch (Exception e) {
+            LOG.error("Error sending email", e);
+        }
     }
 
     private Collection<EmailUser> buildUsers(String addresses, String slocale) {

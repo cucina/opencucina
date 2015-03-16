@@ -1,4 +1,3 @@
-
 package org.cucina.engine.operations;
 
 import java.util.Collection;
@@ -12,19 +11,24 @@ import java.util.Set;
 import javax.activation.DataSource;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cucina.email.event.EmailEvent;
-import org.cucina.email.event.EmailWithAttachmentDto;
-import org.cucina.engine.ExecutionContext;
-import org.cucina.engine.definition.Operation;
-import org.cucina.engine.email.AcegiUserAccessorBean;
-import org.cucina.engine.email.UserAccessorBean;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+
+import org.cucina.email.event.EmailEvent;
+import org.cucina.email.event.EmailWithAttachmentDto;
+import org.cucina.email.service.EmailUser;
+
+import org.cucina.engine.ExecutionContext;
+import org.cucina.engine.definition.Operation;
+import org.cucina.engine.email.AcegiUserAccessorBean;
+import org.cucina.engine.email.UserAccessorBean;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -44,7 +48,6 @@ public class EmailOperation
     private ApplicationEventPublisher applicationEventPublisher;
     private Boolean attachmentRequired = Boolean.FALSE;
     private Boolean filterCurrentUser = Boolean.TRUE;
-    private UserAccessorBean userAccessor;
     private String contextParamAttachmentsKey = ATTACHMENTS_KEY;
     private String contextUsersKey = USERS;
 
@@ -52,6 +55,7 @@ public class EmailOperation
     private String parameterMapExpr;
     private String propertiesList;
     private String templateName;
+    private UserAccessorBean userAccessor;
 
     /**
      * applicationEventPublisher setter
@@ -168,7 +172,7 @@ public class EmailOperation
         Assert.notNull(executionContext, "Workflow context cannot be null.");
         Assert.notNull(templateName, "template name cannot be null.");
 
-        Set<Object> users = new HashSet<Object>();
+        Set<EmailUser> users = new HashSet<EmailUser>();
 
         users.addAll(getContextUsers(executionContext));
 
@@ -228,17 +232,17 @@ public class EmailOperation
     }
 
     @SuppressWarnings("unchecked")
-    private Collection<Object> getContextUsers(ExecutionContext executionContext) {
-        Collection<Object> result = null;
+    private Collection<EmailUser> getContextUsers(ExecutionContext executionContext) {
+        Collection<EmailUser> result = null;
         Map<String, Object> parameters = executionContext.getParameters();
 
         if (parameters != null) {
-            result = (Collection<Object>) parameters.get(contextUsersKey);
+            result = (Collection<EmailUser>) parameters.get(contextUsersKey);
 
             if (result != null) {
                 // Check whether any of the users are null and
                 // remove them, if so
-                Iterator<Object> userIter = result.iterator();
+                Iterator<EmailUser> userIter = result.iterator();
 
                 while (userIter.hasNext()) {
                     if (userIter.next() == null) {
@@ -293,11 +297,11 @@ public class EmailOperation
      *
      * @param users
      */
-    private void filterUsers(Collection<Object> users) {
+    private void filterUsers(Collection<EmailUser> users) {
         if ((users != null) && filterCurrentUser.booleanValue()) {
             Object currentUser = userAccessor.getCurrentUser();
 
-            for (Iterator<Object> iter = users.iterator(); iter.hasNext();) {
+            for (Iterator<EmailUser> iter = users.iterator(); iter.hasNext();) {
                 Object user = iter.next();
 
                 if ((user != null) && user.equals(currentUser)) {

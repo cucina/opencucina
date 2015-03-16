@@ -2,6 +2,8 @@ package org.cucina.email;
 
 import java.io.Serializable;
 
+import java.util.Map;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 
@@ -13,6 +15,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class EmailDto
     implements Serializable {
     private static final long serialVersionUID = -4534743023328299950L;
+    private Map<String, Object> parameters;
     private String bcc;
     private String cc;
     private String from;
@@ -109,6 +112,24 @@ public class EmailDto
      */
     public String getMessageKey() {
         return messageKey;
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @param parameters JAVADOC.
+     */
+    public void setParameters(Map<String, Object> parameters) {
+        this.parameters = parameters;
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @return JAVADOC.
+     */
+    public Map<String, Object> getParameters() {
+        return parameters;
     }
 
     /**

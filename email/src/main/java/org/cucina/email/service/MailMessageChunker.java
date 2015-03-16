@@ -35,7 +35,7 @@ public interface MailMessageChunker {
      * @param bccs - bcc recipients
      * @return set of MimeMessagePreparator
      */
-    Set<MimeMessagePreparator> getPreparators(String templateName, Map<Object, Object> params,
+    Set<MimeMessagePreparator> getPreparators(String templateName, Map<String, Object> params,
         Locale locale, Collection<?extends EmailUser> tos, Collection<?extends EmailUser> ccs,
         Collection<?extends EmailUser> bccs, Collection<DataSource> attachments);
 }

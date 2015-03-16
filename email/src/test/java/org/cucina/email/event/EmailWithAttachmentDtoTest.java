@@ -34,7 +34,7 @@ public class EmailWithAttachmentDtoTest {
     public void testGetParameters() {
         EmailWithAttachmentDto descriptor = new EmailWithAttachmentDto();
 
-        Map<Object, Object> parameters = new HashMap<Object, Object>();
+        Map<String, Object> parameters = new HashMap<String, Object>();
 
         parameters.put("key", new Object());
         descriptor.setParameters(parameters);

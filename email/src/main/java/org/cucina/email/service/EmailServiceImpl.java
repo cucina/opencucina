@@ -65,7 +65,7 @@ public class EmailServiceImpl
     @Override
     public void sendMessages(String subject, String from, Collection<EmailUser> toUsers,
         Collection<EmailUser> ccUsers, Collection<EmailUser> bccUsers, String messageKey,
-        Map<Object, Object> parameters, Collection<DataSource> attachments) {
+        Map<String, Object> parameters, Collection<DataSource> attachments) {
         MimeMessagePreparator[] preparators = emailConstructor.prepareMessages(messageKey, toUsers,
                 ccUsers, bccUsers, parameters, attachments);
 
