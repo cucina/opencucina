@@ -78,7 +78,7 @@ public class TokenFactoryImplTest {
 
         Foo foo = new Foo(123L);
 
-        when(tokenRepository.loadToken(foo)).thenReturn(null);
+        when(tokenRepository.findByDomain(foo)).thenReturn(null);
 
         TokenFactoryImpl factory = new TokenFactoryImpl(instanceFactory, tokenRepository);
         ProcessDefinition definition = new ProcessDefinition();
@@ -114,7 +114,7 @@ public class TokenFactoryImplTest {
 
         Foo foo = new Foo(123L);
 
-        when(tokenRepository.loadToken(foo)).thenReturn(wtoken);
+        when(tokenRepository.findByDomain(foo)).thenReturn(wtoken);
 
         TokenFactoryImpl factory = new TokenFactoryImpl(instanceFactory, tokenRepository);
 

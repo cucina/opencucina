@@ -83,7 +83,7 @@ public class TokenRepositoryImplTest {
                     return null;
                 }
             }).when(em).persist(foo);
-        trepo.create(wf);
+        trepo.save(wf);
         verify(em).persist(wf);
         assertEquals("Foo", wf.getDomainObjectType());
         assertEquals(111L, wf.getDomainObjectId().longValue());
@@ -98,7 +98,7 @@ public class TokenRepositoryImplTest {
         Foo foo = new Foo(111L);
 
         wf.setDomainObject(foo);
-        trepo.create(wf);
+        trepo.save(wf);
         verify(em).merge(foo);
         verify(em).persist(wf);
         assertEquals("Foo", wf.getDomainObjectType());
@@ -151,7 +151,8 @@ public class TokenRepositoryImplTest {
 
         when(cq.where(preand)).thenReturn(cq);
         when(em.createQuery(cq)).thenReturn(tq);
-        trepo.loadDomainIds("workflowId", "placeId", "applicationType");
+        trepo.findDomainIdsByWorkflowIdPlaceIdApplicationType("workflowId", "placeId",
+            "applicationType");
 
         verify(cq).select(token.<Long>get("domainObjectId"));
         verify(tq).getResultList();
@@ -201,7 +202,7 @@ public class TokenRepositoryImplTest {
 
         when(tq.getSingleResult()).thenReturn(tok);
 
-        assertEquals(tok, trepo.loadToken(foo));
+        assertEquals(tok, trepo.findByDomain(foo));
         assertEquals(foo, tok.getDomainObject());
         verify(cq).where(preand);
     }
@@ -277,7 +278,7 @@ public class TokenRepositoryImplTest {
         when(tuple.get(1)).thenReturn(foo);
         list.add(tuple);
         when(tq.getResultList()).thenReturn(list);
-        trepo.loadTokens("applicationType", ids);
+        trepo.findByApplicationTypeAndIds("applicationType", ids);
         assertEquals(foo, token.getDomainObject());
     }
 
@@ -295,7 +296,7 @@ public class TokenRepositoryImplTest {
         wf.setDomainObject(foo);
         wf.setDomainObjectId(foo.getId());
         wf.setDomainObjectType(foo.getApplicationType());
-        trepo.update(wf);
+        trepo.save(wf);
         verify(em).merge(foo);
         verify(em).merge(wf);
     }

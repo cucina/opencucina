@@ -70,7 +70,7 @@ public class BulkWorkflowServiceImplTest {
 
         when(workflowEnvironment.getWorkflowDefinitionHelper()).thenReturn(helper);
 
-        when(tokenRepository.loadDomainIds(WORKFLOW_ID, PLACE_ID, APP_TYPE)).thenReturn(null);
+        when(tokenRepository.findDomainIdsByWorkflowIdPlaceIdApplicationType(WORKFLOW_ID, PLACE_ID, APP_TYPE)).thenReturn(null);
 
         service.executeTransitions(APP_TYPE, WORKFLOW_ID, TRANSITION_ID, parameters);
     }
@@ -92,7 +92,7 @@ public class BulkWorkflowServiceImplTest {
         ids.add(2L);
         ids.add(5L);
 
-        when(tokenRepository.loadDomainIds(WORKFLOW_ID, PLACE_ID, APP_TYPE)).thenReturn(ids);
+        when(tokenRepository.findDomainIdsByWorkflowIdPlaceIdApplicationType(WORKFLOW_ID, PLACE_ID, APP_TYPE)).thenReturn(ids);
 
         when(workflowEnvironment.getWorkflowDefinitionHelper()).thenReturn(helper);
 

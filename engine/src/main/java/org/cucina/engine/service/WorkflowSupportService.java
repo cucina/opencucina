@@ -145,7 +145,7 @@ public interface WorkflowSupportService {
      *
      * @return JAVADOC.
      */
-    List<Map<String, Object>> obtainHistorySummary(Long id, String applicationType);
+    List<Map<Object, Object>> obtainHistorySummary(Long id, String applicationType);
 
     /**
      * Starts and persists workflow and entity

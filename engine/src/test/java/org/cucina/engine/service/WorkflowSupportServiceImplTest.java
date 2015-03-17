@@ -23,18 +23,16 @@ import org.cucina.engine.definition.WorkflowDefinitionHelper;
 import org.cucina.engine.definition.config.ProcessDefinitionRegistry;
 import org.cucina.engine.model.HistoryRecord;
 import org.cucina.engine.model.WorkflowToken;
+import org.cucina.engine.repository.HistoryRecordRepository;
 import org.cucina.engine.repository.TokenRepository;
 import org.cucina.engine.testassist.Foo;
 
 import org.cucina.i18n.model.ListNode;
 import org.cucina.i18n.model.Message;
-import org.cucina.i18n.service.I18nService;
 
 import org.cucina.search.SearchBeanFactory;
-import org.cucina.search.SearchDao;
 import org.cucina.search.SearchService;
 import org.cucina.search.query.SearchBean;
-import org.cucina.search.query.SearchQuery;
 import org.cucina.search.query.SearchResults;
 
 import org.cucina.security.access.AccessRegistry;
@@ -76,13 +74,13 @@ public class WorkflowSupportServiceImplTest {
     @Mock
     private DefinitionService definitionService;
     @Mock
+    private HistoryRecordRepository historyRecordRepository;
+    @Mock
     private ProcessDefinitionRegistry definitionRegistry;
     @Mock
     private ProcessEnvironment workflowEnvironment;
     @Mock
     private SearchBeanFactory searchBeanFactory;
-    @Mock
-    private SearchDao searchDao;
     @Mock
     private SearchService searchService;
     @Mock
@@ -104,7 +102,7 @@ public class WorkflowSupportServiceImplTest {
         throws Exception {
         MockitoAnnotations.initMocks(this);
         service = new WorkflowSupportServiceImpl();
-        service.setSearchDao(searchDao);
+        service.setHistoryRecordRepository(historyRecordRepository);
         service.setWorkflowEnvironment(workflowEnvironment);
         service.setTokenRepository(tokenRepository);
         service.setDefinitionService(definitionService);
@@ -224,7 +222,7 @@ public class WorkflowSupportServiceImplTest {
 
         assertEquals("Should have returned token", token, service.startWorkflow(foo, params));
 
-        verify(tokenRepository).create(token);
+        verify(tokenRepository).save(token);
     }
 
     /**
@@ -271,7 +269,8 @@ public class WorkflowSupportServiceImplTest {
 
         token.setWorkflowDefinitionId("workflowDefinitionId");
         result.add(token);
-        when(tokenRepository.loadTokens(any(String.class), any(Long[].class))).thenReturn(result);
+        when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Long[].class)))
+            .thenReturn(result);
         service.setTokenRepository(tokenRepository);
         service.makeTransition(map, "Foo", "transitionId", "comment", null, null, null, null, null);
     }
@@ -394,7 +393,8 @@ public class WorkflowSupportServiceImplTest {
 
         tokens.add(token1);
         tokens.add(token2);
-        when(tokenRepository.loadTokens(eq(Foo.TYPE), any(Long[].class))).thenReturn(tokens);
+        when(tokenRepository.findByApplicationTypeAndIds(eq(Foo.TYPE), any(Long[].class)))
+            .thenReturn(tokens);
 
         Map<Long, Collection<String>> results = service.listAllTransitions(Collections.<Long>singleton(
                     100L), Foo.TYPE);
@@ -432,7 +432,8 @@ public class WorkflowSupportServiceImplTest {
 
         token.setWorkflowDefinitionId("workflowDefinitionId");
         result.add(token);
-        when(tokenRepository.loadTokens(any(String.class), any(Long[].class))).thenReturn(result);
+        when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Long[].class)))
+            .thenReturn(result);
         assertTrue("Not containing hello",
             service.listTransitions(Collections.<Long>singleton(100L), "Foo").contains("hello"));
     }
@@ -450,6 +451,7 @@ public class WorkflowSupportServiceImplTest {
 
         token.setDomainObject(foo);
         token.setVersion(0);
+        token.setId(1L);
 
         when(helper.isEnded(token)).thenReturn(false);
 
@@ -465,9 +467,10 @@ public class WorkflowSupportServiceImplTest {
         when(workflowEnvironment.getWorkflowDefinitionHelper()).thenReturn(helper);
         when(workflowEnvironment.getService()).thenReturn(workflowService);
 
-        tokenRepository.update(token);
+        tokenRepository.save(token);
         token.setWorkflowDefinitionId("workflowDefinitionId");
-        when(tokenRepository.loadTokens("Foo", 100L)).thenReturn(Collections.singleton(token));
+        when(tokenRepository.findByApplicationTypeAndIds("Foo", 100L))
+            .thenReturn(Collections.singleton(token));
         service.makeTransition(100L, "Foo", "transitionId", "comment", null, null, null, null);
         // this one should call for delete caused by helper.isEnded returning true
         when(helper.isEnded(token)).thenReturn(true);
@@ -481,7 +484,8 @@ public class WorkflowSupportServiceImplTest {
     public void testNoToken() {
         Map<Long, Integer> map = new HashMap<Long, Integer>();
 
-        when(tokenRepository.loadTokens(any(String.class), any(Long[].class))).thenReturn(null);
+        when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Long[].class)))
+            .thenReturn(null);
         service.makeTransition(map, "Foo", "transitionId", null, null, null, null, null, null);
     }
 
@@ -492,9 +496,7 @@ public class WorkflowSupportServiceImplTest {
     public void testObtainHistory() {
         List<HistoryRecord> result = new ArrayList<HistoryRecord>();
 
-        when(searchDao.<HistoryRecord>find(
-                new SearchQuery("select t.histories from Token t " +
-                    "where t.domainObjectId=? and t.domainObjectType=?", 1L, "Foo")))
+        when(tokenRepository.findHistoryRecordsByDomainObjectIdAndDomainObjectType(1L, "Foo"))
             .thenReturn(result);
         assertEquals(result, service.obtainHistory(1L, "Foo"));
     }
@@ -505,45 +507,26 @@ public class WorkflowSupportServiceImplTest {
      */
     @Test
     public void testObtainHistorySummary() {
-        I18nService i18nService = mock(I18nService.class);
-
-        when(i18nService.getLocale()).thenReturn(Locale.UK);
-
-        List<Map<Object, Object>> results = new ArrayList<Map<Object, Object>>();
-        HashMap<Object, Object> historyRec1 = new HashMap<Object, Object>();
+        List<HistoryRecord> results = new ArrayList<HistoryRecord>();
+        HistoryRecord historyRec1 = new HistoryRecord();
         ListNode reason = new ListNode();
         Message label = mock(Message.class);
 
         when(label.getBestMessage(Locale.UK)).thenReturn("A reason");
         reason.setLabel(label);
-        historyRec1.put("reason", reason);
+        historyRec1.setReason(reason);
 
-        HashMap<Object, Object> historyRec2 = new HashMap<Object, Object>();
+        HistoryRecord historyRec2 = new HistoryRecord();
 
         results.add(historyRec1);
         results.add(historyRec2);
-        when(searchDao.findMap(
-                new SearchQuery(
-                    "select hr.id as id, hr.status as status, hr.comments as comments, hr.modifiedBy as modifiedBy," +
-                    " hr.modifiedDate as modifiedDate, hr.approvedBy as approvedBy, hrReason, hrAttachment.id as attachmentId " +
-                    "from HistoryRecord hr left join hr.reason as hrReason left join hr.attachment as hrAttachment " +
-                    "where hr.token.domainObjectId=?1 and hr.token.domainObjectType=?2 " +
-                    "order by hr.modifiedDate desc", 1L, Foo.TYPE))).thenReturn(results);
+        when(historyRecordRepository.findByIdAndApplicationType(1L, "Foo")).thenReturn(results);
 
-        service.setI18nService(i18nService);
-
-        List<Map<String, Object>> summary = service.obtainHistorySummary(1L, Foo.TYPE);
+        List<Map<Object, Object>> summary = service.obtainHistorySummary(1L, Foo.TYPE);
 
         assertEquals(2, summary.size());
         assertEquals(reason, summary.get(0).get("reason"));
         assertNull(summary.get(1).get("reason"));
-        verify(searchDao)
-            .findMap(new SearchQuery(
-                "select hr.id as id, hr.status as status, hr.comments as comments, hr.modifiedBy as modifiedBy," +
-                " hr.modifiedDate as modifiedDate, hr.approvedBy as approvedBy, hrReason, hrAttachment.id as attachmentId " +
-                "from HistoryRecord hr left join hr.reason as hrReason left join hr.attachment as hrAttachment " +
-                "where hr.token.domainObjectId=?1 and hr.token.domainObjectType=?2 " +
-                "order by hr.modifiedDate desc", 1L, Foo.TYPE));
     }
 
     /**
@@ -556,6 +539,7 @@ public class WorkflowSupportServiceImplTest {
 
         token.setDomainObjectId(100L);
         token.setVersion(0);
+        token.setId(1L);
 
         when(helper.isEnded(token)).thenReturn(false);
 
@@ -590,8 +574,9 @@ public class WorkflowSupportServiceImplTest {
         token.setWorkflowDefinitionId("workflowDefinitionId");
         result.add(token);
 
-        when(tokenRepository.loadTokens(any(String.class), any(Long[].class))).thenReturn(result);
-        tokenRepository.update(token);
+        when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Long[].class)))
+            .thenReturn(result);
+        tokenRepository.save(token);
         service.makeTransition(map, "Foo", "transitionId", comments, null, null, null, null,
             attachment);
     }

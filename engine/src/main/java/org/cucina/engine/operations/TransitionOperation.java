@@ -98,7 +98,7 @@ public class TransitionOperation
         Assert.notNull(transitionId,
             "transitionIdExpression has not evaluated to a valid transitionId");
 
-        WorkflowToken token = tokenRepository.loadToken(domain);
+        WorkflowToken token = tokenRepository.findByDomain(domain);
 
         Assert.isTrue(domain == token.getDomainObject(),
             "Loaded token should have same instance of domain as returned in expression 'domainExpression'.");
@@ -108,6 +108,6 @@ public class TransitionOperation
 
         workflowEnvironment.getService().executeTransition(token, transitionId, parameters);
 
-        tokenRepository.update(token);
+        tokenRepository.save(token);
     }
 }

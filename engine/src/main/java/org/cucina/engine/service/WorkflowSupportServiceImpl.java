@@ -4,12 +4,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.persistence.OptimisticLockException;
 
+import org.apache.commons.beanutils.BeanMap;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -32,16 +33,14 @@ import org.cucina.engine.definition.Transition;
 import org.cucina.engine.listeners.HistoryListener;
 import org.cucina.engine.model.HistoryRecord;
 import org.cucina.engine.model.WorkflowToken;
+import org.cucina.engine.repository.HistoryRecordRepository;
 import org.cucina.engine.repository.TokenRepository;
 
 import org.cucina.i18n.model.ListNode;
-import org.cucina.i18n.service.I18nService;
 
 import org.cucina.search.SearchBeanFactory;
-import org.cucina.search.SearchDao;
 import org.cucina.search.SearchService;
 import org.cucina.search.query.SearchBean;
-import org.cucina.search.query.SearchQuery;
 import org.cucina.search.query.SearchResults;
 
 import org.cucina.security.access.AccessRegistry;
@@ -61,19 +60,18 @@ public class WorkflowSupportServiceImpl
     private static final Logger LOG = LoggerFactory.getLogger(WorkflowSupportServiceImpl.class);
     private AccessRegistry accessRegistry;
     private DefinitionService definitionService;
-    private I18nService i18nService;
+    private HistoryRecordRepository historyRecordRepository;
     private ProcessEnvironment workflowEnvironment;
     private SearchBeanFactory searchBeanFactory;
-    private SearchDao searchDao;
     private SearchService searchService;
     private TokenRepository tokenRepository;
 
     /**
-     * JAVADOC Method Level Comments
-     *
-     * @param accessRegistry
-     *            JAVADOC.
-     */
+    * JAVADOC Method Level Comments
+    *
+    * @param accessRegistry
+    *            JAVADOC.
+    */
     @Required
     public void setAccessRegistry(AccessRegistry accessRegistry) {
         this.accessRegistry = accessRegistry;
@@ -93,12 +91,11 @@ public class WorkflowSupportServiceImpl
     /**
      * JAVADOC Method Level Comments
      *
-     * @param i18nService
-     *            JAVADOC.
+     * @param historyRecordRepository JAVADOC.
      */
     @Required
-    public void setI18nService(I18nService i18nService) {
-        this.i18nService = i18nService;
+    public void setHistoryRecordRepository(HistoryRecordRepository historyRecordRepository) {
+        this.historyRecordRepository = historyRecordRepository;
     }
 
     /**
@@ -110,17 +107,6 @@ public class WorkflowSupportServiceImpl
     @Required
     public void setSearchBeanFactory(SearchBeanFactory searchBeanFactory) {
         this.searchBeanFactory = searchBeanFactory;
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param searchDao
-     *            JAVADOC.
-     */
-    @Required
-    public void setSearchDao(SearchDao searchDao) {
-        this.searchDao = searchDao;
     }
 
     /**
@@ -233,7 +219,7 @@ public class WorkflowSupportServiceImpl
     @Transactional
     public Map<Long, Collection<String>> listAllTransitions(Collection<Long> ids,
         String applicationType) {
-        Collection<WorkflowToken> tokens = tokenRepository.loadTokens(applicationType,
+        Collection<WorkflowToken> tokens = tokenRepository.findByApplicationTypeAndIds(applicationType,
                 ids.toArray(new Long[ids.size()]));
 
         if (LOG.isDebugEnabled()) {
@@ -378,7 +364,7 @@ public class WorkflowSupportServiceImpl
         String transitionId, String comment, String approvedAs, String assignedTo,
         Map<String, Object> extraParams, ListNode reason, Attachment attachment) {
         try {
-            Collection<WorkflowToken> tokens = tokenRepository.loadTokens(applicationType,
+            Collection<WorkflowToken> tokens = tokenRepository.findByApplicationTypeAndIds(applicationType,
                     entities.keySet().toArray(new Long[entities.size()]));
 
             Assert.notEmpty(tokens, "Null tokens");
@@ -419,7 +405,7 @@ public class WorkflowSupportServiceImpl
                 if (workflowEnvironment.getWorkflowDefinitionHelper().isEnded(token)) {
                     tokenRepository.delete(token);
                 } else {
-                    tokenRepository.update(token);
+                    tokenRepository.save(token);
                 }
             }
         } catch (RuntimeException e) {
@@ -455,7 +441,8 @@ public class WorkflowSupportServiceImpl
         String comment, String approvedAs, String assignedTo, Map<String, Object> extraParams,
         Attachment attachment) {
         try {
-            Collection<WorkflowToken> tokens = tokenRepository.loadTokens(applicationType, id);
+            Collection<WorkflowToken> tokens = tokenRepository.findByApplicationTypeAndIds(applicationType,
+                    id);
 
             Assert.notEmpty(tokens, "No tokens");
 
@@ -476,7 +463,7 @@ public class WorkflowSupportServiceImpl
             if (workflowEnvironment.getWorkflowDefinitionHelper().isEnded(token)) {
                 tokenRepository.delete(token);
             } else {
-                tokenRepository.update(token);
+                tokenRepository.save(token);
             }
         } catch (RuntimeException e) {
             if (LOG.isDebugEnabled()) {
@@ -497,10 +484,8 @@ public class WorkflowSupportServiceImpl
      */
     @Override
     public List<HistoryRecord> obtainHistory(Long id, String applicationType) {
-        SearchQuery query = new SearchQuery("select t.histories from Token t " +
-                "where t.domainObjectId=? and t.domainObjectType=?", id, applicationType);
-
-        return searchDao.find(query);
+        return tokenRepository.findHistoryRecordsByDomainObjectIdAndDomainObjectType(id,
+            applicationType);
     }
 
     /**
@@ -515,27 +500,18 @@ public class WorkflowSupportServiceImpl
      */
     @Override
     @Transactional(readOnly = true)
-    public List<Map<String, Object>> obtainHistorySummary(Long id, String applicationType) {
+    public List<Map<Object, Object>> obtainHistorySummary(Long id, String applicationType) {
         Assert.notNull(id, "id must be provided!");
         Assert.hasText(applicationType, "applicationType is required!");
 
-        // TODO create repository for this query
-        SearchQuery query = new SearchQuery(
-                "select hr.id as id, hr.status as status, hr.comments as comments, hr.modifiedBy as modifiedBy," +
-                " hr.modifiedDate as modifiedDate, hr.approvedBy as approvedBy, hrReason, hrAttachment.id as attachmentId " +
-                "from HistoryRecord hr left join hr.reason as hrReason left join hr.attachment as hrAttachment " +
-                "where hr.token.domainObjectId=?1 and hr.token.domainObjectType=?2 " +
-                "order by hr.modifiedDate desc", id, applicationType);
+        List<Map<Object, Object>> results = new LinkedList<Map<Object, Object>>();
+        List<HistoryRecord> hres = historyRecordRepository.findByIdAndApplicationType(id,
+                applicationType);
 
-        List<Map<String, Object>> results = searchDao.findMap(query);
-        Locale userLocale = i18nService.getLocale();
+        for (HistoryRecord historyRecord : hres) {
+            Map<Object, Object> bm = new BeanMap(historyRecord);
 
-        for (Map<String, Object> map : results) {
-            ListNode reason = (ListNode) map.remove("hrReason");
-
-            if (reason != null) {
-                map.put("reason", reason.getLabel().getBestMessage(userLocale));
-            }
+            results.add(bm);
         }
 
         return results;
@@ -586,7 +562,7 @@ public class WorkflowSupportServiceImpl
             return null;
         }
 
-        tokenRepository.create(token);
+        tokenRepository.save(token);
 
         return token;
     }
@@ -594,7 +570,7 @@ public class WorkflowSupportServiceImpl
     private Token loadLastToken(Collection<Long> ids, String applicationType) {
         Assert.notNull(ids, "Ids is null");
 
-        Collection<WorkflowToken> tokens = tokenRepository.loadTokens(applicationType,
+        Collection<WorkflowToken> tokens = tokenRepository.findByApplicationTypeAndIds(applicationType,
                 ids.toArray(new Long[ids.size()]));
 
         Assert.notNull(tokens, "Failed to load tokens for ids " + ids);

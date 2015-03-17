@@ -1,7 +1,6 @@
 package org.cucina.engine;
 
 import org.cucina.engine.definition.Check;
-import org.cucina.engine.definition.Decision;
 import org.cucina.engine.definition.ProcessDefinition;
 import org.cucina.engine.definition.Token;
 import org.cucina.engine.testadapters.MockWorkflowDefinitionBuilder;

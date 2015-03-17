@@ -62,7 +62,7 @@ public class TransitionEventListenerTest {
     @Test
     public void testOnApplicationEvent() {
         when(domainRepository.load(domain.getApplicationType(), domain.getId())).thenReturn(domain);
-        when(tokenRepository.loadToken(domain)).thenReturn(token);
+        when(tokenRepository.findByDomain(domain)).thenReturn(token);
         when(workflowService.executeTransition(token, TRANSITION_ID, params)).thenReturn(token);
 
         listener.onApplicationEvent(new TransitionEvent(TRANSITION_ID, "notNeededButMaybeLater",
@@ -75,7 +75,7 @@ public class TransitionEventListenerTest {
     @Test(expected = CheckNotMetException.class)
     public void testOnApplicationEventConditionNotMet() {
         when(domainRepository.load(domain.getApplicationType(), domain.getId())).thenReturn(domain);
-        when(tokenRepository.loadToken(domain)).thenReturn(token);
+        when(tokenRepository.findByDomain(domain)).thenReturn(token);
         when(workflowService.executeTransition(token, TRANSITION_ID, params))
             .thenThrow(new CheckNotMetException("ovd"));
 
@@ -103,7 +103,7 @@ public class TransitionEventListenerTest {
     @Test(expected = IllegalArgumentException.class)
     public void testOnApplicationEventNoToken() {
         when(domainRepository.load(domain.getApplicationType(), domain.getId())).thenReturn(domain);
-        when(tokenRepository.loadToken(domain)).thenReturn(null);
+        when(tokenRepository.findByDomain(domain)).thenReturn(null);
 
         listener.onApplicationEvent(new TransitionEvent(TRANSITION_ID, "notNeededButMaybeLater",
                 domain.getApplicationType(), domain.getId(), params));
@@ -115,7 +115,7 @@ public class TransitionEventListenerTest {
     @Test(expected = SignalFailedException.class)
     public void testOnApplicationEventSignalFailedException() {
         when(domainRepository.load(domain.getApplicationType(), domain.getId())).thenReturn(domain);
-        when(tokenRepository.loadToken(domain)).thenReturn(token);
+        when(tokenRepository.findByDomain(domain)).thenReturn(token);
         when(workflowService.executeTransition(token, TRANSITION_ID, params))
             .thenThrow(new SignalFailedException("ovd"));
 

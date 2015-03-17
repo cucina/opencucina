@@ -64,7 +64,7 @@ public class TransitionEventListener
         Assert.notNull(domain,
             "domain, type [" + applicationType + "], id [" + id + "] does not exist in db");
 
-        Token token = tokenRepository.loadToken(domain);
+        Token token = tokenRepository.findByDomain(domain);
 
         Assert.notNull(token,
             "token for domain, type [" + applicationType + "], id [" + id +

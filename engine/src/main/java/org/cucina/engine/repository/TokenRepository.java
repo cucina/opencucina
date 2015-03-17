@@ -1,10 +1,13 @@
 package org.cucina.engine.repository;
 
 import java.util.Collection;
+import java.util.List;
 
-import org.cucina.engine.model.WorkflowToken;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.repository.Repository;
+
+import org.cucina.engine.model.HistoryRecord;
+import org.cucina.engine.model.WorkflowToken;
 
 
 /**
@@ -19,11 +22,15 @@ import org.springframework.data.repository.Repository;
 public interface TokenRepository
     extends Repository<WorkflowToken, Long> {
     /**
-     * Creates the Token
+     * JAVADOC Method Level Comments
      *
-     * @param token JAVADOC.
+     * @param id JAVADOC.
+     * @param applicationType JAVADOC.
+     *
+     * @return JAVADOC.
      */
-    void create(WorkflowToken token);
+    List<HistoryRecord> findHistoryRecordsByDomainObjectIdAndDomainObjectType(Long id,
+        String applicationType);
 
     /**
      * Deletes token only.
@@ -40,15 +47,14 @@ public interface TokenRepository
     void deleteDeep(WorkflowToken token);
 
     /**
-     * Load the ids of domain objects which have this <code>worklfowId</code> and this <code>placeId</code>.
+     * Load tokens for the identified objects of the same type
      *
-     * @param workflowId String.
-     * @param placeId String.
-     * @param applicationType String of domains
+     * @param ids Collection of objects' ids.
+     * @param applicationType String.
      *
-     * @return Collection<Object> id of those domain objects meeting the criteria.
+     * @return JAVADOC.
      */
-    Collection<Long> loadDomainIds(String workflowId, String placeId, String applicationType);
+    Collection<WorkflowToken> findByApplicationTypeAndIds(String applicationType, Long... ids);
 
     /**
     * Load token for the identified object
@@ -57,22 +63,24 @@ public interface TokenRepository
     *
     * @return JAVADOC.
     */
-    WorkflowToken loadToken(Persistable<Long> domain);
+    WorkflowToken findByDomain(Persistable<Long> domain);
 
     /**
-     * Load tokens for the identified objects of the same type
+     * Load the ids of domain objects which have this <code>worklfowId</code> and this <code>placeId</code>.
      *
-     * @param ids Collection of objects' ids.
-     * @param applicationType String.
+     * @param workflowId String.
+     * @param placeId String.
+     * @param applicationType String of domains
      *
-     * @return JAVADOC.
+     * @return Collection<Object> id of those domain objects meeting the criteria.
      */
-    Collection<WorkflowToken> loadTokens(String applicationType, Long... ids);
+    Collection<Long> findDomainIdsByWorkflowIdPlaceIdApplicationType(String workflowId,
+        String placeId, String applicationType);
 
     /**
-     * Updates the Token
+     * Creates the Token
      *
      * @param token JAVADOC.
      */
-    void update(WorkflowToken token);
+    void save(WorkflowToken token);
 }

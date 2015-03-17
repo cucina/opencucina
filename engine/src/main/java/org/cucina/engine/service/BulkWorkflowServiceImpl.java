@@ -88,7 +88,7 @@ public class BulkWorkflowServiceImpl
         Assert.notNull(placeId,
             "No place for worklowId [" + workflowId + "] and transition [" + transitionId + "]");
 
-        Collection<Long> domainIds = tokenRepository.loadDomainIds(workflowId, placeId,
+        Collection<Long> domainIds = tokenRepository.findDomainIdsByWorkflowIdPlaceIdApplicationType(workflowId, placeId,
                 applicationType);
 
         if (CollectionUtils.isEmpty(domainIds)) {

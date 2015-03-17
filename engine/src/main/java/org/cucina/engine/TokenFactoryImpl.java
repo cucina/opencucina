@@ -122,7 +122,7 @@ public class TokenFactoryImpl
 
         if (entity.getId() != null) {
             // call to searchdao to find an existing one for the object
-            Token token = tokenRepository.loadToken(entity);
+            Token token = tokenRepository.findByDomain(entity);
 
             if (token != null) {
                 LOG.debug("Found existing token for the object :" + token);

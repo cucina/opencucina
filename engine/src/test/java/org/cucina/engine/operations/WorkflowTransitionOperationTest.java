@@ -51,7 +51,7 @@ public class WorkflowTransitionOperationTest {
         //Change domain on token to break
         token2.setDomainObject(new Foo());
 
-        when(tokenRepository.loadToken(domain2)).thenReturn(token2);
+        when(tokenRepository.findByDomain(domain2)).thenReturn(token2);
 
         WorkflowService workflowService = mock(WorkflowService.class);
 
@@ -76,7 +76,7 @@ public class WorkflowTransitionOperationTest {
         when(executor.evaluate(context, TRANSITION_EXPRESSION)).thenReturn(TRANSITION_ID);
 
         operation.execute(context);
-        verify(tokenRepository).update(token2);
+        verify(tokenRepository).save(token2);
     }
 
     /**
@@ -89,8 +89,8 @@ public class WorkflowTransitionOperationTest {
         domains.add(domain2);
         domains.add(domain3);
 
-        when(tokenRepository.loadToken(domain2)).thenReturn(token2);
-        when(tokenRepository.loadToken(domain3)).thenReturn(token3);
+        when(tokenRepository.findByDomain(domain2)).thenReturn(token2);
+        when(tokenRepository.findByDomain(domain3)).thenReturn(token3);
 
         WorkflowService workflowService = mock(WorkflowService.class);
 
@@ -117,8 +117,8 @@ public class WorkflowTransitionOperationTest {
         when(executor.evaluate(context, TRANSITION_EXPRESSION)).thenReturn(TRANSITION_ID);
 
         operation.execute(context);
-        verify(tokenRepository).update(token2);
-        verify(tokenRepository).update(token3);
+        verify(tokenRepository).save(token2);
+        verify(tokenRepository).save(token3);
     }
 
     /**
@@ -145,7 +145,7 @@ public class WorkflowTransitionOperationTest {
      */
     @Test
     public void singleDomain() {
-        when(tokenRepository.loadToken(domain2)).thenReturn(token2);
+        when(tokenRepository.findByDomain(domain2)).thenReturn(token2);
 
         WorkflowService workflowService = mock(WorkflowService.class);
 
@@ -169,6 +169,6 @@ public class WorkflowTransitionOperationTest {
         when(executor.evaluate(context, TRANSITION_EXPRESSION)).thenReturn(TRANSITION_ID);
 
         operation.execute(context);
-        verify(tokenRepository).update(token2);
+        verify(tokenRepository).save(token2);
     }
 }

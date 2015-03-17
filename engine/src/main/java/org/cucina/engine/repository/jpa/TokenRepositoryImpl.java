@@ -1,6 +1,7 @@
 package org.cucina.engine.repository.jpa;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -12,17 +13,22 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.cucina.core.InstanceFactory;
-import org.cucina.core.model.PersistableEntity;
-import org.cucina.engine.model.WorkflowToken;
-import org.cucina.engine.repository.TokenRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.data.domain.Persistable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
+import org.cucina.core.InstanceFactory;
+import org.cucina.core.model.PersistableEntity;
+
+import org.cucina.engine.model.HistoryRecord;
+import org.cucina.engine.model.WorkflowToken;
+import org.cucina.engine.repository.TokenRepository;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -52,7 +58,8 @@ public class TokenRepositoryImpl
     /**
      * JAVADOC Method Level Comments
      *
-     * @param entityManager JAVADOC.
+     * @param entityManager
+     *            JAVADOC.
      */
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
@@ -63,41 +70,6 @@ public class TokenRepositoryImpl
      *
      * @param token
      *            JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    @Transactional
-    public void create(WorkflowToken token) {
-        Assert.notNull(token, "token cannot be null");
-        Assert.isNull(token.getId(), "This must be a new token");
-        Assert.notNull(token.getDomainObject(), "token must have a domainObject");
-
-        if (token.getDomainObject().getId() == null) {
-            Persistable<Long> domain = token.getDomainObject();
-
-            entityManager.persist(domain);
-
-            Assert.notNull(domain.getId(), "id must now be set on domainObject");
-            token.setDomainObject(domain);
-        } else {
-            entityManager.merge(token.getDomainObject());
-        }
-
-        // Now set id and type of domainObject on Token
-        token.setDomainObjectId(token.getDomainObject().getId());
-
-        BeanWrapper beanWrapper = new BeanWrapperImpl(token.getDomainObject());
-
-        token.setDomainObjectType((String) beanWrapper.getPropertyValue("applicationType"));
-
-        entityManager.persist(token);
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param token JAVADOC.
      */
     @Override
     public void delete(WorkflowToken token) {
@@ -107,7 +79,8 @@ public class TokenRepositoryImpl
     /**
      * JAVADOC Method Level Comments
      *
-     * @param token JAVADOC.
+     * @param token
+     *            JAVADOC.
      */
     @Override
     public void deleteDeep(WorkflowToken token) {
@@ -115,75 +88,6 @@ public class TokenRepositoryImpl
 
         entityManager.remove(token);
         entityManager.remove(domain);
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param workflowId
-     *            JAVADOC.
-     * @param placeId
-     *            JAVADOC.
-     * @param applicationType
-     *            JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    @Transactional
-    public Collection<Long> loadDomainIds(final String workflowId, final String placeId,
-        final String applicationType) {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Long> cq = cb.createQuery(Long.class);
-        Root<WorkflowToken> token = cq.from(WorkflowToken.class);
-        Predicate wi = cb.equal(token.get("workflowDefinitionId"), workflowId);
-        Predicate pi = cb.equal(token.get("placeId"), placeId);
-        Predicate at = cb.equal(token.get("domainObjectType"), applicationType);
-        Predicate and = cb.and(wi, pi, at);
-
-        cq.select(token.<Long>get("domainObjectId"));
-
-        return entityManager.createQuery(cq.where(and)).getResultList();
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param domain
-     *            JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    @Transactional
-    public WorkflowToken loadToken(Persistable<Long> domain) {
-        Assert.notNull(domain, "Domain is null");
-
-        BeanWrapper bw = new BeanWrapperImpl(domain);
-
-        Assert.isTrue(bw.isReadableProperty("id"),
-            "No 'id' property on object of type '" + domain.getClass() + "'");
-
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<WorkflowToken> cq = cb.createQuery(WorkflowToken.class);
-        Root<WorkflowToken> token = cq.from(WorkflowToken.class);
-
-        cq.where(cb.and(cb.equal(token.get("domainObjectType"), domain.getClass().getSimpleName()),
-                cb.equal(token.get("domainObjectId"), bw.getPropertyValue("id"))));
-
-        try {
-            WorkflowToken wt = entityManager.createQuery(cq).getSingleResult();
-
-            wt.setDomainObject(domain);
-
-            return wt;
-        } catch (Exception e) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Ignoring this", e);
-            }
-
-            return null;
-        }
     }
 
     /**
@@ -198,7 +102,7 @@ public class TokenRepositoryImpl
      */
     @Override
     @Transactional
-    public Collection<WorkflowToken> loadTokens(String applicationType, Long... ids) {
+    public Collection<WorkflowToken> findByApplicationTypeAndIds(String applicationType, Long... ids) {
         Assert.notNull(applicationType, "type cannot be null");
 
         if (ArrayUtils.isEmpty(ids)) {
@@ -236,14 +140,139 @@ public class TokenRepositoryImpl
     /**
      * JAVADOC Method Level Comments
      *
-     * @param token
+     * @param domain
      *            JAVADOC.
      *
      * @return JAVADOC.
      */
     @Override
     @Transactional
-    public void update(WorkflowToken token) {
+    public WorkflowToken findByDomain(Persistable<Long> domain) {
+        Assert.notNull(domain, "Domain is null");
+
+        BeanWrapper bw = new BeanWrapperImpl(domain);
+
+        Assert.isTrue(bw.isReadableProperty("id"),
+            "No 'id' property on object of type '" + domain.getClass() + "'");
+
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<WorkflowToken> cq = cb.createQuery(WorkflowToken.class);
+        Root<WorkflowToken> token = cq.from(WorkflowToken.class);
+
+        cq.where(cb.and(cb.equal(token.get("domainObjectType"), domain.getClass().getSimpleName()),
+                cb.equal(token.get("domainObjectId"), bw.getPropertyValue("id"))));
+
+        try {
+            WorkflowToken wt = entityManager.createQuery(cq).getSingleResult();
+
+            wt.setDomainObject(domain);
+
+            return wt;
+        } catch (Exception e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Ignoring this", e);
+            }
+
+            return null;
+        }
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @param workflowId
+     *            JAVADOC.
+     * @param placeId
+     *            JAVADOC.
+     * @param applicationType
+     *            JAVADOC.
+     *
+     * @return JAVADOC.
+     */
+    @Override
+    @Transactional
+    public Collection<Long> findDomainIdsByWorkflowIdPlaceIdApplicationType(
+        final String workflowId, final String placeId, final String applicationType) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+        Root<WorkflowToken> token = cq.from(WorkflowToken.class);
+        Predicate wi = cb.equal(token.get("workflowDefinitionId"), workflowId);
+        Predicate pi = cb.equal(token.get("placeId"), placeId);
+        Predicate at = cb.equal(token.get("domainObjectType"), applicationType);
+        Predicate and = cb.and(wi, pi, at);
+
+        cq.select(token.<Long>get("domainObjectId"));
+
+        return entityManager.createQuery(cq.where(and)).getResultList();
+    }
+
+    @Override
+    public List<HistoryRecord> findHistoryRecordsByDomainObjectIdAndDomainObjectType(Long id,
+        String applicationType) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<HistoryRecord> cq = cb.createQuery(HistoryRecord.class);
+        Root<WorkflowToken> token = cq.from(WorkflowToken.class);
+        Predicate pi = cb.equal(token.get("domainObjectId"), id);
+        Predicate at = cb.equal(token.get("domainObjectType"), applicationType);
+        Predicate and = cb.and(pi, at);
+
+        cq.select(token.<HistoryRecord>get("histories"));
+
+        //        cq.orderBy(cb.desc(token.get("histories").get("modifiedDate")));
+        return entityManager.createQuery(cq.where(and)).getResultList();
+    }
+
+    /**
+     * Creates or updates depending on whether the token is new.
+     */
+    @Override
+    public void save(WorkflowToken token) {
+        if (token.isNew()) {
+            create(token);
+        } else {
+            update(token);
+        }
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @param applicationType
+     *            JAVADOC.
+     *
+     * @return JAVADOC.
+     */
+    protected Class<?extends PersistableEntity> resolveClass(String applicationType) {
+        return instanceFactory.getClassType(applicationType);
+    }
+
+    private void create(WorkflowToken token) {
+        Assert.notNull(token, "token cannot be null");
+        Assert.isNull(token.getId(), "This must be a new token");
+        Assert.notNull(token.getDomainObject(), "token must have a domainObject");
+
+        if (token.getDomainObject().getId() == null) {
+            Persistable<Long> domain = token.getDomainObject();
+
+            entityManager.persist(domain);
+
+            Assert.notNull(domain.getId(), "id must now be set on domainObject");
+            token.setDomainObject(domain);
+        } else {
+            entityManager.merge(token.getDomainObject());
+        }
+
+        // Now set id and type of domainObject on Token
+        token.setDomainObjectId(token.getDomainObject().getId());
+
+        BeanWrapper beanWrapper = new BeanWrapperImpl(token.getDomainObject());
+
+        token.setDomainObjectType((String) beanWrapper.getPropertyValue("applicationType"));
+
+        entityManager.persist(token);
+    }
+
+    private void update(WorkflowToken token) {
         Assert.notNull(token, "token cannot be null");
         Assert.notNull(token.getId(), "This must not be a new token");
         Assert.notNull(token.getDomainObject(), "token must have a domainObject");
@@ -253,16 +282,5 @@ public class TokenRepositoryImpl
 
         entityManager.merge(token.getDomainObject());
         entityManager.merge(token);
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param applicationType JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    protected Class<?extends PersistableEntity> resolveClass(String applicationType) {
-        return instanceFactory.getClassType(applicationType);
     }
 }
