@@ -27,7 +27,7 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-pool2</artifactId>
-			<version>2.3</version>
+			<version>2.3</version><!--$NO-MVN-MAN-VER$ -->
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -36,12 +36,12 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.10</version>
+			<version>1.7.10</version><!--$NO-MVN-MAN-VER$ -->
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>log4j-over-slf4j</artifactId>
-			<version>1.7.10</version>
+			<version>1.7.10</version><!--$NO-MVN-MAN-VER$ -->
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -123,6 +123,8 @@
 		<module>security</module>
 		<module>search</module>
 		<module>i18n</module>
-		<module>engine</module> 
+		<module>engine</module>
+		<module>engine-server-api</module>
+		<module>engine-server</module>
 	</modules>
 </project>

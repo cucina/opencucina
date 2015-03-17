@@ -189,7 +189,7 @@ public class EmailOperation
         descriptor.setToUsers(users);
         descriptor.setMessageKey(templateName);
 
-        Map<Object, Object> params = extractTokenParameters(executionContext, propertiesList);
+        Map<String, Object> params = extractTokenParameters(executionContext, propertiesList);
         Map<String, Object> parameterMap = (Map<String, Object>) executionContext.getExpressionExecutor()
                                                                                  .evaluate(executionContext,
                 parameterMapExpr);
@@ -269,13 +269,13 @@ public class EmailOperation
      *
      * @return JAVADOC.
      */
-    private Map<Object, Object> extractTokenParameters(ExecutionContext executionContext,
+    private Map<String, Object> extractTokenParameters(ExecutionContext executionContext,
         String propertiesList) {
         if (StringUtils.isEmpty(propertiesList)) {
-            return new HashMap<Object, Object>();
+            return new HashMap<String, Object>();
         }
 
-        Map<Object, Object> parameters = new HashMap<Object, Object>();
+        Map<String, Object> parameters = new HashMap<String, Object>();
         String[] properNames = propertiesList.split(",");
 
         for (int i = 0; i < properNames.length; i++) {
