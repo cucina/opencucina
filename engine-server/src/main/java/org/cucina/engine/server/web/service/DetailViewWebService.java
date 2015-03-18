@@ -11,6 +11,7 @@ import org.cucina.engine.server.converter.DetailViewPane;
 import org.cucina.engine.server.service.DetailViewService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,8 +36,8 @@ public class DetailViewWebService {
      *
      * @param dataViewService DetailViewService.
      */
+    @Autowired
     public DetailViewWebService(DetailViewService detailViewService) {
-        super();
         Assert.notNull(detailViewService, "detailViewService must be provided as an argument");
         this.detailViewService = detailViewService;
     }

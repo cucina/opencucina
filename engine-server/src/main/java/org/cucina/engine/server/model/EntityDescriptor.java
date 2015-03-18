@@ -3,9 +3,6 @@ package org.cucina.engine.server.model;
 import javax.persistence.Basic;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.cucina.core.model.PersistableEntity;
@@ -43,7 +40,6 @@ public class EntityDescriptor
 
     /** This is a field JAVADOC */
     public static final String APPLICATION_TYPE_PROP = "applicationType";
-    private Long id;
     private Long localId;
     private String applicationName;
     private String applicationType;
@@ -64,7 +60,7 @@ public class EntityDescriptor
      */
     public EntityDescriptor(String applicationType, Long id, String applicationName) {
         this.applicationType = applicationType;
-        this.id = id;
+        this.localId = id;
         this.applicationName = applicationName;
     }
 
@@ -76,7 +72,7 @@ public class EntityDescriptor
      */
     public EntityDescriptor(PersistableEntity entity) {
         this.applicationType = entity.getApplicationType();
-        this.id = entity.getId();
+        this.localId = entity.getId();
     }
 
     /**
@@ -123,26 +119,6 @@ public class EntityDescriptor
     /**
      * JAVADOC Method Level Comments
      *
-     * @param refid
-     *            JAVADOC.
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    @ProjectionColumn
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
      * @param localId
      *            JAVADOC.
      */
@@ -155,8 +131,6 @@ public class EntityDescriptor
      *
      * @return JAVADOC.
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "IdSeq")
     @ProjectionColumn
     public Long getLocalId() {
         return localId;

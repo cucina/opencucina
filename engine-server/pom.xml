@@ -8,9 +8,8 @@
 		<artifactId>cucina</artifactId>
 		<version>0.1</version>
 	</parent>
-	<artifactId>engine-service</artifactId>
-	<name>engine-service</name>
-	<url>http://maven.apache.org</url>
+	<artifactId>engine-server</artifactId>
+	<name>engine-server</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -35,6 +34,34 @@
 			<artifactId>cucina-engine-server-api</artifactId>
 			<version>0.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-integration</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.integration</groupId>
+			<artifactId>spring-integration-jms</artifactId>
+		</dependency>
 	</dependencies>
-
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>org.cucina.engine.server.EngineApplication</mainClass>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+						<configuration>
+							<classifier>exec</classifier>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>

@@ -6,12 +6,14 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-import org.cucina.core.service.ContextService;
-import org.cucina.i18n.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+
+import org.cucina.core.service.ContextService;
+
+import org.cucina.i18n.repository.MessageRepository;
 
 
 /**
@@ -19,7 +21,7 @@ import org.springframework.util.StringUtils;
  * current <code>User</code>'s locale info.
  *
  */
-@Service
+@Service(value = "i18nService")
 public class I18nServiceImpl
     implements I18nService {
     private ContextService contextService;
@@ -28,8 +30,10 @@ public class I18nServiceImpl
     /**
      * Creates a new I18nServiceImpl object.
      *
-     * @param messageRepository JAVADOC.
-     * @param contextService JAVADOC.
+     * @param messageRepository
+     *            JAVADOC.
+     * @param contextService
+     *            JAVADOC.
      */
     @Autowired
     public I18nServiceImpl(MessageRepository messageRepository, ContextService contextService) {
@@ -47,7 +51,7 @@ public class I18nServiceImpl
      * @see org.cucina.meringue.service.opvantage.core.service.I18nService#getCalendar()
      */
     public Calendar getCalendar() {
-        return Calendar.getInstance(getTimeZone0(), getLocale0());
+        return Calendar.getInstance(getTimeZone(), getLocale());
     }
 
     /**
@@ -68,18 +72,37 @@ public class I18nServiceImpl
      * @see org.cucina.meringue.service.sprite.core.service.I18nService#getLocale()
      */
     public Locale getLocale() {
-        return getLocale0();
+        Locale locale = (Locale) contextService.get(CLIENT_LOCALE);
+
+        if (locale == null) {
+            locale = messageRepository.getDefaultLocale();
+        }
+
+        return locale;
     }
 
     /**
-     * JAVADOC.
+     * Return the <code>TimeZone</code> for the user. First checks the users
+     * preferences, then tries to get it from the client map. If both of these
+     * are empty then take the JVM <code>TimeZone</code>
      *
-     * @return JAVADOC.
-     *
+     * @return TimeZone
      * @see org.cucina.meringue.service.opvantage.core.service.I18nService#getTimeZone()
      */
+    @Override
     public TimeZone getTimeZone() {
-        return getTimeZone0();
+        String timezoneName = (String) contextService.get(CLIENT_TIMEZONE);
+        TimeZone timezone = null;
+
+        if (StringUtils.hasText(timezoneName)) {
+            timezone = TimeZone.getTimeZone(timezoneName);
+        }
+
+        if (timezone == null) {
+            timezone = Calendar.getInstance(getLocale()).getTimeZone();
+        }
+
+        return timezone;
     }
 
     /**
@@ -126,38 +149,6 @@ public class I18nServiceImpl
         return cloneOf;
     }
 
-    private Locale getLocale0() {
-        Locale locale = (Locale) contextService.get(CLIENT_LOCALE);
-
-        if (locale == null) {
-            locale = messageRepository.getDefaultLocale();
-        }
-
-        return locale;
-    }
-
-    /**
-     * Return the <code>TimeZone</code> for the user. First checks the users
-     * preferences, then tries to get it from the client map. If both of these
-     * are empty then take the JVM <code>TimeZone</code>
-     *
-     * @return TimeZone
-     */
-    private TimeZone getTimeZone0() {
-        String timezoneName = (String) contextService.get(CLIENT_TIMEZONE);
-        TimeZone timezone = null;
-
-        if (StringUtils.hasText(timezoneName)) {
-            timezone = TimeZone.getTimeZone(timezoneName);
-        }
-
-        if (timezone == null) {
-            timezone = Calendar.getInstance(getLocale0()).getTimeZone();
-        }
-
-        return timezone;
-    }
-
     /**
      * Calculates the offset between the user and the server.
      *
@@ -166,7 +157,7 @@ public class I18nServiceImpl
      */
     private long calculateDiffBetweenUserandServer(long millis) {
         long serverOffset = TimeZone.getDefault().getOffset(millis);
-        long userOffset = getTimeZone0().getOffset(millis);
+        long userOffset = getTimeZone().getOffset(millis);
         long userFromServer = 0;
 
         userFromServer = serverOffset - userOffset;

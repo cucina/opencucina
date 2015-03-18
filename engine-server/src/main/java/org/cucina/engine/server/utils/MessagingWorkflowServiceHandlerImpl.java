@@ -1,4 +1,4 @@
-package org.cucina.engine.server;
+package org.cucina.engine.server.utils;
 
 import java.util.Collection;
 
@@ -28,7 +28,9 @@ import org.cucina.i18n.model.ListNode;
 import org.cucina.i18n.repository.ListNodeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 
@@ -38,6 +40,7 @@ import org.springframework.util.Assert;
  * @author $Author: $
  * @version $Revision: $
   */
+@Component
 public class MessagingWorkflowServiceHandlerImpl
     implements MessagingWorkflowServiceHandler {
     private static final Logger LOG = LoggerFactory.getLogger(MessagingWorkflowServiceHandlerImpl.class);
@@ -52,6 +55,7 @@ public class MessagingWorkflowServiceHandlerImpl
      * @param listNodeDao JAVADOC.
      * @param workflowSupportService JAVADOC.
      */
+    @Autowired
     public MessagingWorkflowServiceHandlerImpl(ConversationContext conversationContext,
         ListNodeRepository listNodeRepository, WorkflowSupportService workflowSupportService) {
         Assert.notNull(conversationContext, "conversationContext is null");

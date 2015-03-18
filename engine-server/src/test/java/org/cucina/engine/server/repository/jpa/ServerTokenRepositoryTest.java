@@ -124,7 +124,7 @@ public class ServerTokenRepositoryTest {
         when(tuple.get(1)).thenReturn(foo);
         list.add(tuple);
         when(tq.getResultList()).thenReturn(list);
-        repo.loadTokens("applicationType", ids);
+        repo.findByApplicationTypeAndIds("applicationType", ids);
         assertEquals(foo, token.getDomainObject());
     }
 }

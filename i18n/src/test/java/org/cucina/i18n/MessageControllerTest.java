@@ -7,13 +7,14 @@ import java.util.Locale;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import org.cucina.i18n.service.MessageService;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import org.mockito.Mock;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.mockito.MockitoAnnotations;
 
@@ -79,8 +80,8 @@ public class MessageControllerTest {
      */
     @Test
     public void testMessageDetails() {
-        controller.messageDetails(11L);
-        verify(messageService).loadById(11L);
+        controller.messageDetails(11L, Locale.UK);
+        verify(messageService).loadById(11L, Locale.UK);
     }
 
     /**
@@ -90,7 +91,7 @@ public class MessageControllerTest {
     public void testSaveMessage() {
         MessageDto messageDto = new MessageDto();
 
-        controller.saveMessage(messageDto);
+        controller.saveMessage(messageDto, null);
         verify(messageService).saveMessage(messageDto);
     }
 }

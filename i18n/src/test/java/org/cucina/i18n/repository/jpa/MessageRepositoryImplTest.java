@@ -20,6 +20,7 @@ import org.cucina.core.spring.SingletonBeanFactory;
 
 import org.cucina.i18n.model.Message;
 import org.cucina.i18n.model.MutableI18nMessage;
+import org.cucina.i18n.repository.MessageRepository;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
@@ -40,6 +41,8 @@ import org.mockito.MockitoAnnotations;
  * @version $Revision: $
  */
 public class MessageRepositoryImplTest {
+    @Mock
+    private BeanFactory beanFactory;
     @Mock
     private CriteriaBuilder cb;
     @Mock
@@ -67,6 +70,8 @@ public class MessageRepositoryImplTest {
         when(em.getCriteriaBuilder()).thenReturn(cb);
         when(cb.createQuery(Message.class)).thenReturn(cq);
         when(em.createQuery(cq)).thenReturn(tq);
+        ((SingletonBeanFactory) SingletonBeanFactory.getInstance()).setBeanFactory(beanFactory);
+        when(beanFactory.getBean(MessageRepository.MESSAGE_REPOSITORY_ID)).thenReturn(repo);
     }
 
     /**
@@ -272,15 +277,12 @@ public class MessageRepositoryImplTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testSaveStringStringStringString() {
-        BeanFactory beanFactory = mock(BeanFactory.class);
-
         when(beanFactory.getBean(SingletonBeanFactory.INSTANCE_FACTORY_ID))
             .thenReturn(instanceFactory);
 
         MutableI18nMessage imess = new MutableI18nMessage();
 
         when(instanceFactory.getBean(MutableI18nMessage.TYPE)).thenReturn(imess);
-        ((SingletonBeanFactory) SingletonBeanFactory.getInstance()).setBeanFactory(beanFactory);
 
         Root<Message> root = mock(Root.class);
 

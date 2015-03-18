@@ -9,7 +9,6 @@ import org.cucina.engine.server.converter.DetailViewConfig;
 import org.cucina.engine.server.event.workflow.ValueEvent;
 import org.cucina.engine.server.repository.EntityDescriptorRepository;
 import org.cucina.engine.server.testassist.Foo;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import org.junit.Before;
@@ -44,7 +43,7 @@ public class ServerDetailViewServiceTest {
 
         event.setValue(result);
 
-      //  assertEquals(result, service.getData(2L, Foo.TYPE, APP_NAME));
+        //  assertEquals(result, service.getData(2L, Foo.TYPE, APP_NAME));
     }
 
     /**
@@ -90,7 +89,7 @@ public class ServerDetailViewServiceTest {
 
         event.setValue(result);
 
-//        assertEquals(result, service.getDetailViewConfig(Foo.TYPE, APP_NAME));
+        //        assertEquals(result, service.getDetailViewConfig(Foo.TYPE, APP_NAME));
     }
 
     /**
@@ -115,7 +114,7 @@ public class ServerDetailViewServiceTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        service = new ServerDetailViewService(conversionService, SERVER_NAME,
-                entityDescriptorRepository);
+        service = new ServerDetailViewService(conversionService, entityDescriptorRepository);
+        service.setServerApplicationName(SERVER_NAME);
     }
 }

@@ -104,7 +104,6 @@ public class WorkflowSupportServiceImpl
      * @param searchBeanFactory
      *            SearchBeanFactory.
      */
-    @Required
     public void setSearchBeanFactory(SearchBeanFactory searchBeanFactory) {
         this.searchBeanFactory = searchBeanFactory;
     }
@@ -115,7 +114,6 @@ public class WorkflowSupportServiceImpl
      * @param searchService
      *            SearchService.
      */
-    @Required
     public void setSearchService(SearchService searchService) {
         this.searchService = searchService;
     }
@@ -153,6 +151,7 @@ public class WorkflowSupportServiceImpl
      *            privilege to check against.
      *
      * @return JAVADOC.
+     * TODO add access control for the current user
      */
     @Override
     public Collection<Transition> listActionableTransitions(String workflowId) {
@@ -271,6 +270,12 @@ public class WorkflowSupportServiceImpl
     @Transactional
     public Collection<Map<String, Object>> listWorkflowProperties(Collection<Long> ids,
         String applicationType) {
+        if (searchService == null) {
+            LOG.info("SearchService is null, no results for listWorkflowProperties");
+
+            return Collections.emptyList();
+        }
+
         Map<String, Object> params = new HashMap<String, Object>();
 
         params.put("id", ids);

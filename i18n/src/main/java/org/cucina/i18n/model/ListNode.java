@@ -44,27 +44,20 @@ public class ListNode
      */
     public static final String TYPE = "ListNode";
 
-    /**
-     * Mark this ListNode as the default
-     */
+    // Mark this ListNode as the default
     @NotNull
     private Boolean defaultValue;
 
-    /**
-     * Mark this ListNode as retired
-     */
+    // Mark this ListNode as retired
     @NotNull
     private Boolean retired;
     private Map<String, Object> attributes;
 
-    /**
-     * The name of the object
-     */
+    // The name of the object
+    @NotNull
     private Message label;
 
-    /**
-     * The type of ListNode
-     */
+    // The type of ListNode
     @NotNull
     @NotBlank
     private String type;
@@ -209,7 +202,8 @@ public class ListNode
      * @return JAVADOC.
      */
     public String toString() {
-        return "[" + getApplicationType() + ":" + getLabel().getMessageCd() + " id=" + getId() +
+        return "[" + getApplicationType() + ":" +
+        ((getLabel() == null) ? "'null label'" : getLabel().getMessageCd()) + " id=" + getId() +
         "]";
     }
 }

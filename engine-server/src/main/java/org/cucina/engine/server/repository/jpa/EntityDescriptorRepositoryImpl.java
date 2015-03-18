@@ -43,7 +43,7 @@ public class EntityDescriptorRepositoryImpl
     }
 
     /**
-     * JAVADOC Method Level Comments
+     * Return workflowDefitinionIds vs number of instances.
      *
      * @return JAVADOC.
      */
@@ -77,7 +77,7 @@ public class EntityDescriptorRepositoryImpl
         Path<Object> pid = rt.get("domainObjectId");
 
         Root<EntityDescriptor> rc = tcq.from(EntityDescriptor.class);
-        Predicate clap = cb.equal(pid, rc.get("id"));
+        Predicate clap = cb.equal(pid, rc.get("localId"));
 
         tcq.multiselect(rt, rc).where(cb.and(clap, tokp));
 

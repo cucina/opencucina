@@ -1,20 +1,23 @@
-package org.cucina.engine.server;
+package org.cucina.engine.server.utils;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.cucina.engine.model.HistoryRecord;
-import org.cucina.engine.model.WorkflowToken;
-import org.cucina.engine.repository.TokenRepository;
-import org.cucina.engine.server.event.CompensateEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
+import org.cucina.engine.model.HistoryRecord;
+import org.cucina.engine.model.WorkflowToken;
+import org.cucina.engine.repository.TokenRepository;
+import org.cucina.engine.server.event.CompensateEvent;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -60,7 +63,8 @@ public class CompensateMessageHandler
 
         Long[] ids = event.getIds();
 
-        Collection<WorkflowToken> tokens = tokenRepository.loadTokens(event.getType(), ids);
+        Collection<WorkflowToken> tokens = tokenRepository.findByApplicationTypeAndIds(event.getType(),
+                ids);
 
         if (CollectionUtils.isNotEmpty(tokens)) {
             for (WorkflowToken token : tokens) {
@@ -70,7 +74,7 @@ public class CompensateMessageHandler
                     tokenRepository.deleteDeep(token);
                 } else {
                     records.remove(0);
-                    tokenRepository.update(token);
+                    tokenRepository.save(token);
                 }
             }
         }

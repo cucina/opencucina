@@ -8,12 +8,13 @@ import java.util.Locale;
 import org.apache.commons.lang3.StringUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import org.cucina.i18n.model.Message;
 import org.cucina.i18n.service.MessageService;
 
 import org.slf4j.Logger;
@@ -73,8 +74,18 @@ public class MessageController {
         return messageService.loadAll();
     }
 
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @param page JAVADOC.
+     * @param size JAVADOC.
+     *
+     * @return JAVADOC.
+     */
     @RequestMapping(method = RequestMethod.GET, value = "/all/{page}/{size}")
-    public Collection<MessageDto> allMessages(int page, int size) {
+    public Collection<MessageDto> allMessages(@PathVariable
+    int page, @PathVariable
+    int size) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("allMessages");
         }
@@ -82,7 +93,6 @@ public class MessageController {
         return messageService.loadAll(page, size);
     }
 
-    
     /**
      * JAVADOC Method Level Comments
      *
@@ -91,12 +101,14 @@ public class MessageController {
      * @return JAVADOC.
      */
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
-    public Message messageDetails(Long id) {
+    public MessageDto messageDetails(@PathVariable
+    Long id, @RequestHeader(required=false)
+    Locale locale) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("messageDetails for " + id);
+            LOG.debug("messageDetails for id=" + id + " and locale=" + locale);
         }
 
-        return messageService.loadById(id);
+        return messageService.loadById(id, locale);
     }
 
     /**
@@ -110,13 +122,18 @@ public class MessageController {
      * @return JAVADOC.
      */
     @RequestMapping(method = RequestMethod.POST)
-    public boolean saveMessage(@RequestBody
-    MessageDto messageDto) {
+    public Long saveMessage(@RequestBody
+    MessageDto messageDto, @RequestHeader(required = false)
+    Locale locale) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("saving message: " + messageDto);
         }
 
         // TODO validation
+        if (messageDto.getLocale() == null) {
+            messageDto.setLocale(locale);
+        }
+
         return messageService.saveMessage(messageDto);
     }
 

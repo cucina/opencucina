@@ -1,24 +1,15 @@
 package org.cucina.i18n.service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.functors.StringValueTransformer;
-import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang3.LocaleUtils;
-import org.cucina.i18n.MessageDto;
-import org.cucina.i18n.model.I18nMessage;
-import org.cucina.i18n.model.Message;
-import org.cucina.i18n.repository.MessageRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
@@ -27,6 +18,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
+import org.cucina.i18n.MessageDto;
+import org.cucina.i18n.model.Message;
+import org.cucina.i18n.repository.MessageRepository;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -56,7 +54,6 @@ public class MessageServiceImpl
     implements MessageService {
     private static final Logger LOG = LoggerFactory.getLogger(MessageServiceImpl.class);
     private ConversionService conversionService;
-    private I18nService i18nService;
     private MessageRepository messageRepository;
 
     /**
@@ -68,11 +65,9 @@ public class MessageServiceImpl
      *            JAVADOC.
      */
     @Autowired
-    public MessageServiceImpl(I18nService i18nService, MessageRepository messageRepository,
+    public MessageServiceImpl(MessageRepository messageRepository,
         @Qualifier(value = "myConversionService")
     ConversionService conversionService) {
-        Assert.notNull(i18nService, "i18nService is null");
-        this.i18nService = i18nService;
         Assert.notNull(messageRepository, "messageRepository is null");
         this.messageRepository = messageRepository;
         Assert.notNull(conversionService, "conversionService is null");
@@ -130,7 +125,7 @@ public class MessageServiceImpl
     }
 
     /**
-     * JAVADOC Method Level Comments
+     * Finds the best message for the given id, assuming that Locale is in contextService.
      *
      * @param id
      *            JAVADOC.
@@ -138,8 +133,16 @@ public class MessageServiceImpl
      * @return JAVADOC.
      */
     @Override
-    public Message loadById(Long id) {
-        return messageRepository.findById(id);
+    public MessageDto loadById(Long id, Locale locale) {
+        Assert.notNull(id, "id cannot be null");
+
+        Message message = messageRepository.findById(id);
+
+        if (message == null) {
+            return null;
+        }
+
+        return findBestFit(message, locale);
     }
 
     /**
@@ -149,112 +152,86 @@ public class MessageServiceImpl
      *            JAVADOC.
      * @param locale
      *            JAVADOC.
-     * @param basenames
+     * @param basename
      *            JAVADOC.
      *
      * @return JAVADOC.
      * @see com.MessageService.algo.zest.message.MessageLoader#loadMessage(java.lang.String,
      *      java.util.Locale, java.util.List)
      */
-    @Transactional
-    public String loadMessage(String code, Locale locale, String... basenames) {
+    @Override
+    public String loadMessage(String code, Locale locale, String basename) {
+        Assert.hasText(code, "code is empty");
+        Assert.hasText(code, "basename is empty");
+
         if (locale == null) {
             locale = Locale.getDefault();
         }
 
-        // Create list of locales including default locale as a fall back
-        List<Locale> locales = LocaleUtils.localeLookupList(locale,
-                messageRepository.getDefaultLocale());
-
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Loading for code '" + code + "' for locales=" + locales + " and basenames=" +
-                Arrays.toString(basenames));
+            LOG.debug("Loading for code '" + code + "' for locale=" + locale + " and basename=" +
+                basename);
         }
 
-        List<String> localesNames = new ArrayList<String>();
+        Message message = messageRepository.findByBasenameAndCode(basename, code);
 
-        CollectionUtils.collect(locales, StringValueTransformer.getInstance(), localesNames);
+        MessageDto dto = findBestFit(message, locale);
 
-        Collection<Message> messages = null;
+        return (dto == null) ? null : dto.getText();
+    }
 
-        if (ArrayUtils.isNotEmpty(basenames)) {
-            messages = messageRepository.findByBasenamesAndCode(Arrays.asList(basenames), code);
-        } else {
-            messages = messageRepository.findByCode(code);
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @param messageDto JAVADOC.
+     *
+     * @return JAVADOC.
+     */
+    @Override
+    @Transactional
+    public Long saveMessage(MessageDto messageDto) {
+        Locale locale = messageDto.getLocale();
+
+        if (messageDto.getLocale() == null) {
+            locale = messageRepository.getDefaultLocale();
         }
 
-        Map<String, Map<String, I18nMessage>> orderedByLocale = new HashMap<String, Map<String, I18nMessage>>();
+        try {
+            Message m = messageRepository.save(messageDto.getApplication(), locale.toString(),
+                    messageDto.getCode(), messageDto.getText());
 
-        for (Message message : messages) {
-            for (String localeName : localesNames) {
-                I18nMessage i18nMessage = message.getMessage(localeName);
+            return m.getId();
+        } catch (Exception e) {
+            LOG.error("Oops", e);
 
-                if (i18nMessage != null) {
-                    Map<String, I18nMessage> orderedByBase = orderedByLocale.get(localeName);
-
-                    if (orderedByBase == null) {
-                        orderedByBase = new HashMap<String, I18nMessage>();
-                    }
-
-                    if (ArrayUtils.isEmpty(basenames)) {
-                        orderedByBase.put("", i18nMessage);
-                    } else {
-                        orderedByBase.put(message.getBaseName(), i18nMessage);
-                    }
-
-                    orderedByLocale.put(localeName, orderedByBase);
-                }
-            }
+            return null;
         }
+    }
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("messages ordered by locale:" + orderedByLocale);
-        }
+    private MessageDto findBestFit(Message message, Locale locale) {
+        @SuppressWarnings("unchecked")
+        Collection<MessageDto> mdtos = conversionService.convert(message, Collection.class);
 
-        // get the best match, considering locales first
-        for (String localeCd : localesNames) {
-            Map<String, I18nMessage> messagesMap = orderedByLocale.get(localeCd);
+        List<Locale> locales = (locale == null)
+            ? Collections.singletonList(messageRepository.getDefaultLocale())
+            : LocaleUtils.localeLookupList(locale, messageRepository.getDefaultLocale());
 
-            if (messagesMap != null) {
-                if (basenames != null) {
-                    for (String bn : basenames) {
-                        I18nMessage message = messagesMap.get(bn);
+        for (final Locale loc : locales) {
+            MessageDto dto = (MessageDto) CollectionUtils.find(mdtos,
+                    new Predicate() {
+                        @Override
+                        public boolean evaluate(Object arg0) {
+                            MessageDto dto = (MessageDto) arg0;
 
-                        if (message != null) {
-                            return message.getMessageTx();
+                            return dto.getLocale().equals(loc);
                         }
-                    }
-                } else {
-                    I18nMessage message = messagesMap.get("");
+                    });
 
-                    if (message != null) {
-                        return message.getMessageTx();
-                    }
-                }
+            if (dto != null) {
+                return dto;
             }
         }
 
         return null;
-    }
-
-    @Override
-    @Transactional
-    public boolean saveMessage(MessageDto messageDto) {
-        Locale locale = messageDto.getLocale();
-
-        if (messageDto.getLocale() == null) {
-            locale = i18nService.getLocale();
-        }
-
-        try {
-            messageRepository.save(messageDto.getApplication(), locale.toString(),
-                messageDto.getCode(), messageDto.getText());
-
-            return true;
-        } catch (Exception e) {
-            LOG.error("Oops", e);
-
-            return false;
-        }
     }
 }

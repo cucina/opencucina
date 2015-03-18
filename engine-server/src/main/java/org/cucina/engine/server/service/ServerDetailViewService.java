@@ -2,7 +2,11 @@ package org.cucina.engine.server.service;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
@@ -22,11 +26,13 @@ import org.slf4j.LoggerFactory;
  * @author $Author: $
  * @version $Revision: $
  */
+@Component
 public class ServerDetailViewService
     implements DetailViewService {
     private static final Logger LOG = LoggerFactory.getLogger(ServerDetailViewService.class);
     private ConversionService conversionService;
     private EntityDescriptorRepository entityDescriptorRepository;
+    @Value("${cucina.server.applicationName:cucinaEngine}")
     private String serverApplicationName;
 
     /**
@@ -35,14 +41,14 @@ public class ServerDetailViewService
      * @param communication
      *            ClientCommunication.
      */
-    public ServerDetailViewService(ConversionService conversionService, String applicationName,
-        EntityDescriptorRepository entityDescriptorRepository) {
+    @Autowired
+    public ServerDetailViewService(
+        @Qualifier(value = "myConversionService")
+    ConversionService conversionService, EntityDescriptorRepository entityDescriptorRepository) {
         Assert.notNull(conversionService, "conversionService cannot be null");
         this.conversionService = conversionService;
         Assert.notNull(entityDescriptorRepository, "entityDescriptorRepository cannot be null");
         this.entityDescriptorRepository = entityDescriptorRepository;
-        Assert.notNull(applicationName, "applicationName cannot be null");
-        this.serverApplicationName = applicationName;
     }
 
     /**
@@ -113,5 +119,14 @@ public class ServerDetailViewService
 
         // TODO provide a channel of communication back to client
         return null;
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @param serverApplicationName JAVADOC.
+     */
+    public void setServerApplicationName(String serverApplicationName) {
+        this.serverApplicationName = serverApplicationName;
     }
 }

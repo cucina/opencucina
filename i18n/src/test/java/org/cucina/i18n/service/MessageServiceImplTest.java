@@ -1,7 +1,6 @@
 package org.cucina.i18n.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 
@@ -14,6 +13,7 @@ import org.cucina.i18n.model.I18nMessage;
 import org.cucina.i18n.model.Message;
 import org.cucina.i18n.repository.MessageRepository;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -37,8 +37,6 @@ public class MessageServiceImplTest {
     @Mock
     private ConversionService conversionService;
     @Mock
-    private I18nService i18nService;
-    @Mock
     private MessageRepository messageRepository;
     private MessageServiceImpl service;
 
@@ -51,7 +49,7 @@ public class MessageServiceImplTest {
     public void setUp()
         throws Exception {
         MockitoAnnotations.initMocks(this);
-        service = new MessageServiceImpl(i18nService, messageRepository, conversionService);
+        service = new MessageServiceImpl(messageRepository, conversionService);
     }
 
     /**
@@ -106,8 +104,36 @@ public class MessageServiceImplTest {
      */
     @Test
     public void testLoadById() {
-        service.loadById(11L);
-        verify(messageRepository).findById(11L);
+        Message message = mock(Message.class);
+
+        when(messageRepository.findById(11L)).thenReturn(message);
+
+        Collection<MessageDto> dtos = new ArrayList<MessageDto>();
+        MessageDto dto1 = new MessageDto();
+
+        dto1.setLocale(Locale.ENGLISH);
+        dto1.setText("eng");
+        dtos.add(dto1);
+
+        MessageDto dto2 = new MessageDto();
+
+        dto2.setLocale(Locale.UK);
+        dto2.setText("uk");
+        dtos.add(dto2);
+        when(conversionService.convert(message, Collection.class)).thenReturn(dtos);
+
+        MessageDto dto = service.loadById(11L, Locale.US);
+
+        assertEquals(dto1, dto);
+        dto = service.loadById(11L, Locale.UK);
+        assertEquals(dto2, dto);
+        dto = service.loadById(11L, null);
+        assertNull(dto);
+        when(messageRepository.getDefaultLocale()).thenReturn(Locale.ENGLISH);
+        dto = service.loadById(11L, Locale.FRANCE);
+        assertEquals(dto1, dto);
+        dto = service.loadById(11L, Locale.ENGLISH);
+        assertEquals(dto1, dto);
     }
 
     /**
@@ -117,7 +143,6 @@ public class MessageServiceImplTest {
     public void testLoadMessage() {
         when(messageRepository.getDefaultLocale()).thenReturn(Locale.PRC);
 
-        Collection<Message> messages = new ArrayList<Message>();
         Message message = mock(Message.class);
 
         when(message.getBaseName()).thenReturn("basename");
@@ -127,21 +152,34 @@ public class MessageServiceImplTest {
         when(imessc.getMessageTx()).thenReturn("PRC");
         when(message.getMessage(Locale.PRC.toString())).thenReturn(imessc);
 
-        messages.add(message);
-        when(messageRepository.findByBasenamesAndCode(Arrays.asList("basename"), "code"))
-            .thenReturn(messages);
+        when(messageRepository.findByBasenameAndCode("basename", "code")).thenReturn(message);
+
+        Collection<MessageDto> dtos = new ArrayList<MessageDto>();
+
+        when(conversionService.convert(message, Collection.class)).thenReturn(dtos);
+
+        MessageDto dto1 = new MessageDto();
+
+        dto1.setLocale(Locale.PRC);
+        dto1.setText("PRC");
+        dtos.add(dto1);
+
         assertEquals("PRC", service.loadMessage("code", Locale.UK, "basename"));
 
-        I18nMessage imesse = mock(I18nMessage.class);
+        MessageDto dto2 = new MessageDto();
 
-        when(imesse.getMessageTx()).thenReturn("enC");
-        when(message.getMessage(Locale.ENGLISH.toString())).thenReturn(imesse);
+        dto2.setLocale(Locale.ENGLISH);
+        dto2.setText("enC");
+        dtos.add(dto2);
+
         assertEquals("enC", service.loadMessage("code", Locale.UK, "basename"));
 
-        I18nMessage imessg = mock(I18nMessage.class);
+        MessageDto dto3 = new MessageDto();
 
-        when(imessg.getMessageTx()).thenReturn("en_GBu");
-        when(message.getMessage(Locale.UK.toString())).thenReturn(imessg);
+        dto3.setLocale(Locale.UK);
+        dto3.setText("en_GBu");
+        dtos.add(dto3);
+
         assertEquals("en_GBu", service.loadMessage("code", Locale.UK, "basename"));
     }
 
@@ -154,7 +192,7 @@ public class MessageServiceImplTest {
 
         messageDto.setCode("code");
         messageDto.setText("text");
-        when(i18nService.getLocale()).thenReturn(Locale.ITALY);
+        messageDto.setLocale(Locale.ITALY);
         service.saveMessage(messageDto);
         verify(messageRepository).save(null, Locale.ITALY.toString(), "code", "text");
     }

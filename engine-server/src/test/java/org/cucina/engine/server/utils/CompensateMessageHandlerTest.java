@@ -1,4 +1,4 @@
-package org.cucina.engine.server;
+package org.cucina.engine.server.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,6 +12,7 @@ import org.cucina.engine.model.WorkflowToken;
 import org.cucina.engine.repository.TokenRepository;
 import org.cucina.engine.server.event.CompensateEvent;
 import org.cucina.engine.server.testassist.Foo;
+import org.cucina.engine.server.utils.CompensateMessageHandler;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -72,13 +73,14 @@ public class CompensateMessageHandlerTest {
 
         Collection<WorkflowToken> tokens = Collections.singleton(token);
 
-        when(tokenRepository.loadTokens(eq("Foo"), any(Long[].class))).thenReturn(tokens);
+        when(tokenRepository.findByApplicationTypeAndIds(eq("Foo"), any(Long[].class)))
+            .thenReturn(tokens);
 
         Message<CompensateEvent> message = mock(Message.class);
 
         when(message.getPayload()).thenReturn(event);
         handler.handleMessage(message);
-        verify(tokenRepository).update(token);
+        verify(tokenRepository).save(token);
         assertTrue("Histories should be empty", histories.isEmpty());
     }
 
@@ -100,7 +102,8 @@ public class CompensateMessageHandlerTest {
 
         Collection<WorkflowToken> tokens = Collections.singleton(token);
 
-        when(tokenRepository.loadTokens(eq("Foo"), any(Long[].class))).thenReturn(tokens);
+        when(tokenRepository.findByApplicationTypeAndIds(eq("Foo"), any(Long[].class)))
+            .thenReturn(tokens);
 
         Message<CompensateEvent> message = mock(Message.class);
 

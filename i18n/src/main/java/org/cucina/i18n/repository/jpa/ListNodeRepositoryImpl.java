@@ -9,6 +9,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 
 import org.cucina.i18n.model.ListNode;
 import org.cucina.i18n.model.Message;
@@ -147,6 +148,7 @@ public class ListNodeRepositoryImpl
      * @param node JAVADOC.
      */
     @Override
+    @Transactional
     public void save(ListNode node) {
         if (node.isNew()) {
             entityManager.persist(node);

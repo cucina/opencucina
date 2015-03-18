@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +39,7 @@ public class WorkflowViewWebService {
      * @param workflowRepository
      *            JAVADOC.
      */
+    @Autowired
     public WorkflowViewWebService(EntityDescriptorRepository entityDescriptorRepository) {
         Assert.notNull(entityDescriptorRepository, "entityDescriptorRepository is null");
         this.entityDescriptorRepository = entityDescriptorRepository;
@@ -62,7 +64,7 @@ public class WorkflowViewWebService {
      * JAVADOC Method Level Comments
      *
      * @param wfid
-     *            JAVADOC.
+     * 
      *
      * @return JAVADOC.
      */

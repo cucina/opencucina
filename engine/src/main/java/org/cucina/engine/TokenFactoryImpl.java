@@ -121,7 +121,7 @@ public class TokenFactoryImpl
         PersistableEntity entity = (PersistableEntity) domainObject;
 
         if (entity.getId() != null) {
-            // call to searchdao to find an existing one for the object
+            // call to tokenRepository to find an existing one for the object
             Token token = tokenRepository.findByDomain(entity);
 
             if (token != null) {

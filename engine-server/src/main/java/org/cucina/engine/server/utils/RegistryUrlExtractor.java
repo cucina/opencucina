@@ -1,4 +1,4 @@
-package org.cucina.engine.server;
+package org.cucina.engine.server.utils;
 
 import org.cucina.engine.server.communication.ClientRegistry;
 import org.cucina.engine.server.communication.ClientRegistry.DestinationDescriptor;
