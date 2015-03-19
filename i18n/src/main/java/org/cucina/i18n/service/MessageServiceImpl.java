@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import org.cucina.i18n.MessageDto;
+import org.cucina.i18n.api.MessageDto;
 import org.cucina.i18n.model.Message;
 import org.cucina.i18n.repository.MessageRepository;
 
@@ -54,6 +54,7 @@ public class MessageServiceImpl
     implements MessageService {
     private static final Logger LOG = LoggerFactory.getLogger(MessageServiceImpl.class);
     private ConversionService conversionService;
+    private I18nService i18nService;
     private MessageRepository messageRepository;
 
     /**
@@ -67,11 +68,13 @@ public class MessageServiceImpl
     @Autowired
     public MessageServiceImpl(MessageRepository messageRepository,
         @Qualifier(value = "myConversionService")
-    ConversionService conversionService) {
+    ConversionService conversionService, I18nService i18nService) {
         Assert.notNull(messageRepository, "messageRepository is null");
         this.messageRepository = messageRepository;
         Assert.notNull(conversionService, "conversionService is null");
         this.conversionService = conversionService;
+        Assert.notNull(i18nService, "i18nService is null");
+        this.i18nService = i18nService;
     }
 
     /**
@@ -193,7 +196,7 @@ public class MessageServiceImpl
         Locale locale = messageDto.getLocale();
 
         if (messageDto.getLocale() == null) {
-            locale = messageRepository.getDefaultLocale();
+            locale = i18nService.getDefaultLocale();
         }
 
         try {
@@ -213,8 +216,8 @@ public class MessageServiceImpl
         Collection<MessageDto> mdtos = conversionService.convert(message, Collection.class);
 
         List<Locale> locales = (locale == null)
-            ? Collections.singletonList(messageRepository.getDefaultLocale())
-            : LocaleUtils.localeLookupList(locale, messageRepository.getDefaultLocale());
+            ? Collections.singletonList(i18nService.getDefaultLocale())
+            : LocaleUtils.localeLookupList(locale, i18nService.getDefaultLocale());
 
         for (final Locale loc : locales) {
             MessageDto dto = (MessageDto) CollectionUtils.find(mdtos,

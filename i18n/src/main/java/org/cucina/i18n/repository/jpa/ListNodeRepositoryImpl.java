@@ -1,7 +1,6 @@
 package org.cucina.i18n.repository.jpa;
 
 import java.util.Collection;
-import java.util.Locale;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -9,16 +8,13 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+
 import javax.transaction.Transactional;
 
+import org.springframework.stereotype.Repository;
+
 import org.cucina.i18n.model.ListNode;
-import org.cucina.i18n.model.Message;
 import org.cucina.i18n.repository.ListNodeRepository;
-import org.cucina.i18n.service.I18nService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
 
 
 /**
@@ -27,23 +23,11 @@ import org.springframework.util.Assert;
  * @author $Author: $
  * @version $Revision: $
   */
+@Repository(value = ListNodeRepository.LISTNODE_REPOSITORY_ID)
 public class ListNodeRepositoryImpl
     implements ListNodeRepository {
-    private static final Logger LOG = LoggerFactory.getLogger(ListNodeRepositoryImpl.class);
     @PersistenceContext
     private EntityManager entityManager;
-    private I18nService i18nService;
-
-    /**
-     * Creates a new ListNodeRepositoryImpl object.
-     *
-     * @param i18nService JAVADOC.
-     */
-    @Autowired
-    public ListNodeRepositoryImpl(I18nService i18nService) {
-        Assert.notNull(i18nService, "i18nService is null");
-        this.i18nService = i18nService;
-    }
 
     /**
     * JAVADOC Method Level Comments
@@ -57,44 +41,13 @@ public class ListNodeRepositoryImpl
     /**
      * JAVADOC Method Level Comments
      *
-     * @param listNode JAVADOC.
+     * @param id JAVADOC.
      *
      * @return JAVADOC.
      */
     @Override
-    public boolean exists(ListNode listNode) {
-        Locale locale = i18nService.getLocale();
-        Message ref = listNode.getLabel();
-        String refText = ref.getBestMessage(locale);
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Reference text for locale '" + locale + "' is  '" + refText + "'");
-        }
-
-        if (refText == null) {
-            return false;
-        }
-
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<ListNode> cq = cb.createQuery(ListNode.class);
-        Root<ListNode> token = cq.from(ListNode.class);
-        Predicate wi = cb.equal(token.get("type"), listNode.getType());
-
-        Collection<ListNode> results = entityManager.createQuery(cq.where(wi)).getResultList();
-
-        for (ListNode ln : results) {
-            Message message = ln.getLabel();
-
-            if (message == null) {
-                continue;
-            }
-
-            if (refText.equals(message.getBestMessage(locale))) {
-                return true;
-            }
-        }
-
-        return false;
+    public ListNode find(Long id) {
+        return entityManager.find(ListNode.class, id);
     }
 
     /**
@@ -112,18 +65,6 @@ public class ListNodeRepositoryImpl
         Predicate wi = cb.equal(token.get("type"), type);
 
         return entityManager.createQuery(cq.where(wi)).getResultList();
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param id JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    public ListNode find(Long id) {
-        return entityManager.find(ListNode.class, id);
     }
 
     /**
@@ -149,11 +90,13 @@ public class ListNodeRepositoryImpl
      */
     @Override
     @Transactional
-    public void save(ListNode node) {
+    public Long save(ListNode node) {
         if (node.isNew()) {
             entityManager.persist(node);
         } else {
             entityManager.merge(node);
         }
+
+        return node.getId();
     }
 }

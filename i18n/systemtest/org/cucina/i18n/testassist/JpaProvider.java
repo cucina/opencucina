@@ -1,8 +1,5 @@
 package org.cucina.i18n.testassist;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.EntityManager;
 
 import org.apache.commons.lang3.ClassUtils;
@@ -161,13 +158,10 @@ public abstract class JpaProvider {
 
         CompositeInstanceFactory cif = new CompositeInstanceFactory();
 
-        List<InstanceFactory> lifs = new ArrayList<InstanceFactory>();
-
         for (int i = 0; i < modelPackageNames.length; i++) {
-            lifs.add(new PackageBasedInstanceFactory(modelPackageNames[i]));
+            cif.getInstanceFactories().add(new PackageBasedInstanceFactory(modelPackageNames[i]));
         }
 
-        cif.setInstanceFactories(lifs);
         this.instanceFactory = cif;
 
         final ContextService contextService = new ThreadLocalContextService();

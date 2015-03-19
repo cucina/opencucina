@@ -5,6 +5,8 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Locale;
 
+import javax.validation.Valid;
+
 import org.apache.commons.lang3.StringUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.cucina.i18n.api.MessageDto;
 import org.cucina.i18n.service.MessageService;
 
 import org.slf4j.Logger;
@@ -102,7 +105,7 @@ public class MessageController {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
     public MessageDto messageDetails(@PathVariable
-    Long id, @RequestHeader(required=false)
+    Long id, @RequestHeader(required = false)
     Locale locale) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("messageDetails for id=" + id + " and locale=" + locale);
@@ -123,6 +126,7 @@ public class MessageController {
      */
     @RequestMapping(method = RequestMethod.POST)
     public Long saveMessage(@RequestBody
+    @Valid
     MessageDto messageDto, @RequestHeader(required = false)
     Locale locale) {
         if (LOG.isDebugEnabled()) {

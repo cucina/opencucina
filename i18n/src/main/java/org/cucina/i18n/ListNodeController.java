@@ -1,16 +1,17 @@
 package org.cucina.i18n;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import org.cucina.i18n.model.ListNode;
-import org.cucina.i18n.repository.ListNodeRepository;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.cucina.i18n.api.ListNodeDto;
+import org.cucina.i18n.service.ListNodeService;
 
 
 /**
@@ -21,9 +22,8 @@ import org.slf4j.LoggerFactory;
 @RestController
 @RequestMapping(value = "/listNode")
 public class ListNodeController {
-    private static final Logger LOG = LoggerFactory.getLogger(ListNodeController.class);
     @Autowired
-    private ListNodeRepository listNodeRepository;
+    private ListNodeService listNodeService;
 
     /**
      * JAVADOC Method Level Comments
@@ -33,8 +33,11 @@ public class ListNodeController {
      * @return JAVADOC.
      */
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
-    public ListNode getById(Long id) {
-        return listNodeRepository.find(id);
+    public ListNodeDto getById(@PathVariable
+    Long id) {
+        Assert.notNull(id, "id is null");
+
+        return listNodeService.load(id);
     }
 
     /**
@@ -46,17 +49,8 @@ public class ListNodeController {
      */
     @RequestMapping(method = RequestMethod.POST)
     public Long save(@RequestBody
-    ListNode listNode) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Before" + listNode);
-        }
-
-        listNodeRepository.save(listNode);
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("After" + listNode);
-        }
-
-        return listNode.getId();
+    @Valid
+    ListNodeDto listNode) {
+        return listNodeService.save(listNode);
     }
 }

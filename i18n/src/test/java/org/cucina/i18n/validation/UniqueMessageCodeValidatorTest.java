@@ -1,15 +1,17 @@
 package org.cucina.i18n.validation;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
-
 import org.cucina.i18n.model.Message;
 import org.cucina.i18n.repository.MessageRepository;
 import org.cucina.i18n.testassist.Foo;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.Mock;
+import static org.mockito.Mockito.when;
+
 import org.mockito.MockitoAnnotations;
 
 
@@ -43,13 +45,14 @@ public class UniqueMessageCodeValidatorTest {
      */
     @Test
     public void test() {
-        when(uniqueMessageCode.basename()).thenReturn("messages.listnode");
+        //        when(uniqueMessageCode.basename()).thenReturn("messages.listnode");
         when(uniqueMessageCode.property()).thenReturn("message");
 
         Foo foo = new Foo();
         Message message = new Message();
 
         foo.setMessage(message);
+        message.setBaseName("messages.listnode");
         message.setMessageCd("CODE");
         when(messageRepository.findByBasenameAndCode("messages.listnode", "CODE")).thenReturn(null);
         assertTrue("Should be unique", validator.isValid(foo, null));
@@ -85,11 +88,10 @@ public class UniqueMessageCodeValidatorTest {
      */
     @Test
     public void testEmptyProperty() {
-        when(uniqueMessageCode.basename()).thenReturn("basename");
-
         Foo foo = new Foo();
         Message message = new Message();
 
+        message.setBaseName("basename");
         foo.setMessage(message);
         assertFalse("Should return false when property is null", validator.isValid(foo, null));
     }
@@ -99,7 +101,6 @@ public class UniqueMessageCodeValidatorTest {
      */
     @Test
     public void testPropertyNotRightType() {
-        when(uniqueMessageCode.basename()).thenReturn("basename");
         when(uniqueMessageCode.property()).thenReturn("id");
 
         Foo foo = new Foo();
@@ -114,7 +115,6 @@ public class UniqueMessageCodeValidatorTest {
      */
     @Test
     public void testWrongPropertyName() {
-        when(uniqueMessageCode.basename()).thenReturn("basename");
         when(uniqueMessageCode.property()).thenReturn("messagexx");
 
         Foo foo = new Foo();

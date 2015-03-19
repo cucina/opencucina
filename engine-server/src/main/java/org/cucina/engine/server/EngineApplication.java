@@ -17,7 +17,9 @@ import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.support.destination.DestinationResolver;
 import org.springframework.jms.support.destination.DynamicDestinationResolver;
 
-import org.cucina.i18n.service.MessageConverter;
+import org.cucina.core.InstanceFactory;
+
+import org.cucina.i18n.converter.MessageConverter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,11 +56,12 @@ public class EngineApplication {
      * @return JAVADOC.
      */
     @Bean
-    public ConversionService myConversionService() {
+    public ConversionService myConversionService(InstanceFactory instanceFactory) {
         ConversionService conversionService = new DefaultConversionService();
 
         if (conversionService instanceof ConverterRegistry) {
-            ((ConverterRegistry) conversionService).addConverter(new MessageConverter());
+            ((ConverterRegistry) conversionService).addConverter(new MessageConverter(
+                    instanceFactory));
         }
 
         return conversionService;

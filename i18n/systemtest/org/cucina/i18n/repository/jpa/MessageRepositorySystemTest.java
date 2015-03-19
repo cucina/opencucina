@@ -4,24 +4,25 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
 
-import javax.persistence.NoResultException;
-
 import org.springframework.beans.factory.BeanFactory;
 
 import org.cucina.core.spring.SingletonBeanFactory;
 
 import org.cucina.i18n.model.Message;
 import org.cucina.i18n.repository.MessageRepository;
+import org.cucina.i18n.service.I18nService;
 import org.cucina.i18n.testassist.JpaProvider;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
 import org.mockito.Mock;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.mockito.MockitoAnnotations;
@@ -55,9 +56,8 @@ public class MessageRepositorySystemTest
     /**
      * basename and code are required.
      */
-    @Test(expected = NoResultException.class)
     public void testBasenameAndCodeRequired() {
-        repo.findByBasenameAndCode(null, null);
+        assertNull("Expected null", repo.findByBasenameAndCode(null, null));
     }
 
     /**
@@ -248,10 +248,13 @@ public class MessageRepositorySystemTest
         MockitoAnnotations.initMocks(this);
         repo = new MessageRepositoryImpl(getInstanceFactory());
         repo.setEntityManager(getEntityManager());
-        repo.setDefaultLocaleString(Locale.ENGLISH.toString());
         when(bf.getBean(SingletonBeanFactory.INSTANCE_FACTORY_ID)).thenReturn(getInstanceFactory());
         when(bf.getBean(MessageRepository.MESSAGE_REPOSITORY_ID)).thenReturn(repo);
 
+        I18nService i18nService = mock(I18nService.class);
+
+        when(i18nService.getDefaultLocale()).thenReturn(Locale.ENGLISH);
+        when(bf.getBean(I18nService.I18N_SERVICE_ID)).thenReturn(i18nService);
         ((SingletonBeanFactory) SingletonBeanFactory.getInstance()).setBeanFactory(bf);
 
         mikeEdMessage = (Message) getInstanceFactory().getBean(Message.class.getSimpleName());

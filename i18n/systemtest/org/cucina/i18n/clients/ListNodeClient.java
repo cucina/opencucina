@@ -1,12 +1,11 @@
 package org.cucina.i18n.clients;
 
-import java.util.Collections;
+import java.util.Locale;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import org.cucina.i18n.model.ListNode;
-import org.cucina.i18n.model.Message;
+import org.cucina.i18n.api.ListNodeDto;
 
 import org.junit.Test;
 
@@ -18,7 +17,6 @@ import org.junit.Test;
   */
 public class ListNodeClient {
     private static final String LN_ACCESS_URL = "http://localhost:8080/listNode";
-    
 
     /**
     * JAVADOC Method Level Comments
@@ -26,21 +24,23 @@ public class ListNodeClient {
     @Test
     public void testSingle() {
         RestTemplate restTemplate = new RestTemplate();
-        
-        ListNode listNode = new ListNode();
+
+        ListNodeDto listNode = new ListNodeDto();
 
         listNode.setType("reason");
-
-        Message label = new Message();
-
-        listNode.setLabel(label);
+        listNode.setApplication("application");
+        listNode.setCode("ho");
+        listNode.setDefaultValue(false);
+        listNode.setLocale(Locale.UK);
+        listNode.setText("Haha");
+        listNode.setType("cause");
 
         ResponseEntity<Long> rid = restTemplate.postForEntity(LN_ACCESS_URL, listNode, Long.class);
 
         System.err.println(rid);
 
-        ListNode ln = restTemplate.getForObject(LN_ACCESS_URL, ListNode.class,
-                Collections.singletonMap("id", rid.getBody()));
+        ListNodeDto ln = restTemplate.getForObject(LN_ACCESS_URL + "/{id}", ListNodeDto.class,
+                rid.getBody());
 
         System.err.println(ln);
     }

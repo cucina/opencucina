@@ -58,9 +58,8 @@ public class UniqueMessageCodeValidator
         }
 
         String propertyName = uniqueMessageCode.property();
-        String basename = uniqueMessageCode.basename();
 
-        if (StringUtils.isEmpty(propertyName) || StringUtils.isEmpty(basename)) {
+        if (StringUtils.isEmpty(propertyName)) {
             LOG.warn("Validator misconfigured check propertyName and basename, returning false ");
 
             return false;
@@ -97,9 +96,11 @@ public class UniqueMessageCodeValidator
 
             return false;
         }
+        
+        String basename = message.getBaseName();
 
         return null == getMessageRepository()
-                           .findByBasenameAndCode(uniqueMessageCode.basename(), msgCd);
+                           .findByBasenameAndCode(basename, msgCd);
     }
 
     /**

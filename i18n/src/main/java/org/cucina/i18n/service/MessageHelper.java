@@ -10,8 +10,6 @@ import org.springframework.util.Assert;
 
 import org.cucina.core.spring.SingletonBeanFactory;
 
-import org.cucina.i18n.repository.MessageRepository;
-
 
 /**
  * Helper class which allows to group useful message related functionality.
@@ -24,12 +22,7 @@ public final class MessageHelper {
      * @return
      */
     public static Locale getDefaultLocale() {
-        MessageRepository messageRepository = (MessageRepository) SingletonBeanFactory.getInstance()
-                                                                                      .getBean(MessageRepository.MESSAGE_REPOSITORY_ID);
-
-        Assert.notNull(messageRepository, "messageRepository is null");
-
-        return messageRepository.getDefaultLocale();
+        return findI18nService().getDefaultLocale();
     }
 
     /**
@@ -59,9 +52,8 @@ public final class MessageHelper {
      * @return
      */
     public static String bestMsgJpql(String basename, String code, boolean includeCd) {
-        Locale locale = ((I18nService) SingletonBeanFactory.getInstance()
-                                                           .getBean(I18nService.I18N_SERVICE_ID)).getLocale();
-        Locale defaultLocale = MessageHelper.getDefaultLocale();
+        Locale locale = findI18nService().getLocale();
+        Locale defaultLocale = getDefaultLocale();
 
         StringBuilder selectClause = new StringBuilder("SELECT\n");
         StringBuilder fromClause = new StringBuilder("FROM Message AS msg\n");
@@ -123,5 +115,9 @@ public final class MessageHelper {
         selectClause.append(fromClause);
 
         return selectClause.toString();
+    }
+
+    private static I18nService findI18nService() {
+        return (I18nService) SingletonBeanFactory.getInstance().getBean(I18nService.I18N_SERVICE_ID);
     }
 }

@@ -14,14 +14,8 @@ import org.springframework.data.repository.Repository;
   */
 public interface ListNodeRepository
     extends Repository<ListNode, Long> {
-    /**
-    * JAVADOC Method Level Comments
-    *
-    * @param listNode JAVADOC.
-    * @return true if listNode exists
-    */
-    boolean exists(ListNode listNode);
-
+	String LISTNODE_REPOSITORY_ID="listNodeRepository";
+  
     /**
      * Load <code>ListNode</code> by id.
      * @param type
@@ -61,6 +55,7 @@ public interface ListNodeRepository
     /**
      * Save the node to the data store.
      * @param node
+     * @return 
      */
-    void save(ListNode node);
+    Long save(ListNode node);
 }

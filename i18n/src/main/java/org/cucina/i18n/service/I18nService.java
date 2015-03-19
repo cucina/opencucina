@@ -81,4 +81,11 @@ public interface I18nService {
      * @return Date adjusted for server timezone
      */
     public Date adjustUserInputForServerTimeZone(Date date);
+
+	/**
+	 * Get the default {@link Locale} for the application.
+	 *
+	 * @return default locale
+	 */
+	Locale getDefaultLocale();
 }

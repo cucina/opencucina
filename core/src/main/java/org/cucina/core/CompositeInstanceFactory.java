@@ -1,11 +1,13 @@
 package org.cucina.core;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.cucina.core.utils.NameUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +25,21 @@ public class CompositeInstanceFactory
     private List<InstanceFactory> instanceFactories = new ArrayList<InstanceFactory>();
     private Map<String, Boolean> attrCache = new HashMap<String, Boolean>();
     private Map<String, String> ptCache = new HashMap<String, String>();
+
+    /**
+     * Creates a new CompositeInstanceFactory object.
+     */
+    public CompositeInstanceFactory() {
+        // default constructor
+    }
+
+    /**
+     * Creates a new CompositeInstanceFactory object.
+     *
+     */
+    public CompositeInstanceFactory(InstanceFactory... factories) {
+        instanceFactories = Arrays.asList(factories);
+    }
 
     /**
      * JAVADOC Method Level Comments
@@ -51,39 +68,14 @@ public class CompositeInstanceFactory
     /**
      * JAVADOC Method Level Comments
      *
-     * @param property JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    public boolean isTranslatedProperty(String className, String property) {
-        String cacheKey = I18N_KEY + NameUtils.concat(className, property);
-        Boolean isI18n = attrCache.get(cacheKey);
-
-        if (isI18n == null) {
-            isI18n = false;
-
-            for (InstanceFactory instfac : instanceFactories) {
-                isI18n = instfac.isTranslatedProperty(className, property);
-
-                if (isI18n) {
-                    break;
-                }
-            }
-
-            attrCache.put(cacheKey, isI18n);
-        }
-
-        return isI18n;
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
      * @param instanceFactories JAVADOC.
      */
     public void setInstanceFactories(List<InstanceFactory> instanceFactories) {
         this.instanceFactories = instanceFactories;
+    }
+
+    public List<InstanceFactory> getInstanceFactories() {
+        return instanceFactories;
     }
 
     /**
@@ -133,6 +125,35 @@ public class CompositeInstanceFactory
         ptCache.put(cacheKey, type);
 
         return type;
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @param property JAVADOC.
+     *
+     * @return JAVADOC.
+     */
+    @Override
+    public boolean isTranslatedProperty(String className, String property) {
+        String cacheKey = I18N_KEY + NameUtils.concat(className, property);
+        Boolean isI18n = attrCache.get(cacheKey);
+
+        if (isI18n == null) {
+            isI18n = false;
+
+            for (InstanceFactory instfac : instanceFactories) {
+                isI18n = instfac.isTranslatedProperty(className, property);
+
+                if (isI18n) {
+                    break;
+                }
+            }
+
+            attrCache.put(cacheKey, isI18n);
+        }
+
+        return isI18n;
     }
 
     /**

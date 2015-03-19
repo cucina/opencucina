@@ -1,11 +1,7 @@
 package org.cucina.i18n.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.when;
-
 import java.sql.Timestamp;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -13,10 +9,18 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import org.cucina.core.service.ContextService;
+
 import org.cucina.i18n.repository.MessageRepository;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.Mock;
+import static org.mockito.Mockito.when;
+
 import org.mockito.MockitoAnnotations;
 
 
@@ -45,9 +49,8 @@ public class I18nServiceImplTest {
         MockitoAnnotations.initMocks(this);
         Locale.setDefault(Locale.UK);
         TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
-        i18nService = new I18nServiceImpl(messageRepository, contextService);
-
-        when(messageRepository.getDefaultLocale()).thenReturn(Locale.ENGLISH);
+        i18nService = new I18nServiceImpl(contextService);
+        i18nService.setDefaultLocale(Locale.ENGLISH);
     }
 
     /**
@@ -149,6 +152,16 @@ public class I18nServiceImplTest {
         Calendar cal = i18nService.getCalendar();
 
         assertNotNull("Should have a calendar instance", cal);
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     */
+    @Test
+    public void testGetDefaultLocale() {
+        assertEquals(Locale.ENGLISH, i18nService.getDefaultLocale());
+        i18nService.setDefaultLocaleString(Locale.KOREAN.toString());
+        assertEquals(Locale.KOREAN, i18nService.getDefaultLocale());
     }
 
     /**

@@ -1,8 +1,11 @@
-package org.cucina.i18n;
+package org.cucina.i18n.api;
 
 import java.io.Serializable;
 
 import java.util.Locale;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -18,7 +21,11 @@ public class MessageDto
     private static final long serialVersionUID = 6002519996213393349L;
     private Locale locale;
     private Long id;
+    @NotNull
+    @Size(min = 1)
     private String application;
+    @NotNull
+    @Size(min = 1)
     private String code;
     private String text;
 

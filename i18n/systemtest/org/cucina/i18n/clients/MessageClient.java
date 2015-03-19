@@ -8,7 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-import org.cucina.i18n.MessageDto;
+import org.cucina.i18n.api.MessageDto;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

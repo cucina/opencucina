@@ -11,7 +11,7 @@ import javax.validation.Payload;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = UniqueListNodeValidator.class)
-public @interface UniqueListNode {String message() default "{org.cucina.meringue.validation.UniqueListNode.message}";
+public @interface UniqueListNode {String message() default "{org.cucina.i18n.validation.UniqueListNode.message}";
     Class<?>[] groups() default  {
     }
     ;

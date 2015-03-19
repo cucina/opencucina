@@ -13,7 +13,6 @@ import javax.validation.Payload;
 @Constraint(validatedBy = UniqueMessageCodeValidator.class)
 public @interface UniqueMessageCode {String message() default "{org.cucina.meringue.validation.UniqueMessageCode.message}";
     String property() default "label";
-    String basename() default "messages";
     Class<?>[] groups() default  {
     }
     ;

@@ -51,7 +51,7 @@ public class ListNodeMessageBeanPopulatorTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         when(instanceFactory.getBean(any(String.class))).thenReturn(new MutableI18nMessage());
-        when(messageRepository.getDefaultLocale()).thenReturn(Locale.ENGLISH);
+        when(i18nService.getDefaultLocale()).thenReturn(Locale.ENGLISH);
         when(beanFactory.getBean(SingletonBeanFactory.INSTANCE_FACTORY_ID))
             .thenReturn(instanceFactory);
         when(beanFactory.getBean(I18nService.I18N_SERVICE_ID)).thenReturn(i18nService);

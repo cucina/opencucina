@@ -52,13 +52,6 @@ public interface MessageRepository {
     String MESSAGE_REPOSITORY_ID = "messageRepository";
 
     /**
-     * Get the default {@link Locale} for the application.
-     *
-     * @return default locale
-     */
-    Locale getDefaultLocale();
-
-    /**
      * Returns the <code>Message</code> with the provided id.
      * @param id
      * @return Message

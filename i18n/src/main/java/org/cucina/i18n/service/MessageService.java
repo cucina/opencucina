@@ -3,7 +3,7 @@ package org.cucina.i18n.service;
 import java.util.Collection;
 import java.util.Locale;
 
-import org.cucina.i18n.MessageDto;
+import org.cucina.i18n.api.MessageDto;
 
 /**
  * JAVADOC.

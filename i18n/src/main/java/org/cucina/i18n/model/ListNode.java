@@ -30,27 +30,20 @@ import org.cucina.i18n.validation.UniqueMessageCode;
 @Entity
 @Cacheable
 @UniqueListNode
-@UniqueMessageCode
+//@UniqueMessageCode
 @PostProcessProjections
 public class ListNode
     extends PersistableEntity
     implements Versioned {
-    /** messages.listnode */
-    public static final String BASENAME = "messages.listnode";
     private static final long serialVersionUID = 1L;
-
-    /**
-     * ListNode.
-     */
-    public static final String TYPE = "ListNode";
 
     // Mark this ListNode as the default
     @NotNull
-    private Boolean defaultValue;
+    private Boolean defaultValue = false;
 
     // Mark this ListNode as retired
     @NotNull
-    private Boolean retired;
+    private Boolean retired = false;
     private Map<String, Object> attributes;
 
     // The name of the object

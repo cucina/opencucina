@@ -6,6 +6,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
+import org.apache.commons.lang3.LocaleUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -13,7 +15,8 @@ import org.springframework.util.StringUtils;
 
 import org.cucina.core.service.ContextService;
 
-import org.cucina.i18n.repository.MessageRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -24,21 +27,20 @@ import org.cucina.i18n.repository.MessageRepository;
 @Service(value = "i18nService")
 public class I18nServiceImpl
     implements I18nService {
+    private static final Logger LOG = LoggerFactory.getLogger(I18nServiceImpl.class);
     private ContextService contextService;
-    private MessageRepository messageRepository;
+    private Locale defaultLocale;
 
     /**
-     * Creates a new I18nServiceImpl object.
-     *
-     * @param messageRepository
-     *            JAVADOC.
-     * @param contextService
-     *            JAVADOC.
-     */
+    * Creates a new I18nServiceImpl object.
+    *
+    * @param messageRepository
+    *            JAVADOC.
+    * @param contextService
+    *            JAVADOC.
+    */
     @Autowired
-    public I18nServiceImpl(MessageRepository messageRepository, ContextService contextService) {
-        Assert.notNull(messageRepository, "messageRepository is null");
-        this.messageRepository = messageRepository;
+    public I18nServiceImpl(ContextService contextService) {
         Assert.notNull(contextService, "contextService is null");
         this.contextService = contextService;
     }
@@ -68,6 +70,44 @@ public class I18nServiceImpl
     /**
      * JAVADOC Method Level Comments
      *
+     * @param defaultLocale JAVADOC.
+     */
+    public void setDefaultLocale(Locale defaultLocale) {
+        this.defaultLocale = defaultLocale;
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @return JAVADOC.
+     */
+    @Override
+    public Locale getDefaultLocale() {
+        if (defaultLocale == null) {
+            return Locale.getDefault();
+        }
+
+        return defaultLocale;
+    }
+
+    /**
+     * Set default Locale. Validates locale String is valid before setting
+     * locale
+     *
+     * @param locale
+     */
+    public void setDefaultLocaleString(String locale) {
+        try {
+            defaultLocale = LocaleUtils.toLocale(locale);
+        } catch (IllegalArgumentException e) {
+            LOG.warn("Invalid locale has been set up [" + locale + "]");
+            throw e;
+        }
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
      * @return JAVADOC.
      * @see org.cucina.meringue.service.sprite.core.service.I18nService#getLocale()
      */
@@ -75,7 +115,7 @@ public class I18nServiceImpl
         Locale locale = (Locale) contextService.get(CLIENT_LOCALE);
 
         if (locale == null) {
-            locale = messageRepository.getDefaultLocale();
+            locale = getDefaultLocale();
         }
 
         return locale;

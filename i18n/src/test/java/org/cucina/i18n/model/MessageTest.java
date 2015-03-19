@@ -45,7 +45,7 @@ public class MessageTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         when(i18nService.getLocale()).thenReturn(Locale.ENGLISH);
-        when(messageRepository.getDefaultLocale()).thenReturn(Locale.JAPANESE);
+        when(i18nService.getDefaultLocale()).thenReturn(Locale.JAPANESE);
         when(instanceFactory.getBean(MutableI18nMessage.TYPE)).thenReturn(new MutableI18nMessage());
         when(bf.getBean(I18nService.I18N_SERVICE_ID)).thenReturn(i18nService);
         when(bf.getBean(MessageRepository.MESSAGE_REPOSITORY_ID)).thenReturn(messageRepository);

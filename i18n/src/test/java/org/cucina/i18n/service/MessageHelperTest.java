@@ -6,8 +6,6 @@ import java.util.Locale;
 import org.springframework.beans.factory.BeanFactory;
 
 import org.cucina.core.spring.SingletonBeanFactory;
-
-import org.cucina.i18n.repository.MessageRepository;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
@@ -38,14 +36,13 @@ public class MessageHelperTest {
     @Before
     public void setUp()
         throws Exception {
-        MessageRepository messageRepository = mock(MessageRepository.class);
+        I18nService i18nService = mock(I18nService.class);
 
-        when(messageRepository.getDefaultLocale()).thenReturn(Locale.ENGLISH);
+        when(i18nService.getDefaultLocale()).thenReturn(Locale.ENGLISH);
 
         BeanFactory beanFactory = mock(BeanFactory.class);
 
-        when(beanFactory.getBean(MessageRepository.MESSAGE_REPOSITORY_ID))
-            .thenReturn(messageRepository);
+        when(beanFactory.getBean(I18nService.I18N_SERVICE_ID)).thenReturn(i18nService);
 
         ((SingletonBeanFactory) SingletonBeanFactory.getInstance()).setBeanFactory(beanFactory);
     }

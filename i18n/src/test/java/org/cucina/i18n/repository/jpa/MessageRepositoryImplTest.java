@@ -21,6 +21,7 @@ import org.cucina.core.spring.SingletonBeanFactory;
 import org.cucina.i18n.model.Message;
 import org.cucina.i18n.model.MutableI18nMessage;
 import org.cucina.i18n.repository.MessageRepository;
+import org.cucina.i18n.service.I18nService;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
@@ -50,6 +51,8 @@ public class MessageRepositoryImplTest {
     @Mock
     private EntityManager em;
     @Mock
+    private I18nService i18nService;
+    @Mock
     private InstanceFactory instanceFactory;
     private MessageRepositoryImpl repo;
     @Mock
@@ -72,6 +75,8 @@ public class MessageRepositoryImplTest {
         when(em.createQuery(cq)).thenReturn(tq);
         ((SingletonBeanFactory) SingletonBeanFactory.getInstance()).setBeanFactory(beanFactory);
         when(beanFactory.getBean(MessageRepository.MESSAGE_REPOSITORY_ID)).thenReturn(repo);
+        when(beanFactory.getBean(I18nService.I18N_SERVICE_ID)).thenReturn(i18nService);
+        when(i18nService.getDefaultLocale()).thenReturn(Locale.ENGLISH);
     }
 
     /**
@@ -229,16 +234,6 @@ public class MessageRepositoryImplTest {
     public void testFindById() {
         repo.findById(11L);
         verify(em).find(Message.class, 11L);
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    public void testGetDefaultLocale() {
-        repo.getDefaultLocale();
-        repo.setDefaultLocaleString(Locale.KOREAN.toString());
-        repo.getDefaultLocale();
     }
 
     /**

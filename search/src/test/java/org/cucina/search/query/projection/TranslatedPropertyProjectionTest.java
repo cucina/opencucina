@@ -7,7 +7,6 @@ import org.springframework.beans.factory.BeanFactory;
 
 import org.cucina.core.spring.SingletonBeanFactory;
 
-import org.cucina.i18n.repository.MessageRepository;
 import org.cucina.i18n.service.I18nService;
 import static org.junit.Assert.assertEquals;
 
@@ -53,8 +52,6 @@ public class TranslatedPropertyProjectionTest {
         "AND msg.messageCd = foo.name),foo.name)) as orderedName";
     @Mock
     private I18nService i18nService;
-    @Mock
-    private MessageRepository messageRepository;
 
     /**
      * JAVADOC Method Level Comments
@@ -63,13 +60,11 @@ public class TranslatedPropertyProjectionTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
 
-        when(messageRepository.getDefaultLocale()).thenReturn(Locale.ENGLISH);
+        when(i18nService.getDefaultLocale()).thenReturn(Locale.ENGLISH);
 
         BeanFactory beanFactory = mock(BeanFactory.class);
 
         when(beanFactory.getBean(I18nService.I18N_SERVICE_ID)).thenReturn(i18nService);
-        when(beanFactory.getBean(MessageRepository.MESSAGE_REPOSITORY_ID))
-            .thenReturn(messageRepository);
 
         ((SingletonBeanFactory) SingletonBeanFactory.getInstance()).setBeanFactory(beanFactory);
     }

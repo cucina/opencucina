@@ -90,8 +90,6 @@ public class JpaProjectionFactoryTest {
         assertEquals("projection name incorrect", "name.label.messageCd", projection.getName());
         assertEquals("projection alias incorrect", PROJECTION_ALIAS, projection.getAlias());
         assertEquals("projection alias incorrect", FOO_ALIAS, projection.getRootAlias());
-        assertEquals("Should be using ListNode basename", ListNode.BASENAME,
-            ((TranslatedPropertyProjection) projection).getBasename());
     }
 
     /**

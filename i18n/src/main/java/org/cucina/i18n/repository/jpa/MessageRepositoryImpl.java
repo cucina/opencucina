@@ -1,9 +1,9 @@
 package org.cucina.i18n.repository.jpa;
 
 import java.util.Collection;
-import java.util.Locale;
 
 import javax.persistence.EntityManager;
+import javax.persistence.FlushModeType;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -12,8 +12,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
-import org.apache.commons.lang3.LocaleUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -35,14 +33,13 @@ import org.slf4j.LoggerFactory;
  * @author $Author: $
  * @version $Revision: $
   */
-@Repository(value = "messageRepository")
+@Repository(value = MessageRepository.MESSAGE_REPOSITORY_ID)
 public class MessageRepositoryImpl
     implements MessageRepository {
     private static final Logger LOG = LoggerFactory.getLogger(MessageRepositoryImpl.class);
     @PersistenceContext
     private EntityManager entityManager;
     private InstanceFactory instanceFactory;
-    private Locale defaultLocale;
 
     /**
      * Creates a new MessageRepositoryImpl object.
@@ -53,35 +50,6 @@ public class MessageRepositoryImpl
     public MessageRepositoryImpl(InstanceFactory instanceFactory) {
         Assert.notNull(instanceFactory, "instanceFactory is null");
         this.instanceFactory = instanceFactory;
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    public Locale getDefaultLocale() {
-        if (defaultLocale == null) {
-            return Locale.getDefault();
-        }
-
-        return defaultLocale;
-    }
-
-    /**
-     * Set default Locale. Validates locale String is valid before setting
-     * locale
-     *
-     * @param locale
-     */
-    public void setDefaultLocaleString(String locale) {
-        try {
-            defaultLocale = LocaleUtils.toLocale(locale);
-        } catch (IllegalArgumentException e) {
-            LOG.warn("Invalid locale has been set up [" + locale + "]");
-            throw e;
-        }
     }
 
     /**
@@ -164,6 +132,8 @@ public class MessageRepositoryImpl
      */
     @Override
     public Message findByBasenameAndCode(String basename, String code) {
+        entityManager.setFlushMode(FlushModeType.COMMIT);
+
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Message> cq = cb.createQuery(Message.class);
         Root<Message> root = cq.from(Message.class);
@@ -291,6 +261,10 @@ public class MessageRepositoryImpl
      */
     @Override
     public Message save(Message message) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Saving " + message);
+        }
+
         if (message.isNew()) {
             entityManager.persist(message);
         } else {

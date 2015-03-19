@@ -8,7 +8,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import org.cucina.i18n.MessageDto;
+import org.cucina.i18n.api.MessageDto;
 import org.cucina.i18n.model.I18nMessage;
 import org.cucina.i18n.model.Message;
 import org.cucina.i18n.repository.MessageRepository;
@@ -37,6 +37,8 @@ public class MessageServiceImplTest {
     @Mock
     private ConversionService conversionService;
     @Mock
+    private I18nService i18nService;
+    @Mock
     private MessageRepository messageRepository;
     private MessageServiceImpl service;
 
@@ -49,7 +51,7 @@ public class MessageServiceImplTest {
     public void setUp()
         throws Exception {
         MockitoAnnotations.initMocks(this);
-        service = new MessageServiceImpl(messageRepository, conversionService);
+        service = new MessageServiceImpl(messageRepository, conversionService, i18nService);
     }
 
     /**
@@ -129,7 +131,7 @@ public class MessageServiceImplTest {
         assertEquals(dto2, dto);
         dto = service.loadById(11L, null);
         assertNull(dto);
-        when(messageRepository.getDefaultLocale()).thenReturn(Locale.ENGLISH);
+        when(i18nService.getDefaultLocale()).thenReturn(Locale.ENGLISH);
         dto = service.loadById(11L, Locale.FRANCE);
         assertEquals(dto1, dto);
         dto = service.loadById(11L, Locale.ENGLISH);
@@ -141,7 +143,7 @@ public class MessageServiceImplTest {
      */
     @Test
     public void testLoadMessage() {
-        when(messageRepository.getDefaultLocale()).thenReturn(Locale.PRC);
+        when(i18nService.getDefaultLocale()).thenReturn(Locale.PRC);
 
         Message message = mock(Message.class);
 
