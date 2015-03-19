@@ -2,10 +2,10 @@ package org.cucina.engine.server.communication;
 
 import java.util.Random;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
-
 import org.cucina.core.service.ContextService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,12 +16,13 @@ import org.slf4j.LoggerFactory;
  * @author $Author: $
  * @version $Revision: $
  */
+@Component
 public class ConversationContextImpl
     implements ConversationContext {
     private static final Logger LOG = LoggerFactory.getLogger(ConversationContextImpl.class);
 
-    /** This is a field JAVADOC */
-    public static final String CONVERSATION_ID_PREFIX = "souffle-";
+    /** cucina-. */
+    public static final String CONVERSATION_ID_PREFIX = "cucina-";
     private static final Random random = new Random();
     private ContextService contextService;
 
@@ -33,6 +34,7 @@ public class ConversationContextImpl
      * @param clientRegistry
      *            JAVADOC.
      */
+    @Autowired
     public ConversationContextImpl(ContextService contextService) {
         Assert.notNull(contextService, "contextService is null");
         this.contextService = contextService;

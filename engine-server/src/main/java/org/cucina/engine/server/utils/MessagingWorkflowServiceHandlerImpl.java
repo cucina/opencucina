@@ -4,6 +4,12 @@ import java.util.Collection;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.Message;
+import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
+
 import org.cucina.engine.definition.Token;
 import org.cucina.engine.server.communication.ConversationContext;
 import org.cucina.engine.server.event.CommitEvent;
@@ -24,14 +30,12 @@ import org.cucina.engine.server.event.workflow.ValueEvent;
 import org.cucina.engine.server.event.workflow.WorkflowEvent;
 import org.cucina.engine.server.model.EntityDescriptor;
 import org.cucina.engine.service.WorkflowSupportService;
-import org.cucina.i18n.model.ListNode;
-import org.cucina.i18n.repository.ListNodeRepository;
+
+import org.cucina.i18n.api.ListNodeDto;
+import org.cucina.i18n.api.ListNodeService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.Message;
-import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 
 /**
@@ -45,7 +49,7 @@ public class MessagingWorkflowServiceHandlerImpl
     implements MessagingWorkflowServiceHandler {
     private static final Logger LOG = LoggerFactory.getLogger(MessagingWorkflowServiceHandlerImpl.class);
     private ConversationContext conversationContext;
-    private ListNodeRepository listNodeRepository;
+    private ListNodeService listNodeService;
     private WorkflowSupportService workflowSupportService;
 
     /**
@@ -57,11 +61,11 @@ public class MessagingWorkflowServiceHandlerImpl
      */
     @Autowired
     public MessagingWorkflowServiceHandlerImpl(ConversationContext conversationContext,
-        ListNodeRepository listNodeRepository, WorkflowSupportService workflowSupportService) {
+        ListNodeService listNodeService, WorkflowSupportService workflowSupportService) {
         Assert.notNull(conversationContext, "conversationContext is null");
         this.conversationContext = conversationContext;
-        Assert.notNull(listNodeRepository, "listNodeRepository is null");
-        this.listNodeRepository = listNodeRepository;
+        Assert.notNull(listNodeService, "listNodeService is null");
+        this.listNodeService = listNodeService;
         Assert.notNull(workflowSupportService, "workflowSupportService is null");
         this.workflowSupportService = workflowSupportService;
     }
@@ -151,7 +155,7 @@ public class MessagingWorkflowServiceHandlerImpl
                     we.getExtraParams(), we.getAttachment());
             } else if (event instanceof BulkTransitionEvent) {
                 BulkTransitionEvent we = (BulkTransitionEvent) event;
-                Collection<ListNode> reasons = listNodeRepository.findByType(we.getReason());
+                Collection<ListNodeDto> reasons = listNodeService.loadByType(we.getReason());
 
                 if (CollectionUtils.isEmpty(reasons)) {
                     LOG.warn("Failed to load reason for string '" + we.getReason() + "'");

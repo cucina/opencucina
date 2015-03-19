@@ -36,7 +36,7 @@ import org.cucina.engine.model.WorkflowToken;
 import org.cucina.engine.repository.HistoryRecordRepository;
 import org.cucina.engine.repository.TokenRepository;
 
-import org.cucina.i18n.model.ListNode;
+import org.cucina.i18n.api.ListNodeDto;
 
 import org.cucina.search.SearchBeanFactory;
 import org.cucina.search.SearchService;
@@ -367,7 +367,7 @@ public class WorkflowSupportServiceImpl
     @Transactional
     public void makeTransition(Map<Long, Integer> entities, String applicationType,
         String transitionId, String comment, String approvedAs, String assignedTo,
-        Map<String, Object> extraParams, ListNode reason, Attachment attachment) {
+        Map<String, Object> extraParams, ListNodeDto reason, Attachment attachment) {
         try {
             Collection<WorkflowToken> tokens = tokenRepository.findByApplicationTypeAndIds(applicationType,
                     entities.keySet().toArray(new Long[entities.size()]));

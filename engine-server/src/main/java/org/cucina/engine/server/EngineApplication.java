@@ -16,11 +16,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.support.destination.DestinationResolver;
 import org.springframework.jms.support.destination.DynamicDestinationResolver;
-
 import org.cucina.core.InstanceFactory;
-
+import org.cucina.core.service.ContextService;
+import org.cucina.core.service.ThreadLocalContextService;
 import org.cucina.i18n.converter.MessageConverter;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,5 +92,10 @@ public class EngineApplication {
                         pubSubDomain);
                 }
             };
+    }
+    
+    @Bean
+    public ContextService tempContextService(){
+    	return new ThreadLocalContextService();
     }
 }

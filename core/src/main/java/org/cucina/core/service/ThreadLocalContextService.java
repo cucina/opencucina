@@ -1,8 +1,9 @@
-
 package org.cucina.core.service;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.springframework.stereotype.Component;
 
 
 /**
@@ -11,9 +12,10 @@ import java.util.Map;
  * @author $Author: $
  * @version $Revision: $
  */
+@Component(value = ContextService.CONTEXTSERVICE_ID)
 public class ThreadLocalContextService
     implements ContextService {
-    private ThreadLocal<Map<Object, Object>> threadLocal = new ThreadLocal<Map<Object, Object>>();
+	private ThreadLocal<Map<Object, Object>> threadLocal = new ThreadLocal<Map<Object, Object>>();
 
     /**
      * JAVADOC Method Level Comments

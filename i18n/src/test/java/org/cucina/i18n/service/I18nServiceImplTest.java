@@ -1,7 +1,11 @@
 package org.cucina.i18n.service;
 
-import java.sql.Timestamp;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.when;
 
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,18 +13,10 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import org.cucina.core.service.ContextService;
-
 import org.cucina.i18n.repository.MessageRepository;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import org.mockito.Mock;
-import static org.mockito.Mockito.when;
-
 import org.mockito.MockitoAnnotations;
 
 

@@ -11,11 +11,7 @@ import java.util.Map;
  * @version $Revision: $
   */
 public interface ContextService {
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
+     String CONTEXTSERVICE_ID = "contetService";
     /**
      * JAVADOC Method Level Comments
      *

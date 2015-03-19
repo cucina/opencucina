@@ -1,17 +1,15 @@
 package org.cucina.i18n.validation;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
+
 import org.cucina.i18n.model.Message;
 import org.cucina.i18n.repository.MessageRepository;
 import org.cucina.i18n.testassist.Foo;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import org.mockito.Mock;
-import static org.mockito.Mockito.when;
-
 import org.mockito.MockitoAnnotations;
 
 

@@ -1,22 +1,19 @@
 package org.cucina.i18n;
 
-import java.text.MessageFormat;
-import java.util.Locale;
-
-import org.springframework.test.util.ReflectionTestUtils;
-import org.cucina.i18n.api.MessageDto;
-import org.cucina.i18n.service.MessageService;
-
 import static org.junit.Assert.assertEquals;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.text.MessageFormat;
+import java.util.Locale;
+
+import org.cucina.i18n.api.MessageDto;
+import org.cucina.i18n.api.MessageService;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.test.util.ReflectionTestUtils;
 
 
 /**

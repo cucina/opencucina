@@ -1,5 +1,7 @@
 package org.cucina.i18n;
 
+import java.util.Collection;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.cucina.i18n.api.ListNodeDto;
-import org.cucina.i18n.service.ListNodeService;
+import org.cucina.i18n.api.ListNodeService;
 
 
 /**
@@ -38,6 +40,19 @@ public class ListNodeController {
         Assert.notNull(id, "id is null");
 
         return listNodeService.load(id);
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @param type JAVADOC.
+     *
+     * @return JAVADOC.
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/type/{type}")
+    public Collection<ListNodeDto> getByType(@PathVariable
+    String type) {
+        return listNodeService.loadByType(type);
     }
 
     /**

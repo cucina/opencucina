@@ -1,25 +1,21 @@
 package org.cucina.i18n.model;
 
-import java.util.Locale;
-
-import org.springframework.beans.factory.BeanFactory;
-
-import org.cucina.core.InstanceFactory;
-import org.cucina.core.spring.SingletonBeanFactory;
-
-import org.cucina.i18n.repository.MessageRepository;
-import org.cucina.i18n.service.I18nService;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import org.mockito.Mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Locale;
+
+import org.cucina.core.InstanceFactory;
+import org.cucina.core.spring.SingletonBeanFactory;
+import org.cucina.i18n.repository.MessageRepository;
+import org.cucina.i18n.service.I18nService;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.BeanFactory;
 
 
 /**

@@ -41,6 +41,11 @@
 			<version>0.1</version>
 		</dependency>
 		<dependency>
+			<groupId>cucina</groupId>
+			<artifactId>cucina-i18n-api</artifactId>
+			<version>0.1</version>
+		</dependency>
+		<dependency>
 			<groupId>org.hibernate.javax.persistence</groupId>
 			<artifactId>hibernate-jpa-2.1-api</artifactId>
 			<version>1.0.0.Final</version>

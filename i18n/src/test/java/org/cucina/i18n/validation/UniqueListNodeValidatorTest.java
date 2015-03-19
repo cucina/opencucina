@@ -1,21 +1,20 @@
 package org.cucina.i18n.validation;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
-
-import org.springframework.test.util.ReflectionTestUtils;
 
 import org.cucina.i18n.model.ListNode;
 import org.cucina.i18n.model.Message;
 import org.cucina.i18n.repository.ListNodeRepository;
 import org.cucina.i18n.service.I18nService;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.springframework.test.util.ReflectionTestUtils;
 
 /**
  * JAVADOC for Class Level

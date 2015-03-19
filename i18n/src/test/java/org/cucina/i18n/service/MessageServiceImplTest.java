@@ -1,30 +1,27 @@
 package org.cucina.i18n.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
-
-import org.springframework.core.convert.ConversionService;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import org.cucina.i18n.api.MessageDto;
 import org.cucina.i18n.model.I18nMessage;
 import org.cucina.i18n.model.Message;
 import org.cucina.i18n.repository.MessageRepository;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import org.mockito.Mock;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import org.mockito.MockitoAnnotations;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 
 /**

@@ -9,7 +9,12 @@ import java.util.Locale;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang3.LocaleUtils;
-
+import org.cucina.i18n.api.MessageDto;
+import org.cucina.i18n.api.MessageService;
+import org.cucina.i18n.model.Message;
+import org.cucina.i18n.repository.MessageRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
@@ -18,13 +23,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-
-import org.cucina.i18n.api.MessageDto;
-import org.cucina.i18n.model.Message;
-import org.cucina.i18n.repository.MessageRepository;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**

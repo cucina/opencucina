@@ -1,4 +1,4 @@
-package org.cucina.i18n.service;
+package org.cucina.i18n.api;
 
 import java.util.Collection;
 import java.util.Locale;

@@ -1,5 +1,9 @@
 package org.cucina.i18n.repository.jpa;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -12,15 +16,9 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.cucina.i18n.model.ListNode;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import org.mockito.Mock;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import org.mockito.MockitoAnnotations;
 
 

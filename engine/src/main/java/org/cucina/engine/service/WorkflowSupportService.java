@@ -9,7 +9,7 @@ import org.cucina.core.model.PersistableEntity;
 import org.cucina.engine.definition.Token;
 import org.cucina.engine.definition.Transition;
 import org.cucina.engine.model.HistoryRecord;
-import org.cucina.i18n.model.ListNode;
+import org.cucina.i18n.api.ListNodeDto;
 
 /**
  * A general interface to call workfow system for all most common uses
@@ -93,14 +93,14 @@ public interface WorkflowSupportService {
      *            JAVADOC.
      * @param extraParams
      *            JAVADOC.
-     * @param reason
+     * @param listNodeDto
      *            JAVADOC.
      * @param attachment
      *            JAVADOC.
      */
     void makeTransition(Map<Long, Integer> entities, String applicationType, String transitionId,
         String comment, String approvedAs, String assignedTo, Map<String, Object> extraParams,
-        ListNode reason, Attachment attachment);
+        ListNodeDto listNodeDto, Attachment attachment);
 
     /**
      * JAVADOC Method Level Comments

@@ -1,19 +1,18 @@
 package org.cucina.i18n.service;
 
-import java.util.List;
-import java.util.Locale;
-
-import org.springframework.beans.factory.BeanFactory;
-
-import org.cucina.core.spring.SingletonBeanFactory;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
-
-import org.junit.Before;
-import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Locale;
+
+import org.cucina.core.spring.SingletonBeanFactory;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.beans.factory.BeanFactory;
 
 
 /**
