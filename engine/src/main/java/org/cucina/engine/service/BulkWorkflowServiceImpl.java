@@ -82,7 +82,7 @@ public class BulkWorkflowServiceImpl
         Assert.notNull(transitionId, "transitionId must be provided as a parameter");
         Assert.notNull(applicationType, "applicationType must be provided as a parameter");
 
-        String placeId = workflowEnvironment.getWorkflowDefinitionHelper()
+        String placeId = workflowEnvironment.getProcessDefinitionHelper()
                                             .findPlaceId(workflowId, transitionId);
 
         Assert.notNull(placeId,

@@ -24,7 +24,7 @@ import org.cucina.core.InstanceFactory;
 import org.cucina.core.model.PersistableEntity;
 
 import org.cucina.engine.model.HistoryRecord;
-import org.cucina.engine.model.WorkflowToken;
+import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.repository.TokenRepository;
 
 import org.slf4j.Logger;
@@ -72,7 +72,7 @@ public class TokenRepositoryImpl
      *            JAVADOC.
      */
     @Override
-    public void delete(WorkflowToken token) {
+    public void delete(ProcessToken token) {
         entityManager.remove(token);
     }
 
@@ -83,7 +83,7 @@ public class TokenRepositoryImpl
      *            JAVADOC.
      */
     @Override
-    public void deleteDeep(WorkflowToken token) {
+    public void deleteDeep(ProcessToken token) {
         Object domain = token.getDomainObject();
 
         entityManager.remove(token);
@@ -102,7 +102,7 @@ public class TokenRepositoryImpl
      */
     @Override
     @Transactional
-    public Collection<WorkflowToken> findByApplicationTypeAndIds(String applicationType, Long... ids) {
+    public Collection<ProcessToken> findByApplicationTypeAndIds(String applicationType, Long... ids) {
         Assert.notNull(applicationType, "type cannot be null");
 
         if (ArrayUtils.isEmpty(ids)) {
@@ -114,7 +114,7 @@ public class TokenRepositoryImpl
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 
         CriteriaQuery<Tuple> tcq = cb.createTupleQuery();
-        Root<WorkflowToken> rt = tcq.from(WorkflowToken.class);
+        Root<ProcessToken> rt = tcq.from(ProcessToken.class);
         Path<Object> pid = rt.get("domainObjectId");
         Predicate tokp = cb.and(cb.equal(rt.get("domainObjectType"), applicationType),
                 pid.in((Object[]) ids));
@@ -147,7 +147,7 @@ public class TokenRepositoryImpl
      */
     @Override
     @Transactional
-    public WorkflowToken findByDomain(Persistable<Long> domain) {
+    public ProcessToken findByDomain(Persistable<Long> domain) {
         Assert.notNull(domain, "Domain is null");
 
         BeanWrapper bw = new BeanWrapperImpl(domain);
@@ -156,14 +156,14 @@ public class TokenRepositoryImpl
             "No 'id' property on object of type '" + domain.getClass() + "'");
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<WorkflowToken> cq = cb.createQuery(WorkflowToken.class);
-        Root<WorkflowToken> token = cq.from(WorkflowToken.class);
+        CriteriaQuery<ProcessToken> cq = cb.createQuery(ProcessToken.class);
+        Root<ProcessToken> token = cq.from(ProcessToken.class);
 
         cq.where(cb.and(cb.equal(token.get("domainObjectType"), domain.getClass().getSimpleName()),
                 cb.equal(token.get("domainObjectId"), bw.getPropertyValue("id"))));
 
         try {
-            WorkflowToken wt = entityManager.createQuery(cq).getSingleResult();
+            ProcessToken wt = entityManager.createQuery(cq).getSingleResult();
 
             wt.setDomainObject(domain);
 
@@ -195,7 +195,7 @@ public class TokenRepositoryImpl
         final String workflowId, final String placeId, final String applicationType) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> cq = cb.createQuery(Long.class);
-        Root<WorkflowToken> token = cq.from(WorkflowToken.class);
+        Root<ProcessToken> token = cq.from(ProcessToken.class);
         Predicate wi = cb.equal(token.get("workflowDefinitionId"), workflowId);
         Predicate pi = cb.equal(token.get("placeId"), placeId);
         Predicate at = cb.equal(token.get("domainObjectType"), applicationType);
@@ -211,7 +211,7 @@ public class TokenRepositoryImpl
         String applicationType) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<HistoryRecord> cq = cb.createQuery(HistoryRecord.class);
-        Root<WorkflowToken> token = cq.from(WorkflowToken.class);
+        Root<ProcessToken> token = cq.from(ProcessToken.class);
         Predicate pi = cb.equal(token.get("domainObjectId"), id);
         Predicate at = cb.equal(token.get("domainObjectType"), applicationType);
         Predicate and = cb.and(pi, at);
@@ -226,7 +226,7 @@ public class TokenRepositoryImpl
      * Creates or updates depending on whether the token is new.
      */
     @Override
-    public void save(WorkflowToken token) {
+    public void save(ProcessToken token) {
         if (token.isNew()) {
             create(token);
         } else {
@@ -246,7 +246,7 @@ public class TokenRepositoryImpl
         return instanceFactory.getClassType(applicationType);
     }
 
-    private void create(WorkflowToken token) {
+    private void create(ProcessToken token) {
         Assert.notNull(token, "token cannot be null");
         Assert.isNull(token.getId(), "This must be a new token");
         Assert.notNull(token.getDomainObject(), "token must have a domainObject");
@@ -272,7 +272,7 @@ public class TokenRepositoryImpl
         entityManager.persist(token);
     }
 
-    private void update(WorkflowToken token) {
+    private void update(ProcessToken token) {
         Assert.notNull(token, "token cannot be null");
         Assert.notNull(token.getId(), "This must not be a new token");
         Assert.notNull(token.getDomainObject(), "token must have a domainObject");

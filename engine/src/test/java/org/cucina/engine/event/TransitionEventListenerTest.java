@@ -6,10 +6,10 @@ import java.util.Map;
 import org.cucina.engine.CheckNotMetException;
 import org.cucina.engine.ProcessEnvironment;
 import org.cucina.engine.SignalFailedException;
-import org.cucina.engine.model.WorkflowToken;
+import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.repository.DomainRepository;
 import org.cucina.engine.repository.TokenRepository;
-import org.cucina.engine.service.WorkflowService;
+import org.cucina.engine.service.ProcessService;
 import org.cucina.engine.testassist.Foo;
 
 import org.junit.Before;
@@ -39,8 +39,8 @@ public class TransitionEventListenerTest {
     private TokenRepository tokenRepository;
     private TransitionEventListener listener;
     @Mock
-    private WorkflowService workflowService;
-    private WorkflowToken token;
+    private ProcessService workflowService;
+    private ProcessToken token;
 
     /**
      * JAVADOC Method Level Comments
@@ -52,7 +52,7 @@ public class TransitionEventListenerTest {
         listener = new TransitionEventListener(workflowEnvironment, tokenRepository,
                 domainRepository);
         domain = new Foo(1L);
-        token = new WorkflowToken();
+        token = new ProcessToken();
         params = new HashMap<String, Object>();
     }
 

@@ -6,7 +6,7 @@ import java.util.Collection;
 import javax.persistence.Tuple;
 
 import org.cucina.core.model.PersistableEntity;
-import org.cucina.engine.model.WorkflowToken;
+import org.cucina.engine.model.ProcessToken;
 import org.springframework.util.Assert;
 
 
@@ -24,11 +24,11 @@ public abstract class WorkflowRepositorySupport {
      *
      * @return JAVADOC.
      */
-    protected Collection<WorkflowToken> populate(Collection<Tuple> input) {
-        Collection<WorkflowToken> result = new ArrayList<WorkflowToken>();
+    protected Collection<ProcessToken> populate(Collection<Tuple> input) {
+        Collection<ProcessToken> result = new ArrayList<ProcessToken>();
 
         for (Tuple tuple : input) {
-            WorkflowToken wt = (WorkflowToken) tuple.get(0);
+            ProcessToken wt = (ProcessToken) tuple.get(0);
             PersistableEntity pe = (PersistableEntity) tuple.get(1);
 
             Assert.notNull(wt, "token should not be null");

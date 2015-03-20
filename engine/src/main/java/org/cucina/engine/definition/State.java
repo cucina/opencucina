@@ -18,7 +18,7 @@ import org.cucina.engine.ExecutionContext;
  * @see Transition
  */
 public interface State
-    extends WorkflowElement, Cloneable {
+    extends ProcessElement, Cloneable {
     final String COLLECTION_EXPRESSION = "collectionExpression";
 
     /**

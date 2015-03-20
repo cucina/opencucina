@@ -20,6 +20,15 @@ public class RemoteListNodeService
     private String url;
 
     /**
+     * Creates a new RemoteListNodeService object.
+     *
+     * @param url JAVADOC.
+     */
+    public RemoteListNodeService(String url) {
+        this.url = url;
+    }
+
+    /**
      * JAVADOC Method Level Comments
      *
      * @param id JAVADOC.

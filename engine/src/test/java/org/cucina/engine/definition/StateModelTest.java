@@ -110,14 +110,14 @@ public class StateModelTest {
 
         Station state = new Station();
 
-        state.setWorkflowDefinition(workflowDefinition);
+        state.setProcessDefinition(workflowDefinition);
 
         Transition transition = new Transition();
 
         state.addTransition(transition);
         transition.setOutput(state);
 
-        assertEquals(workflowDefinition, state.getWorkflowDefinition());
+        assertEquals(workflowDefinition, state.getProcessDefinition());
     }
 
     /**
@@ -128,13 +128,13 @@ public class StateModelTest {
         ProcessDefinition workflowDefinition = new ProcessDefinition();
         Station state = new Station();
 
-        state.setWorkflowDefinition(workflowDefinition);
+        state.setProcessDefinition(workflowDefinition);
 
         Transition transition = new Transition();
 
         state.addTransition(transition);
 
-        assertEquals(workflowDefinition, transition.getWorkflowDefinition());
+        assertEquals(workflowDefinition, transition.getProcessDefinition());
         assertEquals(state, transition.getInput());
     }
 
@@ -151,7 +151,7 @@ public class StateModelTest {
         Decision decision = new Decision();
 
         decision.setId("decision");
-        decision.setWorkflowDefinition(definition);
+        decision.setProcessDefinition(definition);
 
         // create the Coke state
         Station choice1 = new Station();

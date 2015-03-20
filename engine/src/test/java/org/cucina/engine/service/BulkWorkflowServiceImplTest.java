@@ -9,7 +9,7 @@ import java.util.Map;
 import org.springframework.context.ApplicationContext;
 
 import org.cucina.engine.ProcessEnvironment;
-import org.cucina.engine.definition.WorkflowDefinitionHelper;
+import org.cucina.engine.definition.ProcessDefinitionHelper;
 import org.cucina.engine.event.TransitionEvent;
 import org.cucina.engine.repository.TokenRepository;
 
@@ -64,11 +64,11 @@ public class BulkWorkflowServiceImplTest {
      */
     @Test
     public void runNoWorkflows() {
-        WorkflowDefinitionHelper helper = mock(WorkflowDefinitionHelper.class);
+        ProcessDefinitionHelper helper = mock(ProcessDefinitionHelper.class);
 
         when(helper.findPlaceId(WORKFLOW_ID, TRANSITION_ID)).thenReturn(PLACE_ID);
 
-        when(workflowEnvironment.getWorkflowDefinitionHelper()).thenReturn(helper);
+        when(workflowEnvironment.getProcessDefinitionHelper()).thenReturn(helper);
 
         when(tokenRepository.findDomainIdsByWorkflowIdPlaceIdApplicationType(WORKFLOW_ID, PLACE_ID, APP_TYPE)).thenReturn(null);
 
@@ -83,7 +83,7 @@ public class BulkWorkflowServiceImplTest {
     @Test
     public void runTransitions()
         throws Exception {
-        WorkflowDefinitionHelper helper = mock(WorkflowDefinitionHelper.class);
+        ProcessDefinitionHelper helper = mock(ProcessDefinitionHelper.class);
 
         when(helper.findPlaceId(WORKFLOW_ID, TRANSITION_ID)).thenReturn(PLACE_ID);
 
@@ -94,7 +94,7 @@ public class BulkWorkflowServiceImplTest {
 
         when(tokenRepository.findDomainIdsByWorkflowIdPlaceIdApplicationType(WORKFLOW_ID, PLACE_ID, APP_TYPE)).thenReturn(ids);
 
-        when(workflowEnvironment.getWorkflowDefinitionHelper()).thenReturn(helper);
+        when(workflowEnvironment.getProcessDefinitionHelper()).thenReturn(helper);
 
         service.executeTransitions(APP_TYPE, WORKFLOW_ID, TRANSITION_ID, parameters);
 

@@ -33,7 +33,7 @@ import org.springframework.core.OrderComparator;
  * @see #addCondition(Check)
  */
 public class Transition
-    extends AbstractWorkflowElement
+    extends AbstractProcessElement
     implements Cloneable, Serializable {
     private static final long serialVersionUID = 2527222175429217965L;
     private static final Logger LOG = LoggerFactory.getLogger(Transition.class);
@@ -174,7 +174,7 @@ public class Transition
 
         // TODO: validate allowed Place types here
         this.output = output;
-        this.output.setWorkflowDefinition(this.getWorkflowDefinition());
+        this.output.setProcessDefinition(this.getProcessDefinition());
     }
 
     /**
@@ -302,7 +302,7 @@ public class Transition
         executionContext.getProcessDriver().execute(leaveActions, executionContext);
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug(getWorkflowDefinition().getId() + ": output place is " + this.output.getId());
+            LOG.debug(getProcessDefinition().getId() + ": output place is " + this.output.getId());
         }
 
         List<WorkflowListener> workflowListeners = executionContext.getWorkflowListeners();

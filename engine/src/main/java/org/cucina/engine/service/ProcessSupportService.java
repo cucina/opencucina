@@ -17,7 +17,7 @@ import org.cucina.i18n.api.ListNodeDto;
  * @author vlevine
  *
  */
-public interface WorkflowSupportService {
+public interface ProcessSupportService {
     /**
      * For a given entire workflow, return a collection of all transitions that
      * a user (rather than an application) might make. These may or may not have

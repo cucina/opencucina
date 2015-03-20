@@ -19,10 +19,10 @@ import org.cucina.engine.definition.StartStation;
 import org.cucina.engine.definition.State;
 import org.cucina.engine.definition.Station;
 import org.cucina.engine.definition.Transition;
-import org.cucina.engine.definition.WorkflowDefinitionHelper;
+import org.cucina.engine.definition.ProcessDefinitionHelper;
 import org.cucina.engine.definition.config.ProcessDefinitionRegistry;
 import org.cucina.engine.model.HistoryRecord;
-import org.cucina.engine.model.WorkflowToken;
+import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.repository.HistoryRecordRepository;
 import org.cucina.engine.repository.TokenRepository;
 import org.cucina.engine.testassist.Foo;
@@ -78,7 +78,7 @@ public class WorkflowSupportServiceImplTest {
     @Mock
     private ProcessDefinitionRegistry definitionRegistry;
     @Mock
-    private ProcessEnvironment workflowEnvironment;
+    private ProcessEnvironment processEnvironment;
     @Mock
     private SearchBeanFactory searchBeanFactory;
     @Mock
@@ -86,10 +86,10 @@ public class WorkflowSupportServiceImplTest {
     @Mock
     private TokenRepository tokenRepository;
     @Mock
-    private WorkflowDefinitionHelper helper;
+    private ProcessDefinitionHelper helper;
     @Mock
-    private WorkflowService workflowService;
-    private WorkflowSupportServiceImpl service;
+    private ProcessService processService;
+    private ProcessSupportServiceImpl service;
 
     /**
      * JAVADOC Method Level Comments
@@ -101,9 +101,9 @@ public class WorkflowSupportServiceImplTest {
     public void setUp()
         throws Exception {
         MockitoAnnotations.initMocks(this);
-        service = new WorkflowSupportServiceImpl();
+        service = new ProcessSupportServiceImpl();
         service.setHistoryRecordRepository(historyRecordRepository);
-        service.setWorkflowEnvironment(workflowEnvironment);
+        service.setProcessEnvironment(processEnvironment);
         service.setTokenRepository(tokenRepository);
         service.setDefinitionService(definitionService);
         service.setSearchBeanFactory(searchBeanFactory);
@@ -121,7 +121,7 @@ public class WorkflowSupportServiceImplTest {
 
         Map<String, Object> params = new HashMap<String, Object>();
 
-        params.put(WorkflowToken.DOMAIN_OBJ_ID_NAME, ids);
+        params.put(ProcessToken.DOMAIN_OBJ_ID_NAME, ids);
 
         SearchBean searchBean = new SearchBean();
 
@@ -213,12 +213,12 @@ public class WorkflowSupportServiceImplTest {
     public void startWorkflow() {
         Foo foo = new Foo();
         Map<String, Object> params = new HashMap<String, Object>();
-        WorkflowToken token = new WorkflowToken();
+        ProcessToken token = new ProcessToken();
 
         token.setDomainObject(foo);
 
-        when(workflowService.startWorkflow(foo, "Foo", null, params)).thenReturn(token);
-        when(workflowEnvironment.getService()).thenReturn(workflowService);
+        when(processService.startProcess(foo, "Foo", null, params)).thenReturn(token);
+        when(processEnvironment.getService()).thenReturn(processService);
 
         assertEquals("Should have returned token", token, service.startWorkflow(foo, params));
 
@@ -233,8 +233,8 @@ public class WorkflowSupportServiceImplTest {
         Foo foo = new Foo();
         Map<String, Object> params = new HashMap<String, Object>();
 
-        when(workflowService.startWorkflow(foo, "Foo", null, params)).thenReturn(null);
-        when(workflowEnvironment.getService()).thenReturn(workflowService);
+        when(processService.startProcess(foo, "Foo", null, params)).thenReturn(null);
+        when(processEnvironment.getService()).thenReturn(processService);
 
         assertNull("Should have returned null value", service.startWorkflow(foo, params));
     }
@@ -244,7 +244,7 @@ public class WorkflowSupportServiceImplTest {
      */
     @Test
     public void testEndedDelete() {
-        final WorkflowToken token = new WorkflowToken();
+        final ProcessToken token = new ProcessToken();
 
         token.setDomainObjectId(100L);
 
@@ -257,17 +257,17 @@ public class WorkflowSupportServiceImplTest {
         parameters.put("approvedBy", null);
         parameters.put("assignedTo", null);
         parameters.put("extraParams", null);
-        when(workflowService.executeTransition(token, "transitionId", parameters)).thenReturn(token);
-        when(workflowEnvironment.getWorkflowDefinitionHelper()).thenReturn(helper);
-        when(workflowEnvironment.getService()).thenReturn(workflowService);
+        when(processService.executeTransition(token, "transitionId", parameters)).thenReturn(token);
+        when(processEnvironment.getProcessDefinitionHelper()).thenReturn(helper);
+        when(processEnvironment.getService()).thenReturn(processService);
 
         Map<Long, Integer> map = new HashMap<Long, Integer>();
 
         map.put(100L, 0);
 
-        List<WorkflowToken> result = new ArrayList<WorkflowToken>();
+        List<ProcessToken> result = new ArrayList<ProcessToken>();
 
-        token.setWorkflowDefinitionId("workflowDefinitionId");
+        token.setProcessDefinitionId("workflowDefinitionId");
         result.add(token);
         when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Long[].class)))
             .thenReturn(result);
@@ -333,7 +333,7 @@ public class WorkflowSupportServiceImplTest {
             };
 
         when(definitionRegistry.findWorkflowDefinition(definitionId)).thenReturn(definition);
-        when(workflowEnvironment.getDefinitionRegistry()).thenReturn(definitionRegistry);
+        when(processEnvironment.getDefinitionRegistry()).thenReturn(definitionRegistry);
 
         Privilege priv = new Privilege();
 
@@ -351,7 +351,7 @@ public class WorkflowSupportServiceImplTest {
      */
     @Test
     public void testListActionableTransitionsNoWorkflow() {
-        when(workflowEnvironment.getDefinitionRegistry()).thenReturn(definitionRegistry);
+        when(processEnvironment.getDefinitionRegistry()).thenReturn(definitionRegistry);
 
         when(definitionRegistry.findWorkflowDefinition("xxx")).thenReturn(null);
 
@@ -370,26 +370,26 @@ public class WorkflowSupportServiceImplTest {
 
         transitions1.add("hello");
 
-        WorkflowToken token1 = new WorkflowToken();
+        ProcessToken token1 = new ProcessToken();
 
         token1.setDomainObjectId(12L);
 
-        when(workflowService.listTransitions(token1, null)).thenReturn(transitions1);
+        when(processService.listTransitions(token1, null)).thenReturn(transitions1);
 
         Collection<String> transitions2 = new ArrayList<String>();
 
         transitions2.add("tom");
         transitions2.add("matt");
 
-        WorkflowToken token2 = new WorkflowToken();
+        ProcessToken token2 = new ProcessToken();
 
         token2.setDomainObjectId(13L);
 
-        when(workflowService.listTransitions(token2, null)).thenReturn(transitions2);
+        when(processService.listTransitions(token2, null)).thenReturn(transitions2);
 
-        when(workflowEnvironment.getService()).thenReturn(workflowService);
+        when(processEnvironment.getService()).thenReturn(processService);
 
-        List<WorkflowToken> tokens = new ArrayList<WorkflowToken>();
+        List<ProcessToken> tokens = new ArrayList<ProcessToken>();
 
         tokens.add(token1);
         tokens.add(token2);
@@ -422,15 +422,15 @@ public class WorkflowSupportServiceImplTest {
 
         transes.add("hello");
 
-        WorkflowToken token = new WorkflowToken();
+        ProcessToken token = new ProcessToken();
 
         token.setPlaceId("haha");
-        when(workflowService.listTransitions(token, null)).thenReturn(transes);
-        when(workflowEnvironment.getService()).thenReturn(workflowService);
+        when(processService.listTransitions(token, null)).thenReturn(transes);
+        when(processEnvironment.getService()).thenReturn(processService);
 
-        List<WorkflowToken> result = new ArrayList<WorkflowToken>();
+        List<ProcessToken> result = new ArrayList<ProcessToken>();
 
-        token.setWorkflowDefinitionId("workflowDefinitionId");
+        token.setProcessDefinitionId("workflowDefinitionId");
         result.add(token);
         when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Long[].class)))
             .thenReturn(result);
@@ -447,7 +447,7 @@ public class WorkflowSupportServiceImplTest {
 
         foo.setId(100L);
 
-        final WorkflowToken token = new WorkflowToken();
+        final ProcessToken token = new ProcessToken();
 
         token.setDomainObject(foo);
         token.setVersion(0);
@@ -462,13 +462,13 @@ public class WorkflowSupportServiceImplTest {
         parameters.put("approvedBy", null);
         parameters.put("assignedTo", null);
         parameters.put("extraParams", null);
-        when(workflowService.executeTransition(token, "transitionId", parameters)).thenReturn(token);
+        when(processService.executeTransition(token, "transitionId", parameters)).thenReturn(token);
 
-        when(workflowEnvironment.getWorkflowDefinitionHelper()).thenReturn(helper);
-        when(workflowEnvironment.getService()).thenReturn(workflowService);
+        when(processEnvironment.getProcessDefinitionHelper()).thenReturn(helper);
+        when(processEnvironment.getService()).thenReturn(processService);
 
         tokenRepository.save(token);
-        token.setWorkflowDefinitionId("workflowDefinitionId");
+        token.setProcessDefinitionId("workflowDefinitionId");
         when(tokenRepository.findByApplicationTypeAndIds("Foo", 100L))
             .thenReturn(Collections.singleton(token));
         service.makeTransition(100L, "Foo", "transitionId", "comment", null, null, null, null);
@@ -535,7 +535,7 @@ public class WorkflowSupportServiceImplTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testSunnyDay() {
-        final WorkflowToken token = new WorkflowToken();
+        final ProcessToken token = new ProcessToken();
 
         token.setDomainObjectId(100L);
         token.setVersion(0);
@@ -549,7 +549,7 @@ public class WorkflowSupportServiceImplTest {
 
         final String comments = "comment";
 
-        when(workflowService.executeTransition(eq(token), eq("transitionId"),
+        when(processService.executeTransition(eq(token), eq("transitionId"),
                 argThat(new ArgumentMatcher<Map<String, Object>>() {
                 public boolean matches(Object params) {
                     Map<String, Object> mParams = ((Map<String, Object>) params);
@@ -562,16 +562,16 @@ public class WorkflowSupportServiceImplTest {
                             (attachmentParam.getFilename() == attachment.getFilename());
                 }
             }))).thenReturn(token);
-        when(workflowEnvironment.getWorkflowDefinitionHelper()).thenReturn(helper);
-        when(workflowEnvironment.getService()).thenReturn(workflowService);
+        when(processEnvironment.getProcessDefinitionHelper()).thenReturn(helper);
+        when(processEnvironment.getService()).thenReturn(processService);
 
         Map<Long, Integer> map = new HashMap<Long, Integer>();
 
         map.put(100L, 0);
 
-        List<WorkflowToken> result = new ArrayList<WorkflowToken>();
+        List<ProcessToken> result = new ArrayList<ProcessToken>();
 
-        token.setWorkflowDefinitionId("workflowDefinitionId");
+        token.setProcessDefinitionId("workflowDefinitionId");
         result.add(token);
 
         when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Long[].class)))

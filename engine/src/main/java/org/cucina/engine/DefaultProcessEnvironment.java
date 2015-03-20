@@ -7,14 +7,14 @@ import java.util.List;
 import org.cucina.core.spring.ELExpressionExecutor;
 import org.cucina.core.spring.ExpressionExecutor;
 import org.cucina.core.spring.ProtocolResolver;
-import org.cucina.engine.definition.WorkflowDefinitionHelper;
-import org.cucina.engine.definition.WorkflowDefinitionHelperImpl;
+import org.cucina.engine.definition.ProcessDefinitionHelper;
+import org.cucina.engine.definition.ProcessDefinitionHelperImpl;
 import org.cucina.engine.definition.config.MapBasedProcessDefinitionRegistry;
 import org.cucina.engine.definition.config.ProcessDefinitionParser;
 import org.cucina.engine.definition.config.ProcessDefinitionRegistry;
 import org.cucina.engine.definition.config.xml.DigesterModuleProcessDefinitionParser;
-import org.cucina.engine.service.DefaultWorkflowService;
-import org.cucina.engine.service.WorkflowService;
+import org.cucina.engine.service.DefaultProcessService;
+import org.cucina.engine.service.ProcessService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -77,10 +77,10 @@ public class DefaultProcessEnvironment
     private ProcessDriverFactory executorFactory;
     private List<WorkflowListener> workflowListeners;
     private TokenFactory tokenFactory;
-    private WorkflowDefinitionHelper workflowDefinitionHelper;
+    private ProcessDefinitionHelper workflowDefinitionHelper;
     private ProcessDefinitionParser definitionParser;
     private ProcessDefinitionRegistry definitionRegistry;
-    private WorkflowService workflowService;
+    private ProcessService workflowService;
     private ProcessSessionFactory workflowSessionFactory;
     private boolean running;
 
@@ -205,7 +205,7 @@ public class DefaultProcessEnvironment
      * @return JAVADOC.
      */
     @Override
-    public WorkflowService getService() {
+    public ProcessService getService() {
         return workflowService;
     }
 
@@ -236,7 +236,7 @@ public class DefaultProcessEnvironment
      * @return workflowDefinitionHelper
      */
     @Override
-    public WorkflowDefinitionHelper getWorkflowDefinitionHelper() {
+    public ProcessDefinitionHelper getProcessDefinitionHelper() {
         return workflowDefinitionHelper;
     }
 
@@ -361,8 +361,8 @@ public class DefaultProcessEnvironment
     }
 
     private void initDefinitionHelper() {
-        WorkflowDefinitionHelper proto = findInjectedBean(DEFINITION_HELPER,
-                WorkflowDefinitionHelper.class);
+        ProcessDefinitionHelper proto = findInjectedBean(DEFINITION_HELPER,
+                ProcessDefinitionHelper.class);
 
         if (proto != null) {
             LOG.debug("Using plugged " + DEFINITION_HELPER);
@@ -372,7 +372,7 @@ public class DefaultProcessEnvironment
             return;
         }
 
-        workflowDefinitionHelper = new WorkflowDefinitionHelperImpl(definitionRegistry);
+        workflowDefinitionHelper = new ProcessDefinitionHelperImpl(definitionRegistry);
     }
 
     private void initDefinitionParser() {
@@ -429,7 +429,7 @@ public class DefaultProcessEnvironment
     }
 
     private void initService() {
-        WorkflowService proto = findInjectedBean(SERVICE, WorkflowService.class);
+        ProcessService proto = findInjectedBean(SERVICE, ProcessService.class);
 
         if (proto != null) {
             LOG.debug("Using plugged " + SERVICE);
@@ -439,7 +439,7 @@ public class DefaultProcessEnvironment
             return;
         }
 
-        workflowService = new DefaultWorkflowService(workflowSessionFactory);
+        workflowService = new DefaultProcessService(workflowSessionFactory);
     }
 
     private void initSessionFactory() {

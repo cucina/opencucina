@@ -12,12 +12,13 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.cucina.engine.model.WorkflowToken;
+import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.repository.jpa.WorkflowRepositorySupport;
 import org.cucina.engine.server.model.EntityDescriptor;
 import org.cucina.engine.server.repository.EntityDescriptorRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 
 /**
@@ -26,6 +27,7 @@ import org.slf4j.LoggerFactory;
  * @author $Author: $
  * @version $Revision: $
   */
+@Repository
 public class EntityDescriptorRepositoryImpl
     extends WorkflowRepositorySupport
     implements EntityDescriptorRepository {
@@ -52,7 +54,7 @@ public class EntityDescriptorRepositoryImpl
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 
         CriteriaQuery<Object[]> cq = cb.createQuery(Object[].class);
-        Root<WorkflowToken> token = cq.from(WorkflowToken.class);
+        Root<ProcessToken> token = cq.from(ProcessToken.class);
         Path<String> wfid = token.get("workflowDefinitionId");
 
         cq.multiselect(wfid, cb.count(wfid));
@@ -69,10 +71,10 @@ public class EntityDescriptorRepositoryImpl
      * @return JAVADOC.
      */
     @Override
-    public Collection<WorkflowToken> workflowSummary(String wfid) {
+    public Collection<ProcessToken> workflowSummary(String wfid) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tuple> tcq = cb.createTupleQuery();
-        Root<WorkflowToken> rt = tcq.from(WorkflowToken.class);
+        Root<ProcessToken> rt = tcq.from(ProcessToken.class);
         Predicate tokp = cb.equal(rt.get("workflowDefinitionId"), wfid);
         Path<Object> pid = rt.get("domainObjectId");
 

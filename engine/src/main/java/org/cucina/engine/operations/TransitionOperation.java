@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import org.cucina.engine.ExecutionContext;
 import org.cucina.engine.ProcessEnvironment;
-import org.cucina.engine.model.WorkflowToken;
+import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.repository.TokenRepository;
 import org.springframework.data.domain.Persistable;
 import org.springframework.util.Assert;
@@ -98,7 +98,7 @@ public class TransitionOperation
         Assert.notNull(transitionId,
             "transitionIdExpression has not evaluated to a valid transitionId");
 
-        WorkflowToken token = tokenRepository.findByDomain(domain);
+        ProcessToken token = tokenRepository.findByDomain(domain);
 
         Assert.isTrue(domain == token.getDomainObject(),
             "Loaded token should have same instance of domain as returned in expression 'domainExpression'.");

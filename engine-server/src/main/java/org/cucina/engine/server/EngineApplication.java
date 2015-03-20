@@ -5,6 +5,7 @@ import javax.jms.JMSException;
 import javax.jms.Session;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -16,10 +17,15 @@ import org.springframework.core.env.Environment;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.support.destination.DestinationResolver;
 import org.springframework.jms.support.destination.DynamicDestinationResolver;
+
 import org.cucina.core.InstanceFactory;
 import org.cucina.core.service.ContextService;
 import org.cucina.core.service.ThreadLocalContextService;
+
+import org.cucina.i18n.api.ListNodeService;
+import org.cucina.i18n.api.remote.RemoteListNodeService;
 import org.cucina.i18n.converter.MessageConverter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +42,18 @@ public class EngineApplication {
     private static final Logger LOG = LoggerFactory.getLogger(EngineApplication.class);
     @Autowired
     private Environment environment;
+    @Value(value = "cucina.listnodeurl")
+    private String listNodeUrl;
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @return JAVADOC.
+     */
+    @Bean
+    public ListNodeService listNodeService() {
+        return new RemoteListNodeService(listNodeUrl);
+    }
 
     /**
      * JAVADOC Method Level Comments
@@ -93,9 +111,14 @@ public class EngineApplication {
                 }
             };
     }
-    
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @return JAVADOC.
+     */
     @Bean
-    public ContextService tempContextService(){
-    	return new ThreadLocalContextService();
+    public ContextService contextService() {
+        return new ThreadLocalContextService();
     }
 }

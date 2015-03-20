@@ -14,7 +14,7 @@ import javax.persistence.criteria.Root;
 
 import org.cucina.core.InstanceFactory;
 
-import org.cucina.engine.model.WorkflowToken;
+import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.testassist.Foo;
 import static org.junit.Assert.assertEquals;
 
@@ -69,7 +69,7 @@ public class TokenRepositoryImplTest {
      */
     @Test
     public void testCreate() {
-        WorkflowToken wf = new WorkflowToken();
+        ProcessToken wf = new ProcessToken();
         Foo foo = new Foo();
 
         wf.setDomainObject(foo);
@@ -94,7 +94,7 @@ public class TokenRepositoryImplTest {
      */
     @Test
     public void testCreateExist() {
-        WorkflowToken wf = new WorkflowToken();
+        ProcessToken wf = new ProcessToken();
         Foo foo = new Foo(111L);
 
         wf.setDomainObject(foo);
@@ -115,9 +115,9 @@ public class TokenRepositoryImplTest {
 
         when(cb.createQuery(Long.class)).thenReturn(cq);
 
-        Root<WorkflowToken> token = mock(Root.class);
+        Root<ProcessToken> token = mock(Root.class);
 
-        when(cq.from(WorkflowToken.class)).thenReturn(token);
+        when(cq.from(ProcessToken.class)).thenReturn(token);
 
         Path<Object> pathdi = mock(Path.class);
 
@@ -166,13 +166,13 @@ public class TokenRepositoryImplTest {
     public void testLoadToken() {
         Foo foo = new Foo(1L);
 
-        CriteriaQuery<WorkflowToken> cq = mock(CriteriaQuery.class);
+        CriteriaQuery<ProcessToken> cq = mock(CriteriaQuery.class);
 
-        when(cb.createQuery(WorkflowToken.class)).thenReturn(cq);
+        when(cb.createQuery(ProcessToken.class)).thenReturn(cq);
 
-        Root<WorkflowToken> token = mock(Root.class);
+        Root<ProcessToken> token = mock(Root.class);
 
-        when(cq.from(WorkflowToken.class)).thenReturn(token);
+        when(cq.from(ProcessToken.class)).thenReturn(token);
 
         Path<Object> pathdo = mock(Path.class);
 
@@ -194,11 +194,11 @@ public class TokenRepositoryImplTest {
 
         when(cb.and(predo, predi)).thenReturn(preand);
 
-        TypedQuery<WorkflowToken> tq = mock(TypedQuery.class);
+        TypedQuery<ProcessToken> tq = mock(TypedQuery.class);
 
         when(em.createQuery(cq)).thenReturn(tq);
 
-        WorkflowToken tok = new WorkflowToken();
+        ProcessToken tok = new ProcessToken();
 
         when(tq.getSingleResult()).thenReturn(tok);
 
@@ -219,9 +219,9 @@ public class TokenRepositoryImplTest {
 
         when(cb.createTupleQuery()).thenReturn(tcq);
 
-        Root<WorkflowToken> rt = mock(Root.class);
+        Root<ProcessToken> rt = mock(Root.class);
 
-        when(tcq.from(WorkflowToken.class)).thenReturn(rt);
+        when(tcq.from(ProcessToken.class)).thenReturn(rt);
 
         Path<Object> pathdo = mock(Path.class);
 
@@ -269,7 +269,7 @@ public class TokenRepositoryImplTest {
 
         List<Tuple> list = new ArrayList<Tuple>();
         Tuple tuple = mock(Tuple.class);
-        WorkflowToken token = new WorkflowToken();
+        ProcessToken token = new ProcessToken();
 
         when(tuple.get(0)).thenReturn(token);
 
@@ -287,7 +287,7 @@ public class TokenRepositoryImplTest {
      */
     @Test
     public void testUpdate() {
-        WorkflowToken wf = new WorkflowToken();
+        ProcessToken wf = new ProcessToken();
 
         wf.setId(222L);
 

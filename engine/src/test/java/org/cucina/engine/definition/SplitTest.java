@@ -73,13 +73,13 @@ public class SplitTest {
 
         ProcessDefinition definition = mock(ProcessDefinition.class);
 
-        split.setWorkflowDefinition(definition);
+        split.setProcessDefinition(definition);
 
         Transition t1 = mock(Transition.class);
 
         when(t1.isDefault()).thenReturn(false);
         when(t1.getId()).thenReturn("t1");
-        t1.setWorkflowDefinition(definition);
+        t1.setProcessDefinition(definition);
         t1.setInput(split);
         when(t1.getInput()).thenReturn(split);
         t1.checkConditions((ExecutionContext) anyObject());
@@ -90,7 +90,7 @@ public class SplitTest {
 
         when(t2.isDefault()).thenReturn(false);
         when(t2.getId()).thenReturn("t2");
-        t2.setWorkflowDefinition(definition);
+        t2.setProcessDefinition(definition);
         t2.setInput(split);
         when(t2.getInput()).thenReturn(split);
         t2.checkConditions((ExecutionContext) anyObject());

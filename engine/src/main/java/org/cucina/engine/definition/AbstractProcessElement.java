@@ -9,8 +9,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @author $Author: $
  * @version $Revision: $
   */
-public abstract class AbstractWorkflowElement
-    implements WorkflowElement {
+public abstract class AbstractProcessElement
+    implements ProcessElement {
     /**
     * Stores the description for this <code>NetworkElement</code>.
     */
@@ -24,7 +24,7 @@ public abstract class AbstractWorkflowElement
     /**
      * Stores the {@link ProcessDefinition} for this <code>NetworkElement</code>.
      */
-    private ProcessDefinition workflowDefinition;
+    private ProcessDefinition processDefinition;
 
     /**
      * Sets the description for this <code>NetworkElement</code>.
@@ -36,6 +36,7 @@ public abstract class AbstractWorkflowElement
     /**
      * Gets the description for this <code>NetworkElement</code>.
      */
+    @Override
     public String getDescription() {
         return description;
     }
@@ -50,6 +51,7 @@ public abstract class AbstractWorkflowElement
     /**
      * Gets the ID for this <code>NetworkElement</code>.
      */
+    @Override
     public String getId() {
         return id;
     }
@@ -57,15 +59,17 @@ public abstract class AbstractWorkflowElement
     /**
      * Sets the {@link ProcessDefinition} that contains this <code>NetworkElement</code>.
      */
-    public void setWorkflowDefinition(ProcessDefinition workflowDefinition) {
-        this.workflowDefinition = workflowDefinition;
+    @Override
+    public void setProcessDefinition(ProcessDefinition processDefinition) {
+        this.processDefinition = processDefinition;
     }
 
     /**
      * Gets the {@link ProcessDefinition} that contains this <code>NetworkElement</code>.
      */
-    public ProcessDefinition getWorkflowDefinition() {
-        return workflowDefinition;
+    @Override
+    public ProcessDefinition getProcessDefinition() {
+        return processDefinition;
     }
 
     /**

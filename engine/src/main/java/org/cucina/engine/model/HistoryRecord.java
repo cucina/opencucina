@@ -47,7 +47,7 @@ public class HistoryRecord
     private String comments;
     private String modifiedBy;
     private String status;
-    private WorkflowToken token;
+    private ProcessToken token;
 
     /**
     * JAVADOC Method Level Comments
@@ -215,7 +215,7 @@ public class HistoryRecord
      *
      * @param token JAVADOC.
      */
-    public void setToken(WorkflowToken token) {
+    public void setToken(ProcessToken token) {
         this.token = token;
     }
 
@@ -229,7 +229,7 @@ public class HistoryRecord
     @ProjectionColumns({@ProjectionColumn(columnName = "domainObjectId", property = "domainObjectId")
         , @ProjectionColumn(columnName = "domainObjectType", property = "domainObjectType")
     })
-    public WorkflowToken getToken() {
+    public ProcessToken getToken() {
         return token;
     }
 

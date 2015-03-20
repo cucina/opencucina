@@ -2,10 +2,11 @@ package org.cucina.engine.definition;
 
 import java.util.Collection;
 
+import org.springframework.util.Assert;
+
 import org.cucina.engine.CheckNotMetException;
 import org.cucina.engine.DefaultExecutionContext;
 import org.cucina.engine.ExecutionContext;
-import org.springframework.util.Assert;
 
 
 /**
@@ -98,7 +99,7 @@ public class Split
      */
     private void split(ExecutionContext executionContext, Transition newTransition, Token parent) {
         Token child = executionContext.getTokenFactory()
-                                      .createToken(getWorkflowDefinition(), parent.getDomainObject());
+                                      .createToken(getProcessDefinition(), parent.getDomainObject());
 
         child.setPlaceId(this.getId());
 

@@ -8,7 +8,7 @@ import org.cucina.core.spring.SingletonBeanFactory;
 import org.cucina.engine.definition.ProcessDefinition;
 import org.cucina.engine.definition.StartStation;
 import org.cucina.engine.definition.Token;
-import org.cucina.engine.model.WorkflowToken;
+import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.repository.TokenRepository;
 import org.cucina.engine.testassist.Foo;
 import static org.junit.Assert.assertNotNull;
@@ -74,7 +74,7 @@ public class TokenFactoryImplTest {
     public void testCreateToken() {
         InstanceFactory instanceFactory = mock(InstanceFactory.class);
 
-        when(instanceFactory.getBean("WorkflowToken")).thenReturn(new WorkflowToken());
+        when(instanceFactory.getBean(ProcessToken.class.getSimpleName())).thenReturn(new ProcessToken());
 
         Foo foo = new Foo(123L);
 
@@ -94,11 +94,11 @@ public class TokenFactoryImplTest {
 
         domainObject.setId(123L);
 
-        factory.setTokenClass(WorkflowToken.class);
+        factory.setTokenClass(ProcessToken.class);
 
         Token token = factory.createToken(definition, domainObject);
 
-        assertTrue("Should be WorkflowToken instance", token instanceof WorkflowToken);
+        assertTrue("Should be WorkflowToken instance", token instanceof ProcessToken);
 
         assertNotNull("Token is null", token);
     }
@@ -110,7 +110,7 @@ public class TokenFactoryImplTest {
     public void testFoundToken() {
         InstanceFactory instanceFactory = mock(InstanceFactory.class);
 
-        WorkflowToken wtoken = new WorkflowToken();
+        ProcessToken wtoken = new ProcessToken();
 
         Foo foo = new Foo(123L);
 
@@ -118,7 +118,7 @@ public class TokenFactoryImplTest {
 
         TokenFactoryImpl factory = new TokenFactoryImpl(instanceFactory, tokenRepository);
 
-        factory.setTokenClass(WorkflowToken.class);
+        factory.setTokenClass(ProcessToken.class);
 
         ProcessDefinition definition = new ProcessDefinition();
 
@@ -136,6 +136,6 @@ public class TokenFactoryImplTest {
         Token token = factory.createToken(definition, domainObject);
 
         assertNotNull("Token is null", token);
-        assertTrue("Should be WorkflowToken instance", token instanceof WorkflowToken);
+        assertTrue("Should be WorkflowToken instance", token instanceof ProcessToken);
     }
 }

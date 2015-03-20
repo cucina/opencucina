@@ -31,6 +31,11 @@
 		</dependency>
 		<dependency>
 			<groupId>cucina</groupId>
+			<artifactId>cucina-i18n</artifactId>
+			<version>0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>cucina</groupId>
 			<artifactId>cucina-engine-server-api</artifactId>
 			<version>0.1</version>
 		</dependency>

@@ -75,18 +75,18 @@ public interface Token {
     String getPlaceId();
 
     /**
-     * Sets this token's workflow definition id
+     * Sets this token's process definition id
      *
-     * @param workflowDefinitionId JAVADOC.
+     * @param processDefinitionId JAVADOC.
      */
-    void setWorkflowDefinitionId(String workflowDefinitionId);
+    void setProcessDefinitionId(String processDefinitionId);
 
     /**
-     * Gets this token's workflow definition id
+     * Gets this token's process definition id
      *
      * @return JAVADOC.
      */
-    String getWorkflowDefinitionId();
+    String getProcessDefinitionId();
 
     /**
      * Adds a child token

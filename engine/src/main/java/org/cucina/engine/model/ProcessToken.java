@@ -38,18 +38,18 @@ import org.cucina.engine.definition.Token;
 @Entity
 @Cacheable
 @Table(name = "Token")
-public class WorkflowToken
+public class ProcessToken
     extends PersistableEntity
     implements Token, Versioned {
     private static final long serialVersionUID = -5610021631597142222L;
     private List<HistoryRecord> histories;
     private Long domainObjectId;
     private Persistable<Long> domainObject;
-    private Set<WorkflowToken> children;
+    private Set<ProcessToken> children;
     private String domainObjectType;
     private String placeId;
     private String workflowDefinitionId;
-    private WorkflowToken parent;
+    private ProcessToken parent;
     private int version;
 
     /**
@@ -58,7 +58,7 @@ public class WorkflowToken
      * @param children
      *            JAVADOC.
      */
-    public void setChildren(Set<WorkflowToken> children) {
+    public void setChildren(Set<ProcessToken> children) {
         this.children = children;
     }
 
@@ -68,7 +68,7 @@ public class WorkflowToken
      * @return JAVADOC.
      */
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
-    public Set<WorkflowToken> getChildren() {
+    public Set<ProcessToken> getChildren() {
         return children;
     }
 
@@ -173,7 +173,7 @@ public class WorkflowToken
      * @param parent
      *            JAVADOC.
      */
-    public void setParent(WorkflowToken parent) {
+    public void setParent(ProcessToken parent) {
         this.parent = parent;
     }
 
@@ -183,7 +183,7 @@ public class WorkflowToken
      * @return JAVADOC.
      */
     @ManyToOne
-    public WorkflowToken getParent() {
+    public ProcessToken getParent() {
         return parent;
     }
 
@@ -195,8 +195,8 @@ public class WorkflowToken
      */
     @Override
     public void setParentToken(Token token) {
-        Assert.isInstanceOf(WorkflowToken.class, token, "token must be instance of WorkflowToken");
-        this.setParent((WorkflowToken) token);
+        Assert.isInstanceOf(ProcessToken.class, token, "token must be instance of WorkflowToken");
+        this.setParent((ProcessToken) token);
     }
 
     /**
@@ -254,7 +254,7 @@ public class WorkflowToken
      * @param workflowDefinitionId
      *            JAVADOC.
      */
-    public void setWorkflowDefinitionId(String workflowDefinitionId) {
+    public void setProcessDefinitionId(String workflowDefinitionId) {
         this.workflowDefinitionId = workflowDefinitionId;
     }
 
@@ -265,7 +265,7 @@ public class WorkflowToken
      */
     @Basic
     @Column(name = "workflow_definition_id")
-    public String getWorkflowDefinitionId() {
+    public String getProcessDefinitionId() {
         return workflowDefinitionId;
     }
 
@@ -276,12 +276,12 @@ public class WorkflowToken
      *            JAVADOC.
      */
     public void addChild(Token token) {
-        Assert.isTrue(token instanceof WorkflowToken, "cannot handle not WorkflowToken instances");
+        Assert.isTrue(token instanceof ProcessToken, "cannot handle not WorkflowToken instances");
 
-        WorkflowToken wflToken = (WorkflowToken) token;
+        ProcessToken wflToken = (ProcessToken) token;
 
         if (getChildren() == null) {
-            setChildren(new HashSet<WorkflowToken>());
+            setChildren(new HashSet<ProcessToken>());
         }
 
         getChildren().add(wflToken);
@@ -332,7 +332,7 @@ public class WorkflowToken
         return new ToStringBuilder(this).append(PersistableEntity.ID_PROPERTY, getId())
                                         .append("placeId", getPlaceId())
                                         .append("domainObject", getDomainObject())
-                                        .append("workflowDefinitionId", getWorkflowDefinitionId())
+                                        .append("workflowDefinitionId", getProcessDefinitionId())
                                         .toString();
     }
 }

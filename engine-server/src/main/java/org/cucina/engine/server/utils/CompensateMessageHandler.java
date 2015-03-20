@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import org.cucina.engine.model.HistoryRecord;
-import org.cucina.engine.model.WorkflowToken;
+import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.repository.TokenRepository;
 import org.cucina.engine.server.event.CompensateEvent;
 
@@ -63,11 +63,11 @@ public class CompensateMessageHandler
 
         Long[] ids = event.getIds();
 
-        Collection<WorkflowToken> tokens = tokenRepository.findByApplicationTypeAndIds(event.getType(),
+        Collection<ProcessToken> tokens = tokenRepository.findByApplicationTypeAndIds(event.getType(),
                 ids);
 
         if (CollectionUtils.isNotEmpty(tokens)) {
-            for (WorkflowToken token : tokens) {
+            for (ProcessToken token : tokens) {
                 List<HistoryRecord> records = token.getHistories();
 
                 if (CollectionUtils.isEmpty(records)) {

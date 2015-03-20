@@ -51,7 +51,7 @@ public class JoinTest {
 
         when(transition.isDefault()).thenReturn(true);
         when(transition.getId()).thenReturn("tr1");
-        transition.setWorkflowDefinition(null);
+        transition.setProcessDefinition(null);
         transition.setInput(join);
         when(transition.getInput()).thenReturn(join);
 

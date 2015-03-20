@@ -4,12 +4,12 @@ package org.cucina.engine.definition;
 
 /**
  * The internal state of a {@link ProcessDefinition} is made up of individual
- * {@link WorkflowElement} that describe the states and transitions that
+ * {@link ProcessElement} that describe the states and transitions that
  * constitute the workflow.
  *
  * @author Rob Harrop
  */
-public interface WorkflowElement {
+public interface ProcessElement {
     /**
      * Gets the description for this <code>NetworkElement</code>.
      */
@@ -24,11 +24,11 @@ public interface WorkflowElement {
      * Sets the {@link ProcessDefinition} that this <code>NetworkElement</code>
      * is part of.
      */
-    void setWorkflowDefinition(ProcessDefinition worklowDefinition);
+    void setProcessDefinition(ProcessDefinition worklowDefinition);
 
     /**
      * Gets the {@link ProcessDefinition} that this <code>NetworkElement</code>
      * is part of.
      */
-    ProcessDefinition getWorkflowDefinition();
+    ProcessDefinition getProcessDefinition();
 }

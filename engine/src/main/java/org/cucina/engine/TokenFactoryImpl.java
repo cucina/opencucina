@@ -5,7 +5,7 @@ import org.cucina.core.model.PersistableEntity;
 import org.cucina.core.spring.SingletonBeanFactory;
 import org.cucina.engine.definition.ProcessDefinition;
 import org.cucina.engine.definition.Token;
-import org.cucina.engine.model.WorkflowToken;
+import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.repository.TokenRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +60,7 @@ public class TokenFactoryImpl
 
     /**
      * Optional class of the token. By default, if not set or null, it is @see
-     * {@link WorkflowToken}
+     * {@link ProcessToken}
      *
      * @param tokenClass
      *            Class of the token to generate.
@@ -98,7 +98,7 @@ public class TokenFactoryImpl
         }
 
         if (tokenClass == null) {
-            tokenClass = WorkflowToken.class;
+            tokenClass = ProcessToken.class;
         }
     }
 
@@ -134,7 +134,7 @@ public class TokenFactoryImpl
         Token token = instanceFactory.getBean(tokenClass.getSimpleName());
 
         token.setDomainObject(entity);
-        token.setWorkflowDefinitionId(definition.getId());
+        token.setProcessDefinitionId(definition.getId());
         token.setPlaceId(definition.getStartState().getId());
 
         return token;

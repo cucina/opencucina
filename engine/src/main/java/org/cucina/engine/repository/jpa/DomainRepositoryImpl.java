@@ -11,6 +11,7 @@ import org.cucina.engine.repository.DomainRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Persistable;
+import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 
@@ -20,6 +21,7 @@ import org.springframework.util.Assert;
  * @author $Author: $
  * @version $Revision: $
   */
+@Repository
 public class DomainRepositoryImpl
     implements DomainRepository {
     private static final Logger LOG = LoggerFactory.getLogger(DomainRepositoryImpl.class);

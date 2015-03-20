@@ -118,12 +118,12 @@ public class PropertyCreationFactoryTest {
         }
 
         @Override
-        public void setWorkflowDefinition(ProcessDefinition worklowDefinition) {
+        public void setProcessDefinition(ProcessDefinition worklowDefinition) {
             // TODO Auto-generated method stub
         }
 
         @Override
-        public ProcessDefinition getWorkflowDefinition() {
+        public ProcessDefinition getProcessDefinition() {
             // TODO Auto-generated method stub
             return null;
         }
@@ -203,12 +203,12 @@ public class PropertyCreationFactoryTest {
         }
 
         @Override
-        public void setWorkflowDefinition(ProcessDefinition worklowDefinition) {
+        public void setProcessDefinition(ProcessDefinition worklowDefinition) {
             // TODO Auto-generated method stub
         }
 
         @Override
-        public ProcessDefinition getWorkflowDefinition() {
+        public ProcessDefinition getProcessDefinition() {
             // TODO Auto-generated method stub
             return null;
         }

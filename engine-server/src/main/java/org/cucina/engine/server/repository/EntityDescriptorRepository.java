@@ -2,7 +2,7 @@ package org.cucina.engine.server.repository;
 
 import java.util.Collection;
 
-import org.cucina.engine.model.WorkflowToken;
+import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.server.model.EntityDescriptor;
 import org.springframework.data.repository.Repository;
 
@@ -29,5 +29,5 @@ public interface EntityDescriptorRepository
      *
      * @return JAVADOC.
      */
-    Collection<WorkflowToken> workflowSummary(String wfid);
+    Collection<ProcessToken> workflowSummary(String wfid);
 }

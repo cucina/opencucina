@@ -58,7 +58,7 @@ public class DefaultWorkflowSessionTest {
         when(tokenX.getDomainObject()).thenReturn(domainObject);
         when(executor.test(any(Check.class), any(ExecutionContext.class))).thenReturn(true);
 
-        Token token = session.startWorkflowInstance(domainObject, null, null);
+        Token token = session.startProcessInstance(domainObject, null, null);
 
         assertEquals("Incorrect state", "coke", token.getPlaceId());
 
@@ -85,7 +85,7 @@ public class DefaultWorkflowSessionTest {
         when(tokenX.getDomainObject()).thenReturn(domainObject);
         when(executor.test(any(Check.class), any(ExecutionContext.class))).thenReturn(true);
 
-        Token token = session.startWorkflowInstance(domainObject, null, null);
+        Token token = session.startProcessInstance(domainObject, null, null);
 
         // check drink
         assertEquals("Incorrect state", "coke", token.getPlaceId());
@@ -102,7 +102,7 @@ public class DefaultWorkflowSessionTest {
 
         when(tokenX.getPlaceId()).thenReturn("start");
 
-        session.startWorkflowInstance(new Foo(), null, null);
+        session.startProcessInstance(new Foo(), null, null);
 
         verify(tokenX).setPlaceId("start");
         verify(tokenX).setPlaceId("helloWorld");

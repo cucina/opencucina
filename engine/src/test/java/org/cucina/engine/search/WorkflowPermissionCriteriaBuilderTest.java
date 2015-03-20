@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import org.cucina.engine.definition.Station;
 import org.cucina.engine.definition.Transition;
-import org.cucina.engine.service.WorkflowSupportService;
+import org.cucina.engine.service.ProcessSupportService;
 
 import org.cucina.search.query.SearchBean;
 import org.cucina.search.query.criterion.InSearchCriterion;
@@ -54,7 +54,7 @@ public class WorkflowPermissionCriteriaBuilderTest {
     private User user = new User();
     private WorkflowPermissionCriteriaBuilder builder;
     @Mock
-    private WorkflowSupportService workflowSupportService;
+    private ProcessSupportService workflowSupportService;
 
     /**
      * JAVADOC Method Level Comments

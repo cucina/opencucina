@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.cucina.engine.service.WorkflowSupportService;
+import org.cucina.engine.service.ProcessSupportService;
 import org.cucina.engine.testassist.Foo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -32,7 +32,7 @@ import org.mockito.MockitoAnnotations;
 public class UnrestrictedTransitionsAppenderTest {
     private UnrestrictedTransitionsAppender appender;
     @Mock
-    private WorkflowSupportService workflowSupportService;
+    private ProcessSupportService workflowSupportService;
 
     /**
      * Sets up for test

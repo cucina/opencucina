@@ -37,7 +37,7 @@ import org.mockito.MockitoAnnotations;
  *
  * @author $author$
  */
-public class DigesterModuleWorkflowDefinitionParserTest {
+public class DigesterModuleProcessDefinitionParserTest {
     private static final String ANOTHER_WF = "<?xml version=\"1.0\"?>" +
         "<process-definition name=\"another-workflow\">" +
         "	<description>Splitted edit-review process</description>" + "	<start-state id=\"Start\">" +
@@ -166,21 +166,21 @@ public class DigesterModuleWorkflowDefinitionParserTest {
 
         assertNotNull(tr);
         assertEquals(state, tr.getInput());
-        assertEquals(wfd, tr.getWorkflowDefinition());
+        assertEquals(wfd, tr.getProcessDefinition());
         state = tr.getOutput();
         assertNotNull(state);
 
         tr = state.getTransition("toReview");
         assertNotNull(tr);
         assertEquals(state, tr.getInput());
-        assertEquals(wfd, tr.getWorkflowDefinition());
+        assertEquals(wfd, tr.getProcessDefinition());
         assertEquals("Go to review stage", tr.getDescription());
         state = tr.getOutput();
         assertNotNull(state);
         tr = state.getTransition("toEdit2");
         assertNotNull(tr);
         assertEquals(state, tr.getInput());
-        assertEquals(wfd, tr.getWorkflowDefinition());
+        assertEquals(wfd, tr.getProcessDefinition());
         assertEquals(tr.getOutput(), wfd.getStartState());
 
         List<Check> conds = tr.getConditions();

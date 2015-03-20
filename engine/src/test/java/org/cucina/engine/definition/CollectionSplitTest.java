@@ -34,7 +34,7 @@ public class CollectionSplitTest {
     @Mock
     private TokenFactory tokenFactory;
     @Mock
-    private ProcessDefinition workflowDefinition;
+    private ProcessDefinition processDefinition;
     @Mock
     private ProcessDriver executor;
 
@@ -59,7 +59,7 @@ public class CollectionSplitTest {
 
         split.setId("csplit");
 
-        split.setWorkflowDefinition(workflowDefinition);
+        split.setProcessDefinition(processDefinition);
 
         Transition from = mock(Transition.class);
         Token token = mock(Token.class);
@@ -85,17 +85,17 @@ public class CollectionSplitTest {
 
         Token tok1 = mock(Token.class);
 
-        when(tokenFactory.createToken(workflowDefinition, b1)).thenReturn(tok1);
+        when(tokenFactory.createToken(processDefinition, b1)).thenReturn(tok1);
 
         Token tok2 = mock(Token.class);
 
-        when(tokenFactory.createToken(workflowDefinition, b2)).thenReturn(tok2);
+        when(tokenFactory.createToken(processDefinition, b2)).thenReturn(tok2);
 
         Transition transition = mock(Transition.class);
 
         when(transition.getId()).thenReturn("t1");
         when(transition.isDefault()).thenReturn(true);
-        transition.setWorkflowDefinition(workflowDefinition);
+        transition.setProcessDefinition(processDefinition);
         transition.setInput(split);
 
         Transition traClone1 = mock(Transition.class);

@@ -3,12 +3,12 @@ package org.cucina.engine.definition;
 
 
 /**
- * Provides additional functionality to interrogate WorkflowDefinition
+ * Provides additional functionality to interrogate ProcessDefinition
  *
  * @author $Author: $
  * @version $Revision: $
   */
-public interface WorkflowDefinitionHelper {
+public interface ProcessDefinitionHelper {
     /**
      * JAVADOC Method Level Comments
      *

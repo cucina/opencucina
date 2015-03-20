@@ -11,6 +11,7 @@ import javax.persistence.criteria.Root;
 
 import org.cucina.engine.model.HistoryRecord;
 import org.cucina.engine.repository.HistoryRecordRepository;
+import org.springframework.stereotype.Repository;
 
 
 /**
@@ -18,6 +19,7 @@ import org.cucina.engine.repository.HistoryRecordRepository;
  *
  * @author vlevine
   */
+@Repository
 public class HistoryRecordRepositoryImpl
     implements HistoryRecordRepository {
     @PersistenceContext

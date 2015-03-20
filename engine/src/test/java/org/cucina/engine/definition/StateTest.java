@@ -51,7 +51,7 @@ public class StateTest {
         state = new Station();
         state.setId(PLACE_ID);
         when(workflowDefinition.getId()).thenReturn("wid");
-        state.setWorkflowDefinition(workflowDefinition);
+        state.setProcessDefinition(workflowDefinition);
         when(executorFactory.getExecutor()).thenReturn(executor);
     }
 

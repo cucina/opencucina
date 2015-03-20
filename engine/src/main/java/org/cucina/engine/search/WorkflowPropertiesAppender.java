@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.cucina.engine.service.WorkflowSupportService;
+import org.cucina.engine.service.ProcessSupportService;
 import org.cucina.search.AbstractResultSetModifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,14 +27,14 @@ public class WorkflowPropertiesAppender
 
     /** This is a field JAVADOC */
     public static final String PROPERTY_NAME = "workflowProperties";
-    private WorkflowSupportService workflowSupportService;
+    private ProcessSupportService workflowSupportService;
 
     /**
      * Creates a new WorkflowPropertiesAppender object.
      *
      * @param workflowSupportService JAVADOC.
      */
-    public WorkflowPropertiesAppender(WorkflowSupportService workflowSupportService) {
+    public WorkflowPropertiesAppender(ProcessSupportService workflowSupportService) {
         super();
         Assert.notNull(workflowSupportService,
             "workflowSupportService must be provided as an argument");

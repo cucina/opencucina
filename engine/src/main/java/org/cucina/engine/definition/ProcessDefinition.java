@@ -122,7 +122,7 @@ public class ProcessDefinition
      */
     public void setStartState(StartStation startState) {
         this.startState = startState;
-        this.startState.setWorkflowDefinition(this);
+        this.startState.setProcessDefinition(this);
     }
 
     /**

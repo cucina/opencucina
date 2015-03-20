@@ -8,9 +8,9 @@ import org.cucina.core.spring.ExpressionExecutor;
 
 import org.cucina.engine.ExecutionContext;
 import org.cucina.engine.ProcessEnvironment;
-import org.cucina.engine.model.WorkflowToken;
+import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.repository.TokenRepository;
-import org.cucina.engine.service.WorkflowService;
+import org.cucina.engine.service.ProcessService;
 import org.cucina.engine.testassist.Foo;
 
 import org.junit.Before;
@@ -39,9 +39,9 @@ public class WorkflowTransitionOperationTest {
     private Foo domain3;
     @Mock
     private TokenRepository tokenRepository;
-    private WorkflowToken token1;
-    private WorkflowToken token2;
-    private WorkflowToken token3;
+    private ProcessToken token1;
+    private ProcessToken token2;
+    private ProcessToken token3;
 
     /**
      * Check that the domain on the token has to be the same as the domain in context.
@@ -53,7 +53,7 @@ public class WorkflowTransitionOperationTest {
 
         when(tokenRepository.findByDomain(domain2)).thenReturn(token2);
 
-        WorkflowService workflowService = mock(WorkflowService.class);
+        ProcessService workflowService = mock(ProcessService.class);
 
         when(workflowService.executeTransition(token2, TRANSITION_ID, new HashMap<String, Object>()))
             .thenReturn(token2);
@@ -92,7 +92,7 @@ public class WorkflowTransitionOperationTest {
         when(tokenRepository.findByDomain(domain2)).thenReturn(token2);
         when(tokenRepository.findByDomain(domain3)).thenReturn(token3);
 
-        WorkflowService workflowService = mock(WorkflowService.class);
+        ProcessService workflowService = mock(ProcessService.class);
 
         when(workflowService.executeTransition(token2, TRANSITION_ID, new HashMap<String, Object>()))
             .thenReturn(token2);
@@ -128,15 +128,15 @@ public class WorkflowTransitionOperationTest {
     public void onsetup() {
         MockitoAnnotations.initMocks(this);
         domain1 = new Foo();
-        token1 = new WorkflowToken();
+        token1 = new ProcessToken();
         token1.setDomainObject(domain1);
 
         domain2 = new Foo();
-        token2 = new WorkflowToken();
+        token2 = new ProcessToken();
         token2.setDomainObject(domain2);
 
         domain3 = new Foo();
-        token3 = new WorkflowToken();
+        token3 = new ProcessToken();
         token3.setDomainObject(domain3);
     }
 
@@ -147,7 +147,7 @@ public class WorkflowTransitionOperationTest {
     public void singleDomain() {
         when(tokenRepository.findByDomain(domain2)).thenReturn(token2);
 
-        WorkflowService workflowService = mock(WorkflowService.class);
+        ProcessService workflowService = mock(ProcessService.class);
 
         when(workflowService.executeTransition(token2, TRANSITION_ID, new HashMap<String, Object>()))
             .thenReturn(token2);

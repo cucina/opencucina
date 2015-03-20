@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import org.cucina.engine.service.WorkflowSupportService;
+import org.cucina.engine.service.ProcessSupportService;
 import org.cucina.search.AbstractResultSetModifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,14 +28,14 @@ public class UnrestrictedTransitionsAppender
 
     /** This is a field JAVADOC */
     public static final String PROPERTY_NAME = "transitionIds";
-    private WorkflowSupportService workflowSupportService;
+    private ProcessSupportService workflowSupportService;
 
     /**
      * Creates a new UnrestrictedTransitionsAppender object.
      *
      * @param workflowSupportService JAVADOC.
      */
-    public UnrestrictedTransitionsAppender(WorkflowSupportService workflowSupportService) {
+    public UnrestrictedTransitionsAppender(ProcessSupportService workflowSupportService) {
         super();
         Assert.notNull(workflowSupportService, "workflowSupportService cannot be null");
         this.workflowSupportService = workflowSupportService;

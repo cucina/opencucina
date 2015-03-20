@@ -13,7 +13,7 @@ import org.cucina.engine.definition.Token;
  * @author $Author: $
  * @version $Revision: $
   */
-public interface WorkflowService {
+public interface ProcessService {
     /**
      * JAVADOC Method Level Comments
      *
@@ -25,14 +25,6 @@ public interface WorkflowService {
      */
     Token executeTransition(Token token, String transitionId, Map<String, Object> parameters);
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param token JAVADOC.
-     * @param parameters JAVADOC.
-     *
-     * @return JAVADOC.
-     */
     /**
      * JAVADOC Method Level Comments
      *
@@ -53,6 +45,6 @@ public interface WorkflowService {
      *
      * @return JAVADOC.
      */
-    Token startWorkflow(Object object, String workflowId, String transitionId,
+    Token startProcess(Object object, String workflowId, String transitionId,
         Map<String, Object> parameters);
 }

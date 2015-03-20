@@ -7,7 +7,7 @@ import org.springframework.data.domain.Persistable;
 import org.springframework.data.repository.Repository;
 
 import org.cucina.engine.model.HistoryRecord;
-import org.cucina.engine.model.WorkflowToken;
+import org.cucina.engine.model.ProcessToken;
 
 
 /**
@@ -20,7 +20,7 @@ import org.cucina.engine.model.WorkflowToken;
  * @param <Serializable> JAVADOC.
  */
 public interface TokenRepository
-    extends Repository<WorkflowToken, Long> {
+    extends Repository<ProcessToken, Long> {
     /**
      * JAVADOC Method Level Comments
      *
@@ -37,14 +37,14 @@ public interface TokenRepository
      *
      * @param token JAVADOC.
      */
-    void delete(WorkflowToken token);
+    void delete(ProcessToken token);
 
     /**
      * Deletes token and domain object.
      *
      * @param token JAVADOC.
      */
-    void deleteDeep(WorkflowToken token);
+    void deleteDeep(ProcessToken token);
 
     /**
      * Load tokens for the identified objects of the same type
@@ -54,7 +54,7 @@ public interface TokenRepository
      *
      * @return JAVADOC.
      */
-    Collection<WorkflowToken> findByApplicationTypeAndIds(String applicationType, Long... ids);
+    Collection<ProcessToken> findByApplicationTypeAndIds(String applicationType, Long... ids);
 
     /**
     * Load token for the identified object
@@ -63,7 +63,7 @@ public interface TokenRepository
     *
     * @return JAVADOC.
     */
-    WorkflowToken findByDomain(Persistable<Long> domain);
+    ProcessToken findByDomain(Persistable<Long> domain);
 
     /**
      * Load the ids of domain objects which have this <code>worklfowId</code> and this <code>placeId</code>.
@@ -82,5 +82,5 @@ public interface TokenRepository
      *
      * @param token JAVADOC.
      */
-    void save(WorkflowToken token);
+    void save(ProcessToken token);
 }

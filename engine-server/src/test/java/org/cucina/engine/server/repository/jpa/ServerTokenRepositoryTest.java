@@ -12,7 +12,7 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.cucina.engine.model.WorkflowToken;
+import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.server.model.EntityDescriptor;
 import org.cucina.engine.server.testassist.Foo;
 import static org.junit.Assert.assertEquals;
@@ -67,9 +67,9 @@ public class ServerTokenRepositoryTest {
 
         when(cb.createTupleQuery()).thenReturn(tcq);
 
-        Root<WorkflowToken> rt = mock(Root.class);
+        Root<ProcessToken> rt = mock(Root.class);
 
-        when(tcq.from(WorkflowToken.class)).thenReturn(rt);
+        when(tcq.from(ProcessToken.class)).thenReturn(rt);
 
         Path<Object> pathdo = mock(Path.class);
 
@@ -115,7 +115,7 @@ public class ServerTokenRepositoryTest {
 
         List<Tuple> list = new ArrayList<Tuple>();
         Tuple tuple = mock(Tuple.class);
-        WorkflowToken token = new WorkflowToken();
+        ProcessToken token = new ProcessToken();
 
         when(tuple.get(0)).thenReturn(token);
 

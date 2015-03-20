@@ -120,6 +120,6 @@ public interface ProcessSession {
      * provide a non required transitionId, if none is supplied the default
      * transition is used.
      */
-    Token startWorkflowInstance(Object domainObject, String transitionId,
+    Token startProcessInstance(Object domainObject, String transitionId,
         Map<String, Object> parameters);
 }

@@ -8,7 +8,7 @@ import java.util.List;
 import org.springframework.messaging.Message;
 
 import org.cucina.engine.model.HistoryRecord;
-import org.cucina.engine.model.WorkflowToken;
+import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.repository.TokenRepository;
 import org.cucina.engine.server.event.CompensateEvent;
 import org.cucina.engine.server.testassist.Foo;
@@ -62,7 +62,7 @@ public class CompensateMessageHandlerTest {
         event.setIds(100L);
         event.setType("Foo");
 
-        WorkflowToken token = mock(WorkflowToken.class);
+        ProcessToken token = mock(ProcessToken.class);
         HistoryRecord hr = new HistoryRecord();
 
         List<HistoryRecord> histories = new ArrayList<HistoryRecord>();
@@ -71,7 +71,7 @@ public class CompensateMessageHandlerTest {
 
         when(token.getHistories()).thenReturn(histories);
 
-        Collection<WorkflowToken> tokens = Collections.singleton(token);
+        Collection<ProcessToken> tokens = Collections.singleton(token);
 
         when(tokenRepository.findByApplicationTypeAndIds(eq("Foo"), any(Long[].class)))
             .thenReturn(tokens);
@@ -95,12 +95,12 @@ public class CompensateMessageHandlerTest {
         event.setIds(100L);
         event.setType("Foo");
 
-        WorkflowToken token = mock(WorkflowToken.class);
+        ProcessToken token = mock(ProcessToken.class);
         Foo foo = new Foo();
 
         when(token.getDomainObject()).thenReturn(foo);
 
-        Collection<WorkflowToken> tokens = Collections.singleton(token);
+        Collection<ProcessToken> tokens = Collections.singleton(token);
 
         when(tokenRepository.findByApplicationTypeAndIds(eq("Foo"), any(Long[].class)))
             .thenReturn(tokens);

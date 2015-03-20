@@ -9,7 +9,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.cucina.engine.model.Workflow;
-import org.cucina.engine.model.WorkflowToken;
+import org.cucina.engine.model.ProcessToken;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -90,9 +90,9 @@ public class WorkflowRepositoryImplTest {
 
         when(cb.createQuery(Long.class)).thenReturn(cq);
 
-        Root<WorkflowToken> token = mock(Root.class);
+        Root<ProcessToken> token = mock(Root.class);
 
-        when(cq.from(WorkflowToken.class)).thenReturn(token);
+        when(cq.from(ProcessToken.class)).thenReturn(token);
 
         Path<Object> pathdi = mock(Path.class);
 

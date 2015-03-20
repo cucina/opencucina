@@ -107,7 +107,7 @@ public class DefaultProcessSession
      * supplied <code>ExecutionContext</code>.
      * <p/>
      */
-    public Token startWorkflowInstance(Object domainObject, String transitionId,
+    public Token startProcessInstance(Object domainObject, String transitionId,
         Map<String, Object> parameters)
         throws SignalFailedException, TransitionNotFoundException {
         if (LOG.isDebugEnabled()) {

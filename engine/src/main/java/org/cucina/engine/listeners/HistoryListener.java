@@ -11,7 +11,7 @@ import org.cucina.engine.definition.Decision;
 import org.cucina.engine.definition.State;
 import org.cucina.engine.definition.Transition;
 import org.cucina.engine.model.HistoryRecord;
-import org.cucina.engine.model.WorkflowToken;
+import org.cucina.engine.model.ProcessToken;
 import org.cucina.security.ContextUserAccessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,7 +112,7 @@ public class HistoryListener
             LOG.debug("Leaving state:" + state.getId() + " by transition " + transition.getId());
         }
 
-        WorkflowToken token = (WorkflowToken) executionContext.getToken();
+        ProcessToken token = (ProcessToken) executionContext.getToken();
 
         Map<String, Object> parameters = executionContext.getParameters();
 
@@ -152,7 +152,7 @@ public class HistoryListener
         }
     }
 
-    private void calculateCarryovers(Map<String, Object> parameters, WorkflowToken token) {
+    private void calculateCarryovers(Map<String, Object> parameters, ProcessToken token) {
         List<HistoryRecord> histories = token.getHistories();
 
         HistoryRecord last = null;

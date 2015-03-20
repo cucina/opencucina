@@ -9,11 +9,14 @@ import java.util.Map;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import org.springframework.util.Assert;
+
 import org.cucina.engine.ExecutionContext;
 import org.cucina.engine.WorkflowListener;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
 
 
 /**
@@ -28,7 +31,7 @@ import org.springframework.util.Assert;
  * @see Transition
  */
 public abstract class AbstractState
-    extends AbstractWorkflowElement
+    extends AbstractProcessElement
     implements State {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractState.class);
 
@@ -52,38 +55,6 @@ public abstract class AbstractState
      * keyed by their ID.
      */
     private Map<String, Transition> keyedTransitions = new HashMap<String, Transition>();
-
-    /**
-     * Called to leave this <code>Place</code>. Delegates to the
-     * {@link #leaveInternal leaveInternal} method and then fires all leaving
-     * {@link Operation Actions}. Subclasses should customise leave behaviour by
-     * overriding the {@link #leaveInternal leaveInternal} method.
-     *
-     * @see #leaveInternal(Transition, ExecutionContext)
-     */
-    public final void leave(String transitionId, ExecutionContext executionContext) {
-        Transition transition = getTransition(transitionId);
-
-        leave(transition, executionContext);
-    }
-
-    /**
-     * Called to leave this <code>Place</code>. Delegates to the
-     * {@link #leaveInternal leaveInternal} method and then fires all leaving
-     * {@link Operation Actions}. Subclasses should customise leave behaviour by
-     * overriding the {@link #leaveInternal leaveInternal} method.
-     *
-     * @see #leaveInternal(Transition, ExecutionContext)
-     */
-    public final void leave(Transition transition, ExecutionContext executionContext) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug(((getWorkflowDefinition() == null) ? "" : getWorkflowDefinition().getId()) +
-                ": Leaving " + this.getId() + " using transition '" +
-                ((transition == null) ? null : transition.getId()) + "'");
-        }
-
-        leaveInternal(transition, executionContext);
-    }
 
     /**
      * Gets all the {@link Transition Transitions} from this <code>Place</code>.
@@ -144,9 +115,10 @@ public abstract class AbstractState
      * Stores the {@link ProcessDefinition} for this <code>Place</code> and
      * registers this <code>Place</code> with that {@link ProcessDefinition}.
      */
-    public void setWorkflowDefinition(ProcessDefinition workflowDefinition) {
-        super.setWorkflowDefinition(workflowDefinition);
-        getWorkflowDefinition().registerPlace(this);
+    @Override
+    public void setProcessDefinition(ProcessDefinition processDefinition) {
+        super.setProcessDefinition(processDefinition);
+        getProcessDefinition().registerPlace(this);
     }
 
     /**
@@ -176,7 +148,7 @@ public abstract class AbstractState
 
         this.allTransitions.add(transition);
         this.keyedTransitions.put(transition.getId(), transition);
-        transition.setWorkflowDefinition(getWorkflowDefinition());
+        transition.setProcessDefinition(getProcessDefinition());
         transition.setInput(this);
     }
 
@@ -246,6 +218,38 @@ public abstract class AbstractState
         keyedTransitions = MapUtils.unmodifiableMap(keyedTransitions);
         enterActions = ListUtils.unmodifiableList(enterActions);
         leaveActions = ListUtils.unmodifiableList(leaveActions);
+    }
+
+    /**
+     * Called to leave this <code>Place</code>. Delegates to the
+     * {@link #leaveInternal leaveInternal} method and then fires all leaving
+     * {@link Operation Actions}. Subclasses should customise leave behaviour by
+     * overriding the {@link #leaveInternal leaveInternal} method.
+     *
+     * @see #leaveInternal(Transition, ExecutionContext)
+     */
+    public final void leave(String transitionId, ExecutionContext executionContext) {
+        Transition transition = getTransition(transitionId);
+
+        leave(transition, executionContext);
+    }
+
+    /**
+     * Called to leave this <code>Place</code>. Delegates to the
+     * {@link #leaveInternal leaveInternal} method and then fires all leaving
+     * {@link Operation Actions}. Subclasses should customise leave behaviour by
+     * overriding the {@link #leaveInternal leaveInternal} method.
+     *
+     * @see #leaveInternal(Transition, ExecutionContext)
+     */
+    public final void leave(Transition transition, ExecutionContext executionContext) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(((getProcessDefinition() == null) ? "" : getProcessDefinition().getId()) +
+                ": Leaving " + this.getId() + " using transition '" +
+                ((transition == null) ? null : transition.getId()) + "'");
+        }
+
+        leaveInternal(transition, executionContext);
     }
 
     /**

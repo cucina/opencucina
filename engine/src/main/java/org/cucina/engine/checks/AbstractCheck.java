@@ -2,7 +2,7 @@
 package org.cucina.engine.checks;
 
 import org.cucina.engine.ExecutionContext;
-import org.cucina.engine.definition.AbstractWorkflowElement;
+import org.cucina.engine.definition.AbstractProcessElement;
 import org.cucina.engine.definition.Check;
 
 
@@ -13,7 +13,7 @@ import org.cucina.engine.definition.Check;
  * @version $Revision$
   */
 public abstract class AbstractCheck
-    extends AbstractWorkflowElement
+    extends AbstractProcessElement
     implements Check {
     /**
     * JAVADOC.

@@ -1,6 +1,7 @@
 package org.cucina.engine.definition.config.xml;
 
 import java.io.IOException;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -8,6 +9,10 @@ import java.util.Set;
 
 import org.apache.commons.digester3.Digester;
 import org.apache.commons.digester3.binder.DigesterLoader;
+
+import org.springframework.core.io.Resource;
+import org.springframework.util.Assert;
+
 import org.cucina.engine.definition.AbstractState;
 import org.cucina.engine.definition.EndStation;
 import org.cucina.engine.definition.ProcessDefinition;
@@ -15,10 +20,10 @@ import org.cucina.engine.definition.StartStation;
 import org.cucina.engine.definition.State;
 import org.cucina.engine.definition.Transition;
 import org.cucina.engine.definition.config.ProcessDefinitionParser;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.Resource;
-import org.springframework.util.Assert;
+
 import org.xml.sax.SAXException;
 
 
@@ -37,11 +42,11 @@ public class DigesterModuleProcessDefinitionParser
     private static final Logger LOG = LoggerFactory.getLogger(DigesterModuleProcessDefinitionParser.class);
     private DigesterLoader loader;
     private EndStation endState;
+    private ProcessDefinition processDefinition;
     private Set<State> states = new HashSet<State>();
     private Set<State> visitedPlaces = new HashSet<State>();
     private StartStation startState;
     private String description;
-    private ProcessDefinition workflowDefinition;
 
     /**
      * Creates a new DigesterModuleWorkflowDefinitionParser object.
@@ -100,8 +105,8 @@ public class DigesterModuleProcessDefinitionParser
      * Callback for digester
      */
     public void createWorkflowDefinition(String name) {
-        workflowDefinition = new ProcessDefinition();
-        workflowDefinition.setId(name);
+        processDefinition = new ProcessDefinition();
+        processDefinition.setId(name);
     }
 
     /**
@@ -121,12 +126,12 @@ public class DigesterModuleProcessDefinitionParser
 
     private void populate(AbstractState node) {
         visitedPlaces.add(node);
-        node.setWorkflowDefinition(this.workflowDefinition);
+        node.setProcessDefinition(processDefinition);
 
         Collection<Transition> transitions = node.getAllTransitions();
 
         for (Transition transition : transitions) {
-            transition.setWorkflowDefinition(this.workflowDefinition);
+            transition.setProcessDefinition(processDefinition);
 
             if (transition instanceof WrapperTransition) {
                 String to = ((WrapperTransition) transition).getTo();
@@ -159,16 +164,16 @@ public class DigesterModuleProcessDefinitionParser
 
             digester.push(this);
             digester.parse(definitionResource.getInputStream());
-            Assert.notNull(workflowDefinition,
+            Assert.notNull(processDefinition,
                 "Failed to create the workflow definition as a result of parse");
             Assert.notNull(startState, "Failed to create the start state as a result of parse");
             Assert.notNull(endState, "Failed to create the end state as a result of parse");
             Assert.notNull(description, "Failed to create the description as a result of parse");
-            workflowDefinition.setStartState(startState);
-            workflowDefinition.setDescription(description);
-            populate(workflowDefinition.getStartState());
+            processDefinition.setStartState(startState);
+            processDefinition.setDescription(description);
+            populate(processDefinition.getStartState());
 
-            return workflowDefinition;
+            return processDefinition;
         } catch (IOException ex) {
             LOG.error("Could not read workflow definition: [" + definitionResource + "]", ex);
             throw new RuntimeException(ex);

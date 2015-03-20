@@ -16,7 +16,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -32,7 +34,7 @@ import org.cucina.engine.definition.Token;
 import org.cucina.engine.definition.Transition;
 import org.cucina.engine.listeners.HistoryListener;
 import org.cucina.engine.model.HistoryRecord;
-import org.cucina.engine.model.WorkflowToken;
+import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.repository.HistoryRecordRepository;
 import org.cucina.engine.repository.TokenRepository;
 
@@ -55,13 +57,14 @@ import org.slf4j.LoggerFactory;
  * @author $Author: $
  * @version $Revision: $
  */
-public class WorkflowSupportServiceImpl
-    implements WorkflowSupportService {
-    private static final Logger LOG = LoggerFactory.getLogger(WorkflowSupportServiceImpl.class);
+@Service
+public class ProcessSupportServiceImpl
+    implements ProcessSupportService {
+    private static final Logger LOG = LoggerFactory.getLogger(ProcessSupportServiceImpl.class);
     private AccessRegistry accessRegistry;
     private DefinitionService definitionService;
     private HistoryRecordRepository historyRecordRepository;
-    private ProcessEnvironment workflowEnvironment;
+    private ProcessEnvironment processEnvironment;
     private SearchBeanFactory searchBeanFactory;
     private SearchService searchService;
     private TokenRepository tokenRepository;
@@ -73,6 +76,7 @@ public class WorkflowSupportServiceImpl
     *            JAVADOC.
     */
     @Required
+    @Autowired
     public void setAccessRegistry(AccessRegistry accessRegistry) {
         this.accessRegistry = accessRegistry;
     }
@@ -84,6 +88,7 @@ public class WorkflowSupportServiceImpl
      *            DefinitionService
      */
     @Required
+    @Autowired
     public void setDefinitionService(DefinitionService definitionService) {
         this.definitionService = definitionService;
     }
@@ -94,8 +99,21 @@ public class WorkflowSupportServiceImpl
      * @param historyRecordRepository JAVADOC.
      */
     @Required
+    @Autowired
     public void setHistoryRecordRepository(HistoryRecordRepository historyRecordRepository) {
         this.historyRecordRepository = historyRecordRepository;
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @param workflowEnvironment
+     *            JAVADOC.
+     */
+    @Required
+    @Autowired
+    public void setProcessEnvironment(ProcessEnvironment processEnvironment) {
+        this.processEnvironment = processEnvironment;
     }
 
     /**
@@ -124,19 +142,9 @@ public class WorkflowSupportServiceImpl
      * @param tokenRepository JAVADOC.
      */
     @Required
+    @Autowired
     public void setTokenRepository(TokenRepository tokenRepository) {
         this.tokenRepository = tokenRepository;
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param workflowEnvironment
-     *            JAVADOC.
-     */
-    @Required
-    public void setWorkflowEnvironment(ProcessEnvironment workflowEnvironment) {
-        this.workflowEnvironment = workflowEnvironment;
     }
 
     /**
@@ -155,8 +163,8 @@ public class WorkflowSupportServiceImpl
      */
     @Override
     public Collection<Transition> listActionableTransitions(String workflowId) {
-        ProcessDefinition workflowDefinition = workflowEnvironment.getDefinitionRegistry()
-                                                                  .findWorkflowDefinition(workflowId);
+        ProcessDefinition workflowDefinition = processEnvironment.getDefinitionRegistry()
+                                                                 .findWorkflowDefinition(workflowId);
 
         if (workflowDefinition == null) {
             if (LOG.isInfoEnabled()) {
@@ -218,7 +226,7 @@ public class WorkflowSupportServiceImpl
     @Transactional
     public Map<Long, Collection<String>> listAllTransitions(Collection<Long> ids,
         String applicationType) {
-        Collection<WorkflowToken> tokens = tokenRepository.findByApplicationTypeAndIds(applicationType,
+        Collection<ProcessToken> tokens = tokenRepository.findByApplicationTypeAndIds(applicationType,
                 ids.toArray(new Long[ids.size()]));
 
         if (LOG.isDebugEnabled()) {
@@ -228,9 +236,9 @@ public class WorkflowSupportServiceImpl
         Map<Long, Collection<String>> results = new HashMap<Long, Collection<String>>();
 
         if (CollectionUtils.isNotEmpty(tokens)) {
-            for (WorkflowToken token : tokens) {
+            for (ProcessToken token : tokens) {
                 results.put(token.getDomainObjectId(),
-                    workflowEnvironment.getService().listTransitions(token, null));
+                    processEnvironment.getService().listTransitions(token, null));
             }
         }
 
@@ -253,7 +261,7 @@ public class WorkflowSupportServiceImpl
     public Collection<String> listTransitions(Collection<Long> ids, String applicationType) {
         Token token = loadLastToken(ids, applicationType);
 
-        return workflowEnvironment.getService().listTransitions(token, null);
+        return processEnvironment.getService().listTransitions(token, null);
     }
 
     /**
@@ -369,12 +377,12 @@ public class WorkflowSupportServiceImpl
         String transitionId, String comment, String approvedAs, String assignedTo,
         Map<String, Object> extraParams, ListNodeDto reason, Attachment attachment) {
         try {
-            Collection<WorkflowToken> tokens = tokenRepository.findByApplicationTypeAndIds(applicationType,
+            Collection<ProcessToken> tokens = tokenRepository.findByApplicationTypeAndIds(applicationType,
                     entities.keySet().toArray(new Long[entities.size()]));
 
             Assert.notEmpty(tokens, "Null tokens");
 
-            for (WorkflowToken token : tokens) {
+            for (ProcessToken token : tokens) {
                 Integer version = entities.get(token.getDomainObjectId());
 
                 if (version < token.getVersion()) {
@@ -403,11 +411,11 @@ public class WorkflowSupportServiceImpl
 
                 parameters.put("extraParams", extraParams);
 
-                token = (WorkflowToken) workflowEnvironment.getService()
-                                                           .executeTransition(token, transitionId,
+                token = (ProcessToken) processEnvironment.getService()
+                                                         .executeTransition(token, transitionId,
                         parameters);
 
-                if (workflowEnvironment.getWorkflowDefinitionHelper().isEnded(token)) {
+                if (processEnvironment.getProcessDefinitionHelper().isEnded(token)) {
                     tokenRepository.delete(token);
                 } else {
                     tokenRepository.save(token);
@@ -446,12 +454,12 @@ public class WorkflowSupportServiceImpl
         String comment, String approvedAs, String assignedTo, Map<String, Object> extraParams,
         Attachment attachment) {
         try {
-            Collection<WorkflowToken> tokens = tokenRepository.findByApplicationTypeAndIds(applicationType,
+            Collection<ProcessToken> tokens = tokenRepository.findByApplicationTypeAndIds(applicationType,
                     id);
 
             Assert.notEmpty(tokens, "No tokens");
 
-            WorkflowToken token = tokens.iterator().next();
+            ProcessToken token = tokens.iterator().next();
 
             Map<String, Object> parameters = new HashMap<String, Object>();
 
@@ -461,11 +469,11 @@ public class WorkflowSupportServiceImpl
             parameters.put(HistoryListener.ATTACHMENT_PROPERTY, attachment);
             parameters.put("extraParams", extraParams);
 
-            token = (WorkflowToken) workflowEnvironment.getService()
-                                                       .executeTransition(token, transitionId,
+            token = (ProcessToken) processEnvironment.getService()
+                                                     .executeTransition(token, transitionId,
                     parameters);
 
-            if (workflowEnvironment.getWorkflowDefinitionHelper().isEnded(token)) {
+            if (processEnvironment.getProcessDefinitionHelper().isEnded(token)) {
                 tokenRepository.delete(token);
             } else {
                 tokenRepository.save(token);
@@ -544,7 +552,7 @@ public class WorkflowSupportServiceImpl
      *
      * @param entity
      *            PersistableEntity.
-     * @param workflowId
+     * @param processId
      *            JAVADOC.
      * @param parameters
      *            JAVADOC.
@@ -552,17 +560,17 @@ public class WorkflowSupportServiceImpl
      * @return JAVADOC.
      */
     @Override
-    public Token startWorkflow(PersistableEntity entity, String workflowId,
+    public Token startWorkflow(PersistableEntity entity, String processId,
         Map<String, Object> parameters) {
         Assert.notNull(entity, "entity must be provided as a parameter");
-        Assert.hasText(workflowId, "workflowId cannot be empty");
+        Assert.hasText(processId, "processId cannot be empty");
 
-        WorkflowToken token = (WorkflowToken) workflowEnvironment.getService()
-                                                                 .startWorkflow(entity, workflowId,
+        ProcessToken token = (ProcessToken) processEnvironment.getService()
+                                                              .startProcess(entity, processId,
                 null, parameters);
 
         if (token == null) {
-            LOG.warn("Failed to start a workflow for object " + entity);
+            LOG.warn("Failed to start a process for object " + entity);
 
             return null;
         }
@@ -575,7 +583,7 @@ public class WorkflowSupportServiceImpl
     private Token loadLastToken(Collection<Long> ids, String applicationType) {
         Assert.notNull(ids, "Ids is null");
 
-        Collection<WorkflowToken> tokens = tokenRepository.findByApplicationTypeAndIds(applicationType,
+        Collection<ProcessToken> tokens = tokenRepository.findByApplicationTypeAndIds(applicationType,
                 ids.toArray(new Long[ids.size()]));
 
         Assert.notNull(tokens, "Failed to load tokens for ids " + ids);

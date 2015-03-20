@@ -16,7 +16,7 @@ import org.cucina.engine.ExecutionContext;
  * @see Check
  */
 public interface Operation
-    extends WorkflowElement {
+    extends ProcessElement {
     /**
      * Invokes the <code>Action</code>. <code>Action</code>s have full
      * access to the {@link ExecutionContext} which contains not only

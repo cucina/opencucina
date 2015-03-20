@@ -3,7 +3,7 @@ package org.cucina.engine.server.web.service;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cucina.engine.model.WorkflowToken;
+import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.server.repository.EntityDescriptorRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,10 +76,10 @@ public class WorkflowViewWebService {
             LOG.debug("workflowSummary called with " + wfid);
         }
 
-        Collection<WorkflowToken> tokens = entityDescriptorRepository.workflowSummary(wfid);
+        Collection<ProcessToken> tokens = entityDescriptorRepository.workflowSummary(wfid);
         Collection<Object[]> result = new ArrayList<Object[]>();
 
-        for (WorkflowToken workflowToken : tokens) {
+        for (ProcessToken workflowToken : tokens) {
             BeanWrapper beanWrapper = new BeanWrapperImpl(workflowToken);
             Object[] line = new Object[summaryColumns.length];
 

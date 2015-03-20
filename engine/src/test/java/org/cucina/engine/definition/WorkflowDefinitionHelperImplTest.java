@@ -19,14 +19,14 @@ import org.junit.Test;
  * @version $Revision: $
   */
 public class WorkflowDefinitionHelperImplTest {
-    private WorkflowDefinitionHelperImpl helper;
+    private ProcessDefinitionHelperImpl helper;
 
     /**
      * Sets up for test
      */
     @Before
     public void onsetup() {
-        helper = new WorkflowDefinitionHelperImpl(mock(ProcessDefinitionRegistry.class));
+        helper = new ProcessDefinitionHelperImpl(mock(ProcessDefinitionRegistry.class));
     }
 
     /**
@@ -58,7 +58,7 @@ public class WorkflowDefinitionHelperImplTest {
         when(registry.findWorkflowDefinition(MockWorkflowDefinitionBuilder.HELLO_WORLD_ID))
             .thenReturn(definition);
 
-        helper = new WorkflowDefinitionHelperImpl(registry);
+        helper = new ProcessDefinitionHelperImpl(registry);
         helper.findPlaceId(MockWorkflowDefinitionBuilder.HELLO_WORLD_ID, "rabbitch");
     }
 
@@ -75,7 +75,7 @@ public class WorkflowDefinitionHelperImplTest {
         when(registry.findWorkflowDefinition(MockWorkflowDefinitionBuilder.HELLO_WORLD_ID))
             .thenReturn(definition);
 
-        helper = new WorkflowDefinitionHelperImpl(registry);
+        helper = new ProcessDefinitionHelperImpl(registry);
 
         String placeId = helper.findPlaceId(MockWorkflowDefinitionBuilder.HELLO_WORLD_ID, "toEnd");
 
@@ -93,7 +93,7 @@ public class WorkflowDefinitionHelperImplTest {
         when(registry.findWorkflowDefinition(MockWorkflowDefinitionBuilder.HELLO_WORLD_ID))
             .thenReturn(null);
 
-        helper = new WorkflowDefinitionHelperImpl(registry);
+        helper = new ProcessDefinitionHelperImpl(registry);
         helper.findPlaceId(MockWorkflowDefinitionBuilder.HELLO_WORLD_ID, "toEnd");
     }
 
@@ -109,11 +109,11 @@ public class WorkflowDefinitionHelperImplTest {
         when(registry.findWorkflowDefinition(MockWorkflowDefinitionBuilder.HELLO_WORLD_ID))
             .thenReturn(definition);
 
-        helper = new WorkflowDefinitionHelperImpl(registry);
+        helper = new ProcessDefinitionHelperImpl(registry);
 
         Token token = mock(Token.class);
 
-        when(token.getWorkflowDefinitionId())
+        when(token.getProcessDefinitionId())
             .thenReturn(MockWorkflowDefinitionBuilder.HELLO_WORLD_ID);
         when(token.getPlaceId()).thenReturn("end");
 
@@ -132,11 +132,11 @@ public class WorkflowDefinitionHelperImplTest {
         when(registry.findWorkflowDefinition(MockWorkflowDefinitionBuilder.HELLO_WORLD_ID))
             .thenReturn(definition);
 
-        helper = new WorkflowDefinitionHelperImpl(registry);
+        helper = new ProcessDefinitionHelperImpl(registry);
 
         Token token = mock(Token.class);
 
-        when(token.getWorkflowDefinitionId())
+        when(token.getProcessDefinitionId())
             .thenReturn(MockWorkflowDefinitionBuilder.HELLO_WORLD_ID);
         when(token.getPlaceId()).thenReturn("helloWorld");
 

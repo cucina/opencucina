@@ -10,8 +10,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import org.cucina.engine.model.Workflow;
-import org.cucina.engine.model.WorkflowToken;
+import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.repository.WorkflowRepository;
+import org.springframework.stereotype.Repository;
 
 
 /**
@@ -20,6 +21,7 @@ import org.cucina.engine.repository.WorkflowRepository;
  * @author $Author: $
  * @version $Revision: $
   */
+@Repository
 public class WorkflowRepositoryImpl
     implements WorkflowRepository {
     @PersistenceContext
@@ -36,7 +38,7 @@ public class WorkflowRepositoryImpl
     public boolean isActive(String definitionId) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> cq = cb.createQuery(Long.class);
-        Root<WorkflowToken> token = cq.from(WorkflowToken.class);
+        Root<ProcessToken> token = cq.from(ProcessToken.class);
 
         cq.where(cb.equal(token.get("workflowDefinitionId"), definitionId));
         cq.select(cb.count(token));

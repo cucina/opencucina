@@ -19,7 +19,7 @@ import org.cucina.engine.ExecutionContext;
  * @see Transition
  */
 public interface Check
-    extends WorkflowElement {
+    extends ProcessElement {
     /**
      * Test this <code>Condition</code> against the supplied
      * {@link ExecutionContext}. Should return <code>true</code> if

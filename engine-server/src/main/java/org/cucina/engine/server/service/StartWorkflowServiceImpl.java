@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.cucina.engine.definition.Token;
 import org.cucina.engine.server.model.EntityDescriptor;
-import org.cucina.engine.service.WorkflowSupportService;
+import org.cucina.engine.service.ProcessSupportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -19,14 +19,14 @@ import org.springframework.util.Assert;
 public class StartWorkflowServiceImpl
     implements StartWorkflowService {
     private static final Logger LOG = LoggerFactory.getLogger(StartWorkflowServiceImpl.class);
-    private WorkflowSupportService workflowSupportService;
+    private ProcessSupportService workflowSupportService;
 
     /**
      * Creates a new StartWorkflowServiceImpl object.
      *
      * @param workflowSupportService JAVADOC.
      */
-    public StartWorkflowServiceImpl(WorkflowSupportService workflowSupportService) {
+    public StartWorkflowServiceImpl(ProcessSupportService workflowSupportService) {
         this.workflowSupportService = workflowSupportService;
     }
 

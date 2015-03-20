@@ -17,10 +17,10 @@ import org.cucina.engine.ProcessEnvironment;
 import org.cucina.engine.ProcessSessionFactory;
 import org.cucina.engine.TokenFactory;
 import org.cucina.engine.WorkflowListener;
-import org.cucina.engine.definition.WorkflowDefinitionHelper;
+import org.cucina.engine.definition.ProcessDefinitionHelper;
 import org.cucina.engine.definition.config.ProcessDefinitionParser;
 import org.cucina.engine.definition.config.ProcessDefinitionRegistry;
-import org.cucina.engine.service.WorkflowService;
+import org.cucina.engine.service.ProcessService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.expression.BeanResolver;
@@ -42,7 +42,7 @@ public class WorkflowEnvironmentFactory {
      */
     public static ProcessEnvironment buildEnvironment(BeanResolver beanResolver,
         ProcessDefinitionRegistry definitionRegistry, ProcessDefinitionParser definitionParser,
-        WorkflowService workflowService, Collection<Resource> resources)
+        ProcessService workflowService, Collection<Resource> resources)
         throws Exception {
         DefaultProcessEnvironment defaultWorkflowEnvironment = new DefaultProcessEnvironment();
         ApplicationContext applicationContext = mock(ApplicationContext.class);
@@ -84,13 +84,13 @@ public class WorkflowEnvironmentFactory {
         when(applicationContext.containsBean("workflowService")).thenReturn(true);
 
         if (workflowService == null) {
-            workflowService = mock(WorkflowService.class);
+            workflowService = mock(ProcessService.class);
         }
 
         when(applicationContext.getBean("workflowService")).thenReturn(workflowService);
         when(applicationContext.containsBean("workflowDefinitionHelper")).thenReturn(true);
 
-        WorkflowDefinitionHelper workflowDefinitionHelper = mock(WorkflowDefinitionHelper.class);
+        ProcessDefinitionHelper workflowDefinitionHelper = mock(ProcessDefinitionHelper.class);
 
         when(applicationContext.getBean("workflowDefinitionHelper"))
             .thenReturn(workflowDefinitionHelper);

@@ -34,7 +34,7 @@ public class DefaultWorkflowServiceTest {
         Token token = mock(Token.class);
 
         when(token.getPlaceId()).thenReturn("haha");
-        when(token.getWorkflowDefinitionId()).thenReturn("workflowDefinitionId");
+        when(token.getProcessDefinitionId()).thenReturn("workflowDefinitionId");
 
         ProcessSessionFactory workflowSessionFactory = mock(ProcessSessionFactory.class);
 
@@ -46,7 +46,7 @@ public class DefaultWorkflowServiceTest {
         session.signal(context, "hehe");
         when(workflowSessionFactory.openSession("workflowDefinitionId")).thenReturn(session);
 
-        DefaultWorkflowService service = new DefaultWorkflowService(workflowSessionFactory);
+        DefaultProcessService service = new DefaultProcessService(workflowSessionFactory);
 
         assertEquals("Should have returned token", token,
             service.executeTransition(token, "hehe", null));
@@ -60,7 +60,7 @@ public class DefaultWorkflowServiceTest {
         final Token token = mock(Token.class);
 
         when(token.getPlaceId()).thenReturn("haha");
-        when(token.getWorkflowDefinitionId()).thenReturn("workflowDefinitionId");
+        when(token.getProcessDefinitionId()).thenReturn("workflowDefinitionId");
 
         ProcessSessionFactory workflowSessionFactory = mock(ProcessSessionFactory.class);
 
@@ -78,7 +78,7 @@ public class DefaultWorkflowServiceTest {
         list.add(t1);
         when(session.getAvailableTransitions(context)).thenReturn(list);
 
-        DefaultWorkflowService service = new DefaultWorkflowService(workflowSessionFactory);
+        DefaultProcessService service = new DefaultProcessService(workflowSessionFactory);
 
         assertTrue("Not containing hello", service.listTransitions(token, null).contains("hello"));
     }
@@ -96,16 +96,16 @@ public class DefaultWorkflowServiceTest {
 
         ProcessSession session = mock(ProcessSession.class);
 
-        when(session.startWorkflowInstance(foo, null, params)).thenReturn(token);
+        when(session.startProcessInstance(foo, null, params)).thenReturn(token);
 
         ProcessSessionFactory workflowSessionFactory = mock(ProcessSessionFactory.class);
 
         when(workflowSessionFactory.openSession(foo.getClass().getSimpleName())).thenReturn(session);
 
-        DefaultWorkflowService service = new DefaultWorkflowService(workflowSessionFactory);
+        DefaultProcessService service = new DefaultProcessService(workflowSessionFactory);
 
         assertEquals("Should have returned token", token,
-            service.startWorkflow(foo, foo.getClass().getSimpleName(), null, params));
+            service.startProcess(foo, foo.getClass().getSimpleName(), null, params));
     }
 
     /**
@@ -121,15 +121,15 @@ public class DefaultWorkflowServiceTest {
 
         ProcessSession session = mock(ProcessSession.class);
 
-        when(session.startWorkflowInstance(foo, null, params)).thenReturn(token);
+        when(session.startProcessInstance(foo, null, params)).thenReturn(token);
 
         ProcessSessionFactory workflowSessionFactory = mock(ProcessSessionFactory.class);
 
         when(workflowSessionFactory.openSession("hoho")).thenReturn(session);
 
-        DefaultWorkflowService service = new DefaultWorkflowService(workflowSessionFactory);
+        DefaultProcessService service = new DefaultProcessService(workflowSessionFactory);
 
         assertEquals("Should have returned token", token,
-            service.startWorkflow(foo, "hoho", null, params));
+            service.startProcess(foo, "hoho", null, params));
     }
 }

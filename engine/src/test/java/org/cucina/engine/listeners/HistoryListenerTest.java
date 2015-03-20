@@ -11,7 +11,7 @@ import org.cucina.engine.definition.Decision;
 import org.cucina.engine.definition.State;
 import org.cucina.engine.definition.Transition;
 import org.cucina.engine.model.HistoryRecord;
-import org.cucina.engine.model.WorkflowToken;
+import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.testassist.Foo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -59,7 +59,7 @@ public class HistoryListenerTest {
     @SuppressWarnings("serial")
     @Test
     public void testEnteredState() {
-        WorkflowToken token = new WorkflowToken();
+        ProcessToken token = new ProcessToken();
         HistoryRecord historyRecord = new HistoryRecord();
         Map<String, Object> parameters = new HashMap<String, Object>();
 
@@ -89,7 +89,7 @@ public class HistoryListenerTest {
     @SuppressWarnings("serial")
     @Test
     public void testLeavingState() {
-        WorkflowToken token = new WorkflowToken();
+        ProcessToken token = new ProcessToken();
         HistoryRecord oldHistoryRecord = new HistoryRecord();
 
         oldHistoryRecord.setApprovedBy("joe");
@@ -132,7 +132,7 @@ public class HistoryListenerTest {
     @SuppressWarnings("serial")
     @Test
     public void testLeavingStateToDecision() {
-        WorkflowToken token = new WorkflowToken();
+        ProcessToken token = new ProcessToken();
         HistoryRecord oldHistoryRecord = new HistoryRecord();
 
         oldHistoryRecord.setApprovedBy("joe");

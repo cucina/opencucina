@@ -1,14 +1,15 @@
-
 package org.cucina.engine.definition;
 
 import java.util.Collection;
 
+import org.springframework.util.Assert;
+
 import org.cucina.engine.DefaultExecutionContext;
 import org.cucina.engine.ExecutionContext;
 import org.cucina.engine.SignalFailedException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
 
 
 /**
@@ -93,7 +94,7 @@ public class CollectionSplit
 
             // spawn a child token
             Token child = executionContext.getTokenFactory()
-                                          .createToken(getWorkflowDefinition(), element);
+                                          .createToken(getProcessDefinition(), element);
 
             child.setPlaceId(this.getId());
 

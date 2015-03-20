@@ -11,8 +11,8 @@ import org.springframework.util.Assert;
  * @author $Author: $
  * @version $Revision: $
   */
-public class WorkflowDefinitionHelperImpl
-    implements WorkflowDefinitionHelper {
+public class ProcessDefinitionHelperImpl
+    implements ProcessDefinitionHelper {
     private ProcessDefinitionRegistry definitionRegistry;
 
     /**
@@ -20,7 +20,7 @@ public class WorkflowDefinitionHelperImpl
      *
      * @param definitionRegistry WorkflowDefinitionRegistry
      */
-    public WorkflowDefinitionHelperImpl(ProcessDefinitionRegistry definitionRegistry) {
+    public ProcessDefinitionHelperImpl(ProcessDefinitionRegistry definitionRegistry) {
         super();
         Assert.notNull(definitionRegistry, "definitionRegistry cannot be null");
         this.definitionRegistry = definitionRegistry;
@@ -36,19 +36,19 @@ public class WorkflowDefinitionHelperImpl
     @Override
     public boolean isEnded(Token token) {
         Assert.notNull(token, "token cannot be null");
-        Assert.notNull(token.getWorkflowDefinitionId(), "token must have a workflowDefinitionId");
+        Assert.notNull(token.getProcessDefinitionId(), "token must have a workflowDefinitionId");
         Assert.notNull(token.getPlaceId(), "token must have a placeId");
 
-        ProcessDefinition definition = definitionRegistry.findWorkflowDefinition(token.getWorkflowDefinitionId());
+        ProcessDefinition definition = definitionRegistry.findWorkflowDefinition(token.getProcessDefinitionId());
 
         Assert.notNull(definition,
-            "No definition defined for [" + token.getWorkflowDefinitionId() + "]");
+            "No definition defined for [" + token.getProcessDefinitionId() + "]");
 
         State place = definition.findPlace(token.getPlaceId());
 
         Assert.notNull(place,
             "No place [" + token.getPlaceId() + "] defined for [" +
-            token.getWorkflowDefinitionId() + "]");
+            token.getProcessDefinitionId() + "]");
 
         return place instanceof EndStation;
     }

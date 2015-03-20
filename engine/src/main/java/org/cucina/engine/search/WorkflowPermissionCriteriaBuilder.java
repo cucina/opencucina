@@ -12,7 +12,7 @@ import org.springframework.util.CollectionUtils;
 
 import org.cucina.engine.definition.Station;
 import org.cucina.engine.definition.Transition;
-import org.cucina.engine.service.WorkflowSupportService;
+import org.cucina.engine.service.ProcessSupportService;
 
 import org.cucina.search.marshall.SearchCriterionMarshaller;
 import org.cucina.search.query.SearchBean;
@@ -48,7 +48,7 @@ public class WorkflowPermissionCriteriaBuilder
     private PermissionCriteriaBuilderHelper permissionCriteriaBuilderHelper;
     private PermissionRepository permissionRepository;
     private PrivilegeRepository privilegeRepository;
-    private WorkflowSupportService workflowSupportService;
+    private ProcessSupportService workflowSupportService;
 
     /**
      * Creates a new WorkflowPermissionCriteriaBuilder object.
@@ -62,7 +62,7 @@ public class WorkflowPermissionCriteriaBuilder
     public WorkflowPermissionCriteriaBuilder(AccessRegistry accessRegistry,
         PermissionCriteriaBuilderHelper permissionCriteriaBuilderHelper,
         PermissionRepository permissionRepository, PrivilegeRepository privilegeRepository,
-        WorkflowSupportService workflowSupportService) {
+        ProcessSupportService workflowSupportService) {
         Assert.notNull(accessRegistry, "accessRegistry is null");
         this.accessRegistry = accessRegistry;
         Assert.notNull(permissionCriteriaBuilderHelper, "permissionCriteriaBuilderHelper is null");

@@ -29,7 +29,7 @@ import org.cucina.engine.server.event.workflow.StartWorkflowEvent;
 import org.cucina.engine.server.event.workflow.ValueEvent;
 import org.cucina.engine.server.event.workflow.WorkflowEvent;
 import org.cucina.engine.server.model.EntityDescriptor;
-import org.cucina.engine.service.WorkflowSupportService;
+import org.cucina.engine.service.ProcessSupportService;
 
 import org.cucina.i18n.api.ListNodeDto;
 import org.cucina.i18n.api.ListNodeService;
@@ -50,7 +50,7 @@ public class MessagingWorkflowServiceHandlerImpl
     private static final Logger LOG = LoggerFactory.getLogger(MessagingWorkflowServiceHandlerImpl.class);
     private ConversationContext conversationContext;
     private ListNodeService listNodeService;
-    private WorkflowSupportService workflowSupportService;
+    private ProcessSupportService workflowSupportService;
 
     /**
      * Creates a new MessagingWorkflowServiceHandlerImpl object.
@@ -61,7 +61,7 @@ public class MessagingWorkflowServiceHandlerImpl
      */
     @Autowired
     public MessagingWorkflowServiceHandlerImpl(ConversationContext conversationContext,
-        ListNodeService listNodeService, WorkflowSupportService workflowSupportService) {
+        ListNodeService listNodeService, ProcessSupportService workflowSupportService) {
         Assert.notNull(conversationContext, "conversationContext is null");
         this.conversationContext = conversationContext;
         Assert.notNull(listNodeService, "listNodeService is null");
