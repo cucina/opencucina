@@ -72,21 +72,6 @@ public abstract class AbstractInstanceFactory
     }
 
     /**
-     * Return true if i18nProperties contains property
-     *
-     * @param property
-     *            type.propertyName.
-     *
-     * @return true/false if property internationalised.
-     */
-    @Override
-    public boolean isTranslatedProperty(String className, String property) {
-        Class<?> t = getClassType(className);
-
-        return (t == null) ? false : ClassDescriptor.isTranslatedProperty(t, property);
-    }
-
-    /**
      * First part of the property before the . should be the type name as in
      * getBean() method
      *

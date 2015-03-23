@@ -21,7 +21,6 @@ import org.cucina.core.model.support.JsonMapConverter;
 import org.cucina.core.validation.NotBlank;
 
 import org.cucina.i18n.validation.UniqueListNode;
-import org.cucina.i18n.validation.UniqueMessageCode;
 
 
 /**
@@ -30,7 +29,6 @@ import org.cucina.i18n.validation.UniqueMessageCode;
 @Entity
 @Cacheable
 @UniqueListNode
-//@UniqueMessageCode
 @PostProcessProjections
 public class ListNode
     extends PersistableEntity

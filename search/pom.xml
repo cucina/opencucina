@@ -19,7 +19,12 @@
 		</dependency>
 		<dependency>
 			<groupId>cucina</groupId>
-			<artifactId>cucina-security</artifactId>
+			<artifactId>cucina-security-api</artifactId>
+			<version>0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>cucina</groupId>
+			<artifactId>cucina-i18n-api</artifactId>
 			<version>0.1</version>
 		</dependency>
 	</dependencies>

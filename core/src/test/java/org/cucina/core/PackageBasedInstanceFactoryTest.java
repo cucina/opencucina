@@ -68,15 +68,6 @@ public class PackageBasedInstanceFactoryTest {
     }
 
     /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    public void testInternationalised() {
-        assertTrue("Should be internationalised", instanceFactory.isTranslatedProperty("Foo", "name"));
-        assertFalse("Should not be internationalised", instanceFactory.isTranslatedProperty("Foo", "fred"));
-    }
-
-    /**
      * Test Foreign keys
      */
     @Test

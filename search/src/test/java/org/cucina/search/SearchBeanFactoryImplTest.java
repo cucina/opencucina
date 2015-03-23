@@ -15,10 +15,11 @@ import javax.validation.groups.Default;
 import org.apache.commons.beanutils.BeanPropertyValueEqualsPredicate;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.functors.AndPredicate;
-import org.apache.commons.lang3.StringUtils;
 
 import org.cucina.core.InstanceFactory;
 import org.cucina.core.utils.NameUtils;
+
+import org.cucina.i18n.api.LocaleService;
 
 import org.cucina.search.marshall.SearchCriterionMarshallManager;
 import org.cucina.search.marshall.SearchCriterionMarshaller;
@@ -34,17 +35,19 @@ import org.cucina.search.query.projection.Projection;
 import org.cucina.search.query.projection.SimplePropertyProjection;
 import org.cucina.search.query.projection.TranslatedPropertyProjection;
 import org.cucina.search.testassist.Foo;
-
-import org.cucina.security.model.Preference;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import org.mockito.Mock;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import org.mockito.MockitoAnnotations;
 
 
 /**
@@ -68,6 +71,8 @@ public class SearchBeanFactoryImplTest {
     private static final String FOREIGN_PROPERTY = "bar";
     private static final String FOREIGN_ALIAS = "foreign";
     private static final String RESTRICT_ALIAS = "restrictToJobs";
+    @Mock
+    private LocaleService localeService;
     private Map<String, String> aliasPropertyMap;
     private SearchBeanFactoryImpl factory;
 
@@ -77,6 +82,7 @@ public class SearchBeanFactoryImplTest {
     @SuppressWarnings("unchecked")
     @Before
     public void setup() {
+        MockitoAnnotations.initMocks(this);
         aliasPropertyMap = new HashMap<String, String>();
         aliasPropertyMap.put(ID_ALIAS, ID_PROPERTY);
         aliasPropertyMap.put(VALUE_ALIAS, VALUE_PROPERTY);
@@ -163,7 +169,7 @@ public class SearchBeanFactoryImplTest {
                 "firstName");
         Projection surnameProjection = new SimplePropertyProjection("surname", "name", "Name");
         Projection translatedProjection = new TranslatedPropertyProjection("firstline", "address",
-                "Address");
+                "Address", localeService);
 
         ProjectionFactory profactory = mock(ProjectionFactory.class);
 
@@ -222,7 +228,7 @@ public class SearchBeanFactoryImplTest {
 
         Projection surnameProjection = new SimplePropertyProjection("surname", "name", "Name");
         Projection translatedProjection = new TranslatedPropertyProjection("firstline", "address",
-                "Address");
+                "Address", localeService);
 
         ProjectionFactory profactory = mock(ProjectionFactory.class);
 
@@ -290,7 +296,7 @@ public class SearchBeanFactoryImplTest {
     public void testBuildSearchBean() {
         Map<String, String> additionalAliases = new HashMap<String, String>();
 
-        additionalAliases.put(Preference.class.getSimpleName(), "preference");
+        additionalAliases.put("Preference", "preference");
 
         Map<String, Map<String, String>> additionalAliasesByType = new HashMap<String, Map<String, String>>();
 
@@ -372,7 +378,7 @@ public class SearchBeanFactoryImplTest {
                     new BeanPropertyValueEqualsPredicate(VALUE_PROPERTY, VALUE))));
 
         assertEquals("Should have added preference alias", "preference",
-            bean.getAliasByType().get(Preference.class.getSimpleName()));
+            bean.getAliasByType().get("Preference"));
     }
 
     /**

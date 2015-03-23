@@ -10,7 +10,6 @@ import javax.persistence.Table;
 
 import org.cucina.core.model.PersistableEntity;
 import org.cucina.core.model.support.BooleanConverter;
-
 import org.cucina.search.SavedSearch;
 import org.cucina.search.query.SearchBean;
 

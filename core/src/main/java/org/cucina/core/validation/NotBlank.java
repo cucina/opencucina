@@ -13,7 +13,7 @@ import javax.validation.Payload;
 )
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.CONSTRUCTOR, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface NotBlank {public abstract String message() default "{org.cucina.meringue.validation.NotBlank.message}";
+public @interface NotBlank {public abstract String message() default "{org.cucina.core.validation.NotBlank.message}";
     public abstract Class<?>[] groups() default  {
     }
     ;

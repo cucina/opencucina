@@ -10,13 +10,17 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cucina.security.ContextUserAccessor;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import org.cucina.security.model.Preference;
 import org.cucina.security.model.User;
 import org.cucina.security.repository.PreferenceRepository;
+import org.cucina.security.service.UserAccessor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.userdetails.UserDetails;
 
 
 /**
@@ -30,16 +34,8 @@ public class PreferenceRepositoryImpl
     private static final Logger LOG = LoggerFactory.getLogger(PreferenceRepositoryImpl.class);
     @PersistenceContext
     private EntityManager entityManager;
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param entityManager
-     *            JAVADOC.
-     */
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
+    @Autowired
+    private UserAccessor userAccessor;
 
     /**
      * JAVADOC Method Level Comments
@@ -141,7 +137,8 @@ public class PreferenceRepositoryImpl
      */
     @Override
     public void saveAll(Collection<Preference> preferences) {
-    	User user = getUser();
+        User user = getUser();
+
         for (Preference preference : preferences) {
             if (preference.getOwner() == null) {
                 preference.setOwner(user);
@@ -152,7 +149,7 @@ public class PreferenceRepositoryImpl
     }
 
     private User getUser() {
-        Object u = ContextUserAccessor.getCurrentUser();
+        Object u = userAccessor.getCurrentUser();
 
         if (u instanceof User) {
             return (User) u;

@@ -22,8 +22,8 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.cucina.email.api.EmailDto;
 import org.cucina.email.repository.RepositoryTemplateLoader;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

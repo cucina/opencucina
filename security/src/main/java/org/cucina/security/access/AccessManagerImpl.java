@@ -16,12 +16,12 @@ import org.springframework.util.Assert;
 import org.cucina.core.InstanceFactory;
 import org.cucina.core.model.PersistableEntity;
 
-import org.cucina.security.ContextUserAccessor;
 import org.cucina.security.model.Dimension;
 import org.cucina.security.model.Permission;
 import org.cucina.security.model.Privilege;
 import org.cucina.security.model.User;
 import org.cucina.security.repository.UserRepository;
+import org.cucina.security.service.UserAccessor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +39,7 @@ public class AccessManagerImpl
     private InstanceFactory instanceFactory;
     private Map<String, String> suffixByType = new HashMap<String, String>();
     private String adminPrivilegeName;
+    private UserAccessor userAccessor;
     private UserRepository userRepository;
 
     /**
@@ -49,11 +50,13 @@ public class AccessManagerImpl
      * @param adminPrivilegeName JAVADOC.
      */
     public AccessManagerImpl(InstanceFactory instanceFactory, UserRepository userRepository,
-        String adminPrivilegeName) {
+        UserAccessor userAccessor, String adminPrivilegeName) {
         Assert.notNull(instanceFactory, "instanceFactory is null");
         this.instanceFactory = instanceFactory;
         Assert.notNull(userRepository, "userRepository is null");
         this.userRepository = userRepository;
+        Assert.notNull(userAccessor, "userAccessor is null");
+        this.userAccessor = userAccessor;
         Assert.hasLength(adminPrivilegeName, "adminPrivilegeName is empty");
         this.adminPrivilegeName = adminPrivilegeName;
     }
@@ -89,7 +92,7 @@ public class AccessManagerImpl
         Map<String, Object> propertyValues) {
         Assert.hasText(privilegeName, "privilegeName is required!");
 
-        User user = (User) ContextUserAccessor.getCurrentUser();
+        User user = (User) userAccessor.getCurrentUser();
 
         return userHasPermission(user, privilegeName, typeName, propertyValues);
     }
@@ -132,7 +135,7 @@ public class AccessManagerImpl
     public boolean hasPrivilege(String privilegeName) {
         Assert.hasText(privilegeName, "privilegeName is required!");
 
-        User user = (User) ContextUserAccessor.getCurrentUser();
+        User user = (User) userAccessor.getCurrentUser();
 
         return userHasPrivilege(privilegeName, user);
     }
@@ -163,7 +166,7 @@ public class AccessManagerImpl
         }
 
         if ((filterCurrent != null) && filterCurrent) {
-            result.remove(ContextUserAccessor.getCurrentUser());
+            result.remove(userAccessor.getCurrentUser());
         }
 
         return result;

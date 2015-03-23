@@ -1,5 +1,6 @@
 package org.cucina.email;
 
+import org.cucina.email.api.EmailDto;
 import org.cucina.email.service.AbstractEmailHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;

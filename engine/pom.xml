@@ -31,7 +31,12 @@
 		</dependency>
 		<dependency>
 			<groupId>cucina</groupId>
-			<artifactId>cucina-security</artifactId>
+			<artifactId>cucina-email-api</artifactId>
+			<version>0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>cucina</groupId>
+			<artifactId>cucina-security-api</artifactId>
 			<version>0.1</version>
 		</dependency>
 		<dependency>

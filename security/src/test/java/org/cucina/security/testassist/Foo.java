@@ -19,8 +19,8 @@ import javax.xml.bind.annotation.XmlType;
 import org.cucina.core.model.PersistableEntity;
 import org.cucina.core.model.Versioned;
 import org.cucina.core.model.projection.ProjectionColumn;
-import org.cucina.core.model.projection.TranslatedColumns;
 
+import org.cucina.i18n.api.TranslatedColumn;
 import org.cucina.i18n.model.Message;
 
 
@@ -34,7 +34,6 @@ import org.cucina.i18n.model.Message;
 @XmlType(name = "foo")
 @XmlRootElement(name = "foo")
 @Entity(name = Foo.TYPE)
-@TranslatedColumns("name")
 public class Foo
     extends PersistableEntity
     implements Versioned {
@@ -46,6 +45,7 @@ public class Foo
     private Collection<Baz> bazs;
     private Date date;
     private Message message;
+    @TranslatedColumn
     private String name;
     private int value;
     private int version;

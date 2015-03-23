@@ -1,4 +1,3 @@
-
 package org.cucina.search.query.modifier;
 
 import java.util.Collection;
@@ -7,7 +6,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.cucina.i18n.service.I18nService;
+import org.cucina.i18n.api.LocaleService;
 import org.cucina.search.query.SearchBean;
 import org.cucina.search.query.SearchCriterion;
 import org.cucina.search.query.criterion.TextSearchCriterion;
@@ -28,17 +27,17 @@ import org.springframework.util.Assert;
 public class TranslatedMessageRestrictionCriteriaModifer
     extends AbstractCriteriaModifier {
     private static final Logger LOG = LoggerFactory.getLogger(TranslatedMessageRestrictionCriteriaModifer.class);
-    private I18nService i18nService;
+    private LocaleService localeService;
 
     /**
      * Creates a new TranslatedMessageRestrictionCriteriaModifer object.
      *
      * @param i18nService JAVADOC.
      */
-    public TranslatedMessageRestrictionCriteriaModifer(I18nService i18nService) {
+    public TranslatedMessageRestrictionCriteriaModifer(LocaleService localeService) {
         super();
-        Assert.notNull(i18nService, "i18nService must be provided as an argument");
-        this.i18nService = i18nService;
+        Assert.notNull(localeService, "localeService must be provided as an argument");
+        this.localeService = localeService;
     }
 
     /**
@@ -58,7 +57,7 @@ public class TranslatedMessageRestrictionCriteriaModifer
         }
 
         if (CollectionUtils.isNotEmpty(searchBean.getProjections())) {
-            Locale locale = i18nService.getLocale();
+            Locale locale = localeService.currentUserLocale();
 
             for (Projection projection : searchBean.getProjections()) {
                 if (projection instanceof TranslatedMessageWithJoinProjection) {
@@ -67,8 +66,8 @@ public class TranslatedMessageRestrictionCriteriaModifer
                             projection.getName() + "] by user locale [" + locale.toString() + "]");
                     }
 
-                    TextSearchCriterion localeRestriction = new TextSearchCriterion("localeCd", projection.getAlias(),
-                            projection.getRootAlias(), locale.toString());
+                    TextSearchCriterion localeRestriction = new TextSearchCriterion("localeCd",
+                            projection.getAlias(), projection.getRootAlias(), locale.toString());
 
                     localeRestriction.setExact(true);
 

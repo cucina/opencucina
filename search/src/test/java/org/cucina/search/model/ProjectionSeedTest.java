@@ -1,5 +1,9 @@
 package org.cucina.search.model;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -7,16 +11,8 @@ import javax.validation.groups.Default;
 
 import org.apache.commons.beanutils.BeanPropertyValueEqualsPredicate;
 import org.apache.commons.collections.CollectionUtils;
-
 import org.cucina.core.model.projection.ProjectionColumn;
-
 import org.cucina.search.model.projection.Search;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import org.junit.Before;
-import org.junit.Test;
 
 
 /**

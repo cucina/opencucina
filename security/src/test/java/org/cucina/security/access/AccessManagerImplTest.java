@@ -1,13 +1,5 @@
 package org.cucina.security.access;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,23 +8,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.cucina.core.InstanceFactory;
-import org.cucina.core.model.PersistableEntity;
-import org.cucina.core.spring.SingletonBeanFactory;
-import org.cucina.security.testassist.Bar;
-import org.cucina.security.testassist.Baz;
-import org.cucina.security.testassist.Foo;
-import org.cucina.security.ContextUserAccessor;
-import org.cucina.security.model.Dimension;
-import org.cucina.security.model.Permission;
-import org.cucina.security.model.Privilege;
-import org.cucina.security.model.Role;
-import org.cucina.security.model.User;
-import org.cucina.security.repository.UserRepository;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -42,6 +17,34 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import org.cucina.core.InstanceFactory;
+import org.cucina.core.model.PersistableEntity;
+
+import org.cucina.security.model.Dimension;
+import org.cucina.security.model.Permission;
+import org.cucina.security.model.Privilege;
+import org.cucina.security.model.Role;
+import org.cucina.security.model.User;
+import org.cucina.security.repository.UserRepository;
+import org.cucina.security.service.UserAccessor;
+import org.cucina.security.testassist.Bar;
+import org.cucina.security.testassist.Baz;
+import org.cucina.security.testassist.Foo;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Before;
+import org.junit.Test;
+import static org.mockito.Matchers.anyString;
+
+import org.mockito.Mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import org.mockito.MockitoAnnotations;
+
 
 /**
  * JAVADOC for Class Level
@@ -50,19 +53,21 @@ import org.springframework.security.core.userdetails.UserDetailsService;
  * @version $Revision: $
   */
 public class AccessManagerImplTest {
+    private AccessManagerImpl permissionManager;
     @Mock
     private BeanFactory bf;
     @Mock
     private InstanceFactory instanceFactory;
     private Permission permission1;
     private Permission permission2;
-    private AccessManagerImpl permissionManager;
     private Privilege privilege1;
     private Privilege privilege2;
     private Privilege privilege3;
     private Role role1;
     private User inactiveUser;
     private User user;
+    @Mock
+    private UserAccessor userAccessor;
     @Mock
     private UserDetailsService uds;
     @Mock
@@ -75,7 +80,8 @@ public class AccessManagerImplTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         when(instanceFactory.getPropertyType(anyString(), anyString())).thenReturn("blaah");
-        permissionManager = new AccessManagerImpl(instanceFactory, userRepository, "hoho");
+        permissionManager = new AccessManagerImpl(instanceFactory, userRepository, userAccessor,
+                "hoho");
         user = new User();
 
         user.setActive(true);
@@ -84,9 +90,7 @@ public class AccessManagerImplTest {
         inactiveUser.setActive(false);
 
         setSecurityContext(user);
-        when(bf.getBean(ContextUserAccessor.USER_ACCESSOR_ID)).thenReturn(uds);
-        when(uds.loadUserByUsername(anyString())).thenReturn(user);
-        ((SingletonBeanFactory) SingletonBeanFactory.getInstance()).setBeanFactory(bf);
+        when(userAccessor.getCurrentUser()).thenReturn(user);
     }
 
     /**

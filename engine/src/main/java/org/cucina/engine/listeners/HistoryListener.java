@@ -4,19 +4,23 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
+
 import org.cucina.core.InstanceFactory;
 import org.cucina.core.model.Attachment;
+
 import org.cucina.engine.ExecutionContext;
 import org.cucina.engine.definition.Decision;
 import org.cucina.engine.definition.State;
 import org.cucina.engine.definition.Transition;
 import org.cucina.engine.model.HistoryRecord;
 import org.cucina.engine.model.ProcessToken;
-import org.cucina.security.ContextUserAccessor;
+
+import org.cucina.security.api.CurrentUserAccessor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
 
 
 /**
@@ -133,7 +137,7 @@ public class HistoryListener
         HistoryRecord history = instanceFactory.getBean(HistoryRecord.class.getSimpleName());
 
         history.setToken(token);
-        history.setModifiedBy(ContextUserAccessor.getCurrentUserName());
+        history.setModifiedBy(CurrentUserAccessor.getCurrentUserName());
         history.setModifiedDate(new Date());
 
         Attachment attachment = (Attachment) parameters.get(ATTACHMENT_PROPERTY);

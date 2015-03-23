@@ -8,8 +8,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import javax.activation.DataSource;
-
 import org.apache.commons.lang3.StringUtils;
 
 import org.springframework.beans.factory.InitializingBean;
@@ -18,9 +16,8 @@ import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
-import org.cucina.email.event.EmailEvent;
-import org.cucina.email.event.EmailWithAttachmentDto;
-import org.cucina.email.service.EmailUser;
+import org.cucina.email.api.EmailDto;
+import org.cucina.email.api.EmailEvent;
 
 import org.cucina.engine.ExecutionContext;
 import org.cucina.engine.definition.Operation;
@@ -42,13 +39,8 @@ public class EmailOperation
 
     /** users. */
     public static final String USERS = "users";
-
-    /** attachments. */
-    public static final String ATTACHMENTS_KEY = "attachments";
     private ApplicationEventPublisher applicationEventPublisher;
-    private Boolean attachmentRequired = Boolean.FALSE;
     private Boolean filterCurrentUser = Boolean.TRUE;
-    private String contextParamAttachmentsKey = ATTACHMENTS_KEY;
     private String contextUsersKey = USERS;
 
     /** Sets email descriptor name-value pairs to the map's name-value pairs. */
@@ -65,28 +57,6 @@ public class EmailOperation
     @Override
     public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
         this.applicationEventPublisher = applicationEventPublisher;
-    }
-
-    /**
-     * Email will only be sent if there are attachments provided to this Action
-     * in the ExecutionContext parameters map keyed by
-     * {@code contextParamAttachmentsKey}.
-     *
-     * @param attachmentRequired
-     *            Boolean
-     */
-    public void setAttachmentRequired(Boolean attachmentRequired) {
-        this.attachmentRequired = attachmentRequired;
-    }
-
-    /**
-     * parameters key for Collection<DataSource> of attachments
-     *
-     * @param contextParamAttachmentsKey
-     *            String
-     */
-    public void setContextParamAttachmentsKey(String contextParamAttachmentsKey) {
-        this.contextParamAttachmentsKey = contextParamAttachmentsKey;
     }
 
     /**
@@ -172,7 +142,7 @@ public class EmailOperation
         Assert.notNull(executionContext, "Workflow context cannot be null.");
         Assert.notNull(templateName, "template name cannot be null.");
 
-        Set<EmailUser> users = new HashSet<EmailUser>();
+        Set<String> users = new HashSet<String>();
 
         users.addAll(getContextUsers(executionContext));
 
@@ -184,9 +154,9 @@ public class EmailOperation
             return;
         }
 
-        EmailWithAttachmentDto descriptor = new EmailWithAttachmentDto();
+        EmailDto descriptor = new EmailDto();
 
-        descriptor.setToUsers(users);
+        descriptor.setTo(StringUtils.join(users, ","));
         descriptor.setMessageKey(templateName);
 
         Map<String, Object> params = extractTokenParameters(executionContext, propertiesList);
@@ -200,22 +170,23 @@ public class EmailOperation
 
         descriptor.setParameters(params);
 
-        Collection<DataSource> attachments = (Collection<DataSource>) executionContext.getParameters()
-                                                                                      .get(contextParamAttachmentsKey);
+        /*
+                Collection<DataSource> attachments = (Collection<DataSource>) executionContext.getParameters()
+                                                                                              .get(contextParamAttachmentsKey);
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Added attachments [" + ((attachments == null) ? 0 : attachments.size()) +
-                "]");
-        }
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Added attachments [" + ((attachments == null) ? 0 : attachments.size()) +
+                        "]");
+                }
 
-        descriptor.setAttachments(attachments);
+                descriptor.setAttachments(attachments);
 
-        if (attachmentRequired && CollectionUtils.isEmpty(descriptor.getAttachments())) {
-            LOG.debug("Not sending email as attachments are required and there are none");
+                if (attachmentRequired && CollectionUtils.isEmpty(descriptor.getAttachments())) {
+                    LOG.debug("Not sending email as attachments are required and there are none");
 
-            return;
-        }
-
+                    return;
+                }
+        */
         if (LOG.isDebugEnabled()) {
             LOG.debug("EmailDescriptor=" + descriptor);
         }
@@ -232,17 +203,17 @@ public class EmailOperation
     }
 
     @SuppressWarnings("unchecked")
-    private Collection<EmailUser> getContextUsers(ExecutionContext executionContext) {
-        Collection<EmailUser> result = null;
+    private Collection<String> getContextUsers(ExecutionContext executionContext) {
+        Collection<String> result = null;
         Map<String, Object> parameters = executionContext.getParameters();
 
         if (parameters != null) {
-            result = (Collection<EmailUser>) parameters.get(contextUsersKey);
+            result = (Collection<String>) parameters.get(contextUsersKey);
 
             if (result != null) {
                 // Check whether any of the users are null and
                 // remove them, if so
-                Iterator<EmailUser> userIter = result.iterator();
+                Iterator<String> userIter = result.iterator();
 
                 while (userIter.hasNext()) {
                     if (userIter.next() == null) {
@@ -297,11 +268,11 @@ public class EmailOperation
      *
      * @param users
      */
-    private void filterUsers(Collection<EmailUser> users) {
+    private void filterUsers(Collection<String> users) {
         if ((users != null) && filterCurrentUser.booleanValue()) {
             Object currentUser = userAccessor.getCurrentUser();
 
-            for (Iterator<EmailUser> iter = users.iterator(); iter.hasNext();) {
+            for (Iterator<String> iter = users.iterator(); iter.hasNext();) {
                 Object user = iter.next();
 
                 if ((user != null) && user.equals(currentUser)) {

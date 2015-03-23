@@ -1,5 +1,11 @@
 package org.cucina.search.jpa;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -12,14 +18,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.cucina.search.query.SearchQuery;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-
 import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 
 /**

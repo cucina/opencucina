@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.cucina.email.EmailDto;
+import org.cucina.email.api.EmailDto;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +74,7 @@ public abstract class AbstractEmailHandler {
                 continue;
             }
 
-            users.add(new SimpleEmailUser(ass[i], locale));
+            users.add(new SimpleEmailUser(ass[i].trim(), locale));
         }
 
         return users;

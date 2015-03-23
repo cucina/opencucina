@@ -15,11 +15,13 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import org.cucina.core.model.Attachment;
 import org.cucina.core.model.PersistableEntity;
 import org.cucina.core.model.projection.ProjectionColumn;
 import org.cucina.core.model.projection.ProjectionColumns;
-import org.cucina.i18n.model.ListNode;
+
+import org.cucina.i18n.api.TranslatedColumn;
 
 
 /**
@@ -41,13 +43,14 @@ public class HistoryRecord
     public static final String COMMENTS_PROPERTY = "comments";
     private Attachment attachment;
     private Date modifiedDate;
-    private ListNode reason;
+    private ProcessToken token;
     private String approvedBy;
     private String assignedTo;
     private String comments;
     private String modifiedBy;
+    @TranslatedColumn
+    private String reason;
     private String status;
-    private ProcessToken token;
 
     /**
     * JAVADOC Method Level Comments
@@ -175,7 +178,7 @@ public class HistoryRecord
      *
      * @param reason JAVADOC.
      */
-    public void setReason(ListNode reason) {
+    public void setReason(String reason) {
         this.reason = reason;
     }
 
@@ -184,10 +187,7 @@ public class HistoryRecord
      *
      * @return JAVADOC.
      */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reason")
-    //@ProjectionColumn(columnName = "hrReason", property = "label", groups = Export.class)
-    public ListNode getReason() {
+    public String getReason() {
         return reason;
     }
 

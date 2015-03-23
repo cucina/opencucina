@@ -20,10 +20,8 @@ import org.slf4j.LoggerFactory;
  */
 public class CompositeInstanceFactory
     extends AbstractInstanceFactory {
-    private static final String I18N_KEY = "i18n:";
     private static final Logger LOG = LoggerFactory.getLogger(CompositeInstanceFactory.class);
     private List<InstanceFactory> instanceFactories = new ArrayList<InstanceFactory>();
-    private Map<String, Boolean> attrCache = new HashMap<String, Boolean>();
     private Map<String, String> ptCache = new HashMap<String, String>();
 
     /**
@@ -125,35 +123,6 @@ public class CompositeInstanceFactory
         ptCache.put(cacheKey, type);
 
         return type;
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param property JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    public boolean isTranslatedProperty(String className, String property) {
-        String cacheKey = I18N_KEY + NameUtils.concat(className, property);
-        Boolean isI18n = attrCache.get(cacheKey);
-
-        if (isI18n == null) {
-            isI18n = false;
-
-            for (InstanceFactory instfac : instanceFactories) {
-                isI18n = instfac.isTranslatedProperty(className, property);
-
-                if (isI18n) {
-                    break;
-                }
-            }
-
-            attrCache.put(cacheKey, isI18n);
-        }
-
-        return isI18n;
     }
 
     /**

@@ -12,8 +12,11 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.test.util.ReflectionTestUtils;
+
 import org.cucina.security.model.Preference;
 import org.cucina.security.model.User;
+import org.cucina.security.service.UserAccessor;
 import org.cucina.security.testassist.SecurityHelper;
 import static org.junit.Assert.assertEquals;
 
@@ -41,6 +44,8 @@ public class PreferenceRepositoryImplTest {
     private EntityManager em;
     private PreferenceRepositoryImpl repo;
     private User user;
+    @Mock
+    private UserAccessor userAccessor;
 
     /**
      * JAVADOC Method Level Comments
@@ -52,7 +57,9 @@ public class PreferenceRepositoryImplTest {
         throws Exception {
         MockitoAnnotations.initMocks(this);
         repo = new PreferenceRepositoryImpl();
-        repo.setEntityManager(em);
+        ReflectionTestUtils.setField(repo, "entityManager", em);
+        ReflectionTestUtils.setField(repo, "userAccessor", userAccessor);
+
         when(em.getCriteriaBuilder()).thenReturn(cb);
         user = new User();
         user.setUsername("John");
@@ -227,6 +234,7 @@ public class PreferenceRepositoryImplTest {
 
         when(p.getName()).thenReturn("name");
         when(p.isNew()).thenReturn(true);
+        when(userAccessor.getCurrentUser()).thenReturn(user);
         repo.save(p);
         verify(em).persist(p);
         verify(p).setOwner(user);

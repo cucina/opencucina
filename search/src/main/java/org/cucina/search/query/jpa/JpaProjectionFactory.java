@@ -1,23 +1,20 @@
 package org.cucina.search.query.jpa;
 
 import org.apache.commons.lang3.StringUtils;
-
-import org.springframework.util.Assert;
-
 import org.cucina.core.InstanceFactory;
-import org.cucina.core.utils.NameUtils;
-
-import org.cucina.i18n.model.ListNode;
-
+import org.cucina.core.utils.ClassDescriptor;
+import org.cucina.i18n.api.LocaleService;
+import org.cucina.i18n.api.TranslatedColumn;
 import org.cucina.search.query.ProjectionFactory;
 import org.cucina.search.query.projection.CountProjection;
 import org.cucina.search.query.projection.MaxProjection;
 import org.cucina.search.query.projection.Projection;
 import org.cucina.search.query.projection.SimplePropertyProjection;
 import org.cucina.search.query.projection.TranslatedPropertyProjection;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 
 
 /**
@@ -32,6 +29,8 @@ public class JpaProjectionFactory
     private static final String MAX_AGG = "max";
     private static final String COUNT_AGG = "count";
     private InstanceFactory instanceFactory;
+    @Autowired
+    private LocaleService localeService;
 
     /**
      * Constructor with instanceFactory argument.
@@ -69,12 +68,15 @@ public class JpaProjectionFactory
         }
 
         Projection projection = null;
+        Class<?> clazz = instanceFactory.getClassType(rootType);
 
-        if (ListNode.class.getSimpleName().equals(instanceFactory.getPropertyType(rootType, name))) {
+        //TODO less fragile
+        /*if ("ListNodeDto".contains(instanceFactory.getPropertyType(rootType, name))) {
             projection = new TranslatedPropertyProjection(NameUtils.concat(name, "label.messageCd"),
                     alias, rootAlias);
-        } else if (instanceFactory.isTranslatedProperty(rootType, name)) {
-            projection = new TranslatedPropertyProjection(name, alias, rootAlias);
+        } else*/
+        if (ClassDescriptor.hasAnnotation(clazz, name, TranslatedColumn.class)) {
+            projection = new TranslatedPropertyProjection(name, alias, rootAlias, localeService);
         } else if (MAX_AGG.equals(specialFunction)) {
             projection = new MaxProjection(name, alias, rootAlias);
         } else if (COUNT_AGG.equals(specialFunction)) {

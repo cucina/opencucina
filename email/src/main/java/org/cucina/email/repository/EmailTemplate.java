@@ -4,7 +4,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Lob;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
@@ -82,11 +81,17 @@ public class EmailTemplate
         return name;
     }
 
+    /**
+     *
+     */
     @PrePersist
     void createdAt() {
         lastModified = new Date();
     }
 
+    /**
+     *
+     */
     @PreUpdate
     void updatedAt() {
         lastModified = new Date();

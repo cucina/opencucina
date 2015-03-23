@@ -5,9 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +38,6 @@ public class CompositeInstanceFactoryTest {
 
         InstanceFactory if1 = mock(InstanceFactory.class);
 
-        when(if1.isTranslatedProperty("Foo", "name")).thenReturn(true);
         when(if1.getPropertyType("Foo", "bla")).thenReturn("Bla");
 
         Collection<String> blaProperties = new HashSet<String>();
@@ -91,21 +88,5 @@ public class CompositeInstanceFactoryTest {
     public void testGetPropertyTypeString() {
         assertNull(instanceFactory.getPropertyType("User", "password"));
         assertNull(instanceFactory.getPropertyType("Foo", "xxx"));
-    }
-
-    /**
-     * Checks all instanceFactories that property is i18n
-     */
-    @Test
-    public void testInternationalised() {
-        assertTrue("Should be internationalised", instanceFactory.isTranslatedProperty("Foo", "name"));
-    }
-
-    /**
-     * Checks all instanceFactories that property is not i18n
-     */
-    @Test
-    public void testNotInternationalised() {
-        assertFalse("Should not be internationalised", instanceFactory.isTranslatedProperty("Foo", "fred"));
     }
 }

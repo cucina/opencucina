@@ -12,16 +12,13 @@ import javax.persistence.Query;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
-
-import org.springframework.dao.DataAccessException;
-import org.springframework.util.Assert;
-
 import org.cucina.search.SearchDao;
 import org.cucina.search.query.NamedQuery;
 import org.cucina.search.query.SearchQuery;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
+import org.springframework.util.Assert;
 
 
 /**

@@ -1,7 +1,7 @@
 
 package org.cucina.engine.email;
 
-import org.cucina.security.ContextUserAccessor;
+import org.cucina.security.api.CurrentUserAccessor;
 
 
 
@@ -20,6 +20,6 @@ public class AcegiUserAccessorBean
      */
     @Override
     public Object getCurrentUser() {
-        return ContextUserAccessor.getCurrentUser();
+        return CurrentUserAccessor.getCurrentUserName();
     }
 }

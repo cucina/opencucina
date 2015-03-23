@@ -1,22 +1,18 @@
 package org.cucina.search.query.jpa;
 
+import org.apache.commons.lang3.ClassUtils;
+
+import org.cucina.core.PackageBasedInstanceFactory;
+
+import org.cucina.search.query.projection.MaxProjection;
+import org.cucina.search.query.projection.SimplePropertyProjection;
+import org.cucina.search.testassist.Foo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-import org.apache.commons.lang3.ClassUtils;
-import org.cucina.core.InstanceFactory;
-import org.cucina.core.PackageBasedInstanceFactory;
-import org.cucina.i18n.model.ListNode;
-import org.cucina.search.query.projection.MaxProjection;
-import org.cucina.search.query.projection.Projection;
-import org.cucina.search.query.projection.SimplePropertyProjection;
-import org.cucina.search.query.projection.TranslatedPropertyProjection;
-import org.cucina.search.testassist.Foo;
 import org.junit.Before;
 import org.junit.Test;
+
 
 /**
  * Tests JpaProjectionFactory functions as expected.
@@ -57,39 +53,6 @@ public class JpaProjectionFactoryTest {
         assertEquals("projection name incorrect", PROJECTION_NAME, projection.getName());
         assertEquals("projection alias incorrect", PROJECTION_ALIAS, projection.getAlias());
         assertEquals("projection name incorrect", PROJECTION_NAME, projection.getName());
-    }
-
-    /**
-     * TranslatedMessageWithJoinProjection created.
-     */
-    @Test
-    public void createsTranslatedProjection() {
-        Projection projection = factory.create(Foo.TYPE, "name", PROJECTION_ALIAS, FOO_ALIAS, null);
-
-        assertNotNull("must return projection", projection);
-        assertTrue(projection instanceof TranslatedPropertyProjection);
-        assertEquals("projection name incorrect", "name", projection.getName());
-        assertEquals("projection alias incorrect", PROJECTION_ALIAS, projection.getAlias());
-        assertEquals("projection alias incorrect", FOO_ALIAS, projection.getRootAlias());
-    }
-
-    /**
-     * TranslatedMessageWithJoinProjection created.
-     */
-    @Test
-    public void createsTranslatedProjectionForListNode() {
-        InstanceFactory iFactory = mock(InstanceFactory.class);
-
-        when(iFactory.getPropertyType(Foo.TYPE, "name")).thenReturn(ListNode.class.getSimpleName());
-
-        JpaProjectionFactory pFactory = new JpaProjectionFactory(iFactory);
-        Projection projection = pFactory.create(Foo.TYPE, "name", PROJECTION_ALIAS, FOO_ALIAS, null);
-
-        assertNotNull("must return projection", projection);
-        assertTrue(projection instanceof TranslatedPropertyProjection);
-        assertEquals("projection name incorrect", "name.label.messageCd", projection.getName());
-        assertEquals("projection alias incorrect", PROJECTION_ALIAS, projection.getAlias());
-        assertEquals("projection alias incorrect", FOO_ALIAS, projection.getRootAlias());
     }
 
     /**

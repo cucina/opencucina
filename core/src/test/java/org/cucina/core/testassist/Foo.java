@@ -20,17 +20,11 @@ import javax.xml.bind.annotation.XmlType;
 import org.cucina.core.model.PersistableEntity;
 import org.cucina.core.model.Versioned;
 import org.cucina.core.model.projection.ProjectionColumn;
-import org.cucina.core.model.projection.TranslatedColumns;
 
-/**
- *
- * @author ajoffe
- */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "foo")
 @XmlRootElement(name = "foo")
 @Entity(name = Foo.TYPE)
-@TranslatedColumns("name")
 @NamedQueries(value = { @NamedQuery(name = "allFoo", query = "select foo from Foo foo where foo.name = ?1") })
 @Cacheable
 public class Foo extends PersistableEntity implements Versioned {

@@ -17,7 +17,9 @@ import org.cucina.engine.model.WorkflowHistory;
 import org.cucina.engine.repository.WorkflowRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindException;
 
@@ -26,20 +28,20 @@ import org.springframework.validation.BindException;
  * JAVADOC for Class Level
  *
  * @author $Author: vlevine $
- * @version $Revision: 1.3 $
  */
+@Service
 public class DefinitionServiceImpl
     implements DefinitionService {
     private static final Logger LOG = LoggerFactory.getLogger(DefinitionServiceImpl.class);
     private InstanceFactory instanceFactory;
-    private ProcessEnvironment workflowEnvironment;
+    private ProcessEnvironment processEnvironment;
     private Validator validator;
     private WorkflowRepository workflowRepository;
 
     /**
      * Creates a new DefinitionServiceImpl object.
      *
-     * @param workflowEnvironment
+     * @param processEnvironment
      *            JAVADOC.
      * @param instanceFactory
      *            JAVADOC.
@@ -48,10 +50,11 @@ public class DefinitionServiceImpl
      * @param workflowRepository
      *            JAVADOC.
      */
-    public DefinitionServiceImpl(ProcessEnvironment workflowEnvironment,
+    @Autowired
+    public DefinitionServiceImpl(ProcessEnvironment processEnvironment,
         InstanceFactory instanceFactory, WorkflowRepository workflowRepository) {
-        Assert.notNull(workflowEnvironment, "workflowEnvironment is null");
-        this.workflowEnvironment = workflowEnvironment;
+        Assert.notNull(processEnvironment, "workflowEnvironment is null");
+        this.processEnvironment = processEnvironment;
         Assert.notNull(instanceFactory, "instanceFactory is null");
         this.instanceFactory = instanceFactory;
         Assert.notNull(workflowRepository, "workflowRepository is null");
@@ -93,7 +96,7 @@ public class DefinitionServiceImpl
         validate(workflow, Create.class);
 
         workflow.setWorkflowId(newHistory.getWorkflowDefinition().getId());
-        workflowEnvironment.getDefinitionRegistry()
+        processEnvironment.getDefinitionRegistry()
                            .registerWorkflowDefinition(newHistory.getWorkflowDefinition());
 
         workflowRepository.save(workflow);
@@ -130,7 +133,7 @@ public class DefinitionServiceImpl
      */
     @Override
     public ProcessDefinition loadDefinition(String id) {
-        return workflowEnvironment.getDefinitionRegistry().findWorkflowDefinition(id);
+        return processEnvironment.getDefinitionRegistry().findWorkflowDefinition(id);
     }
 
     /**
@@ -171,7 +174,7 @@ public class DefinitionServiceImpl
         validate(workflow, Update.class);
 
         workflowRepository.save(workflow);
-        workflowEnvironment.getDefinitionRegistry()
+        processEnvironment.getDefinitionRegistry()
                            .registerWorkflowDefinition(newHistory.getWorkflowDefinition());
 
         return workflow;
@@ -188,7 +191,7 @@ public class DefinitionServiceImpl
 
         newHistory.setAttachment(attachment);
 
-        ProcessDefinition definition = workflowEnvironment.getDefinitionParser()
+        ProcessDefinition definition = processEnvironment.getDefinitionParser()
                                                           .parse(new ByteArrayResource(content));
 
         Assert.notNull(definition, "failed to parse definition from file '" + fileName + "'");

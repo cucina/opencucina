@@ -7,9 +7,7 @@ import java.io.StringReader;
 import javax.persistence.AttributeConverter;
 
 import org.cucina.core.model.support.JsonMarshallerFactory;
-
 import org.cucina.search.query.SearchBean;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

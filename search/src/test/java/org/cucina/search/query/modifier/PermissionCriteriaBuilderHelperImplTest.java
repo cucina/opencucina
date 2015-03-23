@@ -1,26 +1,22 @@
 package org.cucina.search.query.modifier;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import org.cucina.core.InstanceFactory;
-
-import org.cucina.search.query.SearchCriterion;
-import org.cucina.search.query.criterion.ForeignKeySearchCriterion;
-
-import org.cucina.security.model.Dimension;
-import org.cucina.security.model.Permission;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import org.mockito.Mock;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.cucina.core.InstanceFactory;
+import org.cucina.search.query.SearchCriterion;
+import org.cucina.search.query.criterion.ForeignKeySearchCriterion;
+import org.cucina.security.api.DimensionDto;
+import org.cucina.security.api.PermissionDto;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 
@@ -52,10 +48,10 @@ public class PermissionCriteriaBuilderHelperImplTest {
      */
     @Test
     public void testBuildClause() {
-        Collection<Permission> permissions = new ArrayList<Permission>();
-        Permission permission = new Permission();
-        Collection<Dimension> dimensions = new ArrayList<Dimension>();
-        Dimension dimension = new Dimension();
+        Collection<PermissionDto> permissions = new ArrayList<PermissionDto>();
+        PermissionDto permission = new PermissionDto();
+        Collection<DimensionDto> dimensions = new ArrayList<DimensionDto>();
+        DimensionDto dimension = new DimensionDto();
 
         dimension.setPropertyName("bars");
         dimension.setDomainObjectId(20L);

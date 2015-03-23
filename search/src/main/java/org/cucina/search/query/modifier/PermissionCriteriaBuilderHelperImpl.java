@@ -13,8 +13,8 @@ import org.cucina.search.query.SearchCriterion;
 import org.cucina.search.query.criterion.AndSearchCriterion;
 import org.cucina.search.query.criterion.ForeignKeySearchCriterion;
 import org.cucina.search.query.criterion.OrSearchCriterion;
-import org.cucina.security.model.Dimension;
-import org.cucina.security.model.Permission;
+import org.cucina.security.api.DimensionDto;
+import org.cucina.security.api.PermissionDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,14 +56,14 @@ public class PermissionCriteriaBuilderHelperImpl
      */
     @Override
     public SearchCriterion buildClause(String typeName, String searchAlias,
-        Collection<Permission> permissions) {
+        Collection<PermissionDto> permissions) {
         List<SearchCriterion> criteria = new ArrayList<SearchCriterion>();
 
         Map<String, String> parentAliases = new HashMap<String, String>();
 
         parentAliases.put(searchAlias, searchAlias);
 
-        for (Permission permission : permissions) {
+        for (PermissionDto permission : permissions) {
             List<SearchCriterion> critPerPermission = new ArrayList<SearchCriterion>();
             Map<String, Collection<Long>> clause = relevantDimensions(typeName, permission);
 
@@ -109,18 +109,19 @@ public class PermissionCriteriaBuilderHelperImpl
         return new OrSearchCriterion(searchAlias, criteria);
     }
 
-    private Map<String, Collection<Long>> relevantDimensions(String typeName, Permission permission) {
+    private Map<String, Collection<Long>> relevantDimensions(String typeName,
+        PermissionDto permission) {
         Map<String, Collection<Long>> byProperty = new HashMap<String, Collection<Long>>();
 
-        for (Dimension dimension : permission.getDimensions()) {
+        for (DimensionDto dimension : permission.getDimensions()) {
             String propertyName = dimension.getPropertyName();
 
             if (StringUtils.isNotEmpty(instanceFactory.getPropertyType(typeName, propertyName))) {
-                Collection<Long> objects = byProperty.get(dimension.getPropertyName());
+                Collection<Long> objects = byProperty.get(propertyName);
 
                 if (objects == null) {
                     objects = new HashSet<Long>();
-                    byProperty.put(dimension.getPropertyName(), objects);
+                    byProperty.put(propertyName, objects);
                 }
 
                 objects.add(dimension.getDomainObjectId());

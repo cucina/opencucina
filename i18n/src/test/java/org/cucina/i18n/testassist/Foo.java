@@ -11,6 +11,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -19,7 +20,8 @@ import javax.xml.bind.annotation.XmlType;
 import org.cucina.core.model.PersistableEntity;
 import org.cucina.core.model.Versioned;
 import org.cucina.core.model.projection.ProjectionColumn;
-import org.cucina.core.model.projection.TranslatedColumns;
+
+import org.cucina.i18n.api.TranslatedColumn;
 import org.cucina.i18n.model.Message;
 
 
@@ -33,7 +35,6 @@ import org.cucina.i18n.model.Message;
 @XmlType(name = "foo")
 @XmlRootElement(name = "foo")
 @Entity(name = Foo.TYPE)
-@TranslatedColumns("name")
 @Cacheable
 public class Foo
     extends PersistableEntity
@@ -46,6 +47,7 @@ public class Foo
     private Collection<Baz> bazs;
     private Date date;
     private Message message;
+    @TranslatedColumn
     private String name;
     private int value;
     private int version;

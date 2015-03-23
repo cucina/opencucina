@@ -1,16 +1,9 @@
 package org.cucina.engine.email;
 
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
-import org.springframework.security.core.userdetails.UserDetailsService;
-
-import org.cucina.core.spring.SingletonBeanFactory;
-
-import org.cucina.security.ContextUserAccessor;
-import org.cucina.security.model.User;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -28,8 +21,6 @@ import static org.mockito.Mockito.when;
   */
 public class AcegiUserAccessorBeanTest {
     private AcegiUserAccessorBean engineUserAccessor;
-    private User user;
-    private UserDetailsService userAccesor;
 
     /**
      * Set up for test
@@ -39,13 +30,6 @@ public class AcegiUserAccessorBeanTest {
     @Before
     public void setUp()
         throws Exception {
-        userAccesor = mock(UserDetailsService.class);
-
-        BeanFactory bf = mock(BeanFactory.class);
-
-        when(bf.getBean(ContextUserAccessor.USER_ACCESSOR_ID)).thenReturn(userAccesor);
-        ((SingletonBeanFactory) SingletonBeanFactory.getInstance()).setBeanFactory(bf);
-
         engineUserAccessor = new AcegiUserAccessorBean();
     }
 
@@ -56,12 +40,10 @@ public class AcegiUserAccessorBeanTest {
     public void testGetCurrentUser() {
         setSecurityContext();
 
-        when(userAccesor.loadUserByUsername("User")).thenReturn(user);
-
         Object found = engineUserAccessor.getCurrentUser();
 
         assertNotNull("No user found", found);
-        assertEquals(user, found);
+        assertEquals("UsEr", found);
     }
 
     private void setSecurityContext() {
@@ -75,13 +57,9 @@ public class AcegiUserAccessorBeanTest {
 
         context = SecurityContextHolder.getContext();
 
-        user = new User();
-        user.setId(new Long(1));
-        user.setUsername("User");
+        Authentication auth = mock(Authentication.class);
 
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user,
-                null, null);
-
-        context.setAuthentication(authToken);
+        when(auth.getName()).thenReturn("UsEr");
+        context.setAuthentication(auth);
     }
 }

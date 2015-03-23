@@ -15,8 +15,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.cucina.email.api.EmailDto;
 import org.junit.Test;
-
 import org.junit.runner.RunWith;
 
 

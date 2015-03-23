@@ -3,8 +3,8 @@ package org.cucina.i18n.api.remote;
 import java.util.Collection;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
-
 import org.cucina.i18n.api.ListNodeDto;
 import org.cucina.i18n.api.ListNodeService;
 
@@ -25,6 +25,7 @@ public class RemoteListNodeService
      * @param url JAVADOC.
      */
     public RemoteListNodeService(String url) {
+    	Assert.hasText(url, "url is empty");
         this.url = url;
     }
 

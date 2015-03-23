@@ -19,20 +19,19 @@ import javax.xml.bind.annotation.XmlType;
 import org.cucina.core.model.PersistableEntity;
 import org.cucina.core.model.Versioned;
 import org.cucina.core.model.projection.ProjectionColumn;
-import org.cucina.core.model.projection.TranslatedColumns;
 
 import org.cucina.i18n.model.Message;
 
 
 /**
+ * JAVADOC for Class Level
  *
- * @author ajoffe
- */
+ * @author vlevine
+  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "foo")
 @XmlRootElement(name = "foo")
 @Entity(name = Foo.TYPE)
-@TranslatedColumns("name")
 public class Foo
     extends PersistableEntity
     implements Versioned {

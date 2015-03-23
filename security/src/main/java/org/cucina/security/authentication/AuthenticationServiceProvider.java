@@ -1,7 +1,5 @@
-
 package org.cucina.security.authentication;
 
-import org.cucina.security.model.User;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.AuthenticationException;
@@ -46,8 +44,6 @@ public class AuthenticationServiceProvider
     protected void additionalAuthenticationChecks(UserDetails userDetails,
         UsernamePasswordAuthenticationToken authenticationToken)
         throws AuthenticationException {
-        Assert.isInstanceOf(User.class, userDetails, "Should be a User");
-
         // If ok set details as token
         authenticationToken.setDetails(authenticationService.authenticate(
                 authenticationToken.getName(), (String) authenticationToken.getCredentials()));

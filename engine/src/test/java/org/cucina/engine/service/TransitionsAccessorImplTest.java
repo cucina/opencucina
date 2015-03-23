@@ -5,7 +5,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
 
 import org.cucina.engine.ProcessEnvironment;
 import org.cucina.engine.definition.ProcessDefinition;
@@ -14,9 +17,7 @@ import org.cucina.engine.definition.Transition;
 import org.cucina.engine.definition.config.ProcessDefinitionRegistry;
 import org.cucina.engine.testassist.Foo;
 
-import org.cucina.security.access.AccessManager;
-import org.cucina.security.access.AccessRegistry;
-import org.cucina.security.model.Privilege;
+import org.cucina.security.api.AccessFacade;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -41,9 +42,7 @@ import org.mockito.MockitoAnnotations;
  */
 public class TransitionsAccessorImplTest {
     @Mock
-    private AccessManager<UserDetails> accessManager;
-    @Mock
-    private AccessRegistry accessRegistry;
+    private AccessFacade accessFacade;
     @Mock
     private ProcessDefinitionRegistry definitionRegistry;
     @Mock
@@ -60,7 +59,9 @@ public class TransitionsAccessorImplTest {
     public void setUp()
         throws Exception {
         MockitoAnnotations.initMocks(this);
-        accessor = new TransitionsAccessorImpl(accessRegistry, accessManager, workflowEnvironment);
+        accessor = new TransitionsAccessorImpl(accessFacade, workflowEnvironment);
+        when(accessFacade.getDefaultPrivilege()).thenReturn("DEF");
+        setSecurityContext();
     }
 
     /**
@@ -70,13 +71,10 @@ public class TransitionsAccessorImplTest {
     public void testListPermittedTransitionsHasPermission() {
         Map<String, Object> propertyValues = new HashMap<String, Object>();
 
-        when(accessManager.hasPermission("myPriv", "wflwDfn", propertyValues)).thenReturn(true);
-        when(accessManager.hasPermission("yourPriv", "wflwDfn", propertyValues)).thenReturn(false);
-
-        Privilege defaultPriv = new Privilege();
-
-        defaultPriv.setName("DEF");
-        when(accessRegistry.getDefaultPrivilege()).thenReturn(defaultPriv);
+        when(accessFacade.hasPermissions("UsEr", "myPriv", "wflwDfn", propertyValues))
+            .thenReturn(true);
+        when(accessFacade.hasPermissions("UsEr", "yourPriv", "wflwDfn", propertyValues))
+            .thenReturn(false);
 
         final State place = mock(State.class);
         Collection<Transition> transes = new ArrayList<Transition>();
@@ -113,12 +111,7 @@ public class TransitionsAccessorImplTest {
     public void testListPermittedTransitionsHasPermissionNoConfiguredPrivilege() {
         Map<String, Object> propertyValues = new HashMap<String, Object>();
 
-        when(accessManager.hasPermission("DEF", "wflwDfn", propertyValues)).thenReturn(true);
-
-        Privilege defaultPriv = new Privilege();
-
-        defaultPriv.setName("DEF");
-        when(accessRegistry.getDefaultPrivilege()).thenReturn(defaultPriv);
+        when(accessFacade.hasPermissions("UsEr", "DEF", "wflwDfn", propertyValues)).thenReturn(true);
 
         final State place = mock(State.class);
         Collection<Transition> transes = new ArrayList<Transition>();
@@ -154,14 +147,11 @@ public class TransitionsAccessorImplTest {
     public void testListPermittedTransitionsMulipleTransitions() {
         Map<String, Object> propertyValues = new HashMap<String, Object>();
 
-        when(accessManager.hasPermission("myPriv", "wflwDfn", propertyValues)).thenReturn(true);
-        when(accessManager.hasPermission("yourPriv", "wflwDfn", propertyValues)).thenReturn(false);
-        when(accessManager.hasPermission("DEF", "wflwDfn", propertyValues)).thenReturn(true);
-
-        Privilege defaultPriv = new Privilege();
-
-        defaultPriv.setName("DEF");
-        when(accessRegistry.getDefaultPrivilege()).thenReturn(defaultPriv);
+        when(accessFacade.hasPermissions("UsEr", "myPriv", "wflwDfn", propertyValues))
+            .thenReturn(true);
+        when(accessFacade.hasPermissions("UsEr", "yourPriv", "wflwDfn", propertyValues))
+            .thenReturn(false);
+        when(accessFacade.hasPermissions("UsEr", "DEF", "wflwDfn", propertyValues)).thenReturn(true);
 
         final State place = mock(State.class);
         Collection<Transition> transes = new ArrayList<Transition>();
@@ -210,8 +200,8 @@ public class TransitionsAccessorImplTest {
      */
     @Test
     public void testListPermittedTransitionsNoObjectCheckHasPermission() {
-        when(accessManager.hasPrivilege("myPriv")).thenReturn(true);
-        when(accessManager.hasPrivilege("yourPriv")).thenReturn(false);
+        when(accessFacade.hasPrivilege("UsEr", "myPriv")).thenReturn(true);
+        when(accessFacade.hasPrivilege("UsEr", "yourPriv")).thenReturn(false);
 
         final State place = mock(State.class);
         Collection<Transition> transes = new ArrayList<Transition>();
@@ -253,8 +243,8 @@ public class TransitionsAccessorImplTest {
      */
     @Test
     public void testListPermittedTransitionsNoObjectCheckNoPermission() {
-        when(accessManager.hasPrivilege("myPriv")).thenReturn(false);
-        when(accessManager.hasPrivilege("yourPriv")).thenReturn(false);
+        when(accessFacade.hasPrivilege("UsEr", "myPriv")).thenReturn(false);
+        when(accessFacade.hasPrivilege("UsEr", "yourPriv")).thenReturn(false);
 
         final State place = mock(State.class);
         Collection<Transition> transes = new ArrayList<Transition>();
@@ -291,13 +281,10 @@ public class TransitionsAccessorImplTest {
     public void testListPermittedTransitionsNoPermission() {
         Map<String, Object> propertyValues = new HashMap<String, Object>();
 
-        when(accessManager.hasPermission("myPriv", "wflwDfn", propertyValues)).thenReturn(false);
-        when(accessManager.hasPermission("yourPriv", "wflwDfn", propertyValues)).thenReturn(false);
-
-        Privilege defaultPriv = new Privilege();
-
-        defaultPriv.setName("DEF");
-        when(accessRegistry.getDefaultPrivilege()).thenReturn(defaultPriv);
+        when(accessFacade.hasPermissions("UsEr", "myPriv", "wflwDfn", propertyValues))
+            .thenReturn(false);
+        when(accessFacade.hasPermissions("UsEr", "yourPriv", "wflwDfn", propertyValues))
+            .thenReturn(false);
 
         final State place = mock(State.class);
         Collection<Transition> transes = new ArrayList<Transition>();
@@ -333,17 +320,12 @@ public class TransitionsAccessorImplTest {
     public void testListPermittedTransitionsObject() {
         Foo domainObject = new Foo();
 
-        when(accessManager.hasPermission(eq("myPriv"), eq("Foo"),
+        when(accessFacade.hasPermissions(eq("UsEr"), eq("myPriv"), eq("Foo"),
                 anyMapOf(String.class, Object.class))).thenReturn(true);
-        when(accessManager.hasPermission(eq("yourPriv"), eq("Foo"),
+        when(accessFacade.hasPermissions(eq("UsEr"), eq("yourPriv"), eq("Foo"),
                 anyMapOf(String.class, Object.class))).thenReturn(false);
-        when(accessManager.hasPermission(eq("DEF"), eq("Foo"), anyMapOf(String.class, Object.class)))
-            .thenReturn(true);
-
-        Privilege defaultPriv = new Privilege();
-
-        defaultPriv.setName("DEF");
-        when(accessRegistry.getDefaultPrivilege()).thenReturn(defaultPriv);
+        when(accessFacade.hasPermissions(eq("UsEr"), eq("DEF"), eq("Foo"),
+                anyMapOf(String.class, Object.class))).thenReturn(true);
 
         final State place = mock(State.class);
         Collection<Transition> transes = new ArrayList<Transition>();
@@ -385,5 +367,22 @@ public class TransitionsAccessorImplTest {
         assertEquals("Incorrect number transitions", 2, transitionIds.size());
         assertTrue("Should contain toEnd", transitionIds.contains("toEnd"));
         assertTrue("Should contain toBeginning", transitionIds.contains("toBeginning"));
+    }
+
+    private void setSecurityContext() {
+        SecurityContext context = null;
+
+        if (null == SecurityContextHolder.getContext()) {
+            context = new SecurityContextImpl();
+
+            SecurityContextHolder.setContext(context);
+        }
+
+        context = SecurityContextHolder.getContext();
+
+        Authentication auth = mock(Authentication.class);
+
+        when(auth.getName()).thenReturn("UsEr");
+        context.setAuthentication(auth);
     }
 }

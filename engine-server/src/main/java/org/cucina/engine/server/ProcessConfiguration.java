@@ -1,15 +1,13 @@
 package org.cucina.engine.server;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import org.cucina.engine.service.ProcessSupportService;
 import org.cucina.engine.service.ProcessSupportServiceImpl;
-
-import org.cucina.security.access.AccessRegistry;
-import org.cucina.security.access.AccessRegistryImpl;
-import org.cucina.security.repository.PrivilegeRepository;
-import org.cucina.security.repository.jpa.PrivilegeRepositoryImpl;
+import org.cucina.security.api.AccessFacade;
+import org.cucina.security.api.remote.RemoteAccessFacade;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
 
 /**
@@ -18,7 +16,11 @@ import org.cucina.security.repository.jpa.PrivilegeRepositoryImpl;
  * @author vlevine
   */
 @Configuration
+@ComponentScan(basePackages="org.cucina.engine.service")
 public class ProcessConfiguration {
+    @Value(value = "cucina.access.url")
+    private String accessUrl;
+
     /**
      * JAVADOC Method Level Comments
      *
@@ -27,18 +29,8 @@ public class ProcessConfiguration {
      * @return JAVADOC.
      */
     @Bean
-    public AccessRegistry accessRegistry(PrivilegeRepository privilegeRepository) {
-        return new AccessRegistryImpl(privilegeRepository);
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    @Bean
-    public PrivilegeRepository privilegeRepository() {
-        return new PrivilegeRepositoryImpl();
+    public AccessFacade accessFacade() {
+        return new RemoteAccessFacade(accessUrl);
     }
 
     /**

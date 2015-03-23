@@ -1,24 +1,24 @@
 package org.cucina.search.query.modifier;
 
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cucina.search.query.SearchBean;
 import org.cucina.search.query.SearchCriterion;
 import org.cucina.search.query.criterion.FailingCriterion;
-import org.cucina.security.access.AccessRegistry;
-import org.cucina.security.model.Permission;
-import org.cucina.security.model.Privilege;
-import org.cucina.security.model.User;
-import org.cucina.security.repository.PermissionRepository;
+
+import org.cucina.security.api.AccessFacade;
+import org.cucina.security.api.PermissionDto;
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Before;
 import org.junit.Test;
+import static org.mockito.Matchers.any;
+
 import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.mockito.MockitoAnnotations;
 
 
@@ -30,17 +30,15 @@ import org.mockito.MockitoAnnotations;
   */
 public class SearchPermissionCriteriaBuilderTest {
     @Mock
-    private AccessRegistry accessRegistry;
+    private AccessFacade accessFacade;
     @Mock
     private PermissionCriteriaBuilderHelper permissionCriteriaBuilderHelper;
-    @Mock
-    private PermissionRepository permissionDao;
     @Mock
     private SearchBean searchBean;
     @Mock
     private SearchCriterion searchCriterion;
     private SearchPermissionCriteriaBuilder builder;
-    private User user = new User();
+    private String user = "User";
 
     /**
      * JAVADOC Method Level Comments
@@ -51,8 +49,7 @@ public class SearchPermissionCriteriaBuilderTest {
     public void setUp()
         throws Exception {
         MockitoAnnotations.initMocks(this);
-        builder = new SearchPermissionCriteriaBuilder(accessRegistry, permissionDao,
-                permissionCriteriaBuilderHelper);
+        builder = new SearchPermissionCriteriaBuilder(accessFacade, permissionCriteriaBuilderHelper);
     }
 
     /**
@@ -60,16 +57,12 @@ public class SearchPermissionCriteriaBuilderTest {
      */
     @Test
     public void testBuildCriteria() {
-        Privilege privilege = new Privilege();
-
-        when(accessRegistry.lookup("Foo", PermissionCriteriaModifier.DEFAULT_ACCESS_LEVEL))
-            .thenReturn(privilege);
-
-        Collection<Permission> perms = new ArrayList<Permission>();
-        Permission perm = new Permission();
+        Collection<PermissionDto> perms = new ArrayList<PermissionDto>();
+        PermissionDto perm = new PermissionDto();
 
         perms.add(perm);
-        when(permissionDao.findByUserAndPrivilege(user, privilege)).thenReturn(perms);
+        when(accessFacade.permissionsByUserTypeAccessLevel(user, "Foo",
+                PermissionCriteriaModifier.DEFAULT_ACCESS_LEVEL)).thenReturn(perms);
         when(permissionCriteriaBuilderHelper.buildClause("Foo", "foo", perms))
             .thenReturn(searchCriterion);
 
@@ -85,12 +78,8 @@ public class SearchPermissionCriteriaBuilderTest {
      */
     @Test
     public void testBuildFail() {
-        Privilege privilege = new Privilege();
-
-        when(accessRegistry.lookup("Foo", PermissionCriteriaModifier.DEFAULT_ACCESS_LEVEL))
-            .thenReturn(privilege);
-
-        when(permissionDao.findByUserAndPrivilege(user, privilege)).thenReturn(null);
+        when(accessFacade.permissionsByUserTypeAccessLevel(user, "Foo",
+                PermissionCriteriaModifier.DEFAULT_ACCESS_LEVEL)).thenReturn(null);
 
         SearchBean sb = builder.buildCriteria(searchBean, user, "Foo", "foo",
                 PermissionCriteriaModifier.DEFAULT_ACCESS_LEVEL);

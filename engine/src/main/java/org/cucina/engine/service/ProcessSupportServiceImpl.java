@@ -45,7 +45,7 @@ import org.cucina.search.SearchService;
 import org.cucina.search.query.SearchBean;
 import org.cucina.search.query.SearchResults;
 
-import org.cucina.security.access.AccessRegistry;
+import org.cucina.security.api.AccessFacade;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +61,7 @@ import org.slf4j.LoggerFactory;
 public class ProcessSupportServiceImpl
     implements ProcessSupportService {
     private static final Logger LOG = LoggerFactory.getLogger(ProcessSupportServiceImpl.class);
-    private AccessRegistry accessRegistry;
+    private AccessFacade accessFacade;
     private DefinitionService definitionService;
     private HistoryRecordRepository historyRecordRepository;
     private ProcessEnvironment processEnvironment;
@@ -72,13 +72,13 @@ public class ProcessSupportServiceImpl
     /**
     * JAVADOC Method Level Comments
     *
-    * @param accessRegistry
+    * @param accessFacade
     *            JAVADOC.
     */
     @Required
     @Autowired
-    public void setAccessRegistry(AccessRegistry accessRegistry) {
-        this.accessRegistry = accessRegistry;
+    public void setAccessRegistry(AccessFacade accessFacade) {
+        this.accessFacade = accessFacade;
     }
 
     /**
@@ -174,9 +174,9 @@ public class ProcessSupportServiceImpl
             return Collections.emptySet();
         }
 
-        String systemPrivilege = (accessRegistry.getSystemPrivilege() == null) ? null
-                                                                               : accessRegistry.getSystemPrivilege()
-                                                                                               .getName();
+        String systemPrivilege = (accessFacade.getSystemPrivilege() == null) ? null
+                                                                             : accessFacade.getSystemPrivilege();
+
         Collection<Transition> ret = new HashSet<Transition>();
         State[] allPlaces = workflowDefinition.getAllPlaces();
 

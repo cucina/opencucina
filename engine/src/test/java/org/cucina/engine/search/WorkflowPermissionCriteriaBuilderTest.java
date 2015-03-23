@@ -12,12 +12,8 @@ import org.cucina.search.query.criterion.InSearchCriterion;
 import org.cucina.search.query.modifier.PermissionCriteriaBuilderHelper;
 import org.cucina.search.query.modifier.PermissionCriteriaModifier;
 
-import org.cucina.security.access.AccessRegistry;
-import org.cucina.security.model.Permission;
-import org.cucina.security.model.Privilege;
-import org.cucina.security.model.User;
-import org.cucina.security.repository.PermissionRepository;
-import org.cucina.security.repository.PrivilegeRepository;
+import org.cucina.security.api.AccessFacade;
+import org.cucina.security.api.PermissionDto;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -42,19 +38,14 @@ import org.mockito.MockitoAnnotations;
 public class WorkflowPermissionCriteriaBuilderTest {
     private static final String PRIVILEGE_NAME = "privilegeName";
     @Mock
-    private AccessRegistry accessRegistry;
+    private AccessFacade accessFacade;
     @Mock
     private PermissionCriteriaBuilderHelper permissionCriteriaBuilderHelper;
     @Mock
-    private PermissionRepository permissionRepository;
-    @Mock
-    private PrivilegeRepository privilegeRepository;
+    private ProcessSupportService workflowSupportService;
     @Mock
     private SearchBean searchBean;
-    private User user = new User();
     private WorkflowPermissionCriteriaBuilder builder;
-    @Mock
-    private ProcessSupportService workflowSupportService;
 
     /**
      * JAVADOC Method Level Comments
@@ -65,9 +56,8 @@ public class WorkflowPermissionCriteriaBuilderTest {
     public void setUp()
         throws Exception {
         MockitoAnnotations.initMocks(this);
-        builder = new WorkflowPermissionCriteriaBuilder(accessRegistry,
-                permissionCriteriaBuilderHelper, permissionRepository, privilegeRepository,
-                workflowSupportService);
+        builder = new WorkflowPermissionCriteriaBuilder(accessFacade,
+                permissionCriteriaBuilderHelper, workflowSupportService);
 
         Collection<Transition> trax = new ArrayList<Transition>();
         Transition dtr = new Transition();
@@ -86,19 +76,13 @@ public class WorkflowPermissionCriteriaBuilderTest {
         etr.setInput(input);
         trax.add(etr);
 
-        Privilege privilege = new Privilege();
-
-        privilege.setId(4L);
-        privilege.setName(PRIVILEGE_NAME);
-        when(privilegeRepository.findByName(PRIVILEGE_NAME)).thenReturn(privilege);
         when(workflowSupportService.listActionableTransitions("Foo")).thenReturn(trax);
 
-        Collection<Permission> permissions = new ArrayList<Permission>();
-        Permission permission = new Permission();
+        Collection<PermissionDto> permissions = new ArrayList<PermissionDto>();
+        PermissionDto permission = new PermissionDto();
 
-        permission.setId(5L);
         permissions.add(permission);
-        when(permissionRepository.findByUserAndPrivilege(user, privilege)).thenReturn(permissions);
+        when(accessFacade.permissionsByUserAndPrivilege("user", "privilege")).thenReturn(permissions);
     }
 
     /**
@@ -106,7 +90,7 @@ public class WorkflowPermissionCriteriaBuilderTest {
      */
     @Test
     public void test() {
-        SearchBean sb = builder.buildCriteria(searchBean, user, "Foo", "foo",
+        SearchBean sb = builder.buildCriteria(searchBean, "user", "Foo", "foo",
                 PermissionCriteriaModifier.DEFAULT_ACCESS_LEVEL);
 
         assertNotNull("result is null", sb);

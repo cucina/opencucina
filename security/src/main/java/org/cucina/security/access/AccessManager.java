@@ -52,14 +52,6 @@ public interface AccessManager<T extends UserDetails> {
     boolean hasPrivilege(String privilegeName);
 
     /**
-     * JAVADOC Method Level Comments
-     *
-     * @param privilegeName JAVADOC.
-     * @param filterCurrent JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    /**
      * Returns the list of <code>UserDetails</code>s available in
      * system.
      * @param privilegeName if provided will filter the users by privilege

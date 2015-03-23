@@ -38,17 +38,6 @@ public interface InstanceFactory {
     boolean isForeignKey(String className, String property);
 
     /**
-     * Return true if property of form type.propertyName is an internationalised
-     * property
-     *
-     * @param property
-     *            type.propertyName.
-     *
-     * @return true/false if property internationalised.
-     */
-    boolean isTranslatedProperty(String className, String property);
-
-    /**
      * * Map property names to application types.
      *
      * @param className

@@ -1,17 +1,10 @@
 package org.cucina.security.testassist;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import org.cucina.core.spring.SingletonBeanFactory;
-import org.cucina.security.ContextUserAccessor;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 
 /**
@@ -38,14 +31,5 @@ public class SecurityHelper {
 
         authToken.setDetails("pipipi");
         context.setAuthentication(authToken);
-
-        final UserDetailsService userAccesor = mock(UserDetailsService.class);
-
-        when(userAccesor.loadUserByUsername(user.getUsername())).thenReturn(user);
-
-        BeanFactory bf = mock(BeanFactory.class);
-
-        when(bf.getBean(ContextUserAccessor.USER_ACCESSOR_ID)).thenReturn(userAccesor);
-        ((SingletonBeanFactory) SingletonBeanFactory.getInstance()).setBeanFactory(bf);
     }
 }

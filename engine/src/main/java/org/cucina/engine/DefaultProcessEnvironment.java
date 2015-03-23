@@ -1,23 +1,10 @@
-
 package org.cucina.engine;
 
 import java.util.Collection;
 import java.util.List;
 
-import org.cucina.core.spring.ELExpressionExecutor;
-import org.cucina.core.spring.ExpressionExecutor;
-import org.cucina.core.spring.ProtocolResolver;
-import org.cucina.engine.definition.ProcessDefinitionHelper;
-import org.cucina.engine.definition.ProcessDefinitionHelperImpl;
-import org.cucina.engine.definition.config.MapBasedProcessDefinitionRegistry;
-import org.cucina.engine.definition.config.ProcessDefinitionParser;
-import org.cucina.engine.definition.config.ProcessDefinitionRegistry;
-import org.cucina.engine.definition.config.xml.DigesterModuleProcessDefinitionParser;
-import org.cucina.engine.service.DefaultProcessService;
-import org.cucina.engine.service.ProcessService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.SmartLifecycle;
@@ -26,6 +13,22 @@ import org.springframework.expression.BeanResolver;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.util.Assert;
+
+import org.cucina.core.spring.ELExpressionExecutor;
+import org.cucina.core.spring.ExpressionExecutor;
+import org.cucina.core.spring.ProtocolResolver;
+
+import org.cucina.engine.definition.ProcessDefinitionHelper;
+import org.cucina.engine.definition.ProcessDefinitionHelperImpl;
+import org.cucina.engine.definition.config.MapBasedProcessDefinitionRegistry;
+import org.cucina.engine.definition.config.ProcessDefinitionParser;
+import org.cucina.engine.definition.config.ProcessDefinitionRegistry;
+import org.cucina.engine.definition.config.xml.DigesterModuleProcessDefinitionParser;
+import org.cucina.engine.service.DefaultProcessService;
+import org.cucina.engine.service.ProcessService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -59,30 +62,45 @@ import org.springframework.util.Assert;
 public class DefaultProcessEnvironment
     implements ProcessEnvironment, SmartLifecycle {
     private static final String EXPRESSION_EXECUTOR = "expressionExecutor";
-    private static final String WORKFLOW_EXECUTOR = "workflowExecutor";
-    private static final String EXECUTOR_FACTORY = "executorFactory";
+    private static final String PROCESS_DRIVER = "processDriver";
+    private static final String PROCESSOR_DRIVER_FACTORY = "processorDriverFactory";
     private static final String RULES_DEFINITION_URL = "classpath:org/cucina/engine/definition/config/xml/workflow-rules-definitions.xml";
     private static final Logger LOG = LoggerFactory.getLogger(DefaultProcessEnvironment.class);
-    private static final String DEFINITION_REGISTRY = "workflowDefinitionRegistry";
-    private static final String DEFINITION_PARSER = "workflowDefinitionParser";
-    private static final String DEFINITION_HELPER = "workflowDefinitionHelper";
-    private static final String SESSION_FACTORY = "workflowSessionFactory";
-    private static final String SERVICE = "workflowService";
+    private static final String DEFINITION_REGISTRY = "processDefinitionRegistry";
+    private static final String DEFINITION_PARSER = "processDefinitionParser";
+    private static final String DEFINITION_HELPER = "processDefinitionHelper";
+    private static final String SESSION_FACTORY = "processSessionFactory";
+    private static final String SERVICE = "processService";
     private static final String RESOLVER = "beanResolver";
     private static ProcessEnvironment instance;
     private static final int DEFAULT_LIFECYCLE_PHASE = 100;
     private ApplicationContext applicationContext;
     private BeanResolver beanResolver;
     private Collection<Resource> definitionResources;
-    private ProcessDriverFactory executorFactory;
     private List<WorkflowListener> workflowListeners;
-    private TokenFactory tokenFactory;
     private ProcessDefinitionHelper workflowDefinitionHelper;
     private ProcessDefinitionParser definitionParser;
     private ProcessDefinitionRegistry definitionRegistry;
+    private ProcessDriverFactory processDriverFactory;
     private ProcessService workflowService;
     private ProcessSessionFactory workflowSessionFactory;
+    private TokenFactory tokenFactory;
     private boolean running;
+
+    /**
+     * Singleton style access for objects created on a stack.
+     *
+     * @return An instance of this.
+     * @throws IllegalArgumentException
+     *             if the instance has not been initialised yet.
+     */
+    public static ProcessEnvironment instance() {
+        if (instance == null) {
+            throw new IllegalArgumentException("The workflow environment is not initialized yet");
+        }
+
+        return instance;
+    }
 
     /**
      * JAVADOC Method Level Comments
@@ -163,20 +181,11 @@ public class DefaultProcessEnvironment
     /**
      * JAVADOC Method Level Comments
      *
-     * @param executorFactory JAVADOC.
-     */
-    public void setExecutorFactory(ProcessDriverFactory executorFactory) {
-        this.executorFactory = executorFactory;
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
      * @return JAVADOC.
      */
     @Override
     public ProcessDriverFactory getExecutorFactory() {
-        return executorFactory;
+        return processDriverFactory;
     }
 
     /**
@@ -187,6 +196,25 @@ public class DefaultProcessEnvironment
     @Override
     public int getPhase() {
         return DEFAULT_LIFECYCLE_PHASE;
+    }
+
+    /**
+     * Get workflowDefinitionHelper
+     *
+     * @return workflowDefinitionHelper
+     */
+    @Override
+    public ProcessDefinitionHelper getProcessDefinitionHelper() {
+        return workflowDefinitionHelper;
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @param processDriverFactory JAVADOC.
+     */
+    public void setProcessDriverFactory(ProcessDriverFactory processDriverFactory) {
+        this.processDriverFactory = processDriverFactory;
     }
 
     /**
@@ -216,6 +244,7 @@ public class DefaultProcessEnvironment
      *            JAVADOC.
      */
     @Required
+    @Autowired
     public void setTokenFactory(TokenFactory tokenFactory) {
         this.tokenFactory = tokenFactory;
     }
@@ -228,16 +257,6 @@ public class DefaultProcessEnvironment
     @Override
     public TokenFactory getTokenFactory() {
         return tokenFactory;
-    }
-
-    /**
-     * Get workflowDefinitionHelper
-     *
-     * @return workflowDefinitionHelper
-     */
-    @Override
-    public ProcessDefinitionHelper getProcessDefinitionHelper() {
-        return workflowDefinitionHelper;
     }
 
     /**
@@ -266,21 +285,6 @@ public class DefaultProcessEnvironment
             LOG.error("Oops", e);
             throw e;
         }
-    }
-
-    /**
-     * Singleton style access for objects created on a stack.
-     *
-     * @return An instance of this.
-     * @throws IllegalArgumentException
-     *             if the instance has not been initialised yet.
-     */
-    public static ProcessEnvironment instance() {
-        if (instance == null) {
-            throw new IllegalArgumentException("The workflow environment is not initialized yet");
-        }
-
-        return instance;
     }
 
     /**
@@ -443,8 +447,7 @@ public class DefaultProcessEnvironment
     }
 
     private void initSessionFactory() {
-        ProcessSessionFactory proto = findInjectedBean(SESSION_FACTORY,
-                ProcessSessionFactory.class);
+        ProcessSessionFactory proto = findInjectedBean(SESSION_FACTORY, ProcessSessionFactory.class);
 
         if (proto != null) {
             LOG.debug("Using plugged " + SESSION_FACTORY);
@@ -454,12 +457,12 @@ public class DefaultProcessEnvironment
             return;
         }
 
-        if (executorFactory == null) {
-            ProcessDriverFactory eproto = findInjectedBean(EXECUTOR_FACTORY, ProcessDriverFactory.class);
+        if (processDriverFactory == null) {
+            ProcessDriverFactory eproto = findInjectedBean(PROCESSOR_DRIVER_FACTORY,
+                    ProcessDriverFactory.class);
 
             if (eproto == null) {
-                ProcessDriver executor = findInjectedBean(WORKFLOW_EXECUTOR,
-                        ProcessDriver.class);
+                ProcessDriver executor = findInjectedBean(PROCESS_DRIVER, ProcessDriver.class);
 
                 ExpressionExecutor eex = findInjectedBean(EXPRESSION_EXECUTOR,
                         ExpressionExecutor.class);
@@ -473,10 +476,10 @@ public class DefaultProcessEnvironment
                         (executor == null) ? new LocalProcessDriver() : executor);
             }
 
-            executorFactory = eproto;
+            processDriverFactory = eproto;
         }
 
         this.workflowSessionFactory = new DefaultProcessSessionFactory(definitionRegistry,
-                workflowListeners, executorFactory);
+                workflowListeners, processDriverFactory);
     }
 }

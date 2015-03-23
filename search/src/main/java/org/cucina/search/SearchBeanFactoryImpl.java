@@ -233,14 +233,6 @@ public class SearchBeanFactoryImpl
         search.addOrder(new OrderBy(property, asc));
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.cucina.meringue.search.SearchBeanFactory#addProjections(java.lang
-     * .String, org.cucina.meringue.query.SearchBean, java.lang.String[])
-     */
-
     /**
      * JAVADOC Method Level Comments
      *
@@ -250,6 +242,8 @@ public class SearchBeanFactoryImpl
      *            JAVADOC.
      * @param projections
      *            JAVADOC.
+     * @see org.cucina.meringue.search.SearchBeanFactory#addProjections(java.lang
+     *      .String, org.cucina.meringue.query.SearchBean, java.lang.String[])
      */
     @SuppressWarnings("unchecked")
     @Override

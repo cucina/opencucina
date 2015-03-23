@@ -8,21 +8,17 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.cucina.core.spring.SingletonBeanFactory;
 import org.cucina.search.SearchType;
 import org.cucina.search.query.SearchBean;
-import org.cucina.security.ContextUserAccessor;
-import org.cucina.security.model.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
 /**
@@ -38,7 +34,7 @@ public class PermissionCriteriaModifierTest {
     private PermissionCriteriaModifier modifier;
     @Mock
     private SearchBean searchBean;
-    private User user;
+    private String user;
 
     /**
      * JAVADOC Method Level Comments
@@ -86,11 +82,7 @@ public class PermissionCriteriaModifierTest {
         assertNotNull("result is null", sb);
     }
 
-    private User loginUser() {
-        User user = new User();
-
-        user.setUsername("username");
-
+    private String loginUser() {
         SecurityContext context;
 
         if (null == SecurityContextHolder.getContext()) {
@@ -101,20 +93,15 @@ public class PermissionCriteriaModifierTest {
 
         context = SecurityContextHolder.getContext();
 
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user,
+        UserDetails userDetails = mock(UserDetails.class);
+
+        when(userDetails.getUsername()).thenReturn("username");
+
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,
                 null, null);
 
         context.setAuthentication(authToken);
 
-        UserDetailsService userAccesor = mock(UserDetailsService.class);
-
-        when(userAccesor.loadUserByUsername("username")).thenReturn(user);
-
-        BeanFactory beanFactory = mock(BeanFactory.class);
-
-        when(beanFactory.getBean(ContextUserAccessor.USER_ACCESSOR_ID)).thenReturn(userAccesor);
-        ((SingletonBeanFactory) SingletonBeanFactory.getInstance()).setBeanFactory(beanFactory);
-
-        return user;
+        return "username";
     }
 }

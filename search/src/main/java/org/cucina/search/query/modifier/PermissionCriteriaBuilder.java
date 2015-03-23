@@ -1,8 +1,6 @@
-
 package org.cucina.search.query.modifier;
 
 import org.cucina.search.query.SearchBean;
-import org.cucina.security.model.User;
 
 
 /**
@@ -23,6 +21,6 @@ public interface PermissionCriteriaBuilder {
      *
      * @return JAVADOC.
      */
-    SearchBean buildCriteria(SearchBean searchBean, User user, String applicationType,
+    SearchBean buildCriteria(SearchBean searchBean, String username, String applicationType,
         String searchAlias, String accessLevel);
 }

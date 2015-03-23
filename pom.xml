@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -116,15 +117,17 @@
 	</dependencies>
 	<modules>
 		<module>eggtimer</module>
+		<module>email-api</module>
 		<module>email</module>
 		<module>core</module>
 		<module>loader</module>
+		<module>security-api</module>
 		<module>security</module>
 		<module>search</module>
+		<module>i18n-api</module>
 		<module>i18n</module>
 		<module>engine</module>
 		<module>engine-server-api</module>
 		<module>engine-server</module>
-    <module>i18n-api</module>
-  </modules>
+	</modules>
 </project>

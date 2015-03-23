@@ -2,25 +2,31 @@ package org.cucina.email.event;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.activation.DataSource;
 
-import org.cucina.email.event.EmailEvent;
-import org.cucina.email.event.EmailEventApplicationListener;
-import org.cucina.email.event.EmailWithAttachmentDto;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import org.cucina.email.api.EmailDto;
+import org.cucina.email.api.EmailEvent;
 import org.cucina.email.service.EmailService;
 import org.cucina.email.service.EmailUser;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.Matchers.any;
+
+import org.mockito.ArgumentCaptor;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
+
+import org.mockito.Mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+
+import org.mockito.MockitoAnnotations;
+
 
 /**
  * Tests for {@link EmailEventApplicationListener}
@@ -30,13 +36,17 @@ import static org.mockito.Mockito.when;
  */
 public class EmailEventApplicationListenerTest {
     private EmailEventApplicationListener els;
+    @Mock
+    private EmailService ces;
 
     /**
      * Sets up test
      */
     @Before
     public void setUp() {
+        MockitoAnnotations.initMocks(this);
         els = new EmailEventApplicationListener();
+        ReflectionTestUtils.setField(els, "emailService", ces);
     }
 
     /**
@@ -45,37 +55,50 @@ public class EmailEventApplicationListenerTest {
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Test
     public void testProcessEvent() {
-        Collection tos = new HashSet();
-        EmailUser u1 = mock(EmailUser.class);
-
-        tos.add(u1);
-
-        EmailUser u2 = mock(EmailUser.class);
-
-        when(u2.getLocale()).thenReturn(Locale.SIMPLIFIED_CHINESE);
-        tos.add(u2);
-
-        Collection ccs = new HashSet();
-        Collection bccs = new HashSet();
         Map<String, Object> parameters = new HashMap<String, Object>();
-        Collection<DataSource> attachments = new HashSet<DataSource>();
 
-        EmailWithAttachmentDto descriptor = new EmailWithAttachmentDto();
+        EmailDto dto = new EmailDto();
 
-        descriptor.setToUsers(tos);
-        descriptor.setCcUsers(ccs);
-        descriptor.setBccUsers(bccs);
-        descriptor.setParameters(parameters);
-        descriptor.setAttachments(attachments);
-        descriptor.setMessageKey("template");
+        dto.setParameters(parameters);
+        dto.setMessageKey("template");
+        dto.setBcc("bcc");
+        dto.setCc("cc");
+        dto.setTo("to1, to2");
+        dto.setLocale(Locale.CANADA.toString());
 
-        EmailService ces = mock(EmailService.class);
+        els.onApplicationEvent(new EmailEvent(dto));
 
-        els.setEmailService(ces);
-        els.processEvent(new EmailEvent(descriptor));
+        ArgumentCaptor<Collection> tos = ArgumentCaptor.forClass(Collection.class);
+        ArgumentCaptor<Collection> ccs = ArgumentCaptor.forClass(Collection.class);
+        ArgumentCaptor<Collection> bccs = ArgumentCaptor.forClass(Collection.class);
 
         verify(ces)
-            .sendMessages((String) eq(null), (String) eq(null), any(Collection.class), eq(ccs),
-            eq(bccs), eq("template"), eq(parameters), eq(attachments));
+            .sendMessages(eq(dto.getSubject()), eq(dto.getFrom()), tos.capture(), ccs.capture(),
+            bccs.capture(), eq(dto.getMessageKey()), eq(dto.getParameters()),
+            (Collection<DataSource>) eq(null));
+
+        Collection<?> tou = tos.getValue();
+        Iterator<?> it = tou.iterator();
+        EmailUser u1 = (EmailUser) it.next();
+
+        assertEquals("to1", u1.getEmail());
+        assertEquals(Locale.CANADA, u1.getLocale());
+
+        u1 = (EmailUser) it.next();
+
+        assertEquals("to2", u1.getEmail());
+        assertEquals(Locale.CANADA, u1.getLocale());
+
+        tou = ccs.getValue();
+        it = tou.iterator();
+        u1 = (EmailUser) it.next();
+        assertEquals("cc", u1.getEmail());
+        assertEquals(Locale.CANADA, u1.getLocale());
+
+        tou = bccs.getValue();
+        it = tou.iterator();
+        u1 = (EmailUser) it.next();
+        assertEquals("bcc", u1.getEmail());
+        assertEquals(Locale.CANADA, u1.getLocale());
     }
 }

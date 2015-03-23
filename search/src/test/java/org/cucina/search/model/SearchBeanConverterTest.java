@@ -1,22 +1,18 @@
 package org.cucina.search.model;
 
-import org.springframework.beans.factory.BeanFactory;
-
-import org.cucina.core.marshal.JacksonMarshaller;
-import org.cucina.core.spring.SingletonBeanFactory;
-
-import org.cucina.search.query.SearchBean;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import org.mockito.Mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import org.cucina.core.marshal.JacksonMarshaller;
+import org.cucina.core.spring.SingletonBeanFactory;
+import org.cucina.search.query.SearchBean;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.BeanFactory;
 
 
 /**

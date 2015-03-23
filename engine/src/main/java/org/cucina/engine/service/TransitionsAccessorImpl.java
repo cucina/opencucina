@@ -9,20 +9,15 @@ import java.util.Map;
 import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Transformer;
-
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-
 import org.cucina.core.model.PersistableEntity;
-
 import org.cucina.engine.ProcessEnvironment;
 import org.cucina.engine.definition.ProcessDefinition;
 import org.cucina.engine.definition.State;
 import org.cucina.engine.definition.Transition;
-
-import org.cucina.security.access.AccessManager;
-import org.cucina.security.access.AccessRegistry;
+import org.cucina.security.api.AccessFacade;
+import org.cucina.security.api.CurrentUserAccessor;
 
 
 /**
@@ -33,19 +28,15 @@ import org.cucina.security.access.AccessRegistry;
   */
 public class TransitionsAccessorImpl
     implements TransitionsAccessor {
-    private AccessManager<UserDetails> accessManager;
-    private AccessRegistry accessRegistry;
+    private AccessFacade accessFacade;
     private ProcessEnvironment workflowEnvironment;
 
     /**
      * Creates a new TransitionAccessorImpl object.
      */
-    public TransitionsAccessorImpl(AccessRegistry accessRegistry,
-        AccessManager<UserDetails> accessManager, ProcessEnvironment workflowEnvironment) {
-        Assert.notNull(accessRegistry, "accessRegistry should not be null");
-        this.accessRegistry = accessRegistry;
-        Assert.notNull(accessManager, "accessManager should not be null");
-        this.accessManager = accessManager;
+    public TransitionsAccessorImpl(AccessFacade accessFacade, ProcessEnvironment workflowEnvironment) {
+        Assert.notNull(accessFacade, "accessFacade should not be null");
+        this.accessFacade = accessFacade;
         Assert.notNull(workflowEnvironment, "workflowEnvironment should not be null");
         this.workflowEnvironment = workflowEnvironment;
     }
@@ -105,7 +96,7 @@ public class TransitionsAccessorImpl
         Collection<Transition> permittedTransitions = new ArrayList<Transition>();
 
         Map<String, Boolean> privilegeMap = new HashMap<String, Boolean>();
-        String defaultPrivilegeName = accessRegistry.getDefaultPrivilege().getName();
+        String defaultPrivilegeName = accessFacade.getDefaultPrivilege();
 
         for (Transition transition : place.getAllTransitions()) {
             Collection<String> privilegeNames = transition.getPrivilegeNames();
@@ -118,7 +109,7 @@ public class TransitionsAccessorImpl
                 Boolean cached = privilegeMap.get(privilege);
 
                 if (((cached != null) && cached.booleanValue()) ||
-                        accessManager.hasPermission(privilege, applicationType, map)) {
+                        accessFacade.hasPermissions(CurrentUserAccessor.getCurrentUserName(), privilege, applicationType, map)) {
                     privilegeMap.put(privilege, true);
                     permittedTransitions.add(transition);
 
@@ -172,7 +163,7 @@ public class TransitionsAccessorImpl
         for (Transition transition : place.getAllTransitions()) {
             if (CollectionUtils.isNotEmpty(transition.getPrivilegeNames())) {
                 for (String privilege : transition.getPrivilegeNames()) {
-                    if (accessManager.hasPrivilege(privilege)) {
+                    if (accessFacade.hasPrivilege(CurrentUserAccessor.getCurrentUserName(), privilege)) {
                         permittedTransitions.add(transition);
 
                         break;

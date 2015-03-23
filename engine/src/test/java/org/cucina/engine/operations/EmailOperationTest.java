@@ -1,40 +1,32 @@
 package org.cucina.engine.operations;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import javax.activation.DataSource;
-import javax.mail.util.ByteArrayDataSource;
-
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
+
 import org.cucina.core.spring.ExpressionExecutor;
-import org.cucina.email.event.EmailEvent;
+
+import org.cucina.email.api.EmailEvent;
+
 import org.cucina.engine.DefaultExecutionContext;
 import org.cucina.engine.ExecutionContext;
 import org.cucina.engine.ProcessDriverFactory;
 import org.cucina.engine.definition.Token;
 import org.cucina.engine.email.UserAccessorBean;
 import org.cucina.engine.testassist.Foo;
-
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.ArgumentCaptor;
-
-import static org.mockito.Matchers.any;
-
 import org.mockito.Mock;
-
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -97,17 +89,10 @@ public class EmailOperationTest {
         throws Exception {
         ExecutionContext context = new DefaultExecutionContext(token, null, null, executorFactory);
 
-        Collection<DataSource> datasources = new HashSet<DataSource>();
-
-        datasources.add(new ByteArrayDataSource(new byte[] {  }, "text/csv:charset=UTF-8"));
-
-        context.addParameter(EmailOperation.ATTACHMENTS_KEY, datasources);
-
         context.addParameter("users", users);
 
         when(expressionExecutor.evaluate(context, PARAMETER_EXPRESSION)).thenReturn(parametersMap);
 
-        emailAction.setContextParamAttachmentsKey(EmailOperation.ATTACHMENTS_KEY);
         emailAction.setApplicationEventPublisher(applicationEventPublisher);
         emailAction.execute(context);
 
@@ -119,33 +104,6 @@ public class EmailOperationTest {
 
         assertNotNull("must have set an event", event);
         assertTrue("must be EmailEvent", event instanceof EmailEvent);
-        assertEquals("Should contain datasources", datasources,
-            ((EmailEvent) event).getEmailDescriptor().getAttachments());
-    }
-
-    /**
-     * JAVADOC.
-     *
-     * @throws Exception JAVADOC.
-     */
-    @Test
-    public void testEmailAttachmentsRequired()
-        throws Exception {
-        emailAction.setAttachmentRequired(Boolean.TRUE);
-
-        ExecutionContext context = new DefaultExecutionContext(token, null, null, executorFactory);
-
-        context.addParameter(EmailOperation.ATTACHMENTS_KEY, new HashSet<DataSource>());
-
-        context.addParameter("users", users);
-
-        when(expressionExecutor.evaluate(context, PARAMETER_EXPRESSION)).thenReturn(parametersMap);
-
-        emailAction.setContextParamAttachmentsKey(EmailOperation.ATTACHMENTS_KEY);
-        emailAction.setApplicationEventPublisher(applicationEventPublisher);
-        emailAction.execute(context);
-
-        verify(applicationEventPublisher, never()).publishEvent(any(ApplicationEvent.class));
     }
 
     /**

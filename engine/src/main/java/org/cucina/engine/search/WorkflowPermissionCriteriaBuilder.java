@@ -2,6 +2,7 @@ package org.cucina.engine.search;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -24,12 +25,8 @@ import org.cucina.search.query.criterion.OrSearchCriterion;
 import org.cucina.search.query.modifier.PermissionCriteriaBuilder;
 import org.cucina.search.query.modifier.PermissionCriteriaBuilderHelper;
 
-import org.cucina.security.access.AccessRegistry;
-import org.cucina.security.model.Permission;
-import org.cucina.security.model.Privilege;
-import org.cucina.security.model.User;
-import org.cucina.security.repository.PermissionRepository;
-import org.cucina.security.repository.PrivilegeRepository;
+import org.cucina.security.api.AccessFacade;
+import org.cucina.security.api.PermissionDto;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,33 +41,26 @@ import org.slf4j.LoggerFactory;
 public class WorkflowPermissionCriteriaBuilder
     implements PermissionCriteriaBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(WorkflowPermissionCriteriaBuilder.class);
-    private AccessRegistry accessRegistry;
+    private AccessFacade accessFacade;
     private PermissionCriteriaBuilderHelper permissionCriteriaBuilderHelper;
-    private PermissionRepository permissionRepository;
-    private PrivilegeRepository privilegeRepository;
     private ProcessSupportService workflowSupportService;
 
     /**
      * Creates a new WorkflowPermissionCriteriaBuilder object.
      *
-     * @param accessRegistry JAVADOC.
+     * @param accessFacade JAVADOC.
      * @param permissionCriteriaBuilderHelper JAVADOC.
      * @param permissionDao JAVADOC.
      * @param rolePrivilegeDao JAVADOC.
      * @param workflowSupportService JAVADOC.
      */
-    public WorkflowPermissionCriteriaBuilder(AccessRegistry accessRegistry,
+    public WorkflowPermissionCriteriaBuilder(AccessFacade accessFacade,
         PermissionCriteriaBuilderHelper permissionCriteriaBuilderHelper,
-        PermissionRepository permissionRepository, PrivilegeRepository privilegeRepository,
         ProcessSupportService workflowSupportService) {
-        Assert.notNull(accessRegistry, "accessRegistry is null");
-        this.accessRegistry = accessRegistry;
+        Assert.notNull(accessFacade, "accessFacade is null");
+        this.accessFacade = accessFacade;
         Assert.notNull(permissionCriteriaBuilderHelper, "permissionCriteriaBuilderHelper is null");
         this.permissionCriteriaBuilderHelper = permissionCriteriaBuilderHelper;
-        Assert.notNull(permissionRepository, "permissionRepository is null");
-        this.permissionRepository = permissionRepository;
-        Assert.notNull(privilegeRepository, "privilegeRepository is null");
-        this.privilegeRepository = privilegeRepository;
         Assert.notNull(workflowSupportService, "workflowSupportService is null");
         this.workflowSupportService = workflowSupportService;
     }
@@ -87,20 +77,20 @@ public class WorkflowPermissionCriteriaBuilder
      * @return JAVADOC.
      */
     @Override
-    public SearchBean buildCriteria(SearchBean searchBean, User user, String applicationType,
+    public SearchBean buildCriteria(SearchBean searchBean, String user, String applicationType,
         String searchAlias, String accessLevel) {
-        Map<Privilege, Collection<String>> stateByPriv = extractStateByPriv(applicationType);
+        Map<String, Collection<String>> stateByPriv = extractStateByPriv(applicationType);
         boolean hasPermissions = false;
 
         List<SearchCriterion> criteria = new ArrayList<SearchCriterion>();
 
-        for (Map.Entry<Privilege, Collection<String>> entry : stateByPriv.entrySet()) {
+        for (Map.Entry<String, Collection<String>> entry : stateByPriv.entrySet()) {
             //if there are no states, we don't need the criteria
             if (CollectionUtils.isEmpty(entry.getValue())) {
                 continue;
             }
 
-            Collection<Permission> permissions = permissionRepository.findByUserAndPrivilege(user,
+            Collection<PermissionDto> permissions = accessFacade.permissionsByUserAndPrivilege(user,
                     entry.getKey());
 
             if (!CollectionUtils.isEmpty(permissions)) {
@@ -142,7 +132,7 @@ public class WorkflowPermissionCriteriaBuilder
     }
 
     private SearchCriterion buildTaskListClause(String typeName, String searchAlias,
-        Collection<Permission> permissions, Collection<String> states) {
+        Collection<PermissionDto> permissions, Collection<String> states) {
         if (CollectionUtils.isEmpty(permissions)) {
             return null;
         }
@@ -179,34 +169,25 @@ public class WorkflowPermissionCriteriaBuilder
         return new AndSearchCriterion(searchAlias, jointCriteria);
     }
 
-    private Map<Privilege, Collection<String>> extractStateByPriv(String applicationType) {
+    private Map<String, Collection<String>> extractStateByPriv(String applicationType) {
         //TODO lookup from type -> workflow id
         Collection<Transition> actionableTransitions = workflowSupportService.listActionableTransitions(applicationType);
-        Map<Privilege, Collection<String>> stateByPriv = new HashMap<Privilege, Collection<String>>();
+        Map<String, Collection<String>> stateByPriv = new HashMap<String, Collection<String>>();
 
         //foreach transition then we see if user has that privilege
         //if they do, get begin place and add to a map for that privilege
         for (Transition transition : actionableTransitions) {
-            Collection<Privilege> privs = new HashSet<Privilege>();
-            Collection<String> privNames = transition.getPrivilegeNames();
+            Collection<String> privs = transition.getPrivilegeNames();
 
-            if (CollectionUtils.isEmpty(privNames)) {
-                privs.add(accessRegistry.getDefaultPrivilege());
-            } else {
-                for (String privName : privNames) {
-                    Privilege privilege = privilegeRepository.findByName(privName);
-
-                    if (privilege != null) {
-                        privs.add(privilege);
-                    }
-                }
+            if (CollectionUtils.isEmpty(privs)) {
+                privs = Collections.singleton(accessFacade.getDefaultPrivilege());
             }
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("For transition " + transition + " found privileges " + privs);
             }
 
-            for (Privilege privilege : privs) {
+            for (String privilege : privs) {
                 if (!stateByPriv.containsKey(privilege)) {
                     stateByPriv.put(privilege, new HashSet<String>());
                 }

@@ -1,4 +1,3 @@
-
 package org.cucina.search.query.modifier;
 
 import java.util.Collections;
@@ -7,8 +6,7 @@ import java.util.Map;
 import org.apache.commons.collections.MapUtils;
 import org.cucina.search.SearchType;
 import org.cucina.search.query.SearchBean;
-import org.cucina.security.ContextUserAccessor;
-import org.cucina.security.model.User;
+import org.cucina.security.api.CurrentUserAccessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -90,7 +88,7 @@ public class PermissionCriteriaModifier
         Assert.isTrue(MapUtils.isNotEmpty(aliasByType),
             "Should be at least one search type in the searchBean");
 
-        User user = (User) ContextUserAccessor.getCurrentUser();
+        String user = CurrentUserAccessor.getCurrentUserName();
 
         String applicationType = aliasByType.keySet().iterator().next();
         String searchAlias = aliasByType.get(applicationType);

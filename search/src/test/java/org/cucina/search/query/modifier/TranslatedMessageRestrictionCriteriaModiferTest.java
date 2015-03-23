@@ -1,23 +1,23 @@
-
 package org.cucina.search.query.modifier;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
 
-import org.cucina.i18n.service.I18nService;
+import org.cucina.i18n.api.LocaleService;
+
 import org.cucina.search.query.SearchBean;
 import org.cucina.search.query.SearchCriterion;
 import org.cucina.search.query.projection.Projection;
 import org.cucina.search.query.projection.SimplePropertyProjection;
 import org.cucina.search.query.projection.TranslatedMessageWithJoinProjection;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 /**
@@ -34,11 +34,11 @@ public class TranslatedMessageRestrictionCriteriaModiferTest {
      */
     @Before
     public void setup() {
-        I18nService i18nService = mock(I18nService.class);
+        LocaleService localeService = mock(LocaleService.class);
 
-        when(i18nService.getLocale()).thenReturn(Locale.ENGLISH);
+        when(localeService.currentUserLocale()).thenReturn(Locale.ENGLISH);
 
-        modifier = new TranslatedMessageRestrictionCriteriaModifer(i18nService);
+        modifier = new TranslatedMessageRestrictionCriteriaModifer(localeService);
     }
 
     /**

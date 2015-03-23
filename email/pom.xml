@@ -77,7 +77,11 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jms</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>cucina</groupId>
+			<artifactId>cucina-email-api</artifactId>
+			<version>0.1</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

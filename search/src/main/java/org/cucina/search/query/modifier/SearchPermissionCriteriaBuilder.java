@@ -6,11 +6,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.cucina.search.query.SearchBean;
 import org.cucina.search.query.SearchCriterion;
 import org.cucina.search.query.criterion.FailingCriterion;
-import org.cucina.security.access.AccessRegistry;
-import org.cucina.security.model.Permission;
-import org.cucina.security.model.Privilege;
-import org.cucina.security.model.User;
-import org.cucina.security.repository.PermissionRepository;
+import org.cucina.security.api.AccessFacade;
+import org.cucina.security.api.PermissionDto;
 import org.springframework.util.Assert;
 
 
@@ -22,20 +19,16 @@ import org.springframework.util.Assert;
  */
 public class SearchPermissionCriteriaBuilder
     implements PermissionCriteriaBuilder {
-    private AccessRegistry accessRegistry;
+    private AccessFacade accessFacade;
     private PermissionCriteriaBuilderHelper permissionCriteriaBuilderHelper;
-    private PermissionRepository permissionRepository;
 
     /**
      * Creates a new SearchPermissionCriteriaBuilder object.
      */
-    public SearchPermissionCriteriaBuilder(AccessRegistry accessRegistry,
-        PermissionRepository permissionDao,
+    public SearchPermissionCriteriaBuilder(AccessFacade accessFacade,
         PermissionCriteriaBuilderHelper permissionCriteriaBuilderHelper) {
-        Assert.notNull(accessRegistry, "accessRegistry is null");
-        this.accessRegistry = accessRegistry;
-        Assert.notNull(permissionDao, "permissionDao is null");
-        this.permissionRepository = permissionDao;
+        Assert.notNull(accessFacade, "accessFacade is null");
+        this.accessFacade = accessFacade;
         Assert.notNull(permissionCriteriaBuilderHelper, "permissionCriteriaBuilderHelper is null");
         this.permissionCriteriaBuilderHelper = permissionCriteriaBuilderHelper;
     }
@@ -55,14 +48,10 @@ public class SearchPermissionCriteriaBuilder
      * @return JAVADOC.
      */
     @Override
-    public SearchBean buildCriteria(SearchBean searchBean, User user, String applicationType,
+    public SearchBean buildCriteria(SearchBean searchBean, String user, String applicationType,
         String searchAlias, String accessLevel) {
-        Privilege privilege = accessRegistry.lookup(applicationType, accessLevel);
-
-        Assert.notNull(privilege, "privilege must be configured in accessRegistry");
-
-        Collection<Permission> permissions = permissionRepository.findByUserAndPrivilege(user,
-                privilege);
+        Collection<PermissionDto> permissions = accessFacade.permissionsByUserTypeAccessLevel(user,
+                applicationType, accessLevel);
 
         // if nothing, add a criterion which can never be true
         if (CollectionUtils.isEmpty(permissions)) {
