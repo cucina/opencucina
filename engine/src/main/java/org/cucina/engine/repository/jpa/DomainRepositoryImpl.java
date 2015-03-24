@@ -10,6 +10,7 @@ import org.cucina.core.InstanceFactory;
 import org.cucina.engine.repository.DomainRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Persistable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
@@ -34,6 +35,7 @@ public class DomainRepositoryImpl
      *
      * @param instanceFactory JAVADOC.
      */
+    @Autowired
     public DomainRepositoryImpl(InstanceFactory instanceFactory) {
         Assert.notNull(instanceFactory, "instanceFactory is null");
         this.instanceFactory = instanceFactory;

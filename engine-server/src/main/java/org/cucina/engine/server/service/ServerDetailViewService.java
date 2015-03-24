@@ -2,6 +2,13 @@ package org.cucina.engine.server.service;
 
 import java.util.Map;
 
+import org.cucina.engine.server.converter.DetailViewConfig;
+import org.cucina.engine.server.event.RequestDomainConfigEvent;
+import org.cucina.engine.server.event.RequestDomainDataEvent;
+import org.cucina.engine.server.model.EntityDescriptor;
+import org.cucina.engine.server.repository.EntityDescriptorRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,15 +16,6 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-
-import org.cucina.engine.server.converter.DetailViewConfig;
-import org.cucina.engine.server.event.RequestDomainConfigEvent;
-import org.cucina.engine.server.event.RequestDomainDataEvent;
-import org.cucina.engine.server.model.EntityDescriptor;
-import org.cucina.engine.server.repository.EntityDescriptorRepository;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**

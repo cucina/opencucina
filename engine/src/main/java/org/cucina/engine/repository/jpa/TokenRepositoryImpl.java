@@ -16,6 +16,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Persistable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -51,6 +52,7 @@ public class TokenRepositoryImpl
      * @param entityManager
      *            JAVADOC.
      */
+    @Autowired
     public TokenRepositoryImpl(InstanceFactory instanceFactory) {
         this.instanceFactory = instanceFactory;
     }

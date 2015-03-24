@@ -33,19 +33,9 @@
 		<si:mapping type="org.cucina.engine.server.event.CompensateEvent"
 			channel="compensateChannel" />
 	</si:payload-type-router>
-<!-- 
-	<bean id="messagingWorkflowHandler"
-		class="org.cucina.engine.server.utils.MessagingWorkflowServiceHandlerImpl"
-		c:workflowSupportService-ref="workflowSupportService"
-		c:listNodeRepository-ref="listNodeRepository"
-		c:conversationContext-ref="conversationContext" />
-		
- -->
- 	<si:channel id="compensateChannel" />
+	<si:channel id="compensateChannel" />
 	<si:service-activator input-channel="compensateChannel"
 		output-channel="outboundChannel" ref="compensateHandler" />
-	<bean id="compensateHandler" class="org.cucina.engine.server.utils.CompensateMessageHandler"
-		c:tokenRepository-ref="tokenRepository" />
 	<si:channel id="getValueChannel" />
 	<si:service-activator input-channel="getValueChannel"
 		output-channel="outboundChannel" ref="messagingWorkflowHandler"
@@ -71,8 +61,6 @@
 			method="findDestinationName" />
 		<si:header name="conversationId" expression="@conversationContext.getConversationId()" />
 	</si:header-enricher>
-	<bean id="registryUrlExtractor" class="org.cucina.engine.server.utils.RegistryUrlExtractor"
-		c:clientRegistry-ref="clientRegistry" />
 
 	<si:channel id="workflowCallbackChannelT" />
 	<si:logging-channel-adapter channel="unsupportedProtocolChannel"
@@ -86,5 +74,5 @@
 	<jms:outbound-gateway reply-channel="workflowCallbackReplyChannel"
 		request-channel="workflowCallbackChannelJms" message-converter="xmlMessageConverter"
 		request-destination-expression="headers.destinationName"
-		connection-factory="jmsConnectionFactory"  />
+		connection-factory="jmsConnectionFactory" />
 </beans>

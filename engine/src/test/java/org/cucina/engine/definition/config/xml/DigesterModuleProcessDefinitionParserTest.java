@@ -17,7 +17,7 @@ import org.cucina.engine.definition.ProcessDefinition;
 import org.cucina.engine.definition.State;
 import org.cucina.engine.definition.Transition;
 import org.cucina.engine.operations.AbstractOperation;
-import org.cucina.engine.testadapters.WorkflowEnvironmentFactory;
+import org.cucina.engine.testadapters.ProcessEnvironmentFactory;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -100,7 +100,7 @@ public class DigesterModuleProcessDefinitionParserTest {
         when(beanResolver.resolve(null, "class:TestDefaultCheck")).thenReturn(new TestDefaultCheck());
         when(beanResolver.resolve(null, "class:TestWorkflowAction"))
             .thenReturn(new TestWorkflowOperation());
-        WorkflowEnvironmentFactory.buildEnvironment(beanResolver, null, parser, null, null);
+        ProcessEnvironmentFactory.buildEnvironment(beanResolver, null, parser, null, null);
     }
 
     /**

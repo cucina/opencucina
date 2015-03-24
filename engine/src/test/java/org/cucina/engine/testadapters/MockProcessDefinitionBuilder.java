@@ -17,7 +17,7 @@ import org.cucina.engine.testassist.Foo;
  * @author Rob Harrop
  * @author Rick Evans
  */
-public abstract class MockWorkflowDefinitionBuilder {
+public abstract class MockProcessDefinitionBuilder {
     /** This is a field JAVADOC */
     public static final String HELLO_WORLD_ID = "helloWorld";
 

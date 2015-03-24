@@ -7,7 +7,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.cucina.engine.definition.config.ProcessDefinitionRegistry;
-import org.cucina.engine.testadapters.MockWorkflowDefinitionBuilder;
+import org.cucina.engine.testadapters.MockProcessDefinitionBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,7 +34,7 @@ public class WorkflowDefinitionHelperImplTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void requiresTransitionId() {
-        helper.findPlaceId(MockWorkflowDefinitionBuilder.HELLO_WORLD_ID, null);
+        helper.findPlaceId(MockProcessDefinitionBuilder.HELLO_WORLD_ID, null);
     }
 
     /**
@@ -51,15 +51,15 @@ public class WorkflowDefinitionHelperImplTest {
     @Test(expected = TransitionNotFoundException.class)
     public void testFailsToFindId()
         throws Exception {
-        ProcessDefinition definition = MockWorkflowDefinitionBuilder.buildHelloWorldDefinition();
+        ProcessDefinition definition = MockProcessDefinitionBuilder.buildHelloWorldDefinition();
 
         ProcessDefinitionRegistry registry = mock(ProcessDefinitionRegistry.class);
 
-        when(registry.findWorkflowDefinition(MockWorkflowDefinitionBuilder.HELLO_WORLD_ID))
+        when(registry.findWorkflowDefinition(MockProcessDefinitionBuilder.HELLO_WORLD_ID))
             .thenReturn(definition);
 
         helper = new ProcessDefinitionHelperImpl(registry);
-        helper.findPlaceId(MockWorkflowDefinitionBuilder.HELLO_WORLD_ID, "rabbitch");
+        helper.findPlaceId(MockProcessDefinitionBuilder.HELLO_WORLD_ID, "rabbitch");
     }
 
     /**
@@ -68,16 +68,16 @@ public class WorkflowDefinitionHelperImplTest {
     @Test
     public void testFindsId()
         throws Exception {
-        ProcessDefinition definition = MockWorkflowDefinitionBuilder.buildHelloWorldDefinition();
+        ProcessDefinition definition = MockProcessDefinitionBuilder.buildHelloWorldDefinition();
 
         ProcessDefinitionRegistry registry = mock(ProcessDefinitionRegistry.class);
 
-        when(registry.findWorkflowDefinition(MockWorkflowDefinitionBuilder.HELLO_WORLD_ID))
+        when(registry.findWorkflowDefinition(MockProcessDefinitionBuilder.HELLO_WORLD_ID))
             .thenReturn(definition);
 
         helper = new ProcessDefinitionHelperImpl(registry);
 
-        String placeId = helper.findPlaceId(MockWorkflowDefinitionBuilder.HELLO_WORLD_ID, "toEnd");
+        String placeId = helper.findPlaceId(MockProcessDefinitionBuilder.HELLO_WORLD_ID, "toEnd");
 
         assertEquals("placeId is not as expected", "helloWorld", placeId);
     }
@@ -90,11 +90,11 @@ public class WorkflowDefinitionHelperImplTest {
         throws Exception {
         ProcessDefinitionRegistry registry = mock(ProcessDefinitionRegistry.class);
 
-        when(registry.findWorkflowDefinition(MockWorkflowDefinitionBuilder.HELLO_WORLD_ID))
+        when(registry.findWorkflowDefinition(MockProcessDefinitionBuilder.HELLO_WORLD_ID))
             .thenReturn(null);
 
         helper = new ProcessDefinitionHelperImpl(registry);
-        helper.findPlaceId(MockWorkflowDefinitionBuilder.HELLO_WORLD_ID, "toEnd");
+        helper.findPlaceId(MockProcessDefinitionBuilder.HELLO_WORLD_ID, "toEnd");
     }
 
     /**
@@ -102,11 +102,11 @@ public class WorkflowDefinitionHelperImplTest {
      */
     @Test
     public void workflowEnded() {
-        ProcessDefinition definition = MockWorkflowDefinitionBuilder.buildHelloWorldDefinition();
+        ProcessDefinition definition = MockProcessDefinitionBuilder.buildHelloWorldDefinition();
 
         ProcessDefinitionRegistry registry = mock(ProcessDefinitionRegistry.class);
 
-        when(registry.findWorkflowDefinition(MockWorkflowDefinitionBuilder.HELLO_WORLD_ID))
+        when(registry.findWorkflowDefinition(MockProcessDefinitionBuilder.HELLO_WORLD_ID))
             .thenReturn(definition);
 
         helper = new ProcessDefinitionHelperImpl(registry);
@@ -114,7 +114,7 @@ public class WorkflowDefinitionHelperImplTest {
         Token token = mock(Token.class);
 
         when(token.getProcessDefinitionId())
-            .thenReturn(MockWorkflowDefinitionBuilder.HELLO_WORLD_ID);
+            .thenReturn(MockProcessDefinitionBuilder.HELLO_WORLD_ID);
         when(token.getPlaceId()).thenReturn("end");
 
         assertTrue("workflow is not ended", helper.isEnded(token));
@@ -125,11 +125,11 @@ public class WorkflowDefinitionHelperImplTest {
      */
     @Test
     public void workflowNotEnded() {
-        ProcessDefinition definition = MockWorkflowDefinitionBuilder.buildHelloWorldDefinition();
+        ProcessDefinition definition = MockProcessDefinitionBuilder.buildHelloWorldDefinition();
 
         ProcessDefinitionRegistry registry = mock(ProcessDefinitionRegistry.class);
 
-        when(registry.findWorkflowDefinition(MockWorkflowDefinitionBuilder.HELLO_WORLD_ID))
+        when(registry.findWorkflowDefinition(MockProcessDefinitionBuilder.HELLO_WORLD_ID))
             .thenReturn(definition);
 
         helper = new ProcessDefinitionHelperImpl(registry);
@@ -137,7 +137,7 @@ public class WorkflowDefinitionHelperImplTest {
         Token token = mock(Token.class);
 
         when(token.getProcessDefinitionId())
-            .thenReturn(MockWorkflowDefinitionBuilder.HELLO_WORLD_ID);
+            .thenReturn(MockProcessDefinitionBuilder.HELLO_WORLD_ID);
         when(token.getPlaceId()).thenReturn("helloWorld");
 
         assertFalse("workflow is ended", helper.isEnded(token));

@@ -11,17 +11,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 
 /**
  * JAVADOC for Class Level
  *
- * @author $Author: vlevine $
- * @version $Revision: 1.5 $
+ * @author vlevine
  */
+@Component
 public class TokenFactoryImpl
     implements TokenFactory, InitializingBean, ApplicationContextAware {
     private static final Logger LOG = LoggerFactory.getLogger(TokenFactoryImpl.class);
@@ -38,6 +40,7 @@ public class TokenFactoryImpl
      * @param searchDao
      *            JAVADOC.
      */
+    @Autowired
     public TokenFactoryImpl(InstanceFactory instanceFactory, TokenRepository tokenRepository) {
         this.instanceFactory = instanceFactory;
         this.tokenRepository = tokenRepository;

@@ -7,61 +7,61 @@
 	</pattern>
 	<pattern value="*/end-state">
 		<object-create-rule
-			classname="org.cucina.souffle.definition.EndStation"/>
+			classname="org.cucina.engine.definition.EndStation"/>
 		<set-properties-rule/>
 		<set-next-rule methodname="setEndState"/>
 	</pattern>
 	<pattern value="*/state">
 		<object-create-rule
-			classname="org.cucina.souffle.definition.Station"/>
+			classname="org.cucina.engine.definition.Station"/>
 		<set-properties-rule/>
 		<set-next-rule methodname="addState"/>
 	</pattern>
 	<pattern value="*/split">
 		<object-create-rule
-			classname="org.cucina.souffle.definition.Split"/>
+			classname="org.cucina.engine.definition.Split"/>
 		<set-properties-rule/>
 		<set-next-rule methodname="addState"/>
 	</pattern>
 	<pattern value="*/join">
 		<object-create-rule
-			classname="org.cucina.souffle.definition.Join"/>
+			classname="org.cucina.engine.definition.Join"/>
 		<set-properties-rule/>
 		<set-next-rule methodname="addState"/>
 	</pattern>
 	<pattern value="*/start-state">
 		<object-create-rule
-			classname="org.cucina.souffle.definition.StartStation"/>
+			classname="org.cucina.engine.definition.StartStation"/>
 		<set-properties-rule/>
 		<set-next-rule methodname="setStartState"/>
 	</pattern>
 	<pattern value="*/decision">
 		<object-create-rule
-			classname="org.cucina.souffle.definition.Decision"/>
+			classname="org.cucina.engine.definition.Decision"/>
 		<set-properties-rule/>
 		<set-next-rule methodname="addState"/>
 	</pattern>
 	<pattern value="*/transition">
 		<object-create-rule
-			classname="org.cucina.souffle.definition.config.xml.WrapperTransition"/>
+			classname="org.cucina.engine.definition.config.xml.WrapperTransition"/>
 		<set-properties-rule/>
 		<set-next-rule methodname="addTransition"/>
 	</pattern>
 	<pattern value="*/condition">
 		<object-create-rule
-			classname="org.cucina.souffle.service.definition.CheckDescriptor"/>
+			classname="org.cucina.engine.server.definition.CheckDescriptor"/>
 		<set-properties-rule/>
 		<set-next-rule methodname="addCondition"/>
 	</pattern>
 	<pattern value="*/enter-action">
 		<object-create-rule
-			classname="org.cucina.souffle.service.definition.OperationDescriptor"/>
+			classname="org.cucina.engine.server.definition.OperationDescriptor"/>
 		<set-properties-rule/>
 		<set-next-rule methodname="addEnterAction"/>
 	</pattern>
 	<pattern value="*/exit-action">
 		<object-create-rule
-			classname="org.cucina.souffle.service.definition.OperationDescriptor"/>
+			classname="org.cucina.engine.server.definition.OperationDescriptor"/>
 		<set-properties-rule/>
 		<set-next-rule methodname="addLeaveAction"/>
 	</pattern>
@@ -70,11 +70,11 @@
 	</pattern>
 	<pattern value="*/property">
 		<factory-create-rule
-			classname="org.cucina.souffle.definition.config.xml.PropertyCreationFactory"/>
+			classname="org.cucina.engine.definition.config.xml.PropertyCreationFactory"/>
 	</pattern>
 	<pattern value="*/property-map">
 		<factory-create-rule
-			classname="org.cucina.souffle.definition.config.xml.CreateMapFactory"/>
+			classname="org.cucina.engine.definition.config.xml.CreateMapFactory"/>
 	</pattern>
 	<pattern value="*/property-map/entry">
 		<call-method-rule methodname="put" paramcount="2"/>
@@ -83,7 +83,7 @@
 	</pattern>
 	<pattern value="*/property-list">
 		<factory-create-rule
-			classname="org.cucina.souffle.definition.config.xml.CreateListFactory"/>
+			classname="org.cucina.engine.definition.config.xml.CreateListFactory"/>
 	</pattern>
 	<pattern value="*/property-list/entry">
 		<call-method-rule methodname="add" paramcount="1"/>

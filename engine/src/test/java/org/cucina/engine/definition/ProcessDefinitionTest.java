@@ -13,8 +13,8 @@ import org.springframework.core.io.Resource;
 
 import org.cucina.engine.definition.config.MapBasedProcessDefinitionRegistry;
 import org.cucina.engine.definition.config.ProcessDefinitionParser;
-import org.cucina.engine.testadapters.MockWorkflowDefinitionBuilder;
-import org.cucina.engine.testadapters.WorkflowEnvironmentFactory;
+import org.cucina.engine.testadapters.MockProcessDefinitionBuilder;
+import org.cucina.engine.testadapters.ProcessEnvironmentFactory;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -39,7 +39,7 @@ public class ProcessDefinitionTest {
     @Before
     public void setUp()
         throws Exception {
-        wf = MockWorkflowDefinitionBuilder.buildHelloWorldDefinition();
+        wf = MockProcessDefinitionBuilder.buildHelloWorldDefinition();
 
         List<Resource> resources = new ArrayList<Resource>();
         byte[] ab = "a".getBytes();
@@ -53,7 +53,7 @@ public class ProcessDefinitionTest {
 
         MapBasedProcessDefinitionRegistry registry = new MapBasedProcessDefinitionRegistry(parser);
 
-        WorkflowEnvironmentFactory.buildEnvironment(null, registry, parser, null, resources);
+        ProcessEnvironmentFactory.buildEnvironment(null, registry, parser, null, resources);
     }
 
     /**

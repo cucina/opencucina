@@ -4,20 +4,19 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
-
-import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageHandler;
-import org.springframework.messaging.MessagingException;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
 import org.cucina.engine.model.HistoryRecord;
 import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.repository.TokenRepository;
 import org.cucina.engine.server.event.CompensateEvent;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHandler;
+import org.springframework.messaging.MessagingException;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 
 /**
@@ -26,6 +25,7 @@ import org.slf4j.LoggerFactory;
  * @author $Author: $
  * @version $Revision: $
  */
+@Component("compensateHandler")
 public class CompensateMessageHandler
     implements MessageHandler {
     private static final Logger LOG = LoggerFactory.getLogger(CompensateMessageHandler.class);
@@ -37,6 +37,7 @@ public class CompensateMessageHandler
      * @param tokenRepository
      *            JAVADOC.
      */
+    @Autowired
     public CompensateMessageHandler(TokenRepository tokenRepository) {
         Assert.notNull(tokenRepository, "tokenRepository is null");
         this.tokenRepository = tokenRepository;

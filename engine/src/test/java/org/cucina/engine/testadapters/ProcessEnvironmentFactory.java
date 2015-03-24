@@ -1,14 +1,15 @@
-
 package org.cucina.engine.testadapters;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.util.Collection;
 import java.util.Collections;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.Resource;
+import org.springframework.expression.BeanResolver;
+
 import org.cucina.core.spring.ELExpressionExecutor;
 import org.cucina.core.spring.ExpressionExecutor;
+
 import org.cucina.engine.DefaultProcessEnvironment;
 import org.cucina.engine.DefaultProcessSessionFactory;
 import org.cucina.engine.LocalProcessDriver;
@@ -21,9 +22,8 @@ import org.cucina.engine.definition.ProcessDefinitionHelper;
 import org.cucina.engine.definition.config.ProcessDefinitionParser;
 import org.cucina.engine.definition.config.ProcessDefinitionRegistry;
 import org.cucina.engine.service.ProcessService;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.io.Resource;
-import org.springframework.expression.BeanResolver;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 /**
@@ -32,7 +32,7 @@ import org.springframework.expression.BeanResolver;
  * @author $Author: $
  * @version $Revision: $
   */
-public class WorkflowEnvironmentFactory {
+public class ProcessEnvironmentFactory {
     /**
      * JAVADOC Method Level Comments
      *
@@ -42,9 +42,9 @@ public class WorkflowEnvironmentFactory {
      */
     public static ProcessEnvironment buildEnvironment(BeanResolver beanResolver,
         ProcessDefinitionRegistry definitionRegistry, ProcessDefinitionParser definitionParser,
-        ProcessService workflowService, Collection<Resource> resources)
+        ProcessService processService, Collection<Resource> resources)
         throws Exception {
-        DefaultProcessEnvironment defaultWorkflowEnvironment = new DefaultProcessEnvironment();
+        DefaultProcessEnvironment defaultProcessEnvironment = new DefaultProcessEnvironment();
         ApplicationContext applicationContext = mock(ApplicationContext.class);
 
         when(applicationContext.containsBean("beanResolver")).thenReturn(true);
@@ -54,23 +54,23 @@ public class WorkflowEnvironmentFactory {
         }
 
         when(applicationContext.getBean("beanResolver")).thenReturn(beanResolver);
-        when(applicationContext.containsBean("workflowDefinitionRegistry")).thenReturn(true);
+        when(applicationContext.containsBean("processDefinitionRegistry")).thenReturn(true);
 
         if (definitionRegistry == null) {
             definitionRegistry = mock(ProcessDefinitionRegistry.class);
         }
 
-        when(applicationContext.getBean("workflowDefinitionRegistry")).thenReturn(definitionRegistry);
-        when(applicationContext.containsBean("workflowDefinitionParser")).thenReturn(true);
+        when(applicationContext.getBean("processDefinitionRegistry")).thenReturn(definitionRegistry);
+        when(applicationContext.containsBean("processDefinitionParser")).thenReturn(true);
 
         if (definitionParser == null) {
             definitionParser = mock(ProcessDefinitionParser.class);
         }
 
-        when(applicationContext.getBean("workflowDefinitionParser")).thenReturn(definitionParser);
-        when(applicationContext.containsBean("workflowSessionFactory")).thenReturn(true);
+        when(applicationContext.getBean("processDefinitionParser")).thenReturn(definitionParser);
+        when(applicationContext.containsBean("processSessionFactory")).thenReturn(true);
 
-        defaultWorkflowEnvironment.setTokenFactory(mock(TokenFactory.class));
+        defaultProcessEnvironment.setTokenFactory(mock(TokenFactory.class));
 
         ProcessDriverFactory executorFactory = mock(ProcessDriverFactory.class);
 
@@ -80,30 +80,30 @@ public class WorkflowEnvironmentFactory {
                 Collections.singletonList((WorkflowListener) new StandardOutputWorkflowListener()),
                 executorFactory);
 
-        when(applicationContext.getBean("workflowSessionFactory")).thenReturn(sessionFactory);
-        when(applicationContext.containsBean("workflowService")).thenReturn(true);
+        when(applicationContext.getBean("processSessionFactory")).thenReturn(sessionFactory);
+        when(applicationContext.containsBean("processService")).thenReturn(true);
 
-        if (workflowService == null) {
-            workflowService = mock(ProcessService.class);
+        if (processService == null) {
+            processService = mock(ProcessService.class);
         }
 
-        when(applicationContext.getBean("workflowService")).thenReturn(workflowService);
-        when(applicationContext.containsBean("workflowDefinitionHelper")).thenReturn(true);
+        when(applicationContext.getBean("processService")).thenReturn(processService);
+        when(applicationContext.containsBean("processDefinitionHelper")).thenReturn(true);
 
-        ProcessDefinitionHelper workflowDefinitionHelper = mock(ProcessDefinitionHelper.class);
+        ProcessDefinitionHelper processDefinitionHelper = mock(ProcessDefinitionHelper.class);
 
-        when(applicationContext.getBean("workflowDefinitionHelper"))
-            .thenReturn(workflowDefinitionHelper);
+        when(applicationContext.getBean("processDefinitionHelper"))
+            .thenReturn(processDefinitionHelper);
 
         when(applicationContext.containsBean("expressionExecutor")).thenReturn(true);
 
         ExpressionExecutor exex = new ELExpressionExecutor();
 
         when(applicationContext.getBean("expressionExecutor")).thenReturn(exex);
-        defaultWorkflowEnvironment.setApplicationContext(applicationContext);
-        defaultWorkflowEnvironment.setDefinitionResources(resources);
-        defaultWorkflowEnvironment.start();
+        defaultProcessEnvironment.setApplicationContext(applicationContext);
+        defaultProcessEnvironment.setDefinitionResources(resources);
+        defaultProcessEnvironment.start();
 
-        return defaultWorkflowEnvironment;
+        return defaultProcessEnvironment;
     }
 }

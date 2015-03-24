@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<process-definition name="Report">
+	<description>Item processing</description>
+	<start-state id="start">
+		<transition to="open" id="toOpen" default="true" >
+			<exit-action path="bean:propertySetterAction"
+				application="client">
+				<property name="propertyExpression" value="token.domainObject.status" />
+				<property name="valueExpression" value="'OPEN'" />
+			</exit-action>
+		</transition>
+	</start-state>
+
+	<state id="open">
+		<transition to="finished" id="approve">
+			<condition path="bean:elCondition" application="client">
+				<property name="expression" value="token.domainObject.status == 'OPEN' " />
+			</condition>
+			<exit-action path="bean:propertySetterAction"
+				application="client">
+				<property name="propertyExpression" value="token.domainObject.status" />
+				<property name="valueExpression" value="'APPROVED'" />
+			</exit-action>
+		</transition>
+		<transition to="finished" id="reject">
+			<exit-action path="bean:propertySetterAction"
+				application="client">
+				<property name="propertyExpression" value="token.domainObject.status" />
+				<property name="valueExpression" value="'REJECTED'" />
+			</exit-action>
+		</transition>
+	</state>
+
+	<state id="finished" >
+		<transition to="open" id="toOpen" >
+			<exit-action path="bean:propertySetterAction"
+				application="client">
+				<property name="propertyExpression" value="token.domainObject.status" />
+				<property name="valueExpression" value="'OPEN'" />
+			</exit-action>
+		</transition>
+	</state>
+
+	<end-state id="end" />
+</process-definition>

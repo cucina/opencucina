@@ -3,7 +3,7 @@ package org.cucina.engine;
 import org.cucina.engine.definition.Check;
 import org.cucina.engine.definition.ProcessDefinition;
 import org.cucina.engine.definition.Token;
-import org.cucina.engine.testadapters.MockWorkflowDefinitionBuilder;
+import org.cucina.engine.testadapters.MockProcessDefinitionBuilder;
 import org.cucina.engine.testassist.Foo;
 import static org.junit.Assert.assertEquals;
 
@@ -47,7 +47,7 @@ public class DefaultWorkflowSessionTest {
      */
     @Test
     public void testChooseASoftDrinkWorkflow() {
-        ProcessDefinition definition = MockWorkflowDefinitionBuilder.buildChooseADrinkDefinition();
+        ProcessDefinition definition = MockProcessDefinitionBuilder.buildChooseADrinkDefinition();
         DefaultProcessSession session = new DefaultProcessSession(definition, executorFactory, null);
 
         Foo domainObject = new Foo();
@@ -75,7 +75,7 @@ public class DefaultWorkflowSessionTest {
      */
     @Test
     public void testChooseAToddlerDrinkWorkflow() {
-        ProcessDefinition definition = MockWorkflowDefinitionBuilder.buildChooseADrinkDefinition();
+        ProcessDefinition definition = MockProcessDefinitionBuilder.buildChooseADrinkDefinition();
         ProcessSession session = new DefaultProcessSession(definition, executorFactory, null);
 
         Foo domainObject = new Foo();
@@ -96,7 +96,7 @@ public class DefaultWorkflowSessionTest {
      */
     @Test
     public void testHelloWorldWorkflow() {
-        ProcessDefinition definition = MockWorkflowDefinitionBuilder.buildHelloWorldDefinition();
+        ProcessDefinition definition = MockProcessDefinitionBuilder.buildHelloWorldDefinition();
 
         ProcessSession session = new DefaultProcessSession(definition, executorFactory, null);
 

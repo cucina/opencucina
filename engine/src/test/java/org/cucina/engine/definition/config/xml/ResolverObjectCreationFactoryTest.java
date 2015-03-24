@@ -2,7 +2,7 @@ package org.cucina.engine.definition.config.xml;
 
 import org.springframework.expression.BeanResolver;
 
-import org.cucina.engine.testadapters.WorkflowEnvironmentFactory;
+import org.cucina.engine.testadapters.ProcessEnvironmentFactory;
 import org.cucina.engine.testassist.Foo;
 import static org.junit.Assert.assertEquals;
 
@@ -33,7 +33,7 @@ public class ResolverObjectCreationFactoryTest {
         when(res1.resolve(null, "bean:/aa/bb")).thenReturn(f1);
         when(res1.resolve(null, "class:/cc/dd")).thenReturn(f2);
 
-        WorkflowEnvironmentFactory.buildEnvironment(res1, null, null, null, null);
+        ProcessEnvironmentFactory.buildEnvironment(res1, null, null, null, null);
 
         ResolverObjectCreationFactory factory = new ResolverObjectCreationFactory();
         Attributes attributes = mock(Attributes.class);

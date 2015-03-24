@@ -2,21 +2,17 @@ package org.cucina.engine.server.search;
 
 import java.util.Map;
 
-import org.springframework.util.Assert;
-
 import org.cucina.core.model.PersistableEntity;
 import org.cucina.core.utils.NameUtils;
-
 import org.cucina.engine.server.model.EntityDescriptor;
-
 import org.cucina.search.marshall.SearchCriterionMarshaller;
 import org.cucina.search.query.SearchBean;
 import org.cucina.search.query.criterion.JoinCriterion;
 import org.cucina.search.query.criterion.SubSelectCriterion;
 import org.cucina.search.query.modifier.AbstractCriteriaModifier;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 
 
 /**

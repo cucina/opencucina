@@ -2,9 +2,13 @@ package org.cucina.i18n.api.remote;
 
 import java.util.Collection;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
+
 import org.cucina.i18n.api.ListNodeDto;
 import org.cucina.i18n.api.ListNodeService;
 
@@ -14,6 +18,7 @@ import org.cucina.i18n.api.ListNodeService;
  *
  * @author vlevine
   */
+@Service("listNodeService")
 public class RemoteListNodeService
     implements ListNodeService {
     private RestTemplate restTemplate = new RestTemplate();
@@ -24,8 +29,10 @@ public class RemoteListNodeService
      *
      * @param url JAVADOC.
      */
-    public RemoteListNodeService(String url) {
-    	Assert.hasText(url, "url is empty");
+    @Autowired
+    public RemoteListNodeService(@Value("${org.cucina.listnode.url}")
+    String url) {
+        Assert.hasText(url, "url is empty");
         this.url = url;
     }
 

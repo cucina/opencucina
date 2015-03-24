@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<process-definition name="Item">
+	<description>Item processing</description>
+	<start-state id="start">
+		<transition to="isOpen" id="toOpen" default="true" />
+	</start-state>
+
+	<decision id="isOpen">
+		<transition to="finished" id="nullOrOldDataset">
+			<condition path="bean:elCondition" application="client">
+				<property name="expression" value="token.domainObject.status == 'CLOSED' " />
+			</condition>
+			<exit-action path="bean:elGetSetAction"
+				application="client">
+				<property name="expressionTo" value="token.domainObject.status" />
+				<property name="expressionFrom" value="'CLOSED_INVALID_DS'" />
+			</exit-action>
+		</transition>
+		<transition to="open" id="toOpen">
+			<condition path="bean:conditionFalse" application="client"/>
+		
+			<exit-action path="bean:elGetSetAction"
+				application="client">
+				<property name="expressionTo" value="token.domainObject.status" />
+				<property name="expressionFrom" value="'OPEN'" />
+			</exit-action>
+		</transition>
+	</decision>
+
+	<state id="open">
+		<transition to="finished" id="approve">
+			<condition path="bean:elCondition" application="client">
+				<property name="expression" value="token.domainObject.status == 'OPEN' " />
+			</condition>
+			<exit-action path="bean:commitItemAction" application="client">
+				<property-map name="attributes">
+					<entry key="authorized" value="T(java.lang.Boolean).TRUE.toString()" />
+					<entry key="authorizer"
+						value="T(org.cucina.meringue.security.AcegiUserAccessor).getCurrentUserName()" />
+				</property-map>
+			</exit-action>
+			<exit-action path="bean:elGetSetAction"
+				application="client">
+				<property name="expressionTo" value="token.domainObject.status" />
+				<property name="expressionFrom" value="'APPROVED'" />
+			</exit-action>
+		</transition>
+		<transition to="finished" id="reject">
+			<exit-action path="bean:rejectItemAction" application="client">
+				<property-map name="attributes">
+					<entry key="authorized" value="T(java.lang.Boolean).FALSE.toString()" />
+					<entry key="authorizer"
+						value="T(org.cucina.meringue.security.AcegiUserAccessor).getCurrentUserName()" />
+				</property-map>
+			</exit-action>
+			<exit-action path="bean:elGetSetAction"
+				application="client">
+				<property name="expressionTo" value="token.domainObject.status" />
+				<property name="expressionFrom" value="'REJECTED'" />
+			</exit-action>
+		</transition>
+	</state>
+
+	<state id="finished" />
+
+	<end-state id="end" />
+</process-definition>

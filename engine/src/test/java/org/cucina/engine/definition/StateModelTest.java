@@ -9,7 +9,7 @@ import org.cucina.engine.ProcessDriver;
 import org.cucina.engine.ProcessDriverFactory;
 import org.cucina.engine.WorkflowListener;
 import org.cucina.engine.checks.AbstractCheck;
-import org.cucina.engine.testadapters.MockWorkflowDefinitionBuilder;
+import org.cucina.engine.testadapters.MockProcessDefinitionBuilder;
 import org.cucina.engine.testadapters.StandardOutputWorkflowListener;
 import org.cucina.engine.testassist.Foo;
 import static org.junit.Assert.assertEquals;
@@ -221,7 +221,7 @@ public class StateModelTest {
      */
     @Test
     public void testFindTransitionByName() {
-        ProcessDefinition definition = MockWorkflowDefinitionBuilder.buildHelloWorldDefinition();
+        ProcessDefinition definition = MockProcessDefinitionBuilder.buildHelloWorldDefinition();
 
         State startState = definition.getStartState();
 
@@ -243,7 +243,7 @@ public class StateModelTest {
     @Test
     public void testGetDefaultState() {
         // todo: test for invalid get default state
-        State state = MockWorkflowDefinitionBuilder.buildHelloWorldDefinition().getStartState();
+        State state = MockProcessDefinitionBuilder.buildHelloWorldDefinition().getStartState();
         Transition transition = state.getDefaultTransition();
 
         assertNotNull(transition);
@@ -254,7 +254,7 @@ public class StateModelTest {
      */
     @Test
     public void testHelloWorldWorkflow() {
-        ProcessDefinition definition = MockWorkflowDefinitionBuilder.buildHelloWorldDefinition();
+        ProcessDefinition definition = MockProcessDefinitionBuilder.buildHelloWorldDefinition();
 
         assertNotNull(definition.getStartState());
         assertEquals("start", definition.getStartState().getId());

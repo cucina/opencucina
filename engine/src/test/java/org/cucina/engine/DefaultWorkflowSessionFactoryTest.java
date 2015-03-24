@@ -9,7 +9,7 @@ import java.util.Collections;
 
 import org.cucina.engine.definition.ProcessDefinition;
 import org.cucina.engine.definition.config.ProcessDefinitionRegistry;
-import org.cucina.engine.testadapters.MockWorkflowDefinitionBuilder;
+import org.cucina.engine.testadapters.MockProcessDefinitionBuilder;
 import org.cucina.engine.testadapters.StandardOutputWorkflowListener;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,7 +49,7 @@ public class DefaultWorkflowSessionFactoryTest {
                 Collections.singletonList((WorkflowListener) new StandardOutputWorkflowListener()),
                 executorFactory);
 
-        ProcessDefinition workflowDefinition = MockWorkflowDefinitionBuilder.buildChooseADrinkDefinition();
+        ProcessDefinition workflowDefinition = MockProcessDefinitionBuilder.buildChooseADrinkDefinition();
         ProcessSession session = sessionFactory.openSession(workflowDefinition);
 
         assertNotNull(session);
@@ -61,7 +61,7 @@ public class DefaultWorkflowSessionFactoryTest {
     @Test
     public void testOpenSessionWithSuppliedDefinition() {
         ProcessDefinitionRegistry definitionRegistry = mock(ProcessDefinitionRegistry.class);
-        ProcessDefinition workflowDefinition = MockWorkflowDefinitionBuilder.buildChooseADrinkDefinition();
+        ProcessDefinition workflowDefinition = MockProcessDefinitionBuilder.buildChooseADrinkDefinition();
 
         when(definitionRegistry.findWorkflowDefinition(workflowDefinition.getId()))
             .thenReturn(workflowDefinition);

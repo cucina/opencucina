@@ -3,6 +3,8 @@ package org.cucina.engine.server.utils;
 import org.cucina.engine.server.communication.ClientRegistry;
 import org.cucina.engine.server.communication.ClientRegistry.DestinationDescriptor;
 import org.cucina.engine.server.event.CallbackEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 
 /**
@@ -11,6 +13,7 @@ import org.cucina.engine.server.event.CallbackEvent;
  * @author $Author: $
  * @version $Revision: $
  */
+@Component("registryUrlExtractor")
 public class RegistryUrlExtractor {
     private ClientRegistry clientRegistry;
 
@@ -19,6 +22,7 @@ public class RegistryUrlExtractor {
      *
      * @param clientRegistry JAVADOC.
      */
+    @Autowired
     public RegistryUrlExtractor(ClientRegistry clientRegistry) {
         this.clientRegistry = clientRegistry;
     }

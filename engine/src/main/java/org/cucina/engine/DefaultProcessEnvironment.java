@@ -38,17 +38,17 @@ import org.slf4j.LoggerFactory;
  * construct workable default implementations. So the environment can be used
  * out-of-the-box.
  *
- * <code>workflowDefinitionRegistry</code>
+ * <code>processDefinitionRegistry</code>
  *
- * <code>workflowDefinitionReader</code>
+ * <code>processDefinitionHelper</code>
  *
- * <code>workflowDefinitionParser</code>
+ * <code>processDefinitionParser</code>
  *
- * <code>workflowSessionFactory</code>
+ * <code>processSessionFactory</code>
  *
- * <code>workflowService</code>
+ * <code>processService</code>
  *
- * <code>workflowDefinitionHelper</code>
+ * <code>processorDriverFactory</code>
  *
  * <code>expressionExecutor</code>
  *
@@ -123,16 +123,6 @@ public class DefaultProcessEnvironment
      * @return JAVADOC.
      */
     @Override
-    public ApplicationContext getApplicationContext() {
-        return applicationContext;
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    @Override
     public boolean isAutoStartup() {
         return true;
     }
@@ -184,7 +174,7 @@ public class DefaultProcessEnvironment
      * @return JAVADOC.
      */
     @Override
-    public ProcessDriverFactory getExecutorFactory() {
+    public ProcessDriverFactory getProcessDriverFactory() {
         return processDriverFactory;
     }
 
@@ -323,10 +313,6 @@ public class DefaultProcessEnvironment
      */
     @Override
     public void stop() {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Stop called from:", new Exception());
-        }
-
         running = false;
     }
 
@@ -337,10 +323,6 @@ public class DefaultProcessEnvironment
      */
     @Override
     public void stop(Runnable runnable) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Stop called for " + runnable + " from:", new Exception());
-        }
-
         runnable.run();
         running = false;
     }

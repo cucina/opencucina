@@ -9,9 +9,8 @@ import javax.management.ObjectName;
 import org.springframework.context.ApplicationListener;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.jmx.export.annotation.ManagedResource;
-
+import org.springframework.stereotype.Component;
 import org.cucina.engine.server.event.RegistrationEvent;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +23,7 @@ import org.slf4j.LoggerFactory;
  *          cluster
  */
 @ManagedResource
+@Component
 public class DefaultClientRegistry
     implements ClientRegistry, ApplicationListener<RegistrationEvent> {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultClientRegistry.class);

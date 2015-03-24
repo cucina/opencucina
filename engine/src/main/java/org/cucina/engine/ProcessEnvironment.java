@@ -21,13 +21,6 @@ import org.springframework.expression.BeanResolver;
 public interface ProcessEnvironment
     extends ApplicationContextAware {
     /**
-     * Should return the ApplicationContext which is set by ApplicationContextAware.setApplicationContext
-     *
-     * @return JAVADOC.
-     */
-    ApplicationContext getApplicationContext();
-
-    /**
      * JAVADOC Method Level Comments
      *
      * @return JAVADOC.
@@ -53,7 +46,7 @@ public interface ProcessEnvironment
      *
      * @return JAVADOC.
      */
-    ProcessDriverFactory getExecutorFactory();
+    ProcessDriverFactory getProcessDriverFactory();
 
     /**
      * JAVADOC Method Level Comments
