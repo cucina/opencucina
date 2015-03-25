@@ -9,10 +9,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.cucina.security.model.Privilege;
-import org.cucina.security.repository.PrivilegeRepository;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
+import org.cucina.security.model.Privilege;
+import org.cucina.security.repository.PrivilegeRepository;
 
 
 /**
@@ -20,7 +22,8 @@ import org.springframework.util.Assert;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
+@Repository
 public class PrivilegeRepositoryImpl
     implements PrivilegeRepository {
     @PersistenceContext
@@ -29,16 +32,8 @@ public class PrivilegeRepositoryImpl
     /**
      * JAVADOC Method Level Comments
      *
-     * @param entityManager JAVADOC.
-     */
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param privilege JAVADOC.
+     * @param privilege
+     *            JAVADOC.
      */
     @Override
     @Transactional
@@ -49,7 +44,8 @@ public class PrivilegeRepositoryImpl
     /**
      * JAVADOC Method Level Comments
      *
-     * @param name JAVADOC.
+     * @param name
+     *            JAVADOC.
      *
      * @return JAVADOC.
      */
@@ -76,7 +72,8 @@ public class PrivilegeRepositoryImpl
     /**
      * JAVADOC Method Level Comments
      *
-     * @param name JAVADOC.
+     * @param name
+     *            JAVADOC.
      *
      * @return JAVADOC.
      */
@@ -94,8 +91,10 @@ public class PrivilegeRepositoryImpl
     /**
      * JAVADOC Method Level Comments
      *
-     * @param name JAVADOC.
-     * @param forUpdate JAVADOC.
+     * @param name
+     *            JAVADOC.
+     * @param forUpdate
+     *            JAVADOC.
      *
      * @return JAVADOC.
      */
@@ -110,12 +109,13 @@ public class PrivilegeRepositoryImpl
     }
 
     /**
-    * JAVADOC Method Level Comments
-    *
-    * @param privilege JAVADOC.
-    *
-    * @return JAVADOC.
-    */
+     * JAVADOC Method Level Comments
+     *
+     * @param privilege
+     *            JAVADOC.
+     *
+     * @return JAVADOC.
+     */
     @Override
     @Transactional
     public Privilege save(Privilege privilege) {

@@ -3,6 +3,7 @@ package org.cucina.security.service;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -10,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Component;
 
 import org.cucina.core.spring.ActiveProfilesAccessor;
 
@@ -24,12 +26,14 @@ import org.slf4j.LoggerFactory;
  *
  * @author vlevine
  */
+@Component
 public class UserAccessorImpl
     implements UserAccessor {
     private static final Logger LOG = LoggerFactory.getLogger(UserAccessorImpl.class);
     @Autowired
     private ActiveProfilesAccessor activeProfilesAccessor;
     @Autowired
+    @Qualifier("userRepository")
     private UserDetailsService userDetailsService;
 
     /**

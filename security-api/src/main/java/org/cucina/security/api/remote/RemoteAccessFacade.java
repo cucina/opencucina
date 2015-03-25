@@ -3,9 +3,6 @@ package org.cucina.security.api.remote;
 import java.util.Collection;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,7 +15,6 @@ import org.cucina.security.api.PermissionDto;
  *
  * @author vlevine
  */
-@Service("accessFacade")
 public class RemoteAccessFacade
     implements AccessFacade {
     private RestTemplate restTemplate = new RestTemplate();
@@ -27,14 +23,10 @@ public class RemoteAccessFacade
     /**
      * Creates a new RemoteAccessFacade object.
      *
-     * @param url
-     *            .
+     * @param url .
      */
-    @Autowired
-    public RemoteAccessFacade(@Value("${org.cucina.access.url}")
-    String url) {
+    public RemoteAccessFacade(String url) {
         Assert.hasText(url, "url is empty");
-
         this.url = url;
     }
 

@@ -6,17 +6,17 @@ import java.util.HashSet;
 import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Version;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import org.cucina.core.model.PersistableEntity;
 import org.cucina.core.model.Versioned;
 import org.cucina.core.model.projection.PostProcessProjections;
 import org.cucina.core.model.projection.ProjectionColumn;
-
 import org.cucina.security.validation.UniquePermission;
 
 
@@ -109,6 +109,8 @@ public class Permission
      *
      * @return JAVADOC.
      */
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "role")
     @ProjectionColumn
     public Role getRole() {
         return role;

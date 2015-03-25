@@ -13,9 +13,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.core.convert.converter.ConverterRegistry;
-import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
@@ -31,11 +28,14 @@ import org.cucina.engine.definition.config.ProcessDefinitionParser;
 import org.cucina.engine.definition.config.xml.DigesterModuleProcessDefinitionParser;
 import org.cucina.engine.model.Workflow;
 
-import org.cucina.i18n.converter.MessageConverter;
+import org.cucina.i18n.api.ListNodeService;
+import org.cucina.i18n.api.remote.RemoteListNodeService;
+
+import org.cucina.security.api.AccessFacade;
+import org.cucina.security.api.remote.RemoteAccessFacade;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * JAVADOC for Class Level
@@ -43,92 +43,103 @@ import org.slf4j.LoggerFactory;
  * @author vlevine
  */
 @Configuration
-@ComponentScan(basePackages =  {
-    "org.cucina.engine", "org.cucina.security.api.remote", "org.cucina.i18n.api.remote"}
-)
+@ComponentScan(basePackages = { "org.cucina.engine", "org.cucina.engine.server" })
 public class ProcessConfiguration {
-    private static final String SERVER_PROCESS_RULES = "classpath:org/cucina/engine/server/definition/config/xml/workflow-rules-definitions.xml";
-    private static final Logger LOG = LoggerFactory.getLogger(ProcessConfiguration.class);
-    @Value("${org.cucina.workflows.resources}")
-    private String processLocation; // = { "classpath:workflows/Item.xml", "classpath:workflows/Report.xml" };
+	private static final String SERVER_PROCESS_RULES = "classpath:org/cucina/engine/server/definition/config/xml/workflow-rules-definitions.xml";
+	private static final Logger LOG = LoggerFactory
+			.getLogger(ProcessConfiguration.class);
+	@Value("${org.cucina.access.url}")
+	private String accessUrl;
+	@Value("${org.cucina.listnode.url}")
+	private String listnodeUrl;
+	@Value("${org.cucina.workflows.resources}")
+	private String processLocation; // = { "classpath:workflows/Item.xml",
+									// "classpath:workflows/Report.xml" };
 
-    /**
-     *
-     * @return
-     */
-    @Bean
-    public ContextService contextService() {
-        return new ThreadLocalContextService();
-    }
+	/**
+	 *
+	 * @return .
+	 */
+	@Bean
+	public AccessFacade accessFacade() {
+		return new RemoteAccessFacade(accessUrl);
+	}
 
-    /**
-     * @return .
-     */
-    @Bean
-    public InstanceFactory instanceFactory() {
-        return new PackageBasedInstanceFactory(ClassUtils.getPackageName(Workflow.class));
-    }
+	/**
+	 *
+	 * @return
+	 */
+	@Bean
+	public ContextService contextService() {
+		return new ThreadLocalContextService();
+	}
 
-    /**
-     *
-     * @return JAVADOC.
-     */
-    @Bean
-    public ConversionService myConversionService(InstanceFactory instanceFactory) {
-        ConversionService conversionService = new DefaultConversionService();
+	/**
+	 * @return .
+	 */
+	@Bean
+	public InstanceFactory instanceFactory() {
+		return new PackageBasedInstanceFactory(
+				ClassUtils.getPackageName(Workflow.class));
+	}
 
-        if (conversionService instanceof ConverterRegistry) {
-            ((ConverterRegistry) conversionService).addConverter(new MessageConverter(
-                    instanceFactory));
-        }
+	/**
+	 *
+	 * @return .
+	 */
+	@Bean
+	public ListNodeService listNodeService() {
+		return new RemoteListNodeService(listnodeUrl);
+	}
 
-        return conversionService;
-    }
+	/**
+	 * @param applicationContext
+	 *            .
+	 *
+	 * @return .
+	 */
+	@Bean
+	public ProcessDefinitionParser processDefinitionParser(
+			ApplicationContext applicationContext) {
+		return new DigesterModuleProcessDefinitionParser(
+				applicationContext.getResource(SERVER_PROCESS_RULES));
+	}
 
-    /**
-     * @param applicationContext
-     *            .
-     *
-     * @return .
-     */
-    @Bean
-    public ProcessDefinitionParser processDefinitionParser(ApplicationContext applicationContext) {
-        return new DigesterModuleProcessDefinitionParser(applicationContext.getResource(
-                SERVER_PROCESS_RULES));
-    }
+	/**
+	 *
+	 *
+	 * @param tokenFactory
+	 *            .
+	 * @param applicationContext
+	 *            .
+	 *
+	 * @return .
+	 *
+	 * @throws IOException .
+	 */
+	@Bean
+	public ProcessEnvironment processEnvironment(TokenFactory tokenFactory,
+			ApplicationContext applicationContext) throws IOException {
+		DefaultProcessEnvironment dpe = new DefaultProcessEnvironment();
 
-    /**
-     *
-     *
-     * @param tokenFactory .
-     * @param applicationContext .
-     *
-     * @return .
-     *
-     * @throws IOException .
-     */
-    @Bean
-    public ProcessEnvironment processEnvironment(TokenFactory tokenFactory,
-        ApplicationContext applicationContext)
-        throws IOException {
-        DefaultProcessEnvironment dpe = new DefaultProcessEnvironment();
+		dpe.setTokenFactory(tokenFactory);
+		dpe.setDefinitionResources(findResources(applicationContext,
+				processLocation));
 
-        dpe.setTokenFactory(tokenFactory);
-        dpe.setDefinitionResources(findResources(applicationContext, processLocation));
+		return dpe;
+	}
 
-        return dpe;
-    }
+	private List<Resource> findResources(
+			ResourcePatternResolver applicationContext, String prefix)
+			throws IOException {
+		String path = prefix + "/*.xml";
 
-    private List<Resource> findResources(ResourcePatternResolver applicationContext, String prefix)
-        throws IOException {
-        String path = prefix + "/*.xml";
+		if (!applicationContext.getResource(prefix).exists()) {
+			LOG.warn("No process definitions were found here '" + path + "'");
 
-        if (!applicationContext.getResource(prefix).exists()) {
-            LOG.warn("No process definitions were found here '" + path + "'");
+			return new ArrayList<Resource>();
+		}
 
-            return new ArrayList<Resource>();
-        }
-
-        return Arrays.asList(applicationContext.getResources(path));
-    }
+		return Arrays.asList(applicationContext.getResources(path));
+	}
 }

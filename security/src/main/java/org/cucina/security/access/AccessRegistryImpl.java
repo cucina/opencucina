@@ -9,6 +9,8 @@ import org.cucina.security.model.Privilege;
 import org.cucina.security.repository.PrivilegeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 
@@ -18,6 +20,7 @@ import org.springframework.util.Assert;
  * @author $Author: $
  * @version $Revision: $
   */
+@Component
 public class AccessRegistryImpl
     implements AccessRegistry {
     private static final Logger LOG = LoggerFactory.getLogger(AccessRegistryImpl.class);
@@ -31,6 +34,7 @@ public class AccessRegistryImpl
      *
      * @param rolePrivilegeDao JAVADOC.
      */
+    @Autowired
     public AccessRegistryImpl(PrivilegeRepository privilegeRepository) {
         Assert.notNull(privilegeRepository, "privilegeRepository is null");
         this.privilegeRepository = privilegeRepository;

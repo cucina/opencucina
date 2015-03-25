@@ -8,6 +8,8 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.test.util.ReflectionTestUtils;
+
 import org.cucina.security.model.Role;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -50,7 +52,7 @@ public class RoleRepositoryImplTest {
         throws Exception {
         MockitoAnnotations.initMocks(this);
         repo = new RoleRepositoryImpl();
-        repo.setEntityManager(em);
+        ReflectionTestUtils.setField(repo, "entityManager", em);
         when(em.getCriteriaBuilder()).thenReturn(cb);
         when(cb.createQuery(Role.class)).thenReturn(cq);
         when(em.createQuery(cq)).thenReturn(tq);

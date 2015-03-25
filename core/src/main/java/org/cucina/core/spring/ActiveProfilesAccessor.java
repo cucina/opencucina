@@ -2,6 +2,7 @@ package org.cucina.core.spring;
 
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
 
 /**
@@ -10,6 +11,7 @@ import org.springframework.core.env.Environment;
  * @author $Author: $
  * @version $Revision: $
   */
+@Component
 public class ActiveProfilesAccessor
     implements EnvironmentAware {
     /** This is a field JAVADOC */

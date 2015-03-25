@@ -2,10 +2,7 @@ package org.cucina.i18n.api.remote;
 
 import java.util.Collection;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 
@@ -14,11 +11,10 @@ import org.cucina.i18n.api.ListNodeService;
 
 
 /**
- * JAVADOC for Class Level
+ * A simple facade to the remote microservice.
  *
  * @author vlevine
-  */
-@Service("listNodeService")
+ */
 public class RemoteListNodeService
     implements ListNodeService {
     private RestTemplate restTemplate = new RestTemplate();
@@ -27,11 +23,9 @@ public class RemoteListNodeService
     /**
      * Creates a new RemoteListNodeService object.
      *
-     * @param url JAVADOC.
+     * @param url .
      */
-    @Autowired
-    public RemoteListNodeService(@Value("${org.cucina.listnode.url}")
-    String url) {
+    public RemoteListNodeService(String url) {
         Assert.hasText(url, "url is empty");
         this.url = url;
     }
@@ -39,10 +33,10 @@ public class RemoteListNodeService
     /**
      * JAVADOC Method Level Comments
      *
-     * @param id JAVADOC.
+     * @param id
+     *            JAVADOC.
      *
-     * @return JAVADOC.
-     * TODO add error handling
+     * @return JAVADOC. TODO add error handling
      */
     @Override
     public ListNodeDto load(Long id) {
@@ -52,7 +46,8 @@ public class RemoteListNodeService
     /**
      * JAVADOC Method Level Comments
      *
-     * @param type JAVADOC.
+     * @param type
+     *            JAVADOC.
      *
      * @return JAVADOC.
      */
@@ -65,7 +60,8 @@ public class RemoteListNodeService
     /**
      * JAVADOC Method Level Comments
      *
-     * @param listNodeDto JAVADOC.
+     * @param listNodeDto
+     *            JAVADOC.
      *
      * @return JAVADOC.
      */

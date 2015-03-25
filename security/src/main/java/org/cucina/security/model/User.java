@@ -18,8 +18,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.Version;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.validation.groups.Default;
@@ -28,13 +28,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Transformer;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import org.cucina.core.model.PersistableEntity;
 import org.cucina.core.model.Versioned;
 import org.cucina.core.model.projection.PostProcessProjections;
@@ -42,11 +35,13 @@ import org.cucina.core.model.projection.ProjectionColumn;
 import org.cucina.core.spring.SingletonBeanFactory;
 import org.cucina.core.validation.Create;
 import org.cucina.core.validation.Update;
-
-import org.cucina.email.service.EmailUser;
-
 import org.cucina.security.crypto.Encryptor;
 import org.cucina.security.validation.ValidUsername;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
 /**
@@ -62,7 +57,7 @@ import org.cucina.security.validation.ValidUsername;
 @Table(name = "UserTable")
 public class User
     extends PersistableEntity
-    implements UserDetails, Versioned, EmailUser {
+    implements UserDetails, Versioned {
     private static final long serialVersionUID = -9065653286223567115L;
     private static final Collection<GrantedAuthority> DEFAULT_AUTHORITIES = Collections.singleton((GrantedAuthority) new SimpleGrantedAuthority(
                 "NONE"));
@@ -138,7 +133,6 @@ public class User
      * @return active boolean.
      */
     @ProjectionColumn
-    @Override
     @Column(nullable = false)
     public boolean isActive() {
         return active;
@@ -154,6 +148,7 @@ public class User
      */
     @SuppressWarnings("unchecked")
     @Override
+    @Transient
     public Collection<?extends GrantedAuthority> getAuthorities() {
         Collection<Permission> permissions = getPermissions();
 
@@ -251,7 +246,6 @@ public class User
      * @return JAVADOC.
      */
     @Convert(converter = LocaleConverter.class)
-    @Override
     public Locale getLocale() {
         return locale;
     }

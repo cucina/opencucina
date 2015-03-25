@@ -3,8 +3,6 @@ package org.cucina.engine.server.service;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.core.convert.ConversionService;
-
 import org.cucina.engine.server.converter.DetailViewConfig;
 import org.cucina.engine.server.event.workflow.ValueEvent;
 import org.cucina.engine.server.repository.EntityDescriptorRepository;
@@ -27,8 +25,6 @@ import org.mockito.MockitoAnnotations;
 public class ServerDetailViewServiceTest {
     private static final String SERVER_NAME = "serve";
     private static final String APP_NAME = "mine";
-    @Mock
-    private ConversionService conversionService;
     @Mock
     private EntityDescriptorRepository entityDescriptorRepository;
     private ServerDetailViewService service;
@@ -114,7 +110,7 @@ public class ServerDetailViewServiceTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        service = new ServerDetailViewService(conversionService, entityDescriptorRepository);
+        service = new ServerDetailViewService(entityDescriptorRepository);
         service.setServerApplicationName(SERVER_NAME);
     }
 }

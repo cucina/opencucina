@@ -55,6 +55,8 @@ import org.mockito.MockitoAnnotations;
 public class AccessManagerImplTest {
     private AccessManagerImpl permissionManager;
     @Mock
+    private AccessRegistry accessRegistry;
+    @Mock
     private BeanFactory bf;
     @Mock
     private InstanceFactory instanceFactory;
@@ -81,7 +83,7 @@ public class AccessManagerImplTest {
         MockitoAnnotations.initMocks(this);
         when(instanceFactory.getPropertyType(anyString(), anyString())).thenReturn("blaah");
         permissionManager = new AccessManagerImpl(instanceFactory, userRepository, userAccessor,
-                "hoho");
+                accessRegistry);
         user = new User();
 
         user.setActive(true);
@@ -220,6 +222,10 @@ public class AccessManagerImplTest {
      */
     @Test
     public void testIsAdmin() {
+        Privilege sp = new Privilege();
+
+        sp.setName("SySy");
+        when(accessRegistry.getSystemPrivilege()).thenReturn(sp);
         assertFalse("Shouldn't be admin", permissionManager.isAdmin());
     }
 

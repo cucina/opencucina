@@ -9,9 +9,11 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
+
 import org.cucina.security.model.Role;
 import org.cucina.security.repository.RoleRepository;
-import org.springframework.util.Assert;
 
 
 /**
@@ -19,7 +21,8 @@ import org.springframework.util.Assert;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
+@Repository
 public class RoleRepositoryImpl
     implements RoleRepository {
     @PersistenceContext
@@ -28,17 +31,9 @@ public class RoleRepositoryImpl
     /**
      * JAVADOC Method Level Comments
      *
-     * @param entityManager JAVADOC.
+     * @param role
+     *            JAVADOC.
      */
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
-
-    /**
-    * JAVADOC Method Level Comments
-    *
-    * @param role JAVADOC.
-    */
     @Override
     public void delete(Role role) {
         entityManager.remove(role);
@@ -47,7 +42,8 @@ public class RoleRepositoryImpl
     /**
      * JAVADOC Method Level Comments
      *
-     * @param name JAVADOC.
+     * @param name
+     *            JAVADOC.
      *
      * @return JAVADOC.
      */
@@ -74,7 +70,8 @@ public class RoleRepositoryImpl
     /**
      * JAVADOC Method Level Comments
      *
-     * @param name JAVADOC.
+     * @param name
+     *            JAVADOC.
      *
      * @return JAVADOC.
      */
@@ -91,7 +88,8 @@ public class RoleRepositoryImpl
     /**
      * JAVADOC Method Level Comments
      *
-     * @param role JAVADOC.
+     * @param role
+     *            JAVADOC.
      *
      * @return JAVADOC.
      */

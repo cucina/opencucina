@@ -25,18 +25,15 @@ import org.cucina.core.model.projection.PostProcessProjections;
 import org.cucina.core.model.projection.ProjectionColumn;
 import org.cucina.core.validation.NotBlank;
 
-import org.cucina.loader.LoaderColumnLookup;
-
 import org.cucina.security.validation.UniqueRole;
 
 
 /**
- * Permission object which contains {@link Privilege}s.
+ * Role contains {@link Privilege}s.
  *
  * @author thornton
  * @author vlevine
- * @version $Revision: 1.4 $
-  */
+ */
 @Entity
 @Cacheable
 @PostProcessProjections
@@ -63,18 +60,16 @@ public class Role
     @Size(min = 1, max = 32)
     @NotBlank
     @NotNull
-    @LoaderColumnLookup(propertyAlias =  {
-        "Role Name", "roleName"}
-    )
     @Pattern(regexp = "[a-zA-Z0-9_\\-]+", message = "error.alphanumeric")
     private String name;
     private int version;
 
     /**
-    * Set name
-    *
-    * @param name.
-    */
+     * Set name
+     *
+     * @param name
+     *            .
+     */
     public void setName(String name) {
         this.name = name;
     }
@@ -94,7 +89,8 @@ public class Role
     /**
      * Set privileges
      *
-     * @param privileges Collection<Privilege>.
+     * @param privileges
+     *            Collection<Privilege>.
      */
     public void setPrivileges(Collection<Privilege> privileges) {
         this.privileges = privileges;
@@ -119,7 +115,8 @@ public class Role
     /**
      * JAVADOC Method Level Comments
      *
-     * @param version JAVADOC.
+     * @param version
+     *            JAVADOC.
      */
     public void setVersion(int version) {
         this.version = version;
@@ -136,10 +133,10 @@ public class Role
     }
 
     /**
-         * Default toString implementation
-         *
-         * @return This object as String.
-         */
+     * Default toString implementation
+     *
+     * @return This object as String.
+     */
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);

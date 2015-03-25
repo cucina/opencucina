@@ -3,9 +3,8 @@ package org.cucina.security.repository;
 import java.util.Collection;
 
 import org.cucina.security.model.Permission;
-import org.cucina.security.model.Privilege;
 import org.cucina.security.model.Role;
-import org.cucina.security.model.User;
+
 import org.springframework.data.repository.Repository;
 
 
@@ -74,5 +73,5 @@ public interface PermissionRepository
      *
      * @return JAVADOC.
      */
-    Collection<Permission> findByUserAndPrivilege(User user, Privilege privilege);
+    Collection<Permission> findByUserAndPrivilege(String userName, String privilegeName);
 }

@@ -11,8 +11,8 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.cucina.security.model.Permission;
 import org.cucina.security.model.Role;
 import org.cucina.security.model.User;
@@ -25,20 +25,11 @@ import org.cucina.security.repository.UserRepository;
  * @author $Author: $
  * @version $Revision: $
  */
+@Repository("userRepository")
 public class UserRepositoryImpl
     implements UserRepository {
     @PersistenceContext
     private EntityManager entityManager;
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param entityManager
-     *            JAVADOC.
-     */
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
 
     /**
      * JAVADOC Method Level Comments

@@ -2,20 +2,20 @@ package org.cucina.engine.server.service;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
 import org.cucina.engine.server.converter.DetailViewConfig;
 import org.cucina.engine.server.event.RequestDomainConfigEvent;
 import org.cucina.engine.server.event.RequestDomainDataEvent;
 import org.cucina.engine.server.model.EntityDescriptor;
 import org.cucina.engine.server.repository.EntityDescriptorRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 
 /**
@@ -28,7 +28,6 @@ import org.springframework.util.Assert;
 public class ServerDetailViewService
     implements DetailViewService {
     private static final Logger LOG = LoggerFactory.getLogger(ServerDetailViewService.class);
-    private ConversionService conversionService;
     private EntityDescriptorRepository entityDescriptorRepository;
     @Value("${cucina.server.applicationName:cucinaEngine}")
     private String serverApplicationName;
@@ -40,11 +39,7 @@ public class ServerDetailViewService
      *            ClientCommunication.
      */
     @Autowired
-    public ServerDetailViewService(
-        @Qualifier(value = "myConversionService")
-    ConversionService conversionService, EntityDescriptorRepository entityDescriptorRepository) {
-        Assert.notNull(conversionService, "conversionService cannot be null");
-        this.conversionService = conversionService;
+    public ServerDetailViewService(EntityDescriptorRepository entityDescriptorRepository) {
         Assert.notNull(entityDescriptorRepository, "entityDescriptorRepository cannot be null");
         this.entityDescriptorRepository = entityDescriptorRepository;
     }

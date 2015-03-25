@@ -14,11 +14,11 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
+import org.springframework.test.util.ReflectionTestUtils;
+
 import org.cucina.security.model.Dimension;
 import org.cucina.security.model.Permission;
-import org.cucina.security.model.Privilege;
 import org.cucina.security.model.Role;
-import org.cucina.security.model.User;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -59,7 +59,7 @@ public class PermissionRepositoryImplTest {
         throws Exception {
         MockitoAnnotations.initMocks(this);
         repo = new PermissionRepositoryImpl();
-        repo.setEntityManager(em);
+        ReflectionTestUtils.setField(repo, "entityManager", em);
         when(em.getCriteriaBuilder()).thenReturn(cb);
         when(cb.createQuery(Permission.class)).thenReturn(cq);
         when(em.createQuery(cq)).thenReturn(tq);
@@ -244,39 +244,15 @@ public class PermissionRepositoryImplTest {
     }
 
     /**
-     * JAVADOC Method Level Comments
+     * 
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testFindByUserAndPrivilege() {
-        User user = new User();
-        Privilege privilege = new Privilege();
-        Root<Permission> root = mock(Root.class);
-
-        when(cq.from(Permission.class)).thenReturn(root);
-
-        Path<Object> pr = mock(Path.class);
-
-        when(root.get("role")).thenReturn(pr);
-
-        Path<Collection<Privilege>> pp = pr.get("privileges");
-
-        Predicate pi = mock(Predicate.class);
-
-        when(cb.isMember(privilege, pp)).thenReturn(pi);
-
-        Path<Collection<User>> pu = mock(Path.class);
-
-        when(root.<Collection<User>>get("users")).thenReturn(pu);
-
-        Predicate ui = mock(Predicate.class);
-
-        when(cb.isMember(user, pu)).thenReturn(ui);
-
-        Predicate preand = mock(Predicate.class);
-
-        when(cb.and(pi, ui)).thenReturn(preand);
-        when(cq.where(preand)).thenReturn(cq);
-        repo.findByUserAndPrivilege(user, privilege);
+        when(em.createQuery("select p from Permission p, User u where u.username = ?1 " +
+                " and u member of p.users " +
+                " and p.role in (select r from Privilege pr, Role r where pr.name=?2 and r member of pr.roles)",
+                Permission.class)).thenReturn(tq);
+        repo.findByUserAndPrivilege("userName", "privilegeName");
+        verify(tq).getResultList();
     }
 }

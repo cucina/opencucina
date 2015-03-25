@@ -9,18 +9,20 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.cucina.security.model.Privilege;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
-
 import org.mockito.Mock;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.mockito.MockitoAnnotations;
+import org.springframework.test.util.ReflectionTestUtils;
 
 
 /**
@@ -50,7 +52,7 @@ public class PrivilegeRepositoryImplTest {
         throws Exception {
         MockitoAnnotations.initMocks(this);
         repo = new PrivilegeRepositoryImpl();
-        repo.setEntityManager(em);
+        ReflectionTestUtils.setField(repo, "entityManager", em);
         when(em.getCriteriaBuilder()).thenReturn(cb);
         when(cb.createQuery(Privilege.class)).thenReturn(cq);
         when(em.createQuery(cq)).thenReturn(tq);

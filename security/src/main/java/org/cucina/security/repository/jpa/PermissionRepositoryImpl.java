@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -12,13 +13,14 @@ import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
 import org.apache.commons.collections.CollectionUtils;
+
+import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
+
 import org.cucina.security.model.Dimension;
 import org.cucina.security.model.Permission;
-import org.cucina.security.model.Privilege;
 import org.cucina.security.model.Role;
-import org.cucina.security.model.User;
 import org.cucina.security.repository.PermissionRepository;
-import org.springframework.util.Assert;
 
 
 /**
@@ -26,7 +28,8 @@ import org.springframework.util.Assert;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
+@Repository
 public class PermissionRepositoryImpl
     implements PermissionRepository {
     @PersistenceContext
@@ -35,16 +38,8 @@ public class PermissionRepositoryImpl
     /**
      * JAVADOC Method Level Comments
      *
-     * @param entityManager JAVADOC.
-     */
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param permission JAVADOC.
+     * @param permission
+     *            JAVADOC.
      *
      * @return JAVADOC.
      */
@@ -93,7 +88,8 @@ public class PermissionRepositoryImpl
     /**
      * JAVADOC Method Level Comments
      *
-     * @param id JAVADOC.
+     * @param id
+     *            JAVADOC.
      *
      * @return JAVADOC.
      */
@@ -118,7 +114,8 @@ public class PermissionRepositoryImpl
     /**
      * JAVADOC Method Level Comments
      *
-     * @param role JAVADOC.
+     * @param role
+     *            JAVADOC.
      *
      * @return JAVADOC.
      */
@@ -136,7 +133,8 @@ public class PermissionRepositoryImpl
     /**
      * JAVADOC Method Level Comments
      *
-     * @param roleName JAVADOC.
+     * @param roleName
+     *            JAVADOC.
      *
      * @return JAVADOC.
      */
@@ -154,22 +152,52 @@ public class PermissionRepositoryImpl
     /**
      * JAVADOC Method Level Comments
      *
-     * @param user JAVADOC.
-     * @param privilege JAVADOC.
+     * @param user
+     *            JAVADOC.
+     * @param privilege
+     *            JAVADOC.
      *
      * @return JAVADOC.
      */
     @Override
-    public Collection<Permission> findByUserAndPrivilege(User user, Privilege privilege) {
-        // select perm from Permission perm where ?1 member of perm.role.privileges and ?2 member of perm.users
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Permission> cq = cb.createQuery(Permission.class);
-        Root<Permission> root = cq.from(Permission.class);
+    public Collection<Permission> findByUserAndPrivilege(String userName, String privilegeName) {
+        // select perm from Permission perm where ?1 member of
+        // perm.role.privileges and ?2 member of perm.users
+        /*
+         * CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+         * CriteriaQuery<Permission> cq = cb.createQuery(Permission.class);
+         * Root<Permission> root = cq.from(Permission.class); Path<Role> prole =
+         * root.get("role");
+         *
+         * Subquery<Role> subpriv = cq.subquery(Role.class); Root<Privilege>
+         * privRoot = subpriv.from(Privilege.class); Path<String> privn =
+         * privRoot.get("name"); Predicate pren = cb.equal(privn,
+         * privilegeName); subpriv.select(privRoot.<Role>get("roles"));
+         * subpriv.where(pren);
+         *
+         * Predicate pi = cb.in(prole).value(subpriv);
+         *
+         * Path<Collection<User>> puser = root.get("users");
+         *
+         * Subquery<User> subuser = cq.subquery(User.class); Root<User> uRoot =
+         * subuser.from(User.class); Path<String> uname = uRoot.get("username");
+         * Predicate prun = cb.equal(uname, userName); subuser.select(uRoot);
+         * subuser.where(prun);
+         *
+         * Predicate ui = cb.isMember(subuser, puser);
+         *
+         * cq.select(root).where(cb.and(pi, ui)); TypedQuery<Permission> tq =
+         * entityManager.createQuery(cq);
+         */
+        TypedQuery<Permission> tq = entityManager.createQuery(
+                "select p from Permission p, User u where u.username = ?1 " +
+                " and u member of p.users " +
+                " and p.role in (select r from Privilege pr, Role r where pr.name=?2 and r member of pr.roles)",
+                Permission.class);
 
-        Predicate pi = cb.isMember(privilege,
-                root.get("role").<Collection<Privilege>>get("privileges"));
-        Predicate ui = cb.isMember(user, root.<Collection<User>>get("users"));
+        tq.setParameter(1, privilegeName);
+        tq.setParameter(2, userName);
 
-        return entityManager.createQuery(cq.where(cb.and(pi, ui))).getResultList();
+        return tq.getResultList();
     }
 }

@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Repository;
 
 import org.cucina.security.model.Preference;
 import org.cucina.security.model.User;
@@ -29,6 +30,7 @@ import org.slf4j.LoggerFactory;
  * @author $Author: $
  * @version $Revision: $
  */
+@Repository
 public class PreferenceRepositoryImpl
     implements PreferenceRepository {
     private static final Logger LOG = LoggerFactory.getLogger(PreferenceRepositoryImpl.class);

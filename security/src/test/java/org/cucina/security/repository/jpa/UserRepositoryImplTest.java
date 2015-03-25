@@ -11,6 +11,8 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.test.util.ReflectionTestUtils;
+
 import org.cucina.security.model.Permission;
 import org.cucina.security.model.Role;
 import org.cucina.security.model.User;
@@ -54,7 +56,7 @@ public class UserRepositoryImplTest {
         throws Exception {
         MockitoAnnotations.initMocks(this);
         repo = new UserRepositoryImpl();
-        repo.setEntityManager(em);
+        ReflectionTestUtils.setField(repo, "entityManager", em);
         when(em.getCriteriaBuilder()).thenReturn(cb);
         when(cb.createQuery(User.class)).thenReturn(cq);
         when(em.createQuery(cq)).thenReturn(tq);

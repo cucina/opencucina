@@ -10,6 +10,8 @@ import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
@@ -33,12 +35,13 @@ import org.slf4j.LoggerFactory;
  * @author $Author: $
  * @version $Revision: $
  */
+@Service
 public class AccessManagerImpl
     implements AccessManager<User> {
     private static final Logger LOG = LoggerFactory.getLogger(AccessManagerImpl.class);
+    private AccessRegistry accessRegistry;
     private InstanceFactory instanceFactory;
     private Map<String, String> suffixByType = new HashMap<String, String>();
-    private String adminPrivilegeName;
     private UserAccessor userAccessor;
     private UserRepository userRepository;
 
@@ -49,16 +52,17 @@ public class AccessManagerImpl
      * @param userRepository JAVADOC.
      * @param adminPrivilegeName JAVADOC.
      */
+    @Autowired
     public AccessManagerImpl(InstanceFactory instanceFactory, UserRepository userRepository,
-        UserAccessor userAccessor, String adminPrivilegeName) {
+        UserAccessor userAccessor, AccessRegistry accessRegistry) {
         Assert.notNull(instanceFactory, "instanceFactory is null");
         this.instanceFactory = instanceFactory;
         Assert.notNull(userRepository, "userRepository is null");
         this.userRepository = userRepository;
         Assert.notNull(userAccessor, "userAccessor is null");
         this.userAccessor = userAccessor;
-        Assert.hasLength(adminPrivilegeName, "adminPrivilegeName is empty");
-        this.adminPrivilegeName = adminPrivilegeName;
+        Assert.notNull(accessRegistry, "accessRegistry is null");
+        this.accessRegistry = accessRegistry;
     }
 
     /**
@@ -66,7 +70,7 @@ public class AccessManagerImpl
      */
     @Override
     public boolean isAdmin() {
-        return this.hasPrivilege(adminPrivilegeName);
+        return this.hasPrivilege(accessRegistry.getSystemPrivilege().getName());
     }
 
     /**
