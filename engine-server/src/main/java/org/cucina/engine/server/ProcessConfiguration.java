@@ -141,13 +141,4 @@ public class ProcessConfiguration {
 
 		return Arrays.asList(applicationContext.getResources(path));
 	}
-
-	/*
-	 * @Bean public ProcessDefinitionRegistry
-	 * processDefinitionRegistry(InstanceFactory instanceFactory,
-	 * WorkflowRepository workflowRepository, ProcessDefinitionParser
-	 * definitionParser){ return new
-	 * ProcessDefinitionRegistryImpl(instanceFactory, workflowRepository,
-	 * definitionParser); }
-	 */
 }

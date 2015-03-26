@@ -4,4 +4,4 @@ A collection of useful utilities, microservices, libraries etc. helping to build
 
 Notable is a workflow engine and a service wrapping it allowing to be cloud-deployed.
 
-##!Under construction!  
+Better description on the [wiki](https://github.com/cucina/opencucina/wiki)

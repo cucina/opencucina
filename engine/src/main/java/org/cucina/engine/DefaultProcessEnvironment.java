@@ -86,21 +86,6 @@ public class DefaultProcessEnvironment
     private boolean running;
 
     /**
-     * Singleton style access for objects created on a stack.
-     *
-     * @return An instance of this.
-     * @throws IllegalArgumentException
-     *             if the instance has not been initialised yet.
-     */
-    public static ProcessEnvironment instance() {
-        if (instance == null) {
-            throw new IllegalArgumentException("The workflow environment is not initialized yet");
-        }
-
-        return instance;
-    }
-
-    /**
      * JAVADOC Method Level Comments
      *
      * @param arg0
@@ -284,6 +269,21 @@ public class DefaultProcessEnvironment
             LOG.error("Oops", e);
             throw e;
         }
+    }
+
+    /**
+     * Singleton style access for objects created on a stack.
+     *
+     * @return An instance of this.
+     * @throws IllegalArgumentException
+     *             if the instance has not been initialised yet.
+     */
+    public static ProcessEnvironment instance() {
+        if (instance == null) {
+            throw new IllegalArgumentException("The workflow environment is not initialized yet");
+        }
+
+        return instance;
     }
 
     /**
