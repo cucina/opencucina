@@ -163,8 +163,7 @@ public class ProcessSupportServiceImpl
      */
     @Override
     public Collection<Transition> listActionableTransitions(String workflowId) {
-        ProcessDefinition workflowDefinition = processEnvironment.getDefinitionRegistry()
-                                                                 .findWorkflowDefinition(workflowId);
+        ProcessDefinition workflowDefinition = definitionService.loadDefinition(workflowId);
 
         if (workflowDefinition == null) {
             if (LOG.isInfoEnabled()) {

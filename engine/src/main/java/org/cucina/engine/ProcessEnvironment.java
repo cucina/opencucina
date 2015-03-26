@@ -1,15 +1,14 @@
-
 package org.cucina.engine;
 
 import java.util.Collection;
+
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.expression.BeanResolver;
 
 import org.cucina.engine.definition.ProcessDefinitionHelper;
 import org.cucina.engine.definition.config.ProcessDefinitionParser;
 import org.cucina.engine.definition.config.ProcessDefinitionRegistry;
 import org.cucina.engine.service.ProcessService;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.expression.BeanResolver;
 
 
 /**
@@ -42,6 +41,13 @@ public interface ProcessEnvironment
     ProcessDefinitionRegistry getDefinitionRegistry();
 
     /**
+     * Get ProcessDefinitionHelper
+     *
+     * @return ProcessDefinitionHelper
+     */
+    ProcessDefinitionHelper getProcessDefinitionHelper();
+
+    /**
      * JAVADOC Method Level Comments
      *
      * @return JAVADOC.
@@ -63,13 +69,6 @@ public interface ProcessEnvironment
     TokenFactory getTokenFactory();
 
     /**
-     * Get ProcessDefinitionHelper
-     *
-     * @return ProcessDefinitionHelper
-     */
-    ProcessDefinitionHelper getProcessDefinitionHelper();
-
-    /**
      * JAVADOC Method Level Comments
      *
      * @param id JAVADOC.
@@ -79,10 +78,16 @@ public interface ProcessEnvironment
     String getWorkflowXml(String id);
 
     /**
+     *
+     *
+     * @return .
+     */
+    /**
      * JAVADOC Method Level Comments
      *
      * @return JAVADOC.
      */
+
     /**
      * JAVADOC Method Level Comments
      *

@@ -11,15 +11,19 @@ import java.util.List;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 
-import org.cucina.engine.definition.config.MapBasedProcessDefinitionRegistry;
 import org.cucina.engine.definition.config.ProcessDefinitionParser;
+import org.cucina.engine.definition.config.ProcessDefinitionRegistry;
 import org.cucina.engine.testadapters.MockProcessDefinitionBuilder;
 import org.cucina.engine.testadapters.ProcessEnvironmentFactory;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.Mockito.mock;
+
+import org.mockito.Mock;
 import static org.mockito.Mockito.when;
+
+import org.mockito.MockitoAnnotations;
 
 
 /**
@@ -30,6 +34,10 @@ import static org.mockito.Mockito.when;
   */
 public class ProcessDefinitionTest {
     private ProcessDefinition wf;
+    @Mock
+    private ProcessDefinitionParser parser;
+    @Mock
+    private ProcessDefinitionRegistry definitionRegistry;
 
     /**
      * JAVADOC.
@@ -39,6 +47,7 @@ public class ProcessDefinitionTest {
     @Before
     public void setUp()
         throws Exception {
+        MockitoAnnotations.initMocks(this);
         wf = MockProcessDefinitionBuilder.buildHelloWorldDefinition();
 
         List<Resource> resources = new ArrayList<Resource>();
@@ -47,13 +56,9 @@ public class ProcessDefinitionTest {
 
         resources.add(ar);
 
-        ProcessDefinitionParser parser = mock(ProcessDefinitionParser.class);
-
         when(parser.parse(ar)).thenReturn(wf);
-
-        MapBasedProcessDefinitionRegistry registry = new MapBasedProcessDefinitionRegistry(parser);
-
-        ProcessEnvironmentFactory.buildEnvironment(null, registry, parser, null, resources);
+        when(definitionRegistry.findWorkflowDefinition("helloWorld")).thenReturn(wf);
+        ProcessEnvironmentFactory.buildEnvironment(null, definitionRegistry, parser, null, resources);
     }
 
     /**
@@ -73,6 +78,8 @@ public class ProcessDefinitionTest {
         ObjectInputStream ois = new ObjectInputStream(bais);
         ProcessDefinition tr = (ProcessDefinition) ois.readObject();
 
-        System.err.println("After:" + tr);
+        assertNotNull("failed to read", tr);
+
+        //        System.err.println("After:" + tr);
     }
 }

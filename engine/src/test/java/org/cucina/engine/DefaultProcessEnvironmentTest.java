@@ -1,7 +1,6 @@
 package org.cucina.engine;
 
 import java.io.ByteArrayInputStream;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,12 +8,15 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import org.cucina.engine.definition.config.ProcessDefinitionRegistry;
 import org.junit.Test;
+
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -26,7 +28,7 @@ import static org.mockito.Mockito.when;
  * @author $Author: $
  * @version $Revision: $
   */
-public class DefaultWorkflowEnvironmentTest {
+public class DefaultProcessEnvironmentTest {
     private static final String RULES_DEFINITION_URL = "org/cucina/engine/definition/config/xml/workflow-rules-definitions.xml";
     private static final String TEST_WF = "<?xml version=\"1.0\"?>" +
         "<process-definition name=\"simple\">" + "<description>Simple processing</description>	" +
@@ -78,6 +80,7 @@ public class DefaultWorkflowEnvironmentTest {
         resources.add(resource);
         environment.setDefinitionResources(resources);
         environment.setTokenFactory(mock(TokenFactory.class));
+        environment.setDefinitionRegistry(mock(ProcessDefinitionRegistry.class));
         environment.start();
         assertNotNull("Parser is null", environment.getDefinitionParser());
         assertNotNull("DefinitionRegistry is null", environment.getDefinitionRegistry());

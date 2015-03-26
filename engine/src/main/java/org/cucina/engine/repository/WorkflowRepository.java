@@ -2,8 +2,9 @@ package org.cucina.engine.repository;
 
 import java.util.Collection;
 
-import org.cucina.engine.model.Workflow;
 import org.springframework.data.repository.Repository;
+
+import org.cucina.engine.model.Workflow;
 
 
 /**
@@ -26,11 +27,11 @@ public interface WorkflowRepository
     boolean isActive(String definitionId);
 
     /**
-     * JAVADOC Method Level Comments
      *
-     * @param workflow JAVADOC.
+     *
+     * @param workflowId .
      */
-    void save(Workflow workflow);
+    void delete(String workflowId);
 
     /**
      * JAVADOC Method Level Comments
@@ -47,14 +48,14 @@ public interface WorkflowRepository
      *
      * @return JAVADOC.
      */
-    Collection<String> listAll();
+    Collection<String> findAllIds();
 
     /**
      * Load all workflows
      *
      * @return JAVADOC.
      */
-    Collection<Workflow> loadAll();
+    Collection<Workflow> findAll();
 
     /**
      * JAVADOC Method Level Comments
@@ -66,5 +67,12 @@ public interface WorkflowRepository
      *
      * @return JAVADOC.
      */
-    Workflow loadByWorkflowId(String definitionId);
+    Workflow findByWorkflowId(String definitionId);
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @param workflow JAVADOC.
+     */
+    void save(Workflow workflow);
 }

@@ -20,7 +20,6 @@ import org.cucina.core.spring.ProtocolResolver;
 
 import org.cucina.engine.definition.ProcessDefinitionHelper;
 import org.cucina.engine.definition.ProcessDefinitionHelperImpl;
-import org.cucina.engine.definition.config.MapBasedProcessDefinitionRegistry;
 import org.cucina.engine.definition.config.ProcessDefinitionParser;
 import org.cucina.engine.definition.config.ProcessDefinitionRegistry;
 import org.cucina.engine.definition.config.xml.DigesterModuleProcessDefinitionParser;
@@ -66,7 +65,6 @@ public class DefaultProcessEnvironment
     private static final String PROCESSOR_DRIVER_FACTORY = "processorDriverFactory";
     private static final String RULES_DEFINITION_URL = "classpath:org/cucina/engine/definition/config/xml/workflow-rules-definitions.xml";
     private static final Logger LOG = LoggerFactory.getLogger(DefaultProcessEnvironment.class);
-    private static final String DEFINITION_REGISTRY = "processDefinitionRegistry";
     private static final String DEFINITION_PARSER = "processDefinitionParser";
     private static final String DEFINITION_HELPER = "processDefinitionHelper";
     private static final String SESSION_FACTORY = "processSessionFactory";
@@ -148,6 +146,17 @@ public class DefaultProcessEnvironment
     }
 
     /**
+     *
+     *
+     * @param definitionRegistry .
+     */
+    @Required
+    @Autowired
+    public void setDefinitionRegistry(ProcessDefinitionRegistry definitionRegistry) {
+        this.definitionRegistry = definitionRegistry;
+    }
+
+    /**
      * JAVADOC Method Level Comments
      *
      * @return JAVADOC.
@@ -166,16 +175,6 @@ public class DefaultProcessEnvironment
     @Required
     public void setDefinitionResources(Collection<Resource> definitionResources) {
         this.definitionResources = definitionResources;
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    public ProcessDriverFactory getProcessDriverFactory() {
-        return processDriverFactory;
     }
 
     /**
@@ -205,6 +204,16 @@ public class DefaultProcessEnvironment
      */
     public void setProcessDriverFactory(ProcessDriverFactory processDriverFactory) {
         this.processDriverFactory = processDriverFactory;
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @return JAVADOC.
+     */
+    @Override
+    public ProcessDriverFactory getProcessDriverFactory() {
+        return processDriverFactory;
     }
 
     /**
@@ -378,17 +387,6 @@ public class DefaultProcessEnvironment
     }
 
     private void initDefinitionRegistry() {
-        ProcessDefinitionRegistry proto = findInjectedBean(DEFINITION_REGISTRY,
-                ProcessDefinitionRegistry.class);
-
-        if (proto != null) {
-            LOG.debug("Using plugged " + DEFINITION_REGISTRY);
-
-            definitionRegistry = proto;
-        } else {
-            definitionRegistry = new MapBasedProcessDefinitionRegistry(definitionParser);
-        }
-
         definitionRegistry.readWorkflowDefinitions(definitionResources);
     }
 

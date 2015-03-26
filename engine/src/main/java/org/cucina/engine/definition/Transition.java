@@ -164,7 +164,7 @@ public class Transition
      *
      * @throws IllegalStateException
      *             if the {@link #getInput() input place} has not yet been set
-     * @see State#setWorkflowDefinition(ProcessDefinition)
+     * @see State#setProcessDefinition(ProcessDefinition)
      */
     public void setOutput(State output) {
         if (this.input == null) {

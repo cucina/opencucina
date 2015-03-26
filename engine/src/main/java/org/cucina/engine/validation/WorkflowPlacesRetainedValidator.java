@@ -49,7 +49,7 @@ public class WorkflowPlacesRetainedValidator
                                                             .get(target.getWorkflowHistories().size() -
                     2));
 
-        State[] oldPlaces = previousHistory.getWorkflowDefinition().getAllPlaces();
+        State[] oldPlaces = previousHistory.getProcessDefinition().getAllPlaces();
 
         if (ArrayUtils.isEmpty(oldPlaces)) {
             return true;
@@ -58,7 +58,7 @@ public class WorkflowPlacesRetainedValidator
         Transformer transformer = new IdTransformer();
         Collection<String> oldNames = CollectionUtils.collect(Arrays.asList(oldPlaces), transformer);
 
-        State[] newPlaces = wflHistory.getWorkflowDefinition().getAllPlaces();
+        State[] newPlaces = wflHistory.getProcessDefinition().getAllPlaces();
 
         Collection<String> newNames = CollectionUtils.collect(Arrays.asList(newPlaces), transformer);
 
@@ -89,13 +89,13 @@ public class WorkflowPlacesRetainedValidator
     private WorkflowHistory populateWfl(WorkflowHistory history) {
         Assert.notNull(history, "history is null");
 
-        ProcessDefinition definition = history.getWorkflowDefinition();
+        ProcessDefinition definition = history.getProcessDefinition();
 
         if (definition == null) {
             definition = workflowEnvironment.getDefinitionParser()
                                             .parse(new ByteArrayResource(
                         history.getAttachment().getData()));
-            history.setWorkflowDefinition(definition);
+            history.setProcessDefinition(definition);
         }
 
         return history;

@@ -102,6 +102,7 @@ public class ProcessEnvironmentFactory {
         when(applicationContext.getBean("expressionExecutor")).thenReturn(exex);
         defaultProcessEnvironment.setApplicationContext(applicationContext);
         defaultProcessEnvironment.setDefinitionResources(resources);
+        defaultProcessEnvironment.setDefinitionRegistry(definitionRegistry);
         defaultProcessEnvironment.start();
 
         return defaultProcessEnvironment;

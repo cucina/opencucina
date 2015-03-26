@@ -21,7 +21,7 @@ import org.mockito.MockitoAnnotations;
 /**
  * @author Rob Harrop
  */
-public class DefaultWorkflowSessionTest {
+public class DefaultProcessSessionTest {
     @Mock
     private ProcessDriver executor;
     @Mock
@@ -97,7 +97,6 @@ public class DefaultWorkflowSessionTest {
     @Test
     public void testHelloWorldWorkflow() {
         ProcessDefinition definition = MockProcessDefinitionBuilder.buildHelloWorldDefinition();
-
         ProcessSession session = new DefaultProcessSession(definition, executorFactory, null);
 
         when(tokenX.getPlaceId()).thenReturn("start");

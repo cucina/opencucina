@@ -1,4 +1,3 @@
-
 package org.cucina.engine;
 
 import java.util.Collection;
@@ -6,20 +5,21 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.util.Assert;
+
 import org.cucina.engine.definition.ProcessDefinition;
 import org.cucina.engine.definition.State;
 import org.cucina.engine.definition.Token;
 import org.cucina.engine.definition.Transition;
 import org.cucina.engine.definition.TransitionNotFoundException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
 
 
 /**
- * Default implementation of {@link ProcessSession} that delegates to a
- * {@link WorkflowInstanceHandleDao} for state persistence. Instances of this
- * class are obtained from the {@link DefaultProcessSessionFactory}.
+ * Default implementation of {@link ProcessSession}. Instances of this class are
+ * obtained from the {@link DefaultProcessSessionFactory}.
  *
  * @author Rob Harrop
  * @author vlevine
@@ -29,20 +29,20 @@ import org.springframework.util.Assert;
 public class DefaultProcessSession
     implements ProcessSession {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultProcessSession.class);
-    private static final String ERROR_USER_IS_REQUIRED = "User is required.";
-    private ProcessDriverFactory executorFactory;
+    private static final String ERROR_CONTEXT_IS_REQUIRED = "Context is required.";
     private List<WorkflowListener> workflowListeners;
 
     /**
-     * The {@link ProcessDefinition} that this
-     * <code>DefaultWorkflowSession</code> is associated with.
+     * The {@link ProcessDefinition} that this DefaultProcessSession is
+     * associated with.
      */
     private ProcessDefinition workflowDefinition;
+    private ProcessDriverFactory executorFactory;
 
     /**
-     * Creates a new <code>DefaultWorkflowSession</code> for the supplied
+     * Creates a new <code>DefaultProcessSession</code> for the supplied
      * {@link ProcessDefinition} and using the supplied
-     * {@link WorkflowInstanceHandleDao} and {@link instanceFactory}.
+     * {@link ProcessDriverFactory} and {@link workflowListeners}.
      */
     public DefaultProcessSession(ProcessDefinition workflowDefinition,
         ProcessDriverFactory executorFactory, List<WorkflowListener> workflowListeners) {
@@ -63,7 +63,8 @@ public class DefaultProcessSession
         Token token = getToken(executionContext);
 
         if (token.hasChildren()) {
-            // this token does not have life of its own until all children are dead.
+            // this token does not have life of its own until all children are
+            // dead.
             return Collections.emptyList();
         }
 
@@ -84,7 +85,7 @@ public class DefaultProcessSession
      * Delegates to {@link #doSignal}.
      */
     public void signal(ExecutionContext executionContext, Transition transition) {
-        Assert.notNull(executionContext, ERROR_USER_IS_REQUIRED);
+        Assert.notNull(executionContext, ERROR_CONTEXT_IS_REQUIRED);
         Assert.notNull(transition, "Cannot move to a null transition");
 
         doSignal(executionContext, transition);
@@ -95,7 +96,7 @@ public class DefaultProcessSession
      */
     public void signal(ExecutionContext executionContext, String transitionId)
         throws SignalFailedException, TransitionNotFoundException {
-        Assert.notNull(executionContext, ERROR_USER_IS_REQUIRED);
+        Assert.notNull(executionContext, ERROR_CONTEXT_IS_REQUIRED);
 
         signal(executionContext, findTransition(getToken(executionContext), transitionId));
     }

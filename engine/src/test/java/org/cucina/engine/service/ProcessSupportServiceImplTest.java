@@ -327,8 +327,7 @@ public class ProcessSupportServiceImplTest {
                 }
             };
 
-        when(definitionRegistry.findWorkflowDefinition(definitionId)).thenReturn(definition);
-        when(processEnvironment.getDefinitionRegistry()).thenReturn(definitionRegistry);
+        when(definitionService.loadDefinition(definitionId)).thenReturn(definition);
         when(accessFacade.getSystemPrivilege()).thenReturn("SYSTEM_ONLY");
 
         Collection<Transition> ret = service.listActionableTransitions(definitionId);

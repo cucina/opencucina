@@ -21,7 +21,7 @@ import org.mockito.MockitoAnnotations;
  * @author robh
  * @author vlevine
  */
-public class DefaultWorkflowSessionFactoryTest {
+public class DefaultProcessSessionFactoryTest {
     @Mock
     private ProcessDriverFactory executorFactory;
     @Mock

@@ -1,13 +1,30 @@
 package org.cucina.engine.server;
 
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.ClassUtils;
-
+import org.cucina.core.CompositeInstanceFactory;
+import org.cucina.core.InstanceFactory;
+import org.cucina.core.PackageBasedInstanceFactory;
+import org.cucina.core.model.Attachment;
+import org.cucina.core.service.ContextService;
+import org.cucina.core.service.ThreadLocalContextService;
+import org.cucina.engine.DefaultProcessEnvironment;
+import org.cucina.engine.ProcessEnvironment;
+import org.cucina.engine.TokenFactory;
+import org.cucina.engine.definition.config.ProcessDefinitionParser;
+import org.cucina.engine.definition.config.ProcessDefinitionRegistry;
+import org.cucina.engine.definition.config.xml.DigesterModuleProcessDefinitionParser;
+import org.cucina.engine.model.Workflow;
+import org.cucina.i18n.api.ListNodeService;
+import org.cucina.i18n.api.remote.RemoteListNodeService;
+import org.cucina.security.api.AccessFacade;
+import org.cucina.security.api.remote.RemoteAccessFacade;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -15,27 +32,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourcePatternResolver;
-
-import org.cucina.core.InstanceFactory;
-import org.cucina.core.PackageBasedInstanceFactory;
-import org.cucina.core.service.ContextService;
-import org.cucina.core.service.ThreadLocalContextService;
-
-import org.cucina.engine.DefaultProcessEnvironment;
-import org.cucina.engine.ProcessEnvironment;
-import org.cucina.engine.TokenFactory;
-import org.cucina.engine.definition.config.ProcessDefinitionParser;
-import org.cucina.engine.definition.config.xml.DigesterModuleProcessDefinitionParser;
-import org.cucina.engine.model.Workflow;
-
-import org.cucina.i18n.api.ListNodeService;
-import org.cucina.i18n.api.remote.RemoteListNodeService;
-
-import org.cucina.security.api.AccessFacade;
-import org.cucina.security.api.remote.RemoteAccessFacade;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * JAVADOC for Class Level
@@ -79,8 +75,10 @@ public class ProcessConfiguration {
 	 */
 	@Bean
 	public InstanceFactory instanceFactory() {
-		return new PackageBasedInstanceFactory(
-				ClassUtils.getPackageName(Workflow.class));
+		return new CompositeInstanceFactory(new PackageBasedInstanceFactory(
+				ClassUtils.getPackageName(Workflow.class)),
+				new PackageBasedInstanceFactory(ClassUtils
+						.getPackageName(Attachment.class)));
 	}
 
 	/**
@@ -119,13 +117,14 @@ public class ProcessConfiguration {
 	 */
 	@Bean
 	public ProcessEnvironment processEnvironment(TokenFactory tokenFactory,
-			ApplicationContext applicationContext) throws IOException {
+			ApplicationContext applicationContext,
+			ProcessDefinitionRegistry definitionRegistry) throws IOException {
 		DefaultProcessEnvironment dpe = new DefaultProcessEnvironment();
 
 		dpe.setTokenFactory(tokenFactory);
 		dpe.setDefinitionResources(findResources(applicationContext,
 				processLocation));
-
+		dpe.setDefinitionRegistry(definitionRegistry);
 		return dpe;
 	}
 
@@ -142,4 +141,13 @@ public class ProcessConfiguration {
 
 		return Arrays.asList(applicationContext.getResources(path));
 	}
+
+	/*
+	 * @Bean public ProcessDefinitionRegistry
+	 * processDefinitionRegistry(InstanceFactory instanceFactory,
+	 * WorkflowRepository workflowRepository, ProcessDefinitionParser
+	 * definitionParser){ return new
+	 * ProcessDefinitionRegistryImpl(instanceFactory, workflowRepository,
+	 * definitionParser); }
+	 */
 }

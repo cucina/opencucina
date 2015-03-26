@@ -51,7 +51,7 @@ public class DigesterModuleProcessDefinitionParser
     /**
      * Creates a new DigesterModuleWorkflowDefinitionParser object.
      *
-     * @param rulesResource JAVADOC.
+     * @param rulesResource Resource containing parsing rules definition.
      */
     public DigesterModuleProcessDefinitionParser(Resource rulesResource) {
         Assert.notNull(rulesResource, "ruleResource is null");

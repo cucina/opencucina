@@ -38,7 +38,7 @@ public class WorkflowHistory
     , message = "org.cucina.engine.validation.null.data")
     private Attachment attachment;
     @Valid
-    private ProcessDefinition workflowDefinition;
+    private ProcessDefinition processDefinition;
     private Workflow workflow;
 
     /**
@@ -86,11 +86,11 @@ public class WorkflowHistory
     /**
      * JAVADOC Method Level Comments
      *
-     * @param workflowDefinition
+     * @param processDefinition
      *            JAVADOC.
      */
-    public void setWorkflowDefinition(ProcessDefinition workflowDefinition) {
-        this.workflowDefinition = workflowDefinition;
+    public void setProcessDefinition(ProcessDefinition processDefinition) {
+        this.processDefinition = processDefinition;
     }
 
     /**
@@ -99,7 +99,7 @@ public class WorkflowHistory
      * @return JAVADOC.
      */
     @Transient
-    public ProcessDefinition getWorkflowDefinition() {
-        return workflowDefinition;
+    public ProcessDefinition getProcessDefinition() {
+        return processDefinition;
     }
 }

@@ -48,7 +48,6 @@ public interface DefinitionService {
     /**
      * Updates existing workflow
      *
-     * @param id JAVADOC.
      * @param fileName JAVADOC.
      * @param contentType JAVADOC.
      * @param content JAVADOC.
@@ -56,6 +55,6 @@ public interface DefinitionService {
      * @return JAVADOC.
      * @throws BindException
      */
-    Workflow update(String id, String fileName, String contentType, byte[] content)
+    Workflow update( String fileName, String contentType, byte[] content)
         throws BindException;
 }

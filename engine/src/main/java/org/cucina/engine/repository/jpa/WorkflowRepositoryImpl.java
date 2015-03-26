@@ -6,13 +6,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import org.cucina.engine.model.Workflow;
-import org.cucina.engine.model.ProcessToken;
-import org.cucina.engine.repository.WorkflowRepository;
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Repository;
+
+import org.cucina.engine.model.ProcessToken;
+import org.cucina.engine.model.Workflow;
+import org.cucina.engine.repository.WorkflowRepository;
 
 
 /**
@@ -58,6 +62,22 @@ public class WorkflowRepositoryImpl
     }
 
     /**
+     *
+     *
+     * @param workflowId .
+     */
+    @Override
+    @Transactional
+    public void delete(String workflowId) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaDelete<Workflow> cd = cb.createCriteriaDelete(Workflow.class);
+        Root<Workflow> token = cd.from(Workflow.class);
+
+        cd.where(cb.equal(token.get("workflowId"), workflowId));
+        entityManager.createQuery(cd).executeUpdate();
+    }
+
+    /**
      * JAVADOC Method Level Comments
      *
      * @param definitionId JAVADOC.
@@ -66,7 +86,7 @@ public class WorkflowRepositoryImpl
      */
     @Override
     public boolean exists(String definitionId) {
-        return null != loadByWorkflowId(definitionId);
+        return null != findByWorkflowId(definitionId);
     }
 
     /**
@@ -75,7 +95,20 @@ public class WorkflowRepositoryImpl
      * @return JAVADOC.
      */
     @Override
-    public Collection<String> listAll() {
+    public Collection<Workflow> findAll() {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Workflow> cq = cb.createQuery(Workflow.class);
+
+        return entityManager.createQuery(cq).getResultList();
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @return JAVADOC.
+     */
+    @Override
+    public Collection<String> findAllIds() {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<String> cq = cb.createQuery(String.class);
         Root<Workflow> token = cq.from(Workflow.class);
@@ -88,25 +121,12 @@ public class WorkflowRepositoryImpl
     /**
      * JAVADOC Method Level Comments
      *
-     * @return JAVADOC.
-     */
-    @Override
-    public Collection<Workflow> loadAll() {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Workflow> cq = cb.createQuery(Workflow.class);
-
-        return entityManager.createQuery(cq).getResultList();
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
      * @param definitionId JAVADOC.
      *
      * @return JAVADOC.
      */
     @Override
-    public Workflow loadByWorkflowId(String definitionId) {
+    public Workflow findByWorkflowId(String definitionId) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Workflow> cq = cb.createQuery(Workflow.class);
         Root<Workflow> token = cq.from(Workflow.class);
@@ -126,6 +146,7 @@ public class WorkflowRepositoryImpl
      * @param workflow JAVADOC.
      */
     @Override
+    @Transactional
     public void save(Workflow workflow) {
         if (workflow.isNew()) {
             entityManager.persist(workflow);

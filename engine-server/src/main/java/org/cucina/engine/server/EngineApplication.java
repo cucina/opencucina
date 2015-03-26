@@ -6,13 +6,16 @@ import javax.jms.Session;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.env.Environment;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.support.destination.DestinationResolver;
 import org.springframework.jms.support.destination.DynamicDestinationResolver;
-
+import org.cucina.core.model.Attachment;
+import org.cucina.engine.model.Workflow;
+import org.cucina.engine.server.model.EntityDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +28,9 @@ import org.slf4j.LoggerFactory;
 @SpringBootApplication
 @EnableJms
 @ImportResource(value = "classpath:/channelContext.xml")
+@EntityScan(basePackageClasses =  {
+    EntityDescriptor.class, Workflow.class, Attachment.class}
+)
 public class EngineApplication {
     private static final Logger LOG = LoggerFactory.getLogger(EngineApplication.class);
 

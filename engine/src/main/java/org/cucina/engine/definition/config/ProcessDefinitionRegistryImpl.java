@@ -7,62 +7,147 @@ import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.cucina.core.InstanceFactory;
 import org.cucina.core.model.Attachment;
-import org.cucina.engine.ProcessEnvironment;
+import org.cucina.core.validation.Create;
+import org.cucina.core.validation.Delete;
+import org.cucina.core.validation.Update;
 import org.cucina.engine.definition.ProcessDefinition;
 import org.cucina.engine.model.Workflow;
 import org.cucina.engine.model.WorkflowHistory;
 import org.cucina.engine.repository.WorkflowRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindException;
 
 
 /**
  * JAVADOC for Class Level
  *
- * @author $Author: vlevine $
- * @version $Revision: 1.6 $
-  */
+ * @author vlevine
+ */
+@Component
 public class ProcessDefinitionRegistryImpl
     implements ProcessDefinitionRegistry {
     private static final Logger LOG = LoggerFactory.getLogger(ProcessDefinitionRegistryImpl.class);
     private InstanceFactory instanceFactory;
     private Map<String, ProcessDefinition> definitionCache = new HashMap<String, ProcessDefinition>();
-    private ProcessEnvironment workflowEnvironment;
+    private ProcessDefinitionParser definitionParser;
+    private Validator validator;
     private WorkflowRepository workflowRepository;
-    private boolean reload = false;
+    // TODO make option to reload on startup
+    //private boolean reload = false;
 
     /**
-    * Creates a new WorkflowDefinitionRegistryImpl object.
-    *
-    * @param workflowEnvironment JAVADOC.
-    * @param instanceFactory JAVADOC.
-    * @param workflowRepository JAVADOC.
-    */
-    public ProcessDefinitionRegistryImpl(ProcessEnvironment workflowEnvironment,
-        InstanceFactory instanceFactory, WorkflowRepository workflowRepository) {
-        Assert.notNull(workflowEnvironment, "cannot provide null workflowEnvironment");
-        this.workflowEnvironment = workflowEnvironment;
-        Assert.notNull(instanceFactory, "cannot provide null instanceFactory");
+     * Creates a new WorkflowDefinitionRegistryImpl object.
+     *
+     * @param workflowEnvironment
+     *            JAVADOC.
+     * @param instanceFactory
+     *            JAVADOC.
+     * @param workflowRepository
+     *            JAVADOC.
+     */
+    @Autowired
+    public ProcessDefinitionRegistryImpl(InstanceFactory instanceFactory,
+        WorkflowRepository workflowRepository, ProcessDefinitionParser definitionParser) {
+        Assert.notNull(instanceFactory, "instanceFactory is null");
         this.instanceFactory = instanceFactory;
-        Assert.notNull(workflowRepository, "cannot provide null workflowRepository");
+        Assert.notNull(workflowRepository, "workflowRepository is null");
         this.workflowRepository = workflowRepository;
+        Assert.notNull(definitionParser, "definitionParser is null");
+        this.definitionParser = definitionParser;
     }
 
     /**
      * JAVADOC Method Level Comments
      *
-     * @param reload JAVADOC.
+     * @param reload
+     *            JAVADOC.
      */
-    public void setReload(boolean reload) {
+   /* public void setReload(boolean reload) {
         this.reload = reload;
+    }*/
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @param validator
+     *            JAVADOC.
+     */
+    public void setValidator(Validator validator) {
+        this.validator = validator;
+    }
+
+    /**
+     *
+     *
+     * @param attachment .
+     *
+     * @throws BindException .
+     */
+    @Override
+    public Workflow createProcess(Attachment attachment)
+        throws BindException {
+        WorkflowHistory newHistory = instanceFactory.getBean(WorkflowHistory.class.getSimpleName());
+
+        newHistory.setAttachment(attachment);
+
+        ProcessDefinition definition = definitionParser.parse(new ByteArrayResource(
+                    attachment.getData()));
+
+        newHistory.setProcessDefinition(definition);
+
+        Workflow workflow = instanceFactory.getBean(Workflow.class.getSimpleName());
+
+        workflow.addHistory(newHistory);
+        Assert.notNull(workflow, "workflow is null");
+
+        if (workflow.getWorkflowId() == null) {
+            workflow.setWorkflowId(workflow.getLatestWorkflowHistory().getProcessDefinition().getId());
+        }
+
+        Assert.notNull(workflow.getWorkflowId(), "Workflow id is null");
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Adding workflow with id:" + workflow.getWorkflowId());
+        }
+
+        validate(workflow, Create.class);
+        definitionCache.put(workflow.getWorkflowId(),
+            workflow.getLatestWorkflowHistory().getProcessDefinition());
+        workflowRepository.save(workflow);
+
+        return workflow;
+    }
+
+    /**
+     *
+     *
+     * @param workflowId .
+     */
+    @Override
+    @Transactional
+    public void delete(String workflowId)
+        throws BindException {
+        Workflow wf = workflowRepository.findByWorkflowId(workflowId);
+
+        validate(wf, Delete.class);
+
+        definitionCache.remove(workflowId);
+        workflowRepository.delete(workflowId);
     }
 
     /**
@@ -79,7 +164,7 @@ public class ProcessDefinitionRegistryImpl
         ProcessDefinition definition = definitionCache.get(definitionId);
 
         if (definition == null) {
-            Workflow workflow = workflowRepository.loadByWorkflowId(definitionId);
+            Workflow workflow = workflowRepository.findByWorkflowId(definitionId);
 
             if (workflow == null) {
                 LOG.info("Cannot find workflow id [" + definitionId + "], return null");
@@ -89,8 +174,7 @@ public class ProcessDefinitionRegistryImpl
 
             WorkflowHistory latestHistory = workflow.getLatestWorkflowHistory();
 
-            definition = workflowEnvironment.getDefinitionParser()
-                                            .parse(new ByteArrayResource(
+            definition = definitionParser.parse(new ByteArrayResource(
                         latestHistory.getAttachment().getData()));
 
             definitionCache.put(definitionId, definition);
@@ -109,7 +193,7 @@ public class ProcessDefinitionRegistryImpl
      */
     @Transactional
     public String findWorkflowSource(String definitionId) {
-        Workflow workflow = workflowRepository.loadByWorkflowId(definitionId);
+        Workflow workflow = workflowRepository.findByWorkflowId(definitionId);
 
         if (workflow == null) {
             LOG.warn("Cannot find workflow id [" + definitionId + "], return null");
@@ -136,7 +220,7 @@ public class ProcessDefinitionRegistryImpl
      * @return JAVADOC.
      */
     public Collection<String> listWorkflowDefinitionIds() {
-        return workflowRepository.listAll();
+        return workflowRepository.findAllIds();
     }
 
     /**
@@ -150,43 +234,28 @@ public class ProcessDefinitionRegistryImpl
         Assert.notNull(resources, "cannot provide null workflowResource");
 
         if (CollectionUtils.isNotEmpty(resources)) {
-            for (Resource workflowResource : resources) {
-                ProcessDefinition workflowDefinition = workflowEnvironment.getDefinitionParser()
-                                                                          .parse(workflowResource);
+            for (Resource resource : resources) {
+                String filename = resource.getFilename();
 
-                if (workflowDefinition != null) {
-                    try {
-                        if (LOG.isDebugEnabled()) {
-                            LOG.debug("Workflow definition parsed [" + workflowDefinition.getId() +
-                                "]");
-                        }
+                try {
+                    Attachment attachment = instanceFactory.getBean(Attachment.class.getSimpleName());
 
-                        Workflow workflow = workflowRepository.loadByWorkflowId(workflowDefinition.getId());
+                    attachment.setFilename(filename);
+                    attachment.setData(readBytes(resource));
+                    attachment.setType("text/xml");
 
-                        if (workflow == null) {
-                            workflow = instanceFactory.getBean(Workflow.class.getSimpleName());
-                            workflow.setWorkflowId(workflowDefinition.getId());
-                        }
-
-                        // If reload or a new workflow then persist
-                        if (reload || workflow.isNew()) {
-                            WorkflowHistory newHistory = instanceFactory.getBean(WorkflowHistory.class.getSimpleName());
-                            Attachment attachment = instanceFactory.getBean(Attachment.class.getSimpleName());
-
-                            attachment.setFilename(workflowResource.getFilename());
-                            attachment.setData(readBytes(workflowResource));
-                            attachment.setType("text/xml");
-
-                            newHistory.setAttachment(attachment);
-
-                            workflow.addHistory(newHistory);
-
-                            workflowRepository.save(workflow);
-                            definitionCache.put(workflowDefinition.getId(), workflowDefinition);
-                        }
-                    } catch (IOException e) {
-                        LOG.warn("Failed to load workflowDefinition [" +
-                            workflowDefinition.getId() + "]");
+                    createProcess(attachment);
+                } catch (IOException e) {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.warn("Failed to load workflowDefinition [" + filename + "]", e);
+                    } else {
+                        LOG.warn("Failed to load workflowDefinition [" + filename + "]");
+                    }
+                } catch (BindException e) {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.warn("Failed validation for [" + filename + "]", e);
+                    } else {
+                        LOG.warn("Failed validation for [" + filename + "]");
                     }
                 }
             }
@@ -194,18 +263,42 @@ public class ProcessDefinitionRegistryImpl
     }
 
     /**
-     * JAVADOC Method Level Comments
      *
-     * @param definitionId
-     *            JAVADOC.
-     * @param definition
-     *            JAVADOC.
+     *
+     * @param history .
      */
-    public void registerWorkflowDefinition(ProcessDefinition workflowDefinition) {
-        Assert.notNull(workflowDefinition, "definition cannot be null");
-        Assert.notNull(workflowDefinition.getId(), "definition's id cannot be null");
+    @Override
+    @Transactional
+    public Workflow updateProcess(Attachment attachment)
+        throws BindException {
+        ProcessDefinition definition = definitionParser.parse(new ByteArrayResource(
+                    attachment.getData()));
+        Workflow workflow = workflowRepository.findByWorkflowId(definition.getId());
 
-        definitionCache.put(workflowDefinition.getId(), workflowDefinition);
+        Assert.notNull(workflow, "Failed to load workflow with id " + definition.getId());
+
+        WorkflowHistory newHistory = instanceFactory.getBean(WorkflowHistory.class.getSimpleName());
+
+        newHistory.setAttachment(attachment);
+
+        Assert.notNull(definition,
+            "failed to parse definition '" + definition.getId() + "' from file '" +
+            attachment.getFilename() + "'");
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Parsed workflowDefinition with id:" + definition.getId());
+        }
+
+        newHistory.setProcessDefinition(definition);
+
+        workflow.addHistory(newHistory);
+
+        validate(workflow, Update.class);
+
+        definitionCache.put(workflow.getWorkflowId(), newHistory.getProcessDefinition());
+        workflowRepository.save(workflow);
+
+        return workflow;
     }
 
     private byte[] readBytes(Resource resource)
@@ -231,5 +324,37 @@ public class ProcessDefinitionRegistryImpl
                 is.close();
             }
         }
+    }
+
+    private void validate(Workflow workflow, Class<?> group)
+        throws BindException {
+        if (validator == null) {
+            return;
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Validating for group " + group.getName() + " workflow:" + workflow);
+        }
+
+        Set<ConstraintViolation<Workflow>> violations = validator.validate(workflow, group);
+
+        if (!violations.isEmpty()) {
+            // validation errors
+            BindException be = new BindException(workflow, workflow.getApplicationType());
+
+            for (ConstraintViolation<Workflow> constraintViolation : violations) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("ConstraintViolation:" + constraintViolation);
+                }
+
+                be.reject(constraintViolation.getMessageTemplate(),
+                    new Object[] { constraintViolation.getLeafBean() },
+                    constraintViolation.getMessage());
+            }
+
+            throw be;
+        }
+
+        return;
     }
 }

@@ -1,10 +1,12 @@
-
 package org.cucina.engine.definition.config;
 
 import java.util.Collection;
 
+import org.cucina.core.model.Attachment;
 import org.cucina.engine.definition.ProcessDefinition;
+import org.cucina.engine.model.Workflow;
 import org.springframework.core.io.Resource;
+import org.springframework.validation.BindException;
 
 
 /**
@@ -18,6 +20,13 @@ import org.springframework.core.io.Resource;
  */
 public interface ProcessDefinitionRegistry {
     /**
+     *
+     *
+     * @param workflowId .
+     */
+    void delete(String workflowId) throws BindException;
+
+    /**
      * Finds a {@link ProcessDefinition} using the specified definition ID.
      */
     ProcessDefinition findWorkflowDefinition(String definitionId);
@@ -30,12 +39,7 @@ public interface ProcessDefinitionRegistry {
     String findWorkflowSource(String definitionId);
 
     /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    /**
-     * @return Collection of all registered workflow definitions
+     * @return Collection of all registered workflow definitions.
      */
     Collection<String> listWorkflowDefinitionIds();
 
@@ -47,11 +51,13 @@ public interface ProcessDefinitionRegistry {
      */
     void readWorkflowDefinitions(Collection<Resource> resources);
 
+
+	Workflow createProcess(Attachment attachment) throws BindException;
+
     /**
-     * Sets the WorkflowDefinition in the registry or updates if exists already.
+     * Updates an existing process.
      *
-     * @param definition
-     *            WorkflowDefinition.
+     * @param history .
      */
-    void registerWorkflowDefinition(ProcessDefinition definition);
+	Workflow updateProcess(Attachment attachment) throws BindException;
 }

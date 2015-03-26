@@ -123,7 +123,7 @@ public class WorkflowRepositoryImplTest {
         TypedQuery<Workflow> tq = mock(TypedQuery.class);
 
         when(em.createQuery(cq)).thenReturn(tq);
-        repo.loadAll();
+        repo.findAll();
         verify(tq).getResultList();
     }
 
@@ -152,7 +152,7 @@ public class WorkflowRepositoryImplTest {
         TypedQuery<Workflow> tq = mock(TypedQuery.class);
 
         when(em.createQuery(cq)).thenReturn(tq);
-        repo.loadByWorkflowId("definitionId");
+        repo.findByWorkflowId("definitionId");
         verify(cq).where(predi);
         verify(tq).getSingleResult();
     }
