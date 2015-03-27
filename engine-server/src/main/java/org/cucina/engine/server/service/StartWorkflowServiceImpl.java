@@ -19,15 +19,15 @@ import org.springframework.util.Assert;
 public class StartWorkflowServiceImpl
     implements StartWorkflowService {
     private static final Logger LOG = LoggerFactory.getLogger(StartWorkflowServiceImpl.class);
-    private ProcessSupportService workflowSupportService;
+    private ProcessSupportService processSupportService;
 
     /**
      * Creates a new StartWorkflowServiceImpl object.
      *
      * @param workflowSupportService JAVADOC.
      */
-    public StartWorkflowServiceImpl(ProcessSupportService workflowSupportService) {
-        this.workflowSupportService = workflowSupportService;
+    public StartWorkflowServiceImpl(ProcessSupportService processSupportService) {
+        this.processSupportService = processSupportService;
     }
 
     /**
@@ -43,7 +43,7 @@ public class StartWorkflowServiceImpl
     @Override
     public Token startWorkflow(String applicationType, Long id, String applicationName,
         Map<String, Object> parameters) {
-        Token token = workflowSupportService.startWorkflow(new EntityDescriptor(applicationType,
+        Token token = processSupportService.startWorkflow(new EntityDescriptor(applicationType,
                     id, applicationName), parameters);
 
         Assert.notNull(token,

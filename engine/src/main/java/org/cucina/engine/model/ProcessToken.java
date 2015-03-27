@@ -14,20 +14,16 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
-import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-
-import org.springframework.data.domain.Persistable;
-import org.springframework.util.Assert;
-
 import org.cucina.core.model.PersistableEntity;
 import org.cucina.core.model.Versioned;
-
 import org.cucina.engine.definition.Token;
+import org.springframework.data.domain.Persistable;
+import org.springframework.util.Assert;
 
 
 /**
@@ -37,7 +33,6 @@ import org.cucina.engine.definition.Token;
  */
 @Entity
 @Cacheable
-@Table(name = "Token")
 public class ProcessToken
     extends PersistableEntity
     implements Token, Versioned {
@@ -48,7 +43,7 @@ public class ProcessToken
     private Set<ProcessToken> children;
     private String domainObjectType;
     private String placeId;
-    private String workflowDefinitionId;
+    private String processDefinitionId;
     private ProcessToken parent;
     private int version;
 
@@ -110,7 +105,7 @@ public class ProcessToken
      *            JAVADOC.
      */
     @Basic
-    @Column(name = "domain_object_id", nullable = false)
+    @Column(nullable = false)
     public Long getDomainObjectId() {
         return this.domainObjectId;
     }
@@ -131,7 +126,7 @@ public class ProcessToken
      * @return JAVADOC.
      */
     @Basic
-    @Column(name = "domain_object_type", nullable = false)
+    @Column(nullable = false)
     public String getDomainObjectType() {
         return domainObjectType;
     }
@@ -251,11 +246,11 @@ public class ProcessToken
     /**
      * JAVADOC Method Level Comments
      *
-     * @param workflowDefinitionId
+     * @param processDefinitionId
      *            JAVADOC.
      */
-    public void setProcessDefinitionId(String workflowDefinitionId) {
-        this.workflowDefinitionId = workflowDefinitionId;
+    public void setProcessDefinitionId(String processDefinitionId) {
+        this.processDefinitionId = processDefinitionId;
     }
 
     /**
@@ -264,9 +259,8 @@ public class ProcessToken
      * @return JAVADOC.
      */
     @Basic
-    @Column(name = "workflow_definition_id")
     public String getProcessDefinitionId() {
-        return workflowDefinitionId;
+        return processDefinitionId;
     }
 
     /**

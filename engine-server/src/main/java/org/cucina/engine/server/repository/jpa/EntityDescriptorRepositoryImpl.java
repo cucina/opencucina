@@ -55,7 +55,7 @@ public class EntityDescriptorRepositoryImpl
 
         CriteriaQuery<Object[]> cq = cb.createQuery(Object[].class);
         Root<ProcessToken> token = cq.from(ProcessToken.class);
-        Path<String> wfid = token.get("workflowDefinitionId");
+        Path<String> wfid = token.get("processDefinitionId");
 
         cq.multiselect(wfid, cb.count(wfid));
         cq.groupBy(wfid);

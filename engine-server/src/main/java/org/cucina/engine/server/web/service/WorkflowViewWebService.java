@@ -3,19 +3,22 @@ package org.cucina.engine.server.web.service;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cucina.engine.model.ProcessToken;
-import org.cucina.engine.server.repository.EntityDescriptorRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import org.cucina.engine.model.ProcessToken;
+import org.cucina.engine.server.repository.EntityDescriptorRepository;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -50,7 +53,7 @@ public class WorkflowViewWebService {
      *
      * @return JAVADOC.
      */
-    @RequestMapping(value = "/listWorkflows", method = RequestMethod.GET)
+    @RequestMapping(value = "/workflow", method = RequestMethod.GET)
     @ResponseBody
     public Collection<Object[]> listWorkflows() {
         if (LOG.isDebugEnabled()) {
@@ -64,13 +67,13 @@ public class WorkflowViewWebService {
      * JAVADOC Method Level Comments
      *
      * @param wfid
-     * 
+     *
      *
      * @return JAVADOC.
      */
-    @RequestMapping(value = "/workflowSummary", method = RequestMethod.GET)
+    @RequestMapping(value = "/workflow/{wfid}", method = RequestMethod.GET)
     @ResponseBody
-    public Collection<Object[]> workflowSummary(@RequestParam(value = "wfid")
+    public Collection<Object[]> workflowSummary(@PathVariable
     String wfid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("workflowSummary called with " + wfid);
@@ -86,7 +89,7 @@ public class WorkflowViewWebService {
             for (int i = 0; i < summaryColumns.length; i++) {
                 line[i] = beanWrapper.getPropertyValue(summaryColumns[i]);
             }
-            
+
             result.add(line);
         }
 
