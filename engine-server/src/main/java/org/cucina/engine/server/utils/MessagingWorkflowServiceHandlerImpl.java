@@ -4,6 +4,12 @@ import java.util.Collection;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.Message;
+import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
+
 import org.cucina.engine.definition.Token;
 import org.cucina.engine.server.communication.ConversationContext;
 import org.cucina.engine.server.event.CommitEvent;
@@ -24,14 +30,12 @@ import org.cucina.engine.server.event.workflow.ValueEvent;
 import org.cucina.engine.server.event.workflow.WorkflowEvent;
 import org.cucina.engine.server.model.EntityDescriptor;
 import org.cucina.engine.service.ProcessSupportService;
+
 import org.cucina.i18n.api.ListNodeDto;
 import org.cucina.i18n.api.ListNodeService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.Message;
-import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 
 /**
@@ -82,8 +86,7 @@ public class MessagingWorkflowServiceHandlerImpl
         } else if (event instanceof ListAllTransitionsEvent) {
             ListAllTransitionsEvent lae = (ListAllTransitionsEvent) event;
 
-            result = processSupportService.listAllTransitions(lae.getIds(),
-                    lae.getApplicationType());
+            result = processSupportService.listAllTransitions(lae.getIds(), lae.getApplicationType());
         } else if (event instanceof ListTransitionsEvent) {
             ListTransitionsEvent lae = (ListTransitionsEvent) event;
 
@@ -146,9 +149,10 @@ public class MessagingWorkflowServiceHandlerImpl
             } else if (event instanceof SingleTransitionEvent) {
                 SingleTransitionEvent we = (SingleTransitionEvent) event;
 
+                // TODO convert we.getAttachment() to an Attachment
                 processSupportService.makeTransition((Long) we.getId(), we.getType(),
                     we.getTransitionId(), we.getComment(), we.getApprovedAs(), we.getAssignedTo(),
-                    we.getExtraParams(), we.getAttachment());
+                    we.getExtraParams(), null);
             } else if (event instanceof BulkTransitionEvent) {
                 BulkTransitionEvent we = (BulkTransitionEvent) event;
                 Collection<ListNodeDto> reasons = listNodeService.loadByType(we.getReason());
@@ -160,9 +164,10 @@ public class MessagingWorkflowServiceHandlerImpl
                         "'");
                 }
 
+                // TODO convert we.getAttachment() to an Attachment
                 processSupportService.makeTransition(we.getEntities(), we.getType(),
                     we.getTransitionId(), we.getComment(), we.getApprovedAs(), we.getAssignedTo(),
-                    we.getExtraParams(), reasons.iterator().next(), we.getAttachment());
+                    we.getExtraParams(), reasons.iterator().next(), null);
             }
 
             return new CommitEvent(event);

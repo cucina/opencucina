@@ -26,23 +26,6 @@ public interface ExecutionContext {
     ExpressionExecutor getExpressionExecutor();
 
     /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-
-    /**
      * Gets the parameters for this execution.
      */
     Map<String, Object> getParameters();
@@ -77,17 +60,6 @@ public interface ExecutionContext {
      * @return JAVADOC.
      */
     TokenFactory getTokenFactory();
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
 
     /**
      * JAVADOC Method Level Comments

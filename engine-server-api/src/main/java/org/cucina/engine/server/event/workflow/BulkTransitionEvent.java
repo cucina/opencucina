@@ -1,9 +1,6 @@
-
 package org.cucina.engine.server.event.workflow;
 
 import java.util.Map;
-
-import org.cucina.core.model.Attachment;
 
 
 /**
@@ -15,9 +12,9 @@ import org.cucina.core.model.Attachment;
 public class BulkTransitionEvent
     extends WorkflowEvent {
     private static final long serialVersionUID = 1L;
-    private Attachment attachment;
     private Map<Long, Integer> entities;
     private Map<String, Object> extraParams;
+    private Object attachment;
     private String approvedAs;
     private String assignedTo;
     private String comment;
@@ -80,7 +77,7 @@ public class BulkTransitionEvent
      *
      * @param attachment JAVADOC.
      */
-    public void setAttachment(Attachment attachment) {
+    public void setAttachment(Object attachment) {
         this.attachment = attachment;
     }
 
@@ -89,7 +86,7 @@ public class BulkTransitionEvent
      *
      * @return JAVADOC.
      */
-    public Attachment getAttachment() {
+    public Object getAttachment() {
         return attachment;
     }
 

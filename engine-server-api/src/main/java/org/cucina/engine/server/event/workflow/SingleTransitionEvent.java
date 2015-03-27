@@ -2,8 +2,6 @@ package org.cucina.engine.server.event.workflow;
 
 import java.util.Map;
 
-import org.cucina.core.model.Attachment;
-
 
 /**
  * JAVADOC for Class Level
@@ -14,8 +12,8 @@ import org.cucina.core.model.Attachment;
 public class SingleTransitionEvent
     extends WorkflowEvent {
     private static final long serialVersionUID = 1L;
-    private Attachment attachment;
     private Map<String, Object> extraParams;
+    private Object attachment;
     private String approvedAs;
     private String assignedTo;
     private String comment;
@@ -77,7 +75,7 @@ public class SingleTransitionEvent
      *
      * @param attachment JAVADOC.
      */
-    public void setAttachment(Attachment attachment) {
+    public void setAttachment(Object attachment) {
         this.attachment = attachment;
     }
 
@@ -86,7 +84,7 @@ public class SingleTransitionEvent
      *
      * @return JAVADOC.
      */
-    public Attachment getAttachment() {
+    public Object getAttachment() {
         return attachment;
     }
 

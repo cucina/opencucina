@@ -73,10 +73,9 @@ public class DefaultProcessService
     }
 
     /**
-     * JAVADOC Method Level Comments
+     * List transitions which can be applied to this token.
      *
      * @param token
-     *            JAVADOC.
      *
      * @return JAVADOC.
      */
