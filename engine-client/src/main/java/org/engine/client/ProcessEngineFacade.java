@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.cucina.engine.server.communication.HistoryRecordDto;
-import org.springframework.security.core.token.Token;
 
 
 /**
@@ -56,7 +55,7 @@ public interface ProcessEngineFacade {
      * @param extraParams .
      * @param attachment .
      */
-    void makeTransition(String applicationType, Long id, String transitionId, String comment,
+    void makeTransition(String entityType, Long id, String transitionId, String comment,
         String approvedAs, String assignedTo, Map<String, Object> extraParams, Object attachment);
 
     /**
@@ -72,7 +71,7 @@ public interface ProcessEngineFacade {
      * @param reason .
      * @param attachment .
      */
-    void bulkTransition(Map<Long, Integer> entities, String applicationType, String transitionId,
+    void bulkTransition(Map<Long, Integer> entities, String entityType, String transitionId,
         String comment, String approvedAs, String assignedTo, Map<String, Object> extraParams,
         String reason, Object attachment);
 
@@ -106,7 +105,7 @@ public interface ProcessEngineFacade {
      *
      * @return .
      */
-    Token startWorkflow(String entityType, Long id, String workflowId,
+    boolean startWorkflow(String entityType, Long id, String workflowId,
         Map<String, Object> parameters);
 
     /**
@@ -118,5 +117,5 @@ public interface ProcessEngineFacade {
      *
      * @return .
      */
-    Token startWorkflow(String entityType, Long id, Map<String, Object> parameters);
+    boolean startWorkflow(String entityType, Long id, Map<String, Object> parameters);
 }

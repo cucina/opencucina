@@ -19,6 +19,7 @@ import org.cucina.engine.server.event.RegistrationEvent;
 import org.cucina.engine.server.event.workflow.ValueEvent;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -213,6 +214,7 @@ public class MessagingProcessEngineFacadeTest {
      */
     @Test
     public void testStartWorkflow() {
-        facade.startWorkflow("entityType", 1L, null);
+        reply.setValue(true);
+        assertTrue(facade.startWorkflow("entityType", 1L, null));
     }
 }

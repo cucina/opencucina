@@ -13,12 +13,10 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.ErrorMessage;
-import org.springframework.security.core.token.Token;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationAdapter;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.Assert;
-
 import org.cucina.engine.server.communication.ConversationContext;
 import org.cucina.engine.server.communication.HistoryRecordDto;
 import org.cucina.engine.server.event.CommitSuccessEvent;
@@ -34,7 +32,6 @@ import org.cucina.engine.server.event.workflow.ObtainHistorySummaryEvent;
 import org.cucina.engine.server.event.workflow.SingleTransitionEvent;
 import org.cucina.engine.server.event.workflow.StartWorkflowEvent;
 import org.cucina.engine.server.event.workflow.ValueEvent;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,6 +62,52 @@ public class MessagingProcessEngineFacade
         this.applicationName = applicationName;
         Assert.notNull(asyncChannel, "asyncChannel is null");
         this.asyncChannel = asyncChannel;
+    }
+
+    /**
+     * Bulk transition
+     *
+     * @param entities
+     *            JAVADOC.
+     * @param applicationType
+     *            JAVADOC.
+     * @param transitionId
+     *            JAVADOC.
+     * @param comment
+     *            JAVADOC.
+     * @param approvedAs
+     *            JAVADOC.
+     * @param assignedTo
+     *            JAVADOC.
+     * @param extraParams
+     *            JAVADOC.
+     * @param reason
+     *            JAVADOC.
+     * @param attachment
+     *            JAVADOC.
+     */
+    @Override
+    public void bulkTransition(Map<Long, Integer> entities, String entityType, String transitionId,
+        String comment, String approvedAs, String assignedTo, Map<String, Object> extraParams,
+        String reason, Object attachment) {
+        registerTxHandler(entityType, entities.keySet().toArray(new Long[entities.size()]));
+
+        BulkTransitionEvent event = new BulkTransitionEvent(entityType, applicationName);
+
+        event.setType(entityType);
+        event.setEntities(entities);
+        event.setTransitionId(transitionId);
+        event.setComment(comment);
+        event.setApprovedAs(approvedAs);
+        event.setAssignedTo(assignedTo);
+        event.setExtraParams(extraParams);
+        event.setAttachment(attachment);
+
+        Object reply = sendForReply(event);
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Reply:" + reply);
+        }
     }
 
     /**
@@ -128,55 +171,11 @@ public class MessagingProcessEngineFacade
     }
 
     /**
-     * Bulk transition
-     *
-     * @param entities
-     *            JAVADOC.
-     * @param applicationType
-     *            JAVADOC.
-     * @param transitionId
-     *            JAVADOC.
-     * @param comment
-     *            JAVADOC.
-     * @param approvedAs
-     *            JAVADOC.
-     * @param assignedTo
-     *            JAVADOC.
-     * @param extraParams
-     *            JAVADOC.
-     * @param reason
-     *            JAVADOC.
-     * @param attachment
-     *            JAVADOC.
-     */
-    @Override
-    public void bulkTransition(Map<Long, Integer> entities, String applicationType,
-        String transitionId, String comment, String approvedAs, String assignedTo,
-        Map<String, Object> extraParams, String reason, Object attachment) {
-        BulkTransitionEvent event = new BulkTransitionEvent(applicationType, applicationName);
-
-        event.setType(applicationType);
-        event.setEntities(entities);
-        event.setTransitionId(transitionId);
-        event.setComment(comment);
-        event.setApprovedAs(approvedAs);
-        event.setAssignedTo(assignedTo);
-        event.setExtraParams(extraParams);
-        event.setAttachment(attachment);
-
-        Object reply = sendForReply(event);
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Reply:" + reply);
-        }
-    }
-
-    /**
      * JAVADOC Method Level Comments
      *
      * @param id
      *            JAVADOC.
-     * @param applicationType
+     * @param entityType
      *            JAVADOC.
      * @param transitionId
      *            JAVADOC.
@@ -192,12 +191,13 @@ public class MessagingProcessEngineFacade
      *            JAVADOC.
      */
     @Override
-    public void makeTransition(String applicationType, Long id, String transitionId,
-        String comment, String approvedAs, String assignedTo, Map<String, Object> extraParams,
-        Object attachment) {
-        SingleTransitionEvent event = new SingleTransitionEvent(applicationType, applicationName);
+    public void makeTransition(String entityType, Long id, String transitionId, String comment,
+        String approvedAs, String assignedTo, Map<String, Object> extraParams, Object attachment) {
+        registerTxHandler(entityType, id);
 
-        event.setType(applicationType);
+        SingleTransitionEvent event = new SingleTransitionEvent(entityType, applicationName);
+
+        event.setType(entityType);
         event.setId(id);
         event.setTransitionId(transitionId);
         event.setComment(comment);
@@ -279,7 +279,7 @@ public class MessagingProcessEngineFacade
      * @return JAVADOC.
      */
     @Override
-    public Token startWorkflow(String entityType, Long id, Map<String, Object> parameters) {
+    public boolean startWorkflow(String entityType, Long id, Map<String, Object> parameters) {
         return startWorkflow(entityType, id, entityType, parameters);
     }
 
@@ -296,16 +296,9 @@ public class MessagingProcessEngineFacade
      * @return JAVADOC.
      */
     @Override
-    public Token startWorkflow(final String entityType, final Long id, String workflowId,
+    public boolean startWorkflow(String entityType, Long id, String workflowId,
         Map<String, Object> parameters) {
-        if (TransactionSynchronizationManager.isSynchronizationActive()) {
-            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
-                    @Override
-                    public void afterCompletion(int status) {
-                        handleStatus(status, entityType, id);
-                    }
-                });
-        }
+        registerTxHandler(entityType, id);
 
         StartWorkflowEvent event = new StartWorkflowEvent(entityType, applicationName);
 
@@ -313,13 +306,13 @@ public class MessagingProcessEngineFacade
         event.setId(id);
         event.setParameters(parameters);
 
-        Object reply = sendForReply(event);
+        ValueEvent reply = sendForReply(event);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Reply:" + reply);
         }
 
-        return null;
+        return (Boolean) reply.getValue();
     }
 
     private Message<?> buildMessage(Object payload) {
@@ -345,6 +338,17 @@ public class MessagingProcessEngineFacade
         }
 
         asyncChannel.send(callmess);
+    }
+
+    private void registerTxHandler(final String entityType, final Long... ids) {
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+                    @Override
+                    public void afterCompletion(int status) {
+                        handleStatus(status, entityType, ids);
+                    }
+                });
+        }
     }
 
     @SuppressWarnings("unchecked")
