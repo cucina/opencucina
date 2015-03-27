@@ -1,7 +1,5 @@
 package org.cucina.engine;
 
-import java.util.Collection;
-
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.expression.BeanResolver;
 
@@ -67,31 +65,4 @@ public interface ProcessEnvironment
      * @return JAVADOC.
      */
     TokenFactory getTokenFactory();
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param id JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    String getWorkflowXml(String id);
-
-    /**
-     *
-     *
-     * @return .
-     */
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    Collection<String> listWorkflows();
 }

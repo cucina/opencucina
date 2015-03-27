@@ -163,9 +163,9 @@ public class ProcessSupportServiceImpl
      */
     @Override
     public Collection<Transition> listActionableTransitions(String workflowId) {
-        ProcessDefinition workflowDefinition = definitionService.loadDefinition(workflowId);
+        ProcessDefinition definition = definitionService.loadDefinition(workflowId);
 
-        if (workflowDefinition == null) {
+        if (definition == null) {
             if (LOG.isInfoEnabled()) {
                 LOG.info("No workflow found for workflowId [" + workflowId + "], returning");
             }
@@ -177,7 +177,7 @@ public class ProcessSupportServiceImpl
                                                                              : accessFacade.getSystemPrivilege();
 
         Collection<Transition> ret = new HashSet<Transition>();
-        State[] allPlaces = workflowDefinition.getAllPlaces();
+        State[] allPlaces = definition.getAllPlaces();
 
         for (int i = 0; i < allPlaces.length; i++) {
             State place = allPlaces[i];
@@ -306,24 +306,24 @@ public class ProcessSupportServiceImpl
     /**
      * JAVADOC Method Level Comments
      *
-     * @param workflowId
+     * @param processId
      *            JAVADOC.
      *
      * @return JAVADOC.
      */
     @Override
-    public Collection<Map<String, String>> loadTransitionInfo(String workflowId) {
+    public Collection<Map<String, String>> loadTransitionInfo(String processId) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Loading workflow states by transitionId for workflow [" + workflowId + "]");
+            LOG.debug("Loading process states by transitionId for process [" + processId + "]");
         }
 
-        ProcessDefinition wflDefinition = definitionService.loadDefinition(workflowId);
+        ProcessDefinition definition = definitionService.loadDefinition(processId);
 
-        Assert.notNull(wflDefinition, "wflDefinition should be found with id [" + workflowId + "]");
+        Assert.notNull(definition, "definition should be found with id [" + processId + "]");
 
         Collection<Map<String, String>> stateTransitionInfo = new HashSet<Map<String, String>>();
 
-        State[] places = wflDefinition.getAllPlaces();
+        State[] places = definition.getAllPlaces();
 
         if (ArrayUtils.isNotEmpty(places)) {
             for (int i = 0; i < places.length; i++) {

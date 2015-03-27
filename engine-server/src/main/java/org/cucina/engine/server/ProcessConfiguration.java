@@ -107,9 +107,8 @@ public class ProcessConfiguration {
 	 *
 	 *
 	 * @param tokenFactory
-	 *            .
 	 * @param applicationContext
-	 *            .
+	 * @param definitionRegistry
 	 *
 	 * @return .
 	 *

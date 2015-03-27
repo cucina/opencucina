@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,24 +14,30 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
 import org.apache.commons.collections.CollectionUtils;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.jmx.export.annotation.ManagedOperation;
+import org.springframework.jmx.export.annotation.ManagedResource;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+import org.springframework.validation.BindException;
+
 import org.cucina.core.InstanceFactory;
 import org.cucina.core.model.Attachment;
 import org.cucina.core.validation.Create;
 import org.cucina.core.validation.Delete;
 import org.cucina.core.validation.Update;
+
 import org.cucina.engine.definition.ProcessDefinition;
 import org.cucina.engine.model.Workflow;
 import org.cucina.engine.model.WorkflowHistory;
 import org.cucina.engine.repository.WorkflowRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-import org.springframework.validation.BindException;
 
 
 /**
@@ -38,6 +45,7 @@ import org.springframework.validation.BindException;
  *
  * @author vlevine
  */
+@ManagedResource
 @Component
 public class ProcessDefinitionRegistryImpl
     implements ProcessDefinitionRegistry {
@@ -47,6 +55,7 @@ public class ProcessDefinitionRegistryImpl
     private ProcessDefinitionParser definitionParser;
     private Validator validator;
     private WorkflowRepository workflowRepository;
+
     // TODO make option to reload on startup
     //private boolean reload = false;
 
@@ -77,9 +86,10 @@ public class ProcessDefinitionRegistryImpl
      * @param reload
      *            JAVADOC.
      */
-   /* public void setReload(boolean reload) {
-        this.reload = reload;
-    }*/
+
+    /* public void setReload(boolean reload) {
+         this.reload = reload;
+     }*/
 
     /**
      * JAVADOC Method Level Comments
@@ -89,6 +99,38 @@ public class ProcessDefinitionRegistryImpl
      */
     public void setValidator(Validator validator) {
         this.validator = validator;
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @param definitionId
+     *            JAVADOC.
+     *
+     * @return JAVADOC.
+     */
+    @ManagedOperation
+    @Override
+    public String getWorkflowSource(String definitionId) {
+        Workflow workflow = workflowRepository.findByWorkflowId(definitionId);
+
+        if (workflow == null) {
+            LOG.warn("Cannot find workflow id [" + definitionId + "], return null");
+
+            return null;
+        }
+
+        WorkflowHistory latestHistory = workflow.getLatestWorkflowHistory();
+
+        Assert.notNull(latestHistory, "The workflow '" + definitionId + "' does not have history!");
+
+        try {
+            return new String(latestHistory.getAttachment().getData(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            LOG.error("Failed to convert byte array to String", e);
+
+            return null;
+        }
     }
 
     /**
@@ -186,39 +228,10 @@ public class ProcessDefinitionRegistryImpl
     /**
      * JAVADOC Method Level Comments
      *
-     * @param definitionId
-     *            JAVADOC.
-     *
      * @return JAVADOC.
      */
-    @Transactional
-    public String findWorkflowSource(String definitionId) {
-        Workflow workflow = workflowRepository.findByWorkflowId(definitionId);
-
-        if (workflow == null) {
-            LOG.warn("Cannot find workflow id [" + definitionId + "], return null");
-
-            return null;
-        }
-
-        WorkflowHistory latestHistory = workflow.getLatestWorkflowHistory();
-
-        Assert.notNull(latestHistory, "The workflow '" + definitionId + "' does not have history!");
-
-        try {
-            return new String(latestHistory.getAttachment().getData(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            LOG.error("Failed to convert byte array to String", e);
-
-            return null;
-        }
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
+    @ManagedOperation
+    @Override
     public Collection<String> listWorkflowDefinitionIds() {
         return workflowRepository.findAllIds();
     }

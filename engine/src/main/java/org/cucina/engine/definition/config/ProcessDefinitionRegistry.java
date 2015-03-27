@@ -36,7 +36,7 @@ public interface ProcessDefinitionRegistry {
      * @param definitionId
      * @return
      */
-    String findWorkflowSource(String definitionId);
+    String getWorkflowSource(String definitionId);
 
     /**
      * @return Collection of all registered workflow definitions.

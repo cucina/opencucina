@@ -64,7 +64,7 @@ public class ProcessDefinitionRegistryImplTest {
         wf.setWorkflowId("test");
         when(workflowRepository.findByWorkflowId("test")).thenReturn(wf);
 
-        assertEquals("Hello", registry.findWorkflowSource("test"));
+        assertEquals("Hello", registry.getWorkflowSource("test"));
     }
 
     /**

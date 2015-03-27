@@ -11,7 +11,6 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import org.cucina.engine.model.ProcessToken;
@@ -22,14 +21,15 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * JAVADOC for Class Level
+ * To list and view existing instances of workflows.
  *
  * @author $Author: $
  * @version $Revision: $
  */
 @Controller
-public class WorkflowViewWebService {
-    private static final Logger LOG = LoggerFactory.getLogger(WorkflowViewWebService.class);
+@RequestMapping(value = "/workflowInstance")
+public class RestfulInstanceController {
+    private static final Logger LOG = LoggerFactory.getLogger(RestfulInstanceController.class);
     private static final String[] summaryColumns = {
             "workflowDefinitionId", "placeId", "domainObjectType", "domainObjectId",
             "domainObject.applicationName"
@@ -43,7 +43,7 @@ public class WorkflowViewWebService {
      *            JAVADOC.
      */
     @Autowired
-    public WorkflowViewWebService(EntityDescriptorRepository entityDescriptorRepository) {
+    public RestfulInstanceController(EntityDescriptorRepository entityDescriptorRepository) {
         Assert.notNull(entityDescriptorRepository, "entityDescriptorRepository is null");
         this.entityDescriptorRepository = entityDescriptorRepository;
     }
@@ -53,7 +53,7 @@ public class WorkflowViewWebService {
      *
      * @return JAVADOC.
      */
-    @RequestMapping(value = "/workflow", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public Collection<Object[]> listWorkflows() {
         if (LOG.isDebugEnabled()) {
@@ -71,7 +71,7 @@ public class WorkflowViewWebService {
      *
      * @return JAVADOC.
      */
-    @RequestMapping(value = "/workflow/{wfid}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{wfid}", method = RequestMethod.GET)
     @ResponseBody
     public Collection<Object[]> workflowSummary(@PathVariable
     String wfid) {

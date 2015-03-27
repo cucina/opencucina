@@ -1,9 +1,11 @@
-
 package org.cucina.engine.service;
+
+import java.util.Collection;
+
+import org.springframework.validation.BindException;
 
 import org.cucina.engine.definition.ProcessDefinition;
 import org.cucina.engine.model.Workflow;
-import org.springframework.validation.BindException;
 
 
 /**
@@ -37,6 +39,13 @@ public interface DefinitionService {
         throws BindException;
 
     /**
+     * List all definitions
+     *
+     * @return .
+     */
+    Collection<String> list();
+
+    /**
      * JAVADOC Method Level Comments
      *
      * @param id JAVADOC.
@@ -55,6 +64,6 @@ public interface DefinitionService {
      * @return JAVADOC.
      * @throws BindException
      */
-    Workflow update( String fileName, String contentType, byte[] content)
+    Workflow update(String fileName, String contentType, byte[] content)
         throws BindException;
 }

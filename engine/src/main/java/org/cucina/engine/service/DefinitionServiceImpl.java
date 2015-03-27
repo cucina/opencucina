@@ -1,5 +1,7 @@
 package org.cucina.engine.service;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -78,6 +80,16 @@ public class DefinitionServiceImpl
     public void delete(String id)
         throws BindException {
         processDefinitionRegistry.delete(id);
+    }
+
+    /**
+     *
+     *
+     * @return .
+     */
+    @Override
+    public Collection<String> list() {
+        return processDefinitionRegistry.listWorkflowDefinitionIds();
     }
 
     /**

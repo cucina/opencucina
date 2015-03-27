@@ -10,8 +10,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.core.io.Resource;
 import org.springframework.expression.BeanResolver;
-import org.springframework.jmx.export.annotation.ManagedOperation;
-import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.util.Assert;
 
 import org.cucina.core.spring.ELExpressionExecutor;
@@ -57,7 +55,6 @@ import org.slf4j.LoggerFactory;
  * @author $Author: $
  * @version $Revision: $
  */
-@ManagedResource
 public class DefaultProcessEnvironment
     implements ProcessEnvironment, SmartLifecycle {
     private static final String EXPRESSION_EXECUTOR = "expressionExecutor";
@@ -84,6 +81,21 @@ public class DefaultProcessEnvironment
     private ProcessSessionFactory workflowSessionFactory;
     private TokenFactory tokenFactory;
     private boolean running;
+
+    /**
+     * Singleton style access for objects created on a stack.
+     *
+     * @return An instance of this.
+     * @throws IllegalArgumentException
+     *             if the instance has not been initialised yet.
+     */
+    public static ProcessEnvironment instance() {
+        if (instance == null) {
+            throw new IllegalArgumentException("The workflow environment is not initialized yet");
+        }
+
+        return instance;
+    }
 
     /**
      * JAVADOC Method Level Comments
@@ -251,50 +263,6 @@ public class DefaultProcessEnvironment
      */
     public void setWorkflowListeners(List<WorkflowListener> workflowListeners) {
         this.workflowListeners = workflowListeners;
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param id JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @ManagedOperation
-    @Override
-    public String getWorkflowXml(String id) {
-        try {
-            return getDefinitionRegistry().findWorkflowSource(id);
-        } catch (RuntimeException e) {
-            LOG.error("Oops", e);
-            throw e;
-        }
-    }
-
-    /**
-     * Singleton style access for objects created on a stack.
-     *
-     * @return An instance of this.
-     * @throws IllegalArgumentException
-     *             if the instance has not been initialised yet.
-     */
-    public static ProcessEnvironment instance() {
-        if (instance == null) {
-            throw new IllegalArgumentException("The workflow environment is not initialized yet");
-        }
-
-        return instance;
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    @ManagedOperation
-    @Override
-    public Collection<String> listWorkflows() {
-        return getDefinitionRegistry().listWorkflowDefinitionIds();
     }
 
     /**
