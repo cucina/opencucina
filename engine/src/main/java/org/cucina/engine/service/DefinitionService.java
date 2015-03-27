@@ -16,7 +16,7 @@ import org.cucina.engine.model.Workflow;
   */
 public interface DefinitionService {
     /**
-    * Creates a new workflow
+    * Saves the new process definition
     *
     * @param fileName JAVADOC.
     * @param contentType JAVADOC.
@@ -25,7 +25,7 @@ public interface DefinitionService {
     * @return JAVADOC.
     * @throws BindException
     */
-    Workflow create(String fileName, String contentType, byte[] content)
+    Workflow save(String fileName, String contentType, byte[] content)
         throws BindException;
 
     /**
@@ -53,17 +53,4 @@ public interface DefinitionService {
      * @return JAVADOC.
      */
     ProcessDefinition loadDefinition(String id);
-
-    /**
-     * Updates existing workflow
-     *
-     * @param fileName JAVADOC.
-     * @param contentType JAVADOC.
-     * @param content JAVADOC.
-     *
-     * @return JAVADOC.
-     * @throws BindException
-     */
-    Workflow update(String fileName, String contentType, byte[] content)
-        throws BindException;
 }

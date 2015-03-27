@@ -2,12 +2,13 @@ package org.cucina.engine.definition.config;
 
 import java.util.Collection;
 
-import org.cucina.core.model.Attachment;
-import org.cucina.engine.definition.ProcessDefinition;
-import org.cucina.engine.model.Workflow;
 import org.springframework.core.io.Resource;
 import org.springframework.validation.BindException;
 
+import org.cucina.core.model.Attachment;
+
+import org.cucina.engine.definition.ProcessDefinition;
+import org.cucina.engine.model.Workflow;
 
 /**
  * Registry for storing {@link ProcessDefinition workflow definitions}. Using a
@@ -19,45 +20,50 @@ import org.springframework.validation.BindException;
  * @see ProcessDefinition
  */
 public interface ProcessDefinitionRegistry {
-    /**
-     *
-     *
-     * @param workflowId .
-     */
-    void delete(String workflowId) throws BindException;
+	/**
+	 * Loads xml source for the workflow
+	 * 
+	 * @param definitionId
+	 * @return
+	 */
+	String getWorkflowSource(String definitionId);
 
-    /**
-     * Finds a {@link ProcessDefinition} using the specified definition ID.
-     */
-    ProcessDefinition findWorkflowDefinition(String definitionId);
+	/**
+	 *
+	 *
+	 * @param workflowId
+	 *            .
+	 */
+	void delete(String workflowId) throws BindException;
 
-    /**
-     * Loads xml source for the workflow
-     * @param definitionId
-     * @return
-     */
-    String getWorkflowSource(String definitionId);
+	/**
+	 * Finds a {@link ProcessDefinition} using the specified definition ID.
+	 */
+	ProcessDefinition findWorkflowDefinition(String definitionId);
 
-    /**
-     * @return Collection of all registered workflow definitions.
-     */
-    Collection<String> listWorkflowDefinitionIds();
+	/**
+	 * @return Collection of all registered workflow definitions.
+	 */
+	Collection<String> listWorkflowDefinitionIds();
 
-    /**
-     * Reads workflow definitions from the provided list of resources.
-     *
-     * @param resources
-     *            JAVADOC.
-     */
-    void readWorkflowDefinitions(Collection<Resource> resources);
+	/**
+	 * Reads workflow definitions from the provided list of resources.
+	 *
+	 * @param resources
+	 *            JAVADOC.
+	 */
+	void readWorkflowDefinitions(Collection<Resource> resources);
 
-
-	Workflow createProcess(Attachment attachment) throws BindException;
-
-    /**
-     * Updates an existing process.
-     *
-     * @param history .
-     */
-	Workflow updateProcess(Attachment attachment) throws BindException;
+	/**
+	 * Saves the definition by either updating or creating, dependent on whether
+	 * there is an existing one with the same name.
+	 *
+	 * @param attachment
+	 *            .
+	 *
+	 * @return .
+	 *
+	 * @throws BindException .
+	 */
+	Workflow saveProcess(Attachment attachment) throws BindException;
 }

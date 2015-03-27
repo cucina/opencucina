@@ -98,20 +98,22 @@ public class ProcessDefinitionRegistryImplTest {
      * register definition
      */
     @Test
-    public void testCreateProcess()
+    public void testSaveProcess()
         throws BindException {
-    	when(instanceFactory.getBean("WorkflowHistory")).thenReturn(new WorkflowHistory());
+        when(instanceFactory.getBean(WorkflowHistory.class.getSimpleName()))
+            .thenReturn(new WorkflowHistory());
 
         Workflow workflow = new Workflow();
 
-        when(instanceFactory.getBean("Workflow")).thenReturn(workflow);
+        when(instanceFactory.getBean(Workflow.class.getSimpleName())).thenReturn(workflow);
 
         Attachment attachment = new Attachment();
 
         attachment.setFilename("filename");
         attachment.setData(data);
 
-        registry.createProcess(attachment);
+        when(parser.parse(any(ByteArrayResource.class))).thenReturn(wd);
+        registry.saveProcess(attachment);
 
         assertEquals("Should have set definition", wd, registry.findWorkflowDefinition("test"));
     }
@@ -133,14 +135,14 @@ public class ProcessDefinitionRegistryImplTest {
         wd.setId("test");
 
         when(parser.parse(ar)).thenReturn(wd);
-
         when(workflowRepository.exists("test")).thenReturn(false);
         when(workflowRepository.findByWorkflowId("nottest")).thenReturn(null);
-        when(instanceFactory.getBean("WorkflowHistory")).thenReturn(new WorkflowHistory());
+        when(instanceFactory.getBean(WorkflowHistory.class.getSimpleName()))
+            .thenReturn(new WorkflowHistory());
 
         Workflow workflow = new Workflow();
 
-        when(instanceFactory.getBean("Workflow")).thenReturn(workflow);
+        when(instanceFactory.getBean(Workflow.class.getSimpleName())).thenReturn(workflow);
         when(instanceFactory.getBean(Attachment.class.getSimpleName())).thenReturn(new Attachment());
 
         registry.readWorkflowDefinitions(resources);
@@ -148,7 +150,7 @@ public class ProcessDefinitionRegistryImplTest {
         assertNull(registry.findWorkflowDefinition("nottest"));
 
         try {
-            registry.createProcess(null);
+            registry.saveProcess(null);
             fail("Should not allow for null entries");
         } catch (RuntimeException ex) {
             // success

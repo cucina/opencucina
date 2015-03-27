@@ -45,6 +45,7 @@ public class NoObjectCheckPermittedTransitionsAppenderTest {
     /**
      * Test that a property called transitionIds is added to the row.
      */
+    @SuppressWarnings("unchecked")
     @Test
     public void testDoModify() {
         Map<String, Object> row1 = new HashMap<String, Object>();

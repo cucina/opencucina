@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <process-definition name="Report">
-	<description>Item processing</description>
+	<description>Report process definition</description>
 	<start-state id="start">
 		<transition to="open" id="toOpen" default="true" >
 			<exit-action path="bean:propertySetterAction"

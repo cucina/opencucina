@@ -5,10 +5,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import javax.transaction.Transactional;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
@@ -21,7 +24,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindException;
 
@@ -57,7 +59,7 @@ public class ProcessDefinitionRegistryImpl
     private WorkflowRepository workflowRepository;
 
     // TODO make option to reload on startup
-    //private boolean reload = false;
+    // private boolean reload = false;
 
     /**
      * Creates a new WorkflowDefinitionRegistryImpl object.
@@ -87,9 +89,9 @@ public class ProcessDefinitionRegistryImpl
      *            JAVADOC.
      */
 
-    /* public void setReload(boolean reload) {
-         this.reload = reload;
-     }*/
+    /*
+     * public void setReload(boolean reload) { this.reload = reload; }
+     */
 
     /**
      * JAVADOC Method Level Comments
@@ -136,49 +138,8 @@ public class ProcessDefinitionRegistryImpl
     /**
      *
      *
-     * @param attachment .
-     *
-     * @throws BindException .
-     */
-    @Override
-    public Workflow createProcess(Attachment attachment)
-        throws BindException {
-        WorkflowHistory newHistory = instanceFactory.getBean(WorkflowHistory.class.getSimpleName());
-
-        newHistory.setAttachment(attachment);
-
-        ProcessDefinition definition = definitionParser.parse(new ByteArrayResource(
-                    attachment.getData()));
-
-        newHistory.setProcessDefinition(definition);
-
-        Workflow workflow = instanceFactory.getBean(Workflow.class.getSimpleName());
-
-        workflow.addHistory(newHistory);
-        Assert.notNull(workflow, "workflow is null");
-
-        if (workflow.getWorkflowId() == null) {
-            workflow.setWorkflowId(workflow.getLatestWorkflowHistory().getProcessDefinition().getId());
-        }
-
-        Assert.notNull(workflow.getWorkflowId(), "Workflow id is null");
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Adding workflow with id:" + workflow.getWorkflowId());
-        }
-
-        validate(workflow, Create.class);
-        definitionCache.put(workflow.getWorkflowId(),
-            workflow.getLatestWorkflowHistory().getProcessDefinition());
-        workflowRepository.save(workflow);
-
-        return workflow;
-    }
-
-    /**
-     *
-     *
-     * @param workflowId .
+     * @param workflowId
+     *            .
      */
     @Override
     @Transactional
@@ -241,6 +202,8 @@ public class ProcessDefinitionRegistryImpl
      *
      * @param resources
      *            JAVADOC.
+     *
+     *            TODO move out to a client of this
      */
     @Transactional
     public void readWorkflowDefinitions(Collection<Resource> resources) {
@@ -257,7 +220,7 @@ public class ProcessDefinitionRegistryImpl
                     attachment.setData(readBytes(resource));
                     attachment.setType("text/xml");
 
-                    createProcess(attachment);
+                    saveProcess(attachment);
                 } catch (IOException e) {
                     if (LOG.isDebugEnabled()) {
                         LOG.warn("Failed to load workflowDefinition [" + filename + "]", e);
@@ -278,21 +241,18 @@ public class ProcessDefinitionRegistryImpl
     /**
      *
      *
-     * @param history .
+     * @param attachment .
+     *
+     * @return .
+     *
+     * @throws BindException .
      */
     @Override
     @Transactional
-    public Workflow updateProcess(Attachment attachment)
+    public Workflow saveProcess(Attachment attachment)
         throws BindException {
         ProcessDefinition definition = definitionParser.parse(new ByteArrayResource(
                     attachment.getData()));
-        Workflow workflow = workflowRepository.findByWorkflowId(definition.getId());
-
-        Assert.notNull(workflow, "Failed to load workflow with id " + definition.getId());
-
-        WorkflowHistory newHistory = instanceFactory.getBean(WorkflowHistory.class.getSimpleName());
-
-        newHistory.setAttachment(attachment);
 
         Assert.notNull(definition,
             "failed to parse definition '" + definition.getId() + "' from file '" +
@@ -302,13 +262,30 @@ public class ProcessDefinitionRegistryImpl
             LOG.debug("Parsed workflowDefinition with id:" + definition.getId());
         }
 
+        Workflow workflow = workflowRepository.findByWorkflowId(definition.getId());
+
+        if (workflow == null) {
+            workflow = instanceFactory.getBean(Workflow.class.getSimpleName());
+            workflow.setWorkflowId(definition.getId());
+        } else {
+            if (Arrays.equals(attachment.getData(),
+                        workflow.getLatestWorkflowHistory().getAttachment().getData())) {
+                LOG.info("New definition content is the same as old one");
+
+                return workflow;
+            }
+        }
+
+        WorkflowHistory newHistory = instanceFactory.getBean(WorkflowHistory.class.getSimpleName());
+
+        newHistory.setAttachment(attachment);
         newHistory.setProcessDefinition(definition);
 
         workflow.addHistory(newHistory);
 
-        validate(workflow, Update.class);
+        validate(workflow, workflow.isNew() ? Create.class : Update.class);
 
-        definitionCache.put(workflow.getWorkflowId(), newHistory.getProcessDefinition());
+        definitionCache.put(workflow.getWorkflowId(), definition);
         workflowRepository.save(workflow);
 
         return workflow;

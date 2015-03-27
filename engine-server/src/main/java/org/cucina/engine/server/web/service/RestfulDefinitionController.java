@@ -20,7 +20,6 @@ import org.cucina.engine.service.DefinitionService;
   */
 @Controller
 @RequestMapping(value = "/workflow")
-// TODO apply security
 public class RestfulDefinitionController {
     @Autowired
     private DefinitionService definitionService;
@@ -35,12 +34,12 @@ public class RestfulDefinitionController {
      */
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     @ResponseBody
-    public String handleFileUpload(@RequestParam("name")
-    String name, @RequestParam("file")
+    public String handleFileUpload(@RequestParam("file")
     MultipartFile file) {
         if (!file.isEmpty()) {
+        	String name = file.getOriginalFilename();
             try {
-                definitionService.create(name, "text/xml", file.getBytes());
+                definitionService.save(name, "text/xml", file.getBytes());
 
                 return "You successfully uploaded " + name + "!";
             } catch (Exception e) {
@@ -48,7 +47,7 @@ public class RestfulDefinitionController {
             }
         }
 
-        return "You failed to upload " + name + " because the file was empty.";
+        return "You failed to upload because the file was empty.";
     }
 
     /**
@@ -60,5 +59,18 @@ public class RestfulDefinitionController {
     @ResponseBody
     public Collection<String> list() {
         return definitionService.list();
+    }
+
+    /**
+     *
+     *
+     * @return .
+     */
+    @RequestMapping(value = "/upload", method = RequestMethod.GET)
+    @ResponseBody
+    public String simpleForm() {
+        return "<html><body><form method=\"POST\" enctype=\"multipart/form-data\" action=\"/workflow/upload\">" +
+        "File to upload: <input type=\"file\" name=\"file\"><br />" +
+        "<input type=\"submit\" value=\"Upload\">Press here to upload the file!</form></body></html>";
     }
 }

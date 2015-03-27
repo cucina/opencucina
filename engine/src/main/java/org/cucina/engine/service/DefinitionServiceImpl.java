@@ -50,27 +50,6 @@ public class DefinitionServiceImpl
     /**
      * JAVADOC Method Level Comments
      *
-     * @param fileName
-     *            JAVADOC.
-     * @param contentType
-     *            JAVADOC.
-     * @param content
-     *            JAVADOC.
-     *
-     * @return JAVADOC.
-     *
-     * @throws BindException
-     *             JAVADOC.
-     */
-    public Workflow create(String fileName, String contentType, byte[] content)
-        throws BindException {
-        return processDefinitionRegistry.createProcess(createAttachment(fileName, contentType,
-                content));
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
      * @param id
      *            JAVADOC.
      *
@@ -120,10 +99,9 @@ public class DefinitionServiceImpl
      *             JAVADOC.
      */
     @Override
-    public Workflow update(String fileName, String contentType, byte[] content)
+    public Workflow save(String fileName, String contentType, byte[] content)
         throws BindException {
-        return processDefinitionRegistry.updateProcess(createAttachment(fileName, contentType,
-                content));
+        return processDefinitionRegistry.saveProcess(createAttachment(fileName, contentType, content));
     }
 
     private Attachment createAttachment(String fileName, String contentType, byte[] content) {

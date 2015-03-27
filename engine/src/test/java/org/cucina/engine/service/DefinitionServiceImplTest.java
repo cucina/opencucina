@@ -77,7 +77,7 @@ public class DefinitionServiceImplTest {
 
         byte[] content = "hello".getBytes();
 
-        service.create("hello", "text/xml", content);
+        service.save("hello", "text/xml", content);
     }
 
     /**
@@ -134,7 +134,7 @@ public class DefinitionServiceImplTest {
 
         byte[] content = "hello".getBytes();
 
-        service.update("hello", "text/xml", content);
-        verify(registry).updateProcess(attachment);
+        service.save("hello", "text/xml", content);
+        verify(registry).saveProcess(attachment);
     }
 }
