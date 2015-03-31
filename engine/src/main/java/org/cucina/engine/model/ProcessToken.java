@@ -29,7 +29,7 @@ import org.springframework.util.Assert;
 /**
  * JAVADOC for Class Level
  *
- * @author $Author: vlevine $
+ * @author vlevine
  */
 @Entity
 @Cacheable

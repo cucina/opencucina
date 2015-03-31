@@ -3,7 +3,6 @@ package org.cucina.engine.server.repository;
 import java.util.Collection;
 
 import org.cucina.engine.model.ProcessToken;
-import org.cucina.engine.server.model.EntityDescriptor;
 import org.springframework.data.repository.Repository;
 
 
@@ -13,14 +12,14 @@ import org.springframework.data.repository.Repository;
  * @author $Author: $
  * @version $Revision: $
   */
-public interface EntityDescriptorRepository
-    extends Repository<EntityDescriptor, Long> {
+public interface ProcessTokenRepository
+    extends Repository<ProcessToken, Long> {
     /**
      * Returns names of workflows and number of active instances.
      *
      * @return JAVADOC.
      */
-    Collection<Object[]> listAggregated();
+    Collection<Object[]> countByGroupProcessDefinitionId();
 
     /**
      * JAVADOC Method Level Comments
@@ -29,5 +28,5 @@ public interface EntityDescriptorRepository
      *
      * @return JAVADOC.
      */
-    Collection<ProcessToken> workflowSummary(String wfid);
+    Collection<ProcessToken> findByProcessDefinitionId(String wfid);
 }

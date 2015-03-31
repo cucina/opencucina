@@ -14,16 +14,16 @@ import org.junit.Test;
  *
  * @author vlevine
   */
-public class EntityDescriptorRepositoryImplTest
+public class ProcessTokenRepositoryImplTest
     extends JpaProvider {
-    private EntityDescriptorRepositoryImpl repo;
+    private ProcessTokenRepositoryImpl repo;
 
     /**
      *
      */
     @Test
     public void testListAggregated() {
-        Collection<Object[]> coll = repo.listAggregated();
+        Collection<Object[]> coll = repo.countByGroupProcessDefinitionId();
 
         System.err.println(ToStringBuilder.reflectionToString(coll.iterator().next()));
     }
@@ -37,7 +37,7 @@ public class EntityDescriptorRepositoryImplTest
     protected void onSetUp()
         throws Exception {
         super.onSetUp();
-        repo = new EntityDescriptorRepositoryImpl();
+        repo = new ProcessTokenRepositoryImpl();
         repo.setEntityManager(getEntityManager());
 
         EntityDescriptor ed = getInstanceFactory()

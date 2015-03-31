@@ -12,13 +12,15 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.stereotype.Repository;
+
 import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.repository.jpa.WorkflowRepositorySupport;
 import org.cucina.engine.server.model.EntityDescriptor;
-import org.cucina.engine.server.repository.EntityDescriptorRepository;
+import org.cucina.engine.server.repository.ProcessTokenRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
 
 
 /**
@@ -28,10 +30,10 @@ import org.springframework.stereotype.Repository;
  * @version $Revision: $
   */
 @Repository
-public class EntityDescriptorRepositoryImpl
+public class ProcessTokenRepositoryImpl
     extends WorkflowRepositorySupport
-    implements EntityDescriptorRepository {
-    private static final Logger LOG = LoggerFactory.getLogger(EntityDescriptorRepositoryImpl.class);
+    implements ProcessTokenRepository {
+    private static final Logger LOG = LoggerFactory.getLogger(ProcessTokenRepositoryImpl.class);
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -50,7 +52,7 @@ public class EntityDescriptorRepositoryImpl
      * @return JAVADOC.
      */
     @Override
-    public Collection<Object[]> listAggregated() {
+    public Collection<Object[]> countByGroupProcessDefinitionId() {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 
         CriteriaQuery<Object[]> cq = cb.createQuery(Object[].class);
@@ -71,11 +73,11 @@ public class EntityDescriptorRepositoryImpl
      * @return JAVADOC.
      */
     @Override
-    public Collection<ProcessToken> workflowSummary(String wfid) {
+    public Collection<ProcessToken> findByProcessDefinitionId(String wfid) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tuple> tcq = cb.createTupleQuery();
         Root<ProcessToken> rt = tcq.from(ProcessToken.class);
-        Predicate tokp = cb.equal(rt.get("workflowDefinitionId"), wfid);
+        Predicate tokp = cb.equal(rt.get("processDefinitionId"), wfid);
         Path<Object> pid = rt.get("domainObjectId");
 
         Root<EntityDescriptor> rc = tcq.from(EntityDescriptor.class);

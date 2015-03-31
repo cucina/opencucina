@@ -19,7 +19,8 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
+
+ 		<dependency>
 			<groupId>cucina</groupId>
 			<artifactId>cucina-core</artifactId>
 			<version>0.1</version>
@@ -29,6 +30,7 @@
 			<artifactId>cucina-search</artifactId>
 			<version>0.1</version>
 		</dependency>
+ 
 		<dependency>
 			<groupId>cucina</groupId>
 			<artifactId>cucina-email-api</artifactId>
@@ -36,9 +38,15 @@
 		</dependency>
 		<dependency>
 			<groupId>cucina</groupId>
+			<artifactId>cucina-i18n-api</artifactId>
+			<version>0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>cucina</groupId>
 			<artifactId>cucina-security-api</artifactId>
 			<version>0.1</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-digester3</artifactId>

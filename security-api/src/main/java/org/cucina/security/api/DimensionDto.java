@@ -2,6 +2,8 @@ package org.cucina.security.api;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 
 /**
  * JAVADOC for Class Level
@@ -10,8 +12,8 @@ import java.io.Serializable;
   */
 public class DimensionDto
     implements Serializable {
-	private static final long serialVersionUID = 5884988987152397986L;
-	private Long domainObjectId;
+    private static final long serialVersionUID = 5884988987152397986L;
+    private Long domainObjectId;
     private String propertyName;
 
     /**
@@ -48,5 +50,15 @@ public class DimensionDto
      */
     public String getPropertyName() {
         return propertyName;
+    }
+
+    /**
+     * Default toString implementation
+     *
+     * @return This object as String.
+     */
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }
