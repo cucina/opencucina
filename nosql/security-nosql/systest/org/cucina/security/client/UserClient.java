@@ -6,8 +6,6 @@ import java.util.Collection;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.cucina.security.api.DimensionDto;
 import org.cucina.security.api.PermissionDto;
 import org.cucina.security.api.UserDto;
@@ -22,7 +20,6 @@ import org.junit.Test;
   */
 public class UserClient {
     private static final String ACCESS_URL = "http://localhost:8080/user";
-    private ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      *
@@ -67,6 +64,11 @@ public class UserClient {
         rdto = restTemplate.getForEntity(ACCESS_URL + "/{username}", UserDto.class, "username");
 
         dto = rdto.getBody();
+        
+        ResponseEntity<Collection> cr = restTemplate.getForEntity(ACCESS_URL, Collection.class);
+        Collection coll = cr.getBody();
+        
+        System.err.println(coll);
 
         ResponseEntity<Boolean> rb = restTemplate.getForEntity(ACCESS_URL + "/delete/{username}",
                 Boolean.class, "username");
