@@ -9,21 +9,17 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
-
 import org.cucina.email.api.EmailDto;
-import org.cucina.email.api.EmailEvent;
-
 import org.cucina.engine.ExecutionContext;
 import org.cucina.engine.definition.Operation;
 import org.cucina.engine.email.AcegiUserAccessorBean;
 import org.cucina.engine.email.UserAccessorBean;
-
+import org.cucina.engine.event.EmailEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -196,6 +192,7 @@ public class EmailOperation
                 LOG.debug("Publishing EmailEvent [" + descriptor.toString() + "]");
             }
 
+            // TODO use api provided
             applicationEventPublisher.publishEvent(new EmailEvent(descriptor));
         } catch (RuntimeException e) {
             LOG.error("Errow while trying to send email");
