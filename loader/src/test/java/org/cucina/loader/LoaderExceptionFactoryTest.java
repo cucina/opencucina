@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.Locale;
 
-import org.cucina.i18n.service.I18nService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -23,8 +22,6 @@ import org.springframework.validation.BindException;
  * @version $Revision: $
   */
 public class LoaderExceptionFactoryTest {
-    @Mock
-    private I18nService i18nService;
     @Mock
     private MessageSource messageSource;
 
@@ -49,10 +46,9 @@ public class LoaderExceptionFactoryTest {
         //        MessageSource messageSource = mock(MessageSource.class);
         String errorCode = "loader.fileNullOrEmpty";
 
-        when(messageSource.getMessage(errorCode, null, Locale.ENGLISH)).thenReturn(returnMessage);
-        when(i18nService.getLocale()).thenReturn(Locale.ENGLISH);
+        when(messageSource.getMessage(errorCode, null, Locale.getDefault())).thenReturn(returnMessage);
 
-        LoaderExceptionFactory service = new LoaderExceptionFactory(i18nService, messageSource);
+        LoaderExceptionFactory service = new LoaderExceptionFactory(messageSource);
 
         BindException be = new BindException(new Object(), "");
 
@@ -60,8 +56,7 @@ public class LoaderExceptionFactoryTest {
 
         LoaderException le = service.getLoaderException(be);
 
-        verify(messageSource).getMessage(errorCode, null, Locale.ENGLISH);
-        verify(i18nService).getLocale();
+        verify(messageSource).getMessage(errorCode, null, Locale.getDefault());
         assertEquals(le.getErrors()[0], returnMessage);
     }
 
@@ -78,9 +73,8 @@ public class LoaderExceptionFactoryTest {
 
         when(messageSource.getMessage(errorCode, null, Locale.getDefault()))
             .thenReturn(returnMessage);
-        when(i18nService.getLocale()).thenReturn(null);
 
-        LoaderExceptionFactory service = new LoaderExceptionFactory(i18nService, messageSource);
+        LoaderExceptionFactory service = new LoaderExceptionFactory(messageSource);
 
         BindException be = new BindException(new Object(), "");
 
@@ -89,7 +83,6 @@ public class LoaderExceptionFactoryTest {
         LoaderException le = service.getLoaderException(be);
 
         verify(messageSource).getMessage(errorCode, null, Locale.getDefault());
-        verify(i18nService).getLocale();
         assertEquals(le.getErrors()[0], returnMessage);
     }
 
@@ -104,11 +97,10 @@ public class LoaderExceptionFactoryTest {
         String message = "BLAAH oh BLAAH oh blaah blaah";
         String errorCode = "loader.fileNullOrEmpty";
 
-        when(messageSource.getMessage(errorCode, null, Locale.ENGLISH))
+        when(messageSource.getMessage(errorCode, null, Locale.getDefault()))
             .thenThrow(new RuntimeException(message));
-        when(i18nService.getLocale()).thenReturn(Locale.ENGLISH);
 
-        LoaderExceptionFactory service = new LoaderExceptionFactory(i18nService, messageSource);
+        LoaderExceptionFactory service = new LoaderExceptionFactory( messageSource);
 
         String defaultMessage = "This is the default message";
         BindException be = new BindException(new Object(), defaultMessage);
@@ -117,7 +109,6 @@ public class LoaderExceptionFactoryTest {
 
         LoaderException le = service.getLoaderException(be);
 
-        verify(i18nService).getLocale();
         assertEquals("Should return the default message if MessageSource blows up", defaultMessage,
             le.getErrors()[0]);
     }

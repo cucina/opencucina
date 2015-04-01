@@ -14,8 +14,6 @@ import org.cucina.cluster.ChangeNotifier;
 import org.cucina.core.InstanceFactory;
 import org.cucina.core.model.PersistableEntity;
 
-import org.cucina.i18n.service.I18nService;
-
 import org.cucina.loader.testassist.Foo;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -45,8 +43,6 @@ public class CsvLoaderTest {
     private ChangeNotifier changeNotifier;
     @Mock
     private HeadersModifier headersModifier;
-    @Mock
-    private I18nService i18nService;
     @Mock
     private InstanceFactory instanceFactory;
     @Mock
@@ -166,8 +162,7 @@ public class CsvLoaderTest {
         when(messageSource.getMessage(any(String.class), any(Object[].class), any(Locale.class)))
             .thenReturn("2");
 
-        LoaderExceptionFactory loaderExceptionFactory = new LoaderExceptionFactory(i18nService,
-                messageSource);
+        LoaderExceptionFactory loaderExceptionFactory = new LoaderExceptionFactory(messageSource);
         CsvRowLoader rowProcessor = new CsvRowLoader() {
                 @Override
                 @Transactional(rollbackFor = BindException.class)

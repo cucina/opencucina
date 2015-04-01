@@ -16,16 +16,29 @@
 			<artifactId>cucina-core</artifactId>
 			<version>0.1</version>
 		</dependency>
-		<dependency>
+<!-- 		<dependency>
 			<groupId>cucina</groupId>
 			<artifactId>cucina-i18n</artifactId>
 			<version>0.1</version>
 		</dependency>
-	</dependencies>
-	<build>
-		<plugins>
-
-		</plugins>
-	</build>
+ -->	</dependencies>
+	<profiles>
+		<profile>
+			<id>jenkins</id>
+			<activation>
+				<property>
+					<name>env.BUILD_NUMBER</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>cobertura-maven-plugin</artifactId>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>

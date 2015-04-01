@@ -5,14 +5,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import org.cucina.i18n.service.I18nService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -24,7 +24,6 @@ import org.springframework.validation.ObjectError;
 public class LoaderExceptionFactory {
     private static final Logger LOG = LoggerFactory.getLogger(LoaderExceptionFactory.class);
     private static final String LOADER_FAILURE_SEE_ERRORS = "Loader failure (see errors)";
-    private I18nService i18nService;
     private MessageSource messageSource;
 
     /**
@@ -33,9 +32,8 @@ public class LoaderExceptionFactory {
      * @param i18nService JAVADOC.
      * @param messageSource JAVADOC.
      */
-    public LoaderExceptionFactory(I18nService i18nService, MessageSource messageSource) {
-        Assert.notNull(i18nService, "i18nService is null");
-        this.i18nService = i18nService;
+    public LoaderExceptionFactory(MessageSource messageSource) {
+        Assert.notNull(messageSource, "messageSource is null");
         this.messageSource = messageSource;
     }
 
@@ -47,7 +45,7 @@ public class LoaderExceptionFactory {
      * @return JAVADOC.
      */
     public LoaderException getLoaderException(BindException be) {
-        String[] errors = getI18nErrors(i18nService.getLocale(), be);
+        String[] errors = getI18nErrors(be);
 
         LOG.info("Exception thrown [" + Arrays.toString(errors) + "]");
 
@@ -63,7 +61,7 @@ public class LoaderExceptionFactory {
      *
      * @return JAVADOC.
      */
-    protected String[] getI18nErrors(final Locale locale, final BindingResult bindingResult) {
+    protected String[] getI18nErrors(final BindingResult bindingResult) {
         List<String> errors = new ArrayList<String>();
 
         if ((bindingResult != null) && bindingResult.hasGlobalErrors()) {
@@ -71,7 +69,7 @@ public class LoaderExceptionFactory {
                 String message = objectError.getDefaultMessage();
 
                 if (messageSource != null) {
-                    Locale loc = ((locale != null) ? locale : Locale.getDefault());
+                    Locale loc = Locale.getDefault();
 
                     try {
                         message = messageSource.getMessage(objectError.getCode(),
