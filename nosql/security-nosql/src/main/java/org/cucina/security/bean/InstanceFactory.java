@@ -5,7 +5,7 @@ package org.cucina.security.bean;
 /**
  * Provides domain object instances and type information.
  *
- * @author $Author: thornton $
+
  */
 public interface InstanceFactory {
     /**

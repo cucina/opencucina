@@ -116,13 +116,11 @@
 		</dependency>
 	</dependencies>
 	<modules>
-		<module>eggtimer</module>
 		<module>email-api</module>
 		<module>email</module>
 		<module>core</module>
 		<module>loader</module>
 		<module>security-api</module>
-		<module>security</module>
 		<module>search</module>
 		<module>i18n-api</module>
 		<module>i18n</module>
@@ -151,7 +149,7 @@
 							<version>2.2</version>
 							<configuration>
 								<formats>
-									<format>html</format>
+									<format>xml</format>
 								</formats>
 							</configuration>
 							<executions>

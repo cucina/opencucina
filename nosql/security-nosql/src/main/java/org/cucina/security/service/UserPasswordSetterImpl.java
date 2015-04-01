@@ -79,7 +79,7 @@ public class UserPasswordSetterImpl
         }
 
         if (system == null) {
-            system = instanceFactory.getBean(User.class.getSimpleName());
+            system = instanceFactory.getBean(User.class.getName());
         }
 
         system.setSystem(true);

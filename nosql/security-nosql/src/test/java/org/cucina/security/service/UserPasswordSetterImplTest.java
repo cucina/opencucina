@@ -68,7 +68,7 @@ public class UserPasswordSetterImplTest {
         Role adminRole = new Role();
         Permission permission = new Permission();
 
-        when(instanceFactory.getBean(User.class.getSimpleName())).thenReturn(sysUser);
+        when(instanceFactory.getBean(User.class.getName())).thenReturn(sysUser);
         when(passwordDecryptor.decrypt(ADMIN_USER)).thenReturn(ADMIN_USER);
         when(roleRepository.findByName(Role.ADMINISTRATOR)).thenReturn(adminRole);
         when(instanceFactory.getBean(Permission.class.getName())).thenReturn(permission);
@@ -85,7 +85,7 @@ public class UserPasswordSetterImplTest {
         assertEquals(1, sysUser.getPermissions().size());
         assertEquals(permission, sysUser.getPermissions().iterator().next());
         verify(userRepository).findBySystem(true);
-        verify(instanceFactory).getBean(User.class.getSimpleName());
+        verify(instanceFactory).getBean(User.class.getName());
         verify(passwordDecryptor).decrypt(ADMIN_USER);
         verify(instanceFactory).getBean(Permission.class.getName());
     }
