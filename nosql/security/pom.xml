@@ -8,8 +8,8 @@
 		<artifactId>nosql</artifactId>
 		<version>0.1</version>
 	</parent>
-	<artifactId>security-nosql</artifactId>
-	<name>security-nosql</name>
+	<artifactId>security</artifactId>
+	<name>security</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,14 +19,6 @@
 			<groupId>cucina</groupId>
 			<artifactId>cucina-security-api</artifactId>
 			<version>0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-mongodb</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
