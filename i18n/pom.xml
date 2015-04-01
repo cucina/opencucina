@@ -35,12 +35,12 @@
 			<artifactId>hsqldb</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
+ 		<dependency>
 			<groupId>cucina</groupId>
 			<artifactId>cucina-core</artifactId>
 			<version>0.1</version>
 		</dependency>
-		<dependency>
+ 		<dependency>
 			<groupId>cucina</groupId>
 			<artifactId>cucina-i18n-api</artifactId>
 			<version>0.1</version>

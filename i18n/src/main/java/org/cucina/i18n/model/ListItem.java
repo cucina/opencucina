@@ -20,7 +20,7 @@ import org.cucina.core.model.support.BooleanConverter;
 import org.cucina.core.model.support.JsonMapConverter;
 import org.cucina.core.validation.NotBlank;
 
-import org.cucina.i18n.validation.UniqueListNode;
+import org.cucina.i18n.validation.UniqueListItem;
 
 
 /**
@@ -28,9 +28,9 @@ import org.cucina.i18n.validation.UniqueListNode;
  */
 @Entity
 @Cacheable
-@UniqueListNode
+@UniqueListItem
 @PostProcessProjections
-public class ListNode
+public class ListItem
     extends PersistableEntity
     implements Versioned {
     private static final long serialVersionUID = 1L;
@@ -55,18 +55,18 @@ public class ListNode
     private int version;
 
     /**
-     * Creates a new instance of the {@link ListNode} class.
+     * Creates a new instance of the {@link ListItem} class.
      */
-    public ListNode() {
+    public ListItem() {
     }
 
     /**
-     * Creates a new instance of the {@link ListNode} class specifying
+     * Creates a new instance of the {@link ListItem} class specifying
      * the underlying application type of this node instance.
      *
      * @param type the application type of this node instance.
      */
-    public ListNode(String type) {
+    public ListItem(String type) {
         setType(type);
     }
 

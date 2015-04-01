@@ -1,13 +1,10 @@
 package org.cucina.i18n.testassist;
 
-import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Cacheable;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
@@ -34,17 +31,12 @@ import org.cucina.i18n.model.Message;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "foo")
 @XmlRootElement(name = "foo")
-@Entity(name = Foo.TYPE)
+@Entity
 @Cacheable
 public class Foo
     extends PersistableEntity
     implements Versioned {
     private static final long serialVersionUID = -3494592002323415751L;
-
-    /** Foo */
-    public static final String TYPE = "Foo";
-    private Collection<Bar> bars;
-    private Collection<Baz> bazs;
     private Date date;
     private Message message;
     @TranslatedColumn
@@ -68,46 +60,6 @@ public class Foo
     public Foo(Long id) {
         super();
         setId(id);
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param bars
-     *            JAVADOC.
-     */
-    public void setBars(Collection<Bar> bars) {
-        this.bars = bars;
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "foo")
-    public Collection<Bar> getBars() {
-        return bars;
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param bazs
-     *            JAVADOC.
-     */
-    public void setBazs(Collection<Baz> bazs) {
-        this.bazs = bazs;
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "foo")
-    public Collection<Baz> getBazs() {
-        return bazs;
     }
 
     /**

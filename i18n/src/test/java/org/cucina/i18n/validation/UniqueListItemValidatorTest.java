@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
 
-import org.cucina.i18n.model.ListNode;
+import org.cucina.i18n.model.ListItem;
 import org.cucina.i18n.model.Message;
-import org.cucina.i18n.repository.ListNodeRepository;
+import org.cucina.i18n.repository.ListItemRepository;
 import org.cucina.i18n.service.I18nService;
 import org.junit.Test;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -22,13 +22,13 @@ import org.springframework.test.util.ReflectionTestUtils;
  * @author $Author: $
  * @version $Revision: $
   */
-public class UniqueListNodeValidatorTest {
+public class UniqueListItemValidatorTest {
     /**
      * JAVADOC Method Level Comments
      */
     @Test
     public void testIsValid() {
-        ListNode listNode = new ListNode();
+        ListItem listNode = new ListItem();
 
         listNode.setType("listNode");
 
@@ -38,10 +38,10 @@ public class UniqueListNodeValidatorTest {
 
         listNode.setLabel(label);
 
-        UniqueListNodeValidator validator = new UniqueListNodeValidator();
-        ListNodeRepository listNodeRepository = mock(ListNodeRepository.class);
+        UniqueListItemValidator validator = new UniqueListItemValidator();
+        ListItemRepository listNodeRepository = mock(ListItemRepository.class);
 
-        Collection<ListNode> nodes = new ArrayList<ListNode>();
+        Collection<ListItem> nodes = new ArrayList<ListItem>();
 
         when(listNodeRepository.findByType("listNode")).thenReturn(nodes);
 
@@ -55,7 +55,7 @@ public class UniqueListNodeValidatorTest {
 
         assertTrue("Should be unique", validator.isValid(listNode, null));
 
-        ListNode ln = new ListNode();
+        ListItem ln = new ListItem();
 
         ln.setLabel(label);
         nodes.add(ln);

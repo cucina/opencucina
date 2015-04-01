@@ -7,7 +7,7 @@ import org.springframework.beans.factory.BeanFactory;
 import org.cucina.core.InstanceFactory;
 import org.cucina.core.spring.SingletonBeanFactory;
 
-import org.cucina.i18n.model.ListNode;
+import org.cucina.i18n.model.ListItem;
 import org.cucina.i18n.model.Message;
 import org.cucina.i18n.model.MutableI18nMessage;
 import org.cucina.i18n.repository.MessageRepository;
@@ -66,7 +66,7 @@ public class ListNodeMessageBeanPopulatorTest {
     @Test
     public void testArgsMissing() {
         ListNodeMessageBeanPopulator populator = new ListNodeMessageBeanPopulator();
-        ListNode listNode = new ListNode();
+        ListItem listNode = new ListItem();
 
         populator.populate(listNode, null);
         assertNull(listNode.getLabel());
@@ -93,7 +93,7 @@ public class ListNodeMessageBeanPopulatorTest {
      */
     @Test
     public void testMessageCdAlreadySet() {
-        ListNode listNode = new ListNode();
+        ListItem listNode = new ListItem();
         Message label = new Message();
 
         listNode.setLabel(label);
@@ -131,7 +131,7 @@ public class ListNodeMessageBeanPopulatorTest {
      */
     @Test
     public void testSunnyDay() {
-        ListNode listNode = new ListNode();
+        ListItem listNode = new ListItem();
         Message label = new Message();
 
         listNode.setLabel(label);

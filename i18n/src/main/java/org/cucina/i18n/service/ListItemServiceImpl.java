@@ -7,8 +7,8 @@ import javax.transaction.Transactional;
 
 import org.cucina.i18n.api.ListNodeDto;
 import org.cucina.i18n.api.ListNodeService;
-import org.cucina.i18n.model.ListNode;
-import org.cucina.i18n.repository.ListNodeRepository;
+import org.cucina.i18n.model.ListItem;
+import org.cucina.i18n.repository.ListItemRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +24,11 @@ import org.springframework.util.Assert;
  * @author vlevine
   */
 @Service
-public class ListNodeServiceImpl
+public class ListItemServiceImpl
     implements ListNodeService {
-    private static final Logger LOG = LoggerFactory.getLogger(ListNodeServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ListItemServiceImpl.class);
     private ConversionService conversionService;
-    private ListNodeRepository listNodeRepository;
+    private ListItemRepository listNodeRepository;
 
     /**
      * Creates a new ListNodeServiceImpl object.
@@ -37,7 +37,7 @@ public class ListNodeServiceImpl
      * @param conversionService JAVADOC.
      */
     @Autowired
-    public ListNodeServiceImpl(ListNodeRepository listNodeRepository,
+    public ListItemServiceImpl(ListItemRepository listNodeRepository,
         @Qualifier(value = "myConversionService")
     ConversionService conversionService) {
         Assert.notNull(listNodeRepository, "listNodeRepository is null");
@@ -55,7 +55,7 @@ public class ListNodeServiceImpl
      */
     @Override
     public ListNodeDto load(Long id) {
-        ListNode ln = listNodeRepository.find(id);
+        ListItem ln = listNodeRepository.findById(id);
 
         return conversionService.convert(ln, ListNodeDto.class);
     }
@@ -69,10 +69,10 @@ public class ListNodeServiceImpl
      */
     @Override
     public Collection<ListNodeDto> loadByType(String type) {
-        Collection<ListNode> lns = listNodeRepository.findByType(type);
+        Collection<ListItem> lns = listNodeRepository.findByType(type);
         Collection<ListNodeDto> result = new ArrayList<ListNodeDto>();
 
-        for (ListNode listNode : lns) {
+        for (ListItem listNode : lns) {
             result.add(conversionService.convert(listNode, ListNodeDto.class));
         }
 
@@ -89,12 +89,12 @@ public class ListNodeServiceImpl
     @Override
     @Transactional
     public Long save(ListNodeDto listNodeDto) {
-        ListNode node = conversionService.convert(listNodeDto, ListNode.class);
+        ListItem node = conversionService.convert(listNodeDto, ListItem.class);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Saving " + node);
         }
 
-        return listNodeRepository.save(node);
+        return listNodeRepository.save(node).getId();
     }
 }

@@ -23,7 +23,7 @@ import org.cucina.i18n.api.ListNodeService;
   */
 @RestController
 @RequestMapping(value = "/listNode")
-public class ListNodeController {
+public class ListItemController {
     @Autowired
     private ListNodeService listNodeService;
 

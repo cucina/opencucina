@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cucina.core.service.BeanPopulator;
-import org.cucina.i18n.model.ListNode;
+import org.cucina.i18n.model.ListItem;
 import org.cucina.i18n.model.Message;
 import org.cucina.i18n.service.MessageHelper;
 import org.slf4j.Logger;
@@ -33,14 +33,14 @@ public class ListNodeMessageBeanPopulator
      */
     @Override
     public <T> T populate(T entity, Map<String, Object> params) {
-        if (!(entity instanceof ListNode)) {
+        if (!(entity instanceof ListItem)) {
             LOG.warn("Weird. Object is not a ListNode. Should be. " +
                 ((entity != null) ? entity.getClass().getName() : ""));
 
             return entity;
         }
 
-        ListNode listNode = (ListNode) entity;
+        ListItem listNode = (ListItem) entity;
         Message label = listNode.getLabel();
         String type = listNode.getType();
 

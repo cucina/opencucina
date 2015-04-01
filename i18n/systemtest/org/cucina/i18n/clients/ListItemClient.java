@@ -15,7 +15,7 @@ import org.junit.Test;
  *
  * @author vlevine
   */
-public class ListNodeClient {
+public class ListItemClient {
     private static final String LN_ACCESS_URL = "http://localhost:8080/listNode";
 
     /**

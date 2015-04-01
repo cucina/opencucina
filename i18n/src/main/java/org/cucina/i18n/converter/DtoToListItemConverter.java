@@ -2,10 +2,8 @@ package org.cucina.i18n.converter;
 
 import org.springframework.core.convert.converter.Converter;
 
-import org.cucina.core.InstanceFactory;
-
 import org.cucina.i18n.api.ListNodeDto;
-import org.cucina.i18n.model.ListNode;
+import org.cucina.i18n.model.ListItem;
 import org.cucina.i18n.model.Message;
 import org.cucina.i18n.repository.MessageRepository;
 
@@ -17,9 +15,8 @@ import reactor.util.Assert;
  *
  * @author vlevine
   */
-public class DtoToListNodeConverter
-    implements Converter<ListNodeDto, ListNode> {
-    private InstanceFactory instanceFactory;
+public class DtoToListItemConverter
+    implements Converter<ListNodeDto, ListItem> {
     private MessageRepository messageRepository;
 
     /**
@@ -27,10 +24,7 @@ public class DtoToListNodeConverter
      *
      * @param instanceFactory JAVADOC.
      */
-    public DtoToListNodeConverter(InstanceFactory instanceFactory,
-        MessageRepository messageRepository) {
-        Assert.notNull(instanceFactory, "instanceFactory is null");
-        this.instanceFactory = instanceFactory;
+    public DtoToListItemConverter(MessageRepository messageRepository) {
         Assert.notNull(messageRepository, "messageRepository is null");
         this.messageRepository = messageRepository;
     }
@@ -43,8 +37,8 @@ public class DtoToListNodeConverter
      * @return JAVADOC.
      */
     @Override
-    public ListNode convert(ListNodeDto source) {
-        ListNode node = instanceFactory.getBean(ListNode.class.getSimpleName());
+    public ListItem convert(ListNodeDto source) {
+        ListItem node = new ListItem();
 
         node.setDefaultValue(source.getDefaultValue());
         node.setType(source.getType());

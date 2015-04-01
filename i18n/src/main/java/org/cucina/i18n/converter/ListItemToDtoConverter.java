@@ -2,10 +2,8 @@ package org.cucina.i18n.converter;
 
 import org.springframework.core.convert.converter.Converter;
 
-import org.cucina.core.InstanceFactory;
-
 import org.cucina.i18n.api.ListNodeDto;
-import org.cucina.i18n.model.ListNode;
+import org.cucina.i18n.model.ListItem;
 import org.cucina.i18n.service.I18nService;
 
 import reactor.util.Assert;
@@ -16,19 +14,16 @@ import reactor.util.Assert;
  *
  * @author vlevine
   */
-public class ListNodeToDtoConverter
-    implements Converter<ListNode, ListNodeDto> {
+public class ListItemToDtoConverter
+    implements Converter<ListItem, ListNodeDto> {
     private I18nService i18nService;
-    private InstanceFactory instanceFactory;
 
     /**
      * Creates a new ListNodeToDtoConverter object.
      *
      * @param instanceFactory JAVADOC.
      */
-    public ListNodeToDtoConverter(InstanceFactory instanceFactory, I18nService i18nService) {
-        Assert.notNull(instanceFactory, "instanceFactory is null");
-        this.instanceFactory = instanceFactory;
+    public ListItemToDtoConverter(I18nService i18nService) {
         Assert.notNull(i18nService, "i18nService is null");
         this.i18nService = i18nService;
     }
@@ -41,8 +36,8 @@ public class ListNodeToDtoConverter
      * @return JAVADOC.
      */
     @Override
-    public ListNodeDto convert(ListNode source) {
-        ListNodeDto dto = instanceFactory.getBean(ListNodeDto.class.getSimpleName());
+    public ListNodeDto convert(ListItem source) {
+        ListNodeDto dto = new ListNodeDto();
 
         dto.setDefaultValue(source.getDefaultValue());
         dto.setType(source.getType());
