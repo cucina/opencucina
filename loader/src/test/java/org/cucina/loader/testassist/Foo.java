@@ -5,7 +5,6 @@ import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -19,8 +18,6 @@ import javax.xml.bind.annotation.XmlType;
 import org.cucina.core.model.PersistableEntity;
 import org.cucina.core.model.Versioned;
 import org.cucina.core.model.projection.ProjectionColumn;
-
-import org.cucina.i18n.model.Message;
 
 
 /**
@@ -42,7 +39,6 @@ public class Foo
     private Collection<Bar> bars;
     private Collection<Baz> bazs;
     private Date date;
-    private Message message;
     private String name;
     private int value;
     private int version;
@@ -118,26 +114,6 @@ public class Foo
     @Temporal(TemporalType.TIMESTAMP)
     public Date getDate() {
         return date;
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param message
-     *            JAVADOC.
-     */
-    public void setMessage(Message message) {
-        this.message = message;
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    @ManyToOne
-    public Message getMessage() {
-        return message;
     }
 
     /**

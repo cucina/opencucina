@@ -16,12 +16,7 @@
 			<artifactId>cucina-core</artifactId>
 			<version>0.1</version>
 		</dependency>
-<!-- 		<dependency>
-			<groupId>cucina</groupId>
-			<artifactId>cucina-i18n</artifactId>
-			<version>0.1</version>
-		</dependency>
- -->	</dependencies>
+	</dependencies>
 	<profiles>
 		<profile>
 			<id>jenkins</id>

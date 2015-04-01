@@ -118,16 +118,16 @@
 	<modules>
 		<module>email-api</module>
 		<module>core</module>
-		<module>loader</module>
 		<module>security-api</module>
-		<module>search</module>
 		<module>i18n-api</module>
-		<module>i18n</module>
+		<module>search</module>
 		<module>engine</module>
 		<module>engine-server-api</module>
 		<module>engine-server</module>
 		<module>engine-client</module>
+		<module>i18n</module>
 		<module>nosql</module>
+		<module>loader</module>
 	</modules>
 	<profiles>
 		<!-- Jenkins by default defines a property BUILD_NUMBER which is used to 
