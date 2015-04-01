@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 
-import org.cucina.i18n.api.ListNodeDto;
-import org.cucina.i18n.api.ListNodeService;
+import org.cucina.i18n.api.ListItemDto;
+import org.cucina.i18n.api.ListItemService;
 
 
 /**
@@ -16,7 +16,7 @@ import org.cucina.i18n.api.ListNodeService;
  * @author vlevine
  */
 public class RemoteListNodeService
-    implements ListNodeService {
+    implements ListItemService {
     private RestTemplate restTemplate = new RestTemplate();
     private String url;
 
@@ -39,8 +39,8 @@ public class RemoteListNodeService
      * @return JAVADOC. TODO add error handling
      */
     @Override
-    public ListNodeDto load(Long id) {
-        return restTemplate.getForObject(url + "/{id}", ListNodeDto.class, id);
+    public ListItemDto load(Long id) {
+        return restTemplate.getForObject(url + "/{id}", ListItemDto.class, id);
     }
 
     /**
@@ -53,7 +53,7 @@ public class RemoteListNodeService
      */
     @SuppressWarnings("unchecked")
     @Override
-    public Collection<ListNodeDto> loadByType(String type) {
+    public Collection<ListItemDto> loadByType(String type) {
         return restTemplate.getForObject(url + "/type/{type}", Collection.class, type);
     }
 
@@ -66,7 +66,7 @@ public class RemoteListNodeService
      * @return JAVADOC.
      */
     @Override
-    public Long save(ListNodeDto listNodeDto) {
+    public Long save(ListItemDto listNodeDto) {
         ResponseEntity<Long> rid = restTemplate.postForEntity(url, listNodeDto, Long.class);
 
         return rid.getBody();

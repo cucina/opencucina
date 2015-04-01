@@ -5,8 +5,8 @@ import java.util.Collection;
 
 import javax.transaction.Transactional;
 
-import org.cucina.i18n.api.ListNodeDto;
-import org.cucina.i18n.api.ListNodeService;
+import org.cucina.i18n.api.ListItemDto;
+import org.cucina.i18n.api.ListItemService;
 import org.cucina.i18n.model.ListItem;
 import org.cucina.i18n.repository.ListItemRepository;
 import org.slf4j.Logger;
@@ -25,7 +25,7 @@ import org.springframework.util.Assert;
   */
 @Service
 public class ListItemServiceImpl
-    implements ListNodeService {
+    implements ListItemService {
     private static final Logger LOG = LoggerFactory.getLogger(ListItemServiceImpl.class);
     private ConversionService conversionService;
     private ListItemRepository listNodeRepository;
@@ -54,10 +54,10 @@ public class ListItemServiceImpl
      * @return JAVADOC.
      */
     @Override
-    public ListNodeDto load(Long id) {
+    public ListItemDto load(Long id) {
         ListItem ln = listNodeRepository.findById(id);
 
-        return conversionService.convert(ln, ListNodeDto.class);
+        return conversionService.convert(ln, ListItemDto.class);
     }
 
     /**
@@ -68,12 +68,12 @@ public class ListItemServiceImpl
      * @return JAVADOC.
      */
     @Override
-    public Collection<ListNodeDto> loadByType(String type) {
+    public Collection<ListItemDto> loadByType(String type) {
         Collection<ListItem> lns = listNodeRepository.findByType(type);
-        Collection<ListNodeDto> result = new ArrayList<ListNodeDto>();
+        Collection<ListItemDto> result = new ArrayList<ListItemDto>();
 
         for (ListItem listNode : lns) {
-            result.add(conversionService.convert(listNode, ListNodeDto.class));
+            result.add(conversionService.convert(listNode, ListItemDto.class));
         }
 
         return result;
@@ -88,7 +88,7 @@ public class ListItemServiceImpl
      */
     @Override
     @Transactional
-    public Long save(ListNodeDto listNodeDto) {
+    public Long save(ListItemDto listNodeDto) {
         ListItem node = conversionService.convert(listNodeDto, ListItem.class);
 
         if (LOG.isDebugEnabled()) {

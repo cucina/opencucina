@@ -31,8 +31,8 @@ import org.cucina.engine.server.event.workflow.WorkflowEvent;
 import org.cucina.engine.server.model.EntityDescriptor;
 import org.cucina.engine.service.ProcessSupportService;
 
-import org.cucina.i18n.api.ListNodeDto;
-import org.cucina.i18n.api.ListNodeService;
+import org.cucina.i18n.api.ListItemDto;
+import org.cucina.i18n.api.ListItemService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +49,7 @@ public class MessagingWorkflowServiceHandlerImpl
     implements MessagingWorkflowServiceHandler {
     private static final Logger LOG = LoggerFactory.getLogger(MessagingWorkflowServiceHandlerImpl.class);
     private ConversationContext conversationContext;
-    private ListNodeService listNodeService;
+    private ListItemService listNodeService;
     private ProcessSupportService processSupportService;
 
     /**
@@ -61,7 +61,7 @@ public class MessagingWorkflowServiceHandlerImpl
      */
     @Autowired
     public MessagingWorkflowServiceHandlerImpl(ConversationContext conversationContext,
-        ListNodeService listNodeService, ProcessSupportService processSupportService) {
+        ListItemService listNodeService, ProcessSupportService processSupportService) {
         Assert.notNull(conversationContext, "conversationContext is null");
         this.conversationContext = conversationContext;
         Assert.notNull(listNodeService, "listNodeService is null");
@@ -155,7 +155,7 @@ public class MessagingWorkflowServiceHandlerImpl
                     we.getExtraParams(), null);
             } else if (event instanceof BulkTransitionEvent) {
                 BulkTransitionEvent we = (BulkTransitionEvent) event;
-                Collection<ListNodeDto> reasons = listNodeService.loadByType(we.getReason());
+                Collection<ListItemDto> reasons = listNodeService.loadByType(we.getReason());
 
                 if (CollectionUtils.isEmpty(reasons)) {
                     LOG.warn("Failed to load reason for string '" + we.getReason() + "'");

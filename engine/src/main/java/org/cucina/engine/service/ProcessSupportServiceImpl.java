@@ -38,7 +38,7 @@ import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.repository.HistoryRecordRepository;
 import org.cucina.engine.repository.TokenRepository;
 
-import org.cucina.i18n.api.ListNodeDto;
+import org.cucina.i18n.api.ListItemDto;
 
 import org.cucina.search.SearchBeanFactory;
 import org.cucina.search.SearchService;
@@ -391,7 +391,7 @@ public class ProcessSupportServiceImpl implements ProcessSupportService {
 	public void makeTransition(Map<Long, Integer> entities,
 			String applicationType, String transitionId, String comment,
 			String approvedAs, String assignedTo,
-			Map<String, Object> extraParams, ListNodeDto reason,
+			Map<String, Object> extraParams, ListItemDto reason,
 			Attachment attachment) {
 		try {
 			Collection<ProcessToken> tokens = tokenRepository

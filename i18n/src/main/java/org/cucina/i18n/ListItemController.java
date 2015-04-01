@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import org.cucina.i18n.api.ListNodeDto;
-import org.cucina.i18n.api.ListNodeService;
+import org.cucina.i18n.api.ListItemDto;
+import org.cucina.i18n.api.ListItemService;
 
 
 /**
@@ -25,7 +25,7 @@ import org.cucina.i18n.api.ListNodeService;
 @RequestMapping(value = "/listNode")
 public class ListItemController {
     @Autowired
-    private ListNodeService listNodeService;
+    private ListItemService listNodeService;
 
     /**
      * JAVADOC Method Level Comments
@@ -35,7 +35,7 @@ public class ListItemController {
      * @return JAVADOC.
      */
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
-    public ListNodeDto getById(@PathVariable
+    public ListItemDto getById(@PathVariable
     Long id) {
         Assert.notNull(id, "id is null");
 
@@ -50,7 +50,7 @@ public class ListItemController {
      * @return JAVADOC.
      */
     @RequestMapping(method = RequestMethod.GET, value = "/type/{type}")
-    public Collection<ListNodeDto> getByType(@PathVariable
+    public Collection<ListItemDto> getByType(@PathVariable
     String type) {
         return listNodeService.loadByType(type);
     }
@@ -65,7 +65,7 @@ public class ListItemController {
     @RequestMapping(method = RequestMethod.POST)
     public Long save(@RequestBody
     @Valid
-    ListNodeDto listNode) {
+    ListItemDto listNode) {
         return listNodeService.save(listNode);
     }
 }

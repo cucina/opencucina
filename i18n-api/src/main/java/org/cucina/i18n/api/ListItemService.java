@@ -2,7 +2,7 @@ package org.cucina.i18n.api;
 
 import java.util.Collection;
 
-import org.cucina.i18n.api.ListNodeDto;
+import org.cucina.i18n.api.ListItemDto;
 
 
 /**
@@ -10,7 +10,7 @@ import org.cucina.i18n.api.ListNodeDto;
  *
  * @author $Author: $
   */
-public interface ListNodeService {
+public interface ListItemService {
     /**
      * JAVADOC Method Level Comments
      *
@@ -18,7 +18,7 @@ public interface ListNodeService {
      *
      * @return JAVADOC.
      */
-    ListNodeDto load(Long id);
+    ListItemDto load(Long id);
 
     /**
      * JAVADOC Method Level Comments
@@ -27,7 +27,7 @@ public interface ListNodeService {
      *
      * @return JAVADOC.
      */
-    Collection<ListNodeDto> loadByType(String type);
+    Collection<ListItemDto> loadByType(String type);
 
     /**
      * JAVADOC Method Level Comments
@@ -36,5 +36,5 @@ public interface ListNodeService {
      *
      * @return JAVADOC.
      */
-    Long save(ListNodeDto listNodeDto);
+    Long save(ListItemDto listNodeDto);
 }

@@ -15,7 +15,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  *
  * @author vlevine
   */
-public class ListNodeDto
+public class ListItemDto
     implements Serializable {
     private static final long serialVersionUID = -940953750522936803L;
     private Boolean defaultValue;

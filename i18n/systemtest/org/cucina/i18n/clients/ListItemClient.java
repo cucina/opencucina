@@ -5,7 +5,7 @@ import java.util.Locale;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import org.cucina.i18n.api.ListNodeDto;
+import org.cucina.i18n.api.ListItemDto;
 
 import org.junit.Test;
 
@@ -25,7 +25,7 @@ public class ListItemClient {
     public void testSingle() {
         RestTemplate restTemplate = new RestTemplate();
 
-        ListNodeDto listNode = new ListNodeDto();
+        ListItemDto listNode = new ListItemDto();
 
         listNode.setType("reason");
         listNode.setApplication("application");
@@ -39,7 +39,7 @@ public class ListItemClient {
 
         System.err.println(rid);
 
-        ListNodeDto ln = restTemplate.getForObject(LN_ACCESS_URL + "/{id}", ListNodeDto.class,
+        ListItemDto ln = restTemplate.getForObject(LN_ACCESS_URL + "/{id}", ListItemDto.class,
                 rid.getBody());
 
         System.err.println(ln);

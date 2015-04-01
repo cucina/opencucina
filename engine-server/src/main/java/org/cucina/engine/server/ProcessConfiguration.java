@@ -19,7 +19,7 @@ import org.cucina.engine.definition.config.ProcessDefinitionParser;
 import org.cucina.engine.definition.config.ProcessDefinitionRegistry;
 import org.cucina.engine.definition.config.xml.DigesterModuleProcessDefinitionParser;
 import org.cucina.engine.model.Workflow;
-import org.cucina.i18n.api.ListNodeService;
+import org.cucina.i18n.api.ListItemService;
 import org.cucina.i18n.api.remote.RemoteListNodeService;
 import org.cucina.security.api.AccessFacade;
 import org.cucina.security.api.remote.RemoteAccessFacade;
@@ -86,7 +86,7 @@ public class ProcessConfiguration {
 	 * @return .
 	 */
 	@Bean
-	public ListNodeService listNodeService() {
+	public ListItemService listNodeService() {
 		return new RemoteListNodeService(listnodeUrl);
 	}
 
