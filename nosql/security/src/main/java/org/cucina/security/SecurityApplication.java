@@ -40,9 +40,7 @@ import org.cucina.security.repository.UserRepository;
  * @author vlevine
  */
 @SpringBootApplication(exclude = RemoteAccessFacade.class)
-@ComponentScan(basePackages =  {
-    "org.cucina.security", "org.cucina.core.spring"}
-)
+@ComponentScan
 public class SecurityApplication {
     /**
      * JAVADOC Method Level Comments
