@@ -41,10 +41,9 @@ public class DtoUserConverter
         }
 
         user.setEmail(dto.getEmail());
-        //        user.setId(BigInteger.valueOf(dto.getId()));
         user.setPassword(dto.getPassword());
         user.setUsername(dto.getUsername());
-
+System.err.println(user);
         return user;
     }
 }

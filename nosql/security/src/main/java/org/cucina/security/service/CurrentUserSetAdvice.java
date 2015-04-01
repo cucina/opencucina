@@ -3,8 +3,9 @@ package org.cucina.security.service;
 import java.lang.reflect.Method;
 
 import org.springframework.aop.MethodBeforeAdvice;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
+
+import org.cucina.security.model.User;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +56,7 @@ public class CurrentUserSetAdvice
             return;
         }
 
-        UserDetails user = userAccessor.getCurrentUser();
+        User user = userAccessor.getCurrentUser();
 
         if (user == null) {
             String userName = systemUserService.getUsername();

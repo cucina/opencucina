@@ -1,25 +1,28 @@
 package org.cucina.security.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import org.cucina.security.repository.UserRepository;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.util.ReflectionTestUtils;
+
 //import org.cucina.core.spring.ActiveProfilesAccessor;
 import org.cucina.security.model.User;
+import org.cucina.security.repository.UserRepository;
+
+import org.junit.After;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import org.mockito.MockitoAnnotations;
 
 
 /**
@@ -29,9 +32,10 @@ import org.cucina.security.model.User;
  * @version $Revision: $
   */
 public class UserAccessorImplTest {
-/*    @Mock
-    private ActiveProfilesAccessor activeProfilesAccessor;
-*/    private User user;
+    /*    @Mock
+        private ActiveProfilesAccessor activeProfilesAccessor;
+    */
+    private User user;
     private UserAccessorImpl accessor;
     @Mock
     private UserRepository userRepository;
@@ -49,6 +53,8 @@ public class UserAccessorImplTest {
         accessor = new UserAccessorImpl();
         //ReflectionTestUtils.setField(accessor, "activeProfilesAccessor", activeProfilesAccessor);
         ReflectionTestUtils.setField(accessor, "userRepository", userRepository);
+        user = new User();
+        user.setUsername("User");
     }
 
     /**
@@ -80,7 +86,7 @@ public class UserAccessorImplTest {
 
         when(userRepository.findByUsername("User")).thenReturn(user);
 
-        UserDetails found = accessor.getCurrentUser();
+        User found = accessor.getCurrentUser();
 
         assertNotNull("No user found", found);
         assertEquals(user, found);
@@ -120,34 +126,31 @@ public class UserAccessorImplTest {
     /**
      * JAVADOC Method Level Comments
      */
-   /* @Test
-    public void testIsSso() {
-        when(activeProfilesAccessor.getActiveProfiles()).thenReturn(new String[] {  });
-        assertFalse(accessor.isSso());
 
-        String ssoOk = "SSO-OK";
+    /* @Test
+     public void testIsSso() {
+         when(activeProfilesAccessor.getActiveProfiles()).thenReturn(new String[] {  });
+         assertFalse(accessor.isSso());
 
-        activeProfiles = new String[] { ssoOk, "blaah" };
+         String ssoOk = "SSO-OK";
 
-        when(activeProfilesAccessor.getActiveProfiles()).thenReturn(activeProfiles);
-        when(activeProfilesAccessor.getSsoProfileKey()).thenReturn(ssoOk);
+         activeProfiles = new String[] { ssoOk, "blaah" };
 
-        assertTrue(accessor.isSso());
+         when(activeProfilesAccessor.getActiveProfiles()).thenReturn(activeProfiles);
+         when(activeProfilesAccessor.getSsoProfileKey()).thenReturn(ssoOk);
 
-        when(activeProfilesAccessor.getActiveProfiles()).thenReturn(new String[] {  });
+         assertTrue(accessor.isSso());
 
-        assertFalse("Should not be sso", accessor.isSso());
+         when(activeProfilesAccessor.getActiveProfiles()).thenReturn(new String[] {  });
 
-        activeProfiles = null;
+         assertFalse("Should not be sso", accessor.isSso());
 
-        assertFalse(accessor.isSso());
-    }*/
+         activeProfiles = null;
 
+         assertFalse(accessor.isSso());
+     }*/
     private void setSecurityContext() {
         SecurityContext context = SecurityContextHolder.getContext();
-
-        user = new User();
-        user.setUsername("User");
 
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user,
                 null, null);

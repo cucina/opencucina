@@ -1,6 +1,7 @@
 package org.cucina.security.access;
 
 import java.math.BigInteger;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -17,6 +18,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
 import org.cucina.security.bean.InstanceFactory;
 import org.cucina.security.model.Dimension;
 import org.cucina.security.model.Entity;
@@ -29,18 +31,15 @@ import org.cucina.security.service.UserAccessor;
 import org.cucina.security.testassist.Bar;
 import org.cucina.security.testassist.Baz;
 import org.cucina.security.testassist.Foo;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
-
 import static org.mockito.Matchers.anyString;
 
 import org.mockito.Mock;
-
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -55,6 +54,10 @@ import org.mockito.MockitoAnnotations;
  * @version $Revision: $
   */
 public class AccessManagerImplTest {
+    private static final BigInteger ID_1 = BigInteger.valueOf(1L);
+    private static final BigInteger ID_2 = BigInteger.valueOf(2L);
+    private static final BigInteger ID_4 = BigInteger.valueOf(4L);
+    private static final BigInteger ID_11 = BigInteger.valueOf(11L);
     private AccessManagerImpl permissionManager;
     @Mock
     private AccessRegistry accessRegistry;
@@ -76,10 +79,7 @@ public class AccessManagerImplTest {
     private UserDetailsService uds;
     @Mock
     private UserRepository userRepository;
-private static final BigInteger ID_1 = BigInteger.valueOf(1l);
-private static final BigInteger ID_2 = BigInteger.valueOf(2l);
-private static final BigInteger ID_4 = BigInteger.valueOf(4l);
-private static final BigInteger ID_11 = BigInteger.valueOf(11l);
+
     /**
     * JAVADOC Method Level Comments
     */
@@ -142,7 +142,8 @@ private static final BigInteger ID_11 = BigInteger.valueOf(11l);
         suffixByType.put(Foo.class.getName(), "BLAAH");
 
         assertEquals("should be 1L as we revert to normal property name if one with suffix not found",
-            ID_1, permissionManager.getPropertyValue(Foo.class.getName(), "property", propertyValues));
+            ID_1,
+            permissionManager.getPropertyValue(Foo.class.getName(), "property", propertyValues));
     }
 
     /**

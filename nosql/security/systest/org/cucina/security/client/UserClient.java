@@ -5,11 +5,9 @@ import java.util.Collection;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-
 import org.cucina.security.api.DimensionDto;
 import org.cucina.security.api.PermissionDto;
 import org.cucina.security.api.UserDto;
-
 import org.junit.Test;
 
 
@@ -24,7 +22,8 @@ public class UserClient {
     /**
      *
      */
-    @Test
+    @SuppressWarnings("rawtypes")
+	@Test
     public void testCrud()
         throws Exception {
         RestTemplate restTemplate = new RestTemplate();
@@ -57,6 +56,7 @@ public class UserClient {
         permissions.add(pd);
         dto.setPermissions(permissions);
         dto.setId(rid.getBody());
+        dto.setPassword("passwordX");
         System.err.println(dto);
 
         rid = restTemplate.postForEntity(ACCESS_URL, dto, Long.class);
@@ -64,10 +64,10 @@ public class UserClient {
         rdto = restTemplate.getForEntity(ACCESS_URL + "/{username}", UserDto.class, "username");
 
         dto = rdto.getBody();
-        
+
         ResponseEntity<Collection> cr = restTemplate.getForEntity(ACCESS_URL, Collection.class);
         Collection coll = cr.getBody();
-        
+
         System.err.println(coll);
 
         ResponseEntity<Boolean> rb = restTemplate.getForEntity(ACCESS_URL + "/delete/{username}",

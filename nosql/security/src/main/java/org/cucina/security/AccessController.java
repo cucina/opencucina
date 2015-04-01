@@ -24,10 +24,10 @@ import org.cucina.security.service.UserAccessor;
  */
 @RestController
 @RequestMapping("/security")
-public class SecurityController
+public class AccessController
     implements AccessFacade {
     @Autowired
-    private AccessManager<?> accessManager;
+    private AccessManager accessManager;
     @Autowired
     private AccessRegistry accessRegistry;
     @Autowired

@@ -52,7 +52,7 @@ public class UserPasswordSetterImplTest {
         when(userRepository.findByUsername(USERNAME)).thenReturn(user);
         impl.setUserPassword(USERNAME, PASSWORD);
 
-        assertEquals("Should have set password", PASSWORD, user.getPassword());
+        assertEquals("Should have set password", PASSWORD, user.getPassword().getValue());
         verify(userRepository).findByUsername(USERNAME);
         verify(userRepository).save(user);
     }
@@ -81,7 +81,7 @@ public class UserPasswordSetterImplTest {
         assertEquals(true, sysUser.isCredentialsNonExpired());
         assertEquals(ADMIN_USER, sysUser.getName());
         assertEquals(ADMIN_USER, sysUser.getUsername());
-        assertEquals(ADMIN_USER, sysUser.getPassword());
+        assertEquals(ADMIN_USER, sysUser.getPassword().getValue());
         assertEquals(1, sysUser.getPermissions().size());
         assertEquals(permission, sysUser.getPermissions().iterator().next());
         verify(userRepository).findBySystem(true);

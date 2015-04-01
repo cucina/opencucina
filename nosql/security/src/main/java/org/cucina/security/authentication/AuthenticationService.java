@@ -1,6 +1,6 @@
-
 package org.cucina.security.authentication;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 
 
@@ -21,6 +21,6 @@ public interface AuthenticationService {
      *
      * @throws AuthenticationException JAVADOC.
      */
-    String authenticate(String username, String password)
+    Authentication authenticate(String username, String password)
         throws AuthenticationException;
 }

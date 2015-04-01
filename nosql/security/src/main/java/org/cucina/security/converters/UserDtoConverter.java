@@ -26,7 +26,7 @@ public class UserDtoConverter
 
         dto.setEmail(user.getEmail());
         dto.setId(user.getId().longValue());
-        dto.setPassword(user.getPassword());
+//        dto.setPassword(user.getPassword().getValue());
         dto.setUsername(user.getUsername());
 
         return dto;

@@ -1,6 +1,6 @@
 package org.cucina.security.service;
 
-import org.springframework.security.core.userdetails.UserDetails;
+import org.cucina.security.model.User;
 
 
 /**
@@ -15,7 +15,7 @@ public interface UserAccessor {
      *
      * @return JAVADOC.
      */
-    UserDetails getCurrentUser();
+    User getCurrentUser();
 
     /**
      * JAVADOC Method Level Comments
@@ -24,23 +24,23 @@ public interface UserAccessor {
      */
     boolean isSso();
 
-	/**
-	 * Inside job - for interceptor
-	 *
-	 * @param username JAVADOC.
-	 * @param token JAVADOC.
-	 *
-	 * @return JAVADOC.
-	 */
-	UserDetails forceUserToContext(String username);
+    /**
+     * Inside job - for interceptor
+     *
+     * @param username JAVADOC.
+     * @param token JAVADOC.
+     *
+     * @return JAVADOC.
+     */
+    User forceUserToContext(String username);
 
-	/**
-	 * To call from servlet directly
-	 *
-	 * @param username JAVADOC.
-	 * @param password JAVADOC.
-	 *
-	 * @return JAVADOC.
-	 */
-	UserDetails forceUserToContext(String username, String password);
+    /**
+     * To call from servlet directly
+     *
+     * @param username JAVADOC.
+     * @param password JAVADOC.
+     *
+     * @return JAVADOC.
+     */
+    User forceUserToContext(String username, String password);
 }

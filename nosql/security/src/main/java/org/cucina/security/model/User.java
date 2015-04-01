@@ -18,7 +18,6 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import org.cucina.security.validation.ValidUsername;
 
@@ -29,17 +28,15 @@ import org.cucina.security.validation.ValidUsername;
  */
 @Document
 public class User
-    extends Entity
-    implements UserDetails {
-    private static final long serialVersionUID = -9065653286223567115L;
+    extends Entity {
     private static final Collection<GrantedAuthority> DEFAULT_AUTHORITIES = Collections.singleton((GrantedAuthority) new SimpleGrantedAuthority(
                 "NONE"));
     private Collection<Permission> permissions = new HashSet<Permission>();
     private Collection<Preference> preferences = new HashSet<Preference>();
     private Locale locale;
+    private Password password;
     private String email;
     private String name;
-    private String password;
     private String username;
     private boolean accountNonExpired = true;
     private boolean accountNonLocked = true;
@@ -62,7 +59,6 @@ public class User
      *
      * @return JAVADOC.
      */
-    @Override
     public boolean isAccountNonExpired() {
         return accountNonExpired;
     }
@@ -82,7 +78,6 @@ public class User
      *
      * @return JAVADOC.
      */
-    @Override
     public boolean isAccountNonLocked() {
         return accountNonLocked;
     }
@@ -96,7 +91,6 @@ public class User
      * @return JAVADOC.
      */
     @SuppressWarnings("unchecked")
-    @Override
     @Transient
     public Collection<?extends GrantedAuthority> getAuthorities() {
         Collection<Permission> permissions = getPermissions();
@@ -133,7 +127,6 @@ public class User
      *
      * @return JAVADOC.
      */
-    @Override
     public boolean isCredentialsNonExpired() {
         return credentialsNonExpired;
     }
@@ -171,7 +164,6 @@ public class User
      *
      * @return JAVADOC.
      */
-    @Override
     public boolean isEnabled() {
         return enabled;
     }
@@ -220,8 +212,17 @@ public class User
      * @param password
      *            JAVADOC.
      */
-    public void setPassword(String password) {
+    public void setPassword(Password password) {
         this.password = password;
+    }
+
+    /**
+     *
+     *
+     * @param pass .
+     */
+    public void setPassword(String pass) {
+        this.password = new Password(pass);
     }
 
     /**
@@ -229,8 +230,7 @@ public class User
      *
      * @return password String.
      */
-    @Override
-    public String getPassword() {
+    public Password getPassword() {
         return password;
     }
 

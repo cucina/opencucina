@@ -7,11 +7,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 //import org.cucina.core.spring.ActiveProfilesAccessor;
 import org.cucina.security.api.CurrentUserAccessor;
+import org.cucina.security.model.User;
 import org.cucina.security.repository.UserRepository;
 
 import org.slf4j.Logger;
@@ -41,7 +41,7 @@ public class UserAccessorImpl
      * @return JAVADOC.
     @see org.cucina.security.service.UserAccessor#getCurrentUser()     */
     @Override
-    public UserDetails getCurrentUser() {
+    public User getCurrentUser() {
         Authentication auth = CurrentUserAccessor.currentAuthentication();
 
         if (auth == null) {
@@ -50,7 +50,7 @@ public class UserAccessorImpl
 
         Object principal = auth.getPrincipal();
 
-        if (!(principal instanceof UserDetails)) {
+        if (!(principal instanceof User)) {
             LOG.debug("Non-user found in security context: " + principal);
 
             return null;
@@ -58,7 +58,7 @@ public class UserAccessorImpl
 
         try {
             // Get the id of the currently logged-in user.
-            String name = ((UserDetails) principal).getUsername();
+            String name = ((User) principal).getUsername();
 
             // Reload the user - normally this should only involve cache access, rather than
             // a database call.
@@ -111,8 +111,8 @@ public class UserAccessorImpl
      * @return JAVADOC.
      */
     @Override
-    public UserDetails forceUserToContext(String username) {
-        UserDetails user = userRepository.findByUsername(username);
+    public User forceUserToContext(String username) {
+        User user = userRepository.findByUsername(username);
 
         putToContext(user, null);
 
@@ -128,8 +128,8 @@ public class UserAccessorImpl
      * @return JAVADOC.
      */
     @Override
-    public UserDetails forceUserToContext(String username, String password) {
-        UserDetails user = userRepository.findByUsername(username);
+    public User forceUserToContext(String username, String password) {
+        User user = userRepository.findByUsername(username);
 
         // TODO verify password
         putToContext(user, password);
@@ -137,7 +137,7 @@ public class UserAccessorImpl
         return user;
     }
 
-    private void putToContext(UserDetails user, String token) {
+    private void putToContext(User user, String token) {
         SecurityContext context;
 
         if (null == SecurityContextHolder.getContext()) {

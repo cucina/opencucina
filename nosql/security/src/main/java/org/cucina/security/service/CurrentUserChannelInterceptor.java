@@ -3,8 +3,9 @@ package org.cucina.security.service;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.ChannelInterceptorAdapter;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
+
+import org.cucina.security.model.User;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +47,7 @@ public class CurrentUserChannelInterceptor
      */
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
-        UserDetails user = userAccessor.getCurrentUser();
+        User user = userAccessor.getCurrentUser();
 
         if (user == null) {
             String userName = systemUserService.getUsername();

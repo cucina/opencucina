@@ -1,6 +1,7 @@
 package org.cucina.security.access;
 
 import java.math.BigInteger;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,6 +11,12 @@ import org.apache.commons.beanutils.BeanPropertyValueEqualsPredicate;
 import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
 import org.cucina.security.bean.InstanceFactory;
 import org.cucina.security.model.Dimension;
 import org.cucina.security.model.Entity;
@@ -18,12 +25,9 @@ import org.cucina.security.model.Privilege;
 import org.cucina.security.model.User;
 import org.cucina.security.repository.UserRepository;
 import org.cucina.security.service.UserAccessor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 
 /**
@@ -34,7 +38,7 @@ import org.springframework.util.Assert;
  */
 @Service
 public class AccessManagerImpl
-    implements AccessManager<User> {
+    implements AccessManager {
     private static final Logger LOG = LoggerFactory.getLogger(AccessManagerImpl.class);
     private AccessRegistry accessRegistry;
     private InstanceFactory instanceFactory;
@@ -93,7 +97,7 @@ public class AccessManagerImpl
         Map<String, Object> propertyValues) {
         Assert.hasText(privilegeName, "privilegeName is required!");
 
-        User user = (User) userAccessor.getCurrentUser();
+        User user = userAccessor.getCurrentUser();
 
         return userHasPermission(user, privilegeName, typeName, propertyValues);
     }
@@ -136,7 +140,7 @@ public class AccessManagerImpl
     public boolean hasPrivilege(String privilegeName) {
         Assert.hasText(privilegeName, "privilegeName is required!");
 
-        User user = (User) userAccessor.getCurrentUser();
+        User user = userAccessor.getCurrentUser();
 
         return userHasPrivilege(privilegeName, user);
     }
@@ -243,13 +247,14 @@ public class AccessManagerImpl
         } else if (object instanceof Entity) {
             objectId = ((Entity) object).getId();
         } else if (object instanceof BigInteger) {
-        	objectId = (BigInteger) object;
+            objectId = (BigInteger) object;
         }
 
         return ref.contains(objectId);
     }
 
-    private Map<String, Collection<BigInteger>> relevantDimensions(String typeName, Permission permission) {
+    private Map<String, Collection<BigInteger>> relevantDimensions(String typeName,
+        Permission permission) {
         Map<String, Collection<BigInteger>> byProperty = new HashMap<String, Collection<BigInteger>>();
 
         for (Dimension dimension : permission.getDimensions()) {
@@ -276,7 +281,8 @@ public class AccessManagerImpl
             if (CollectionUtils.find(permission.getRole().getPrivileges(),
                         new BeanPropertyValueEqualsPredicate("name", privilegeName)) != null) {
                 //found priv match
-                Map<String, Collection<BigInteger>> organisedMap = relevantDimensions(typeName, permission);
+                Map<String, Collection<BigInteger>> organisedMap = relevantDimensions(typeName,
+                        permission);
 
                 if (matches(typeName, organisedMap, propertyValues)) {
                     return true;

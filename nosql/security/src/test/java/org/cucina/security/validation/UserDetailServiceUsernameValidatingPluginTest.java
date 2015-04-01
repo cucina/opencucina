@@ -1,18 +1,18 @@
 package org.cucina.security.validation;
 
+import org.cucina.security.model.User;
+import org.cucina.security.repository.UserRepository;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
-import org.cucina.security.model.User;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.Mock;
+import static org.mockito.Mockito.when;
+
 import org.mockito.MockitoAnnotations;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 
 /**
@@ -24,9 +24,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 public class UserDetailServiceUsernameValidatingPluginTest {
     private static final String USERNAME = "username";
     private User user;
-    private UserDetailServiceUsernameValidatingPlugin plugin;
     @Mock
-    private UserDetailsService userDetailsService;
+    private UserRepository userRepository;
+    private UserRepositoryUsernameValidatingPlugin plugin;
 
     /**
      * Message is incorrect.
@@ -43,7 +43,7 @@ public class UserDetailServiceUsernameValidatingPluginTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        plugin = new UserDetailServiceUsernameValidatingPlugin(userDetailsService);
+        plugin = new UserRepositoryUsernameValidatingPlugin(userRepository);
 
         user = new User();
     }
@@ -53,11 +53,8 @@ public class UserDetailServiceUsernameValidatingPluginTest {
      */
     @Test
     public void userNotFoundException() {
-        when(userDetailsService.loadUserByUsername(USERNAME))
-            .thenThrow(new UsernameNotFoundException(USERNAME));
+        when(userRepository.findByUsername(USERNAME)).thenReturn(null);
         assertTrue("Should be found as no user", plugin.isValid(USERNAME));
-
-        verify(userDetailsService).loadUserByUsername(USERNAME);
     }
 
     /**
@@ -65,7 +62,7 @@ public class UserDetailServiceUsernameValidatingPluginTest {
      */
     @Test
     public void usernameFound() {
-        when(userDetailsService.loadUserByUsername(USERNAME)).thenReturn(user);
+        when(userRepository.findByUsername(USERNAME)).thenReturn(user);
 
         assertFalse("Should not be valid as user is found", plugin.isValid(USERNAME));
     }

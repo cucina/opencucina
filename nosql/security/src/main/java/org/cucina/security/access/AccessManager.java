@@ -1,11 +1,10 @@
-
 package org.cucina.security.access;
 
 import java.util.Collection;
 import java.util.Map;
 
 import org.cucina.security.model.Entity;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.cucina.security.model.User;
 
 
 /**
@@ -13,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
  *
  */
-public interface AccessManager<T extends UserDetails> {
+public interface AccessManager {
     /**
      * Returns true if the current user has the required admin <code>Privilege</code>
      *
@@ -58,5 +57,5 @@ public interface AccessManager<T extends UserDetails> {
      * @param filterCurrent if true then the current <code>UserDetails</code> will not be returned in the list.
      * @return
      */
-    Collection<T> listActiveUsers(String privilegeName, Boolean filterCurrent);
+    Collection<User> listActiveUsers(String privilegeName, Boolean filterCurrent);
 }
