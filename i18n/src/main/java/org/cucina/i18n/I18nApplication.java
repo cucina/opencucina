@@ -10,7 +10,6 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.ConverterRegistry;
 import org.springframework.core.convert.support.DefaultConversionService;
 
-import org.cucina.core.CompositeInstanceFactory;
 import org.cucina.core.InstanceFactory;
 import org.cucina.core.PackageBasedInstanceFactory;
 import org.cucina.core.service.ContextService;
@@ -18,7 +17,6 @@ import org.cucina.core.service.ThreadLocalContextService;
 import org.cucina.core.spring.ContextPrinter;
 import org.cucina.core.spring.SingletonBeanFactory;
 
-import org.cucina.i18n.api.MessageDto;
 import org.cucina.i18n.converter.DtoToListItemConverter;
 import org.cucina.i18n.converter.ListItemToDtoConverter;
 import org.cucina.i18n.converter.MessageConverter;
@@ -73,9 +71,7 @@ public class I18nApplication {
      */
     @Bean
     public InstanceFactory instanceFactory() {
-        return new CompositeInstanceFactory(new PackageBasedInstanceFactory(
-                ClassUtils.getPackageName(Message.class)),
-            new PackageBasedInstanceFactory(ClassUtils.getPackageName(MessageDto.class)));
+        return new PackageBasedInstanceFactory(ClassUtils.getPackageName(Message.class));
     }
 
     /**
