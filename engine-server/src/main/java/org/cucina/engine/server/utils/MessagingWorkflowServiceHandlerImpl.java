@@ -165,7 +165,7 @@ public class MessagingWorkflowServiceHandlerImpl
                 }
 
                 // TODO convert we.getAttachment() to an Attachment
-                processSupportService.makeTransition(we.getEntities(), we.getType(),
+                processSupportService.makeBulkTransition(we.getEntities(), we.getType(),
                     we.getTransitionId(), we.getComment(), we.getApprovedAs(), we.getAssignedTo(),
                     we.getExtraParams(), reasons.iterator().next(), null);
             }

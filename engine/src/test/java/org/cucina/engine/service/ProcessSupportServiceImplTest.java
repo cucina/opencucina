@@ -267,7 +267,7 @@ public class ProcessSupportServiceImplTest {
         when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Long[].class)))
             .thenReturn(result);
         service.setTokenRepository(tokenRepository);
-        service.makeTransition(map, "Foo", "transitionId", "comment", null, null, null, null, null);
+        service.makeBulkTransition(map, "Foo", "transitionId", "comment", null, null, null, null, null);
     }
 
     /**
@@ -476,7 +476,7 @@ public class ProcessSupportServiceImplTest {
 
         when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Long[].class)))
             .thenReturn(null);
-        service.makeTransition(map, "Foo", "transitionId", null, null, null, null, null, null);
+        service.makeBulkTransition(map, "Foo", "transitionId", null, null, null, null, null, null);
     }
 
     /**
@@ -563,7 +563,7 @@ public class ProcessSupportServiceImplTest {
         when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Long[].class)))
             .thenReturn(result);
         tokenRepository.save(token);
-        service.makeTransition(map, "Foo", "transitionId", comments, null, null, null, null,
+        service.makeBulkTransition(map, "Foo", "transitionId", comments, null, null, null, null,
             attachment);
     }
 }

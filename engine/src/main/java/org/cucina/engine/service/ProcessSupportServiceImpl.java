@@ -373,7 +373,7 @@ public class ProcessSupportServiceImpl
      */
     @Override
     @Transactional
-    public void makeTransition(Map<Long, Integer> entities, String applicationType,
+    public void makeBulkTransition(Map<Long, Integer> entities, String applicationType,
         String transitionId, String comment, String approvedAs, String assignedTo,
         Map<String, Object> extraParams, ListItemDto reason, Attachment attachment) {
         try {
