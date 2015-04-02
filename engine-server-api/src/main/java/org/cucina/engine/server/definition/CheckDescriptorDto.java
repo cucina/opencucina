@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.cucina.engine.ExecutionContext;
-import org.cucina.engine.operations.AbstractOperation;
 
 
 /**
@@ -16,9 +14,8 @@ import org.cucina.engine.operations.AbstractOperation;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
-public class OperationDescriptor
-    extends AbstractOperation
+ */
+public class CheckDescriptorDto
     implements WorkflowElementDescriptor, Map<String, Object> {
     private HashMap<String, Object> properties = new HashMap<String, Object>();
 
@@ -81,10 +78,10 @@ public class OperationDescriptor
     }
 
     /**
-    * JAVADOC Method Level Comments
-    *
-    * @return JAVADOC.
-    */
+     * JAVADOC Method Level Comments
+     *
+     * @return JAVADOC.
+     */
     public boolean isEmpty() {
         return properties.isEmpty();
     }
@@ -118,7 +115,8 @@ public class OperationDescriptor
     /**
      * JAVADOC Method Level Comments
      *
-     * @param key JAVADOC.
+     * @param key
+     *            JAVADOC.
      *
      * @return JAVADOC.
      */
@@ -129,7 +127,8 @@ public class OperationDescriptor
     /**
      * JAVADOC Method Level Comments
      *
-     * @param value JAVADOC.
+     * @param value
+     *            JAVADOC.
      *
      * @return JAVADOC.
      */
@@ -142,24 +141,15 @@ public class OperationDescriptor
      *
      * @return JAVADOC.
      */
-    public Set<Entry<String, Object>> entrySet() {
+    public Set<java.util.Map.Entry<String, Object>> entrySet() {
         return properties.entrySet();
     }
 
     /**
      * JAVADOC Method Level Comments
      *
-     * @param executionContext JAVADOC.
-     */
-    @Override
-    public void execute(ExecutionContext executionContext) {
-        throw new IllegalArgumentException("Execute is not implemented in ActionDescriptor");
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param key JAVADOC.
+     * @param key
+     *            JAVADOC.
      *
      * @return JAVADOC.
      */
@@ -179,8 +169,10 @@ public class OperationDescriptor
     /**
      * JAVADOC Method Level Comments
      *
-     * @param key JAVADOC.
-     * @param value JAVADOC.
+     * @param key
+     *            JAVADOC.
+     * @param value
+     *            JAVADOC.
      *
      * @return JAVADOC.
      */
@@ -191,7 +183,8 @@ public class OperationDescriptor
     /**
      * JAVADOC Method Level Comments
      *
-     * @param m JAVADOC.
+     * @param m
+     *            JAVADOC.
      */
     public void putAll(Map<?extends String, ?extends Object> m) {
         properties.putAll(m);
@@ -200,7 +193,8 @@ public class OperationDescriptor
     /**
      * JAVADOC Method Level Comments
      *
-     * @param key JAVADOC.
+     * @param key
+     *            JAVADOC.
      *
      * @return JAVADOC.
      */

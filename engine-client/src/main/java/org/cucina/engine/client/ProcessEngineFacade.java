@@ -1,4 +1,4 @@
-package org.engine.client;
+package org.cucina.engine.client;
 
 import java.util.Collection;
 import java.util.List;

@@ -8,7 +8,7 @@
 		<artifactId>cucina</artifactId>
 		<version>0.1</version>
 	</parent>
-	<artifactId>cucina-engine-server-api</artifactId>
+	<artifactId>engine-server-api</artifactId>
 	<name>engine-server-api</name>
 	<url>http://maven.apache.org</url>
 	<properties>
@@ -25,12 +25,12 @@
 			<artifactId>cucina-core</artifactId>
 			<version>0.1</version>
 		</dependency>
-		<dependency>
+<!-- 		<dependency>
 			<groupId>cucina</groupId>
 			<artifactId>cucina-engine</artifactId>
 			<version>0.1</version>
 		</dependency>
-		<dependency>
+ -->		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jms</artifactId>
 		</dependency>

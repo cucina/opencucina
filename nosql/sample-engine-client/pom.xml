@@ -4,12 +4,13 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>cucina</groupId>
-		<artifactId>cucina</artifactId>
+		<groupId>nosql</groupId>
+		<artifactId>nosql</artifactId>
 		<version>0.1</version>
 	</parent>
-	<artifactId>engine-server</artifactId>
-	<name>engine-server</name>
+	<artifactId>sample-engine-client</artifactId>
+	<name>sample-engine-client</name>
+	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -20,26 +21,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>cucina</groupId>
-			<artifactId>cucina-engine</artifactId>
-			<version>0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>cucina</groupId>
-			<artifactId>cucina-core</artifactId>
-			<version>0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>cucina</groupId>
-			<artifactId>cucina-i18n-api</artifactId>
-			<version>0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>cucina</groupId>
-			<artifactId>engine-server-api</artifactId>
-			<version>0.1</version>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-integration</artifactId>
 		</dependency>
@@ -48,25 +29,18 @@
 			<artifactId>spring-integration-jms</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-commons</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.activemq</groupId>
 			<artifactId>activemq-broker</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.hsqldb</groupId>
-			<artifactId>hsqldb</artifactId>
-			<scope>test</scope>
+			<groupId>cucina</groupId>
+			<artifactId>engine-server-api</artifactId>
+			<version>0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>cucina</groupId>
+			<artifactId>engine-client</artifactId>
+			<version>0.1</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -75,7 +49,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>org.cucina.engine.server.EngineApplication</mainClass>
+					<mainClass>org.cucina.sample.engine.client.ClientApplication</mainClass>
 				</configuration>
 				<executions>
 					<execution>

@@ -5,33 +5,15 @@ import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import org.cucina.core.model.PersistableEntity;
-import org.cucina.core.model.projection.ExternalProjectionColumn;
-import org.cucina.core.model.projection.ExternalProjectionColumns;
-import org.cucina.core.model.projection.ProjectionColumn;
-import org.cucina.engine.model.HistoryRecord;
-import org.cucina.search.model.projection.Search;
 
 
 /**
- * JAVADOC for Class Level
  *
- * @author $Author: $
- * @version $Revision: $
- */
-@ExternalProjectionColumns(fieldName = HistoryRecord.ALIAS, clazz = HistoryRecord.class, value =  {
-    @ExternalProjectionColumn(columnName = "lastUpdatedDate", property = "modifiedDate")
-    , @ExternalProjectionColumn(columnName = "tokenStatus", property = "status")
-    , @ExternalProjectionColumn(columnName = "approvedBy", property = "approvedBy")
-    , @ExternalProjectionColumn(columnName = "comments", property = "comments")
-    , @ExternalProjectionColumn(columnName = "transitionedBy", property = "modifiedBy")
-    , @ExternalProjectionColumn(columnName = "assignedTo", property = "assignedTo")
-    , @ExternalProjectionColumn(columnName = "domainObjectType", property = "token.domainObjectType", groups = Search.class)
-    , @ExternalProjectionColumn(columnName = "version", property = "token.version", groups = Search.class)
-    , @ExternalProjectionColumn(columnName = "workflowDefinitionId", property = "token.workflowDefinitionId", groups = Search.class)
-    , @ExternalProjectionColumn(columnName = "placeId", property = "token.placeId", groups = Search.class)
-}
-)
+ *
+ * @author vlevine
+  */
 @Cacheable
 @Entity
 public class EntityDescriptor
@@ -90,7 +72,6 @@ public class EntityDescriptor
      * @return applicationName String.
      */
     @Basic(optional = false)
-    @ProjectionColumn
     public String getApplicationName() {
         return applicationName;
     }
@@ -110,7 +91,6 @@ public class EntityDescriptor
      *
      * @return JAVADOC.
      */
-    @ProjectionColumn
     @Basic(optional = false)
     public String getApplicationType() {
         return applicationType;
@@ -131,7 +111,6 @@ public class EntityDescriptor
      *
      * @return JAVADOC.
      */
-    @ProjectionColumn
     public Long getLocalId() {
         return localId;
     }

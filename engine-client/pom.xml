@@ -22,7 +22,7 @@
 		</dependency>
 		<dependency>
 			<groupId>cucina</groupId>
-			<artifactId>cucina-engine-server-api</artifactId>
+			<artifactId>engine-server-api</artifactId>
 			<version>0.1</version>
 		</dependency>
 	</dependencies>

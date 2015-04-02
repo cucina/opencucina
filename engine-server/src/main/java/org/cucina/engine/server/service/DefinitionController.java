@@ -1,4 +1,4 @@
-package org.cucina.engine.server.web.service;
+package org.cucina.engine.server.service;
 
 import java.util.Collection;
 
@@ -20,7 +20,7 @@ import org.cucina.engine.service.DefinitionService;
   */
 @Controller
 @RequestMapping(value = "/workflow")
-public class RestfulDefinitionController {
+public class DefinitionController {
     @Autowired
     private DefinitionService definitionService;
 

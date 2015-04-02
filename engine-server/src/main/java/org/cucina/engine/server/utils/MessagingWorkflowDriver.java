@@ -5,23 +5,29 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.integration.gateway.MessagingGatewaySupport;
+import org.springframework.util.Assert;
+
 import org.cucina.engine.ExecutionContext;
 import org.cucina.engine.ProcessDriver;
 import org.cucina.engine.definition.Check;
 import org.cucina.engine.definition.Operation;
 import org.cucina.engine.server.communication.ConversationContext;
 import org.cucina.engine.server.definition.CheckDescriptor;
+import org.cucina.engine.server.definition.CheckDescriptorDto;
 import org.cucina.engine.server.definition.OperationDescriptor;
+import org.cucina.engine.server.definition.OperationDescriptorDto;
 import org.cucina.engine.server.event.BooleanEvent;
 import org.cucina.engine.server.event.CallbackEvent;
 import org.cucina.engine.server.event.EngineEvent;
 import org.cucina.engine.server.event.RollbackEvent;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
-import org.springframework.integration.gateway.MessagingGatewaySupport;
-import org.springframework.util.Assert;
 
 
 /**
@@ -35,6 +41,7 @@ public class MessagingWorkflowDriver
     implements ProcessDriver {
     private static final Logger LOG = LoggerFactory.getLogger(MessagingWorkflowDriver.class);
     private ConversationContext conversationContext;
+    private ConversionService conversionService;
     private ProcessDriver localExecutor;
 
     /**
@@ -45,11 +52,13 @@ public class MessagingWorkflowDriver
      * @param applicationName JAVADOC.
      */
     public MessagingWorkflowDriver(ConversationContext conversationContext,
-        ProcessDriver localExecutor) {
+        ProcessDriver localExecutor, ConversionService conversionService) {
         Assert.notNull(conversationContext, "conversationContext is null");
         this.conversationContext = conversationContext;
         Assert.notNull(localExecutor, "localExecutor is null");
         this.localExecutor = localExecutor;
+        Assert.notNull(conversionService, "conversionService is null");
+        this.conversionService = conversionService;
     }
 
     /**
@@ -68,8 +77,8 @@ public class MessagingWorkflowDriver
                 LOG.debug("Action:" + action);
             }
 
-            if (action instanceof OperationDescriptor) {
-                OperationDescriptor wed = (OperationDescriptor) action;
+            if (action instanceof OperationDescriptorDto) {
+                OperationDescriptorDto wed = (OperationDescriptorDto) action;
                 BeanWrapper beanWrapper = new BeanWrapperImpl(executionContext.getToken()
                                                                               .getDomainObject());
 
@@ -121,8 +130,8 @@ public class MessagingWorkflowDriver
             LOG.debug("Condition:" + condition);
         }
 
-        if (condition instanceof CheckDescriptor) {
-            CheckDescriptor ced = (CheckDescriptor) condition;
+        if (condition instanceof CheckDescriptorDto) {
+            CheckDescriptorDto ced = (CheckDescriptorDto) condition;
 
             BeanWrapper beanWrapper = new BeanWrapperImpl(executionContext.getToken()
                                                                           .getDomainObject());
@@ -163,19 +172,20 @@ public class MessagingWorkflowDriver
         return false;
     }
 
-    private void executeLocal(OperationDescriptor action, ExecutionContext context) {
+    private void executeLocal(OperationDescriptorDto operation, ExecutionContext context) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Local execution");
         }
 
-        localExecutor.execute(Collections.<Operation>singletonList(action), context);
+        localExecutor.execute(Collections.<Operation>singletonList(conversionService.convert(
+                    operation, OperationDescriptor.class)), context);
     }
 
-    private boolean testLocal(CheckDescriptor condition, ExecutionContext context) {
+    private boolean testLocal(CheckDescriptorDto check, ExecutionContext context) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Local test");
         }
 
-        return localExecutor.test(condition, context);
+        return localExecutor.test(conversionService.convert(check, CheckDescriptor.class), context);
     }
 }

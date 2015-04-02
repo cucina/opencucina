@@ -1,4 +1,4 @@
-package org.cucina.engine.server.web.service;
+package org.cucina.engine.server.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,8 +28,8 @@ import org.slf4j.LoggerFactory;
  */
 @Controller
 @RequestMapping(value = "/workflowInstance")
-public class RestfulInstanceController {
-    private static final Logger LOG = LoggerFactory.getLogger(RestfulInstanceController.class);
+public class InstanceController {
+    private static final Logger LOG = LoggerFactory.getLogger(InstanceController.class);
     private static final String[] SUMMARY_COLUMNS = {
             "workflowDefinitionId", "placeId", "domainObjectType", "domainObjectId",
             "domainObject.applicationName"
@@ -43,7 +43,7 @@ public class RestfulInstanceController {
      *            JAVADOC.
      */
     @Autowired
-    public RestfulInstanceController(ProcessTokenRepository entityDescriptorRepository) {
+    public InstanceController(ProcessTokenRepository entityDescriptorRepository) {
         Assert.notNull(entityDescriptorRepository, "entityDescriptorRepository is null");
         this.processTokenRepository = entityDescriptorRepository;
     }

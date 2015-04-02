@@ -4,12 +4,6 @@ import java.util.Collection;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.Message;
-import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
-
 import org.cucina.engine.definition.Token;
 import org.cucina.engine.server.communication.ConversationContext;
 import org.cucina.engine.server.event.CommitEvent;
@@ -30,12 +24,14 @@ import org.cucina.engine.server.event.workflow.ValueEvent;
 import org.cucina.engine.server.event.workflow.WorkflowEvent;
 import org.cucina.engine.server.model.EntityDescriptor;
 import org.cucina.engine.service.ProcessSupportService;
-
 import org.cucina.i18n.api.ListItemDto;
 import org.cucina.i18n.api.ListItemService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.Message;
+import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 
 /**

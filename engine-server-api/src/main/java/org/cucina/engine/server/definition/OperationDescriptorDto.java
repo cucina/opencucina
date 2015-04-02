@@ -1,4 +1,3 @@
-
 package org.cucina.engine.server.definition;
 
 import java.util.Collection;
@@ -7,25 +6,22 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.cucina.engine.ExecutionContext;
-import org.cucina.engine.checks.AbstractCheck;
 
 
 /**
  * JAVADOC for Class Level
  *
- * @author $Author: $
- * @version $Revision: $
+ * @author vlevine
  */
-public class CheckDescriptor
-    extends AbstractCheck
+public class OperationDescriptorDto
     implements WorkflowElementDescriptor, Map<String, Object> {
     private HashMap<String, Object> properties = new HashMap<String, Object>();
 
     /**
      * JAVADOC Method Level Comments
      *
-     * @param application JAVADOC.
+     * @param application
+     *            JAVADOC.
      */
     public void setApplication(String application) {
         properties.put("application", application);
@@ -41,11 +37,11 @@ public class CheckDescriptor
     }
 
     /**
-    * JAVADOC Method Level Comments
-    *
-    * @param domainId
-    *            JAVADOC.
-    */
+     * JAVADOC Method Level Comments
+     *
+     * @param domainId
+     *            JAVADOC.
+     */
     public void setDomainId(Object domainId) {
         properties.put("domainId", domainId);
     }
@@ -109,6 +105,25 @@ public class CheckDescriptor
     }
 
     /**
+     * Set properties
+     *
+     * @param properties
+     *            HashMap<String, Object>
+     */
+    public void setProperties(HashMap<String, Object> properties) {
+        this.properties = properties;
+    }
+
+    /**
+     * Get properties
+     *
+     * @return HashMap<String, Object>
+     */
+    public HashMap<String, Object> getProperties() {
+        return properties;
+    }
+
+    /**
      * JAVADOC Method Level Comments
      */
     public void clear() {
@@ -144,7 +159,7 @@ public class CheckDescriptor
      *
      * @return JAVADOC.
      */
-    public Set<java.util.Map.Entry<String, Object>> entrySet() {
+    public Set<Entry<String, Object>> entrySet() {
         return properties.entrySet();
     }
 
@@ -215,19 +230,6 @@ public class CheckDescriptor
     }
 
     /**
-     * JAVADOC Method Level Comments
-     *
-     * @param executionContext
-     *            JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    public boolean test(ExecutionContext executionContext) {
-        throw new IllegalArgumentException("Test is not implemented in ConditionDescriptor");
-    }
-
-    /**
      * Default toString implementation
      *
      * @return This object as String.
@@ -245,22 +247,4 @@ public class CheckDescriptor
     public Collection<Object> values() {
         return properties.values();
     }
-
-	/**
-	 * Get properties
-	 * 
-	 * @return HashMap<String, Object>
-	 */
-	public HashMap<String, Object> getProperties() {
-		return properties;
-	}
-
-	/**
-	 * Set properties
-	 * 
-	 * @param properties HashMap<String, Object>
-	 */
-	public void setProperties(HashMap<String, Object> properties) {
-		this.properties = properties;
-	}
 }

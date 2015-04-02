@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 import java.util.Date;
 
-import org.cucina.i18n.api.TranslatedColumn;
-
 
 /**
  *
@@ -20,7 +18,6 @@ public class HistoryRecordDto
     private String assignedTo;
     private String comments;
     private String modifiedBy;
-    @TranslatedColumn
     private String reason;
     private String status;
 

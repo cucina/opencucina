@@ -6,35 +6,35 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 /**
  * Common properties holder
  *
- * @author $Author: $
- * @version $Revision: $
-  */
+ * @author vlevine
+ */
 public abstract class AbstractProcessElement
     implements ProcessElement {
     /**
-    * Stores the description for this <code>NetworkElement</code>.
-    */
-    private String description;
-
-    /**
-     * Stores the ID for this <code>NetworkElement</code>.
-     */
-    private String id;
-
-    /**
-     * Stores the {@link ProcessDefinition} for this <code>NetworkElement</code>.
+     * Stores the {@link ProcessDefinition} for this <code>ProcessElement</code>
+     * .
      */
     private ProcessDefinition processDefinition;
 
     /**
-     * Sets the description for this <code>NetworkElement</code>.
+     * Stores the description for this <code>ProcessElement</code>.
+     */
+    private String description;
+
+    /**
+     * Stores the ID for this <code>ProcessElement</code>.
+     */
+    private String id;
+
+    /**
+     * Sets the description for this <code>ProcessElement</code>.
      */
     public void setDescription(String description) {
         this.description = description;
     }
 
     /**
-     * Gets the description for this <code>NetworkElement</code>.
+     * Gets the description for this <code>ProcessElement</code>.
      */
     @Override
     public String getDescription() {
@@ -42,14 +42,14 @@ public abstract class AbstractProcessElement
     }
 
     /**
-     * Sets the ID for this <code>NetworkElement</code>.
+     * Sets the ID for this <code>ProcessElement</code>.
      */
     public void setId(String id) {
         this.id = id;
     }
 
     /**
-     * Gets the ID for this <code>NetworkElement</code>.
+     * Gets the ID for this <code>ProcessElement</code>.
      */
     @Override
     public String getId() {
@@ -57,7 +57,8 @@ public abstract class AbstractProcessElement
     }
 
     /**
-     * Sets the {@link ProcessDefinition} that contains this <code>NetworkElement</code>.
+     * Sets the {@link ProcessDefinition} that contains this
+     * <code>ProcessElement</code>.
      */
     @Override
     public void setProcessDefinition(ProcessDefinition processDefinition) {
@@ -65,7 +66,8 @@ public abstract class AbstractProcessElement
     }
 
     /**
-     * Gets the {@link ProcessDefinition} that contains this <code>NetworkElement</code>.
+     * Gets the {@link ProcessDefinition} that contains this
+     * <code>ProcessElement</code>.
      */
     @Override
     public ProcessDefinition getProcessDefinition() {
@@ -73,7 +75,7 @@ public abstract class AbstractProcessElement
     }
 
     /**
-     * Returns String including all elements of the Workflow definition
+     *
      * @return String
      */
     public String toLongString() {
@@ -81,7 +83,7 @@ public abstract class AbstractProcessElement
     }
 
     /**
-     * JAVADOC.
+     *
      *
      * @return JAVADOC.
      */
