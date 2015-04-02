@@ -38,8 +38,8 @@ public class PasswordWriteConverter
     public DBObject convert(Password source) {
         DBObject dbo = new BasicDBObject();
 
-        dbo.put("encrypted", source.getValue());
-System.err.println(dbo);
+        dbo.put("encrypted", encryptor.encrypt(source.getValue()));
+
         return dbo;
     }
 }

@@ -45,7 +45,7 @@ public class UserController {
      *
      * @return .
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/delete/{username}")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{username}")
     public boolean delete(@PathVariable
     String username) {
     	LOG.debug("Delete '" + username + "'");

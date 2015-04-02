@@ -1,7 +1,7 @@
-
 package org.cucina.security.crypto;
 
 import java.io.UnsupportedEncodingException;
+
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 
@@ -10,11 +10,15 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.crypto.codec.Hex;
 import org.springframework.security.crypto.codec.Utf8;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import reactor.util.Assert;
 
 
 /**
@@ -26,7 +30,7 @@ import org.springframework.security.crypto.codec.Utf8;
 public class AESEncryptor
     implements Encryptor, InitializingBean {
     private static final String AES = "AES";
-//    private static final String AES = "AES/CBC/PKCS5Padding";
+    private static final String AES_PAD = "AES/CBC/PKCS5Padding";
     private static final int ITERATIONS = 1000;
     private static final String HASHING_ALGO = "SHA-256";
     private static final Logger LOG = LoggerFactory.getLogger(AESEncryptor.class);
@@ -51,19 +55,14 @@ public class AESEncryptor
     }
 
     /**
-     * JAVADOC Method Level Comments
      *
-     * @throws Exception JAVADOC.
+     *
+     * @throws Exception .
      */
     @Override
     public void afterPropertiesSet()
         throws Exception {
-        byte[] bPassword = password.getBytes("UTF-8");
-        byte[] salt = SALT.getBytes("UTF-8");
-
-        key = generateKey(bPassword, salt);
-        enc = Cipher.getInstance(AES);
-        dec = Cipher.getInstance(AES);
+        init();
     }
 
     /**
@@ -78,6 +77,14 @@ public class AESEncryptor
     public String decrypt(String text) {
         if (StringUtils.isEmpty(text)) {
             return text;
+        }
+
+        if (enc == null) {
+            try {
+                init();
+            } catch (Exception e) {
+                LOG.error("Oops", e);
+            }
         }
 
         synchronized (dec) {
@@ -106,6 +113,14 @@ public class AESEncryptor
     public String encrypt(String text) {
         if (StringUtils.isEmpty(text)) {
             return text;
+        }
+
+        if (enc == null) {
+            try {
+                init();
+            } catch (Exception e) {
+                LOG.error("Oops", e);
+            }
         }
 
         synchronized (enc) {
@@ -162,5 +177,28 @@ public class AESEncryptor
         }
 
         return aesKey;
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @throws Exception JAVADOC.
+     */
+    private void init()
+        throws Exception {
+        byte[] bPassword = password.getBytes("UTF-8");
+        byte[] salt = SALT.getBytes("UTF-8");
+
+        key = generateKey(bPassword, salt);
+        enc = Cipher.getInstance(AES);
+
+        if (enc == null) {
+            LOG.debug("enc is null for " + AES);
+            enc = Cipher.getInstance(AES_PAD);
+            Assert.notNull(enc, "enc is null for " + AES + " and " + AES_PAD);
+            dec = Cipher.getInstance(AES_PAD);
+        } else {
+            dec = Cipher.getInstance(AES);
+        }
     }
 }

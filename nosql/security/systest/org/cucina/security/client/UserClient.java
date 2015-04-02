@@ -10,69 +10,67 @@ import org.cucina.security.api.PermissionDto;
 import org.cucina.security.api.UserDto;
 import org.junit.Test;
 
-
 /**
  *
  *
  * @author vlevine
-  */
+ */
 public class UserClient {
-    private static final String ACCESS_URL = "http://localhost:8080/user";
+	private static final String ACCESS_URL = "http://localhost:8080/user";
 
-    /**
+	/**
      *
      */
-    @SuppressWarnings("rawtypes")
+	@SuppressWarnings("rawtypes")
 	@Test
-    public void testCrud()
-        throws Exception {
-        RestTemplate restTemplate = new RestTemplate();
-        UserDto userDto = new UserDto();
+	public void testCrud() throws Exception {
+		RestTemplate restTemplate = new RestTemplate();
+		UserDto userDto = new UserDto();
 
-        userDto.setEmail("email@email.com");
-        userDto.setPassword("password");
-        userDto.setUsername("username");
+		userDto.setEmail("email@email.com");
+		userDto.setPassword("password");
+		userDto.setUsername("username");
 
-        ResponseEntity<Long> rid = restTemplate.postForEntity(ACCESS_URL, userDto, Long.class);
+		ResponseEntity<Long> rid = restTemplate.postForEntity(ACCESS_URL,
+				userDto, Long.class);
 
-        System.err.println(rid);
+		System.err.println(rid);
 
-        ResponseEntity<UserDto> rdto = restTemplate.getForEntity(ACCESS_URL + "/{username}",
-                UserDto.class, "username");
+		ResponseEntity<UserDto> rdto = restTemplate.getForEntity(ACCESS_URL
+				+ "/{username}", UserDto.class, "username");
 
-        UserDto dto = rdto.getBody();
-        Collection<PermissionDto> permissions = new ArrayList<PermissionDto>();
-        PermissionDto pd = new PermissionDto();
+		UserDto dto = rdto.getBody();
+		Collection<PermissionDto> permissions = new ArrayList<PermissionDto>();
+		PermissionDto pd = new PermissionDto();
 
-        pd.setName("perm1");
+		pd.setName("perm1");
 
-        Collection<DimensionDto> dimensions = new ArrayList<DimensionDto>();
-        DimensionDto dd = new DimensionDto();
+		Collection<DimensionDto> dimensions = new ArrayList<DimensionDto>();
+		DimensionDto dd = new DimensionDto();
 
-        dd.setDomainObjectId(20L);
-        dd.setPropertyName("propertyName");
-        dimensions.add(dd);
-        pd.setDimensions(dimensions);
-        permissions.add(pd);
-        dto.setPermissions(permissions);
-        dto.setId(rid.getBody());
-        dto.setPassword("passwordX");
-        System.err.println(dto);
+		dd.setDomainObjectId(20L);
+		dd.setPropertyName("propertyName");
+		dimensions.add(dd);
+		pd.setDimensions(dimensions);
+		permissions.add(pd);
+		dto.setPermissions(permissions);
+		dto.setId(rid.getBody());
+		dto.setPassword("passwordX");
+		System.err.println(dto);
 
-        rid = restTemplate.postForEntity(ACCESS_URL, dto, Long.class);
-        System.err.println(rid);
-        rdto = restTemplate.getForEntity(ACCESS_URL + "/{username}", UserDto.class, "username");
+		rid = restTemplate.postForEntity(ACCESS_URL, dto, Long.class);
+		System.err.println(rid);
+		rdto = restTemplate.getForEntity(ACCESS_URL + "/{username}",
+				UserDto.class, "username");
 
-        dto = rdto.getBody();
+		dto = rdto.getBody();
 
-        ResponseEntity<Collection> cr = restTemplate.getForEntity(ACCESS_URL, Collection.class);
-        Collection coll = cr.getBody();
+		ResponseEntity<Collection> cr = restTemplate.getForEntity(ACCESS_URL,
+				Collection.class);
+		Collection coll = cr.getBody();
 
-        System.err.println(coll);
+		System.err.println(coll);
 
-        ResponseEntity<Boolean> rb = restTemplate.getForEntity(ACCESS_URL + "/delete/{username}",
-                Boolean.class, "username");
-
-        System.err.println(rb.getBody());
-    }
+		restTemplate.delete(ACCESS_URL + "/{username}", "username");
+	}
 }

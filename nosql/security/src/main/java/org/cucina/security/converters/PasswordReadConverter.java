@@ -35,8 +35,6 @@ public class PasswordReadConverter
      */
     @Override
     public Password convert(DBObject source) {
-        Password p = new Password((String) source.get("encrypted"));
-
-        return p;
+        return new Password(encryptor.decrypt((String) source.get("encrypted")));
     }
 }

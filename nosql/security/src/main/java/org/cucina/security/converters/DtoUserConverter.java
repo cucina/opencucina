@@ -43,7 +43,7 @@ public class DtoUserConverter
         user.setEmail(dto.getEmail());
         user.setPassword(dto.getPassword());
         user.setUsername(dto.getUsername());
-System.err.println(user);
+
         return user;
     }
 }

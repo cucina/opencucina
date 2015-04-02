@@ -1,5 +1,9 @@
 package org.cucina.security;
 
+import java.io.UnsupportedEncodingException;
+
+import java.security.GeneralSecurityException;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -29,8 +33,8 @@ import org.cucina.security.converters.PasswordReadConverter;
 import org.cucina.security.converters.PasswordWriteConverter;
 import org.cucina.security.converters.PermissionDtoConverter;
 import org.cucina.security.converters.UserDtoConverter;
+import org.cucina.security.crypto.AESEncryptor;
 import org.cucina.security.crypto.Encryptor;
-import org.cucina.security.crypto.SpringEncryptor;
 import org.cucina.security.repository.UserRepository;
 
 
@@ -117,9 +121,11 @@ public class SecurityApplication {
             return "security";
         }
 
-        private CustomConversions conversions() {
-            // TODO parameterise 
-            Encryptor encryptor = new SpringEncryptor("CuCiNa");
+        private CustomConversions conversions()
+            throws UnsupportedEncodingException, GeneralSecurityException {
+            // TODO parameterise seed
+            Encryptor encryptor = new AESEncryptor("CuCiNa");
+
             List<Converter<?, ?>> converters = new ArrayList<Converter<?, ?>>();
 
             converters.add(new PasswordWriteConverter(encryptor));
