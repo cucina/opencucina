@@ -11,11 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 
 
 /**
- * JAVADOC for Class Level
- *
- * @author $Author: $
- * @version $Revision: $
-  */
+ * @deprecated
+ */
 @SuppressWarnings("rawtypes")
 @Converter
 public class CsvCollectionConverter
@@ -23,37 +20,8 @@ public class CsvCollectionConverter
     /**
      * JAVADOC Method Level Comments
      *
-     * @param string
+     * @param val
      *            JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    public static Collection<String> fromString(String string) {
-        String[] vals = StringUtils.split(string, ", ");
-
-        return Arrays.asList(vals);
-    }
-
-    /**
-    * JAVADOC Method Level Comments
-    *
-    * @param coll
-    *            JAVADOC.
-    *
-    * @return JAVADOC.
-    */
-    public static String toString(Collection<String> coll) {
-        if (CollectionUtils.isEmpty(coll)) {
-            return null;
-        }
-
-        return StringUtils.join(coll, ',');
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param val JAVADOC.
      *
      * @return JAVADOC.
      */
@@ -70,7 +38,8 @@ public class CsvCollectionConverter
     /**
      * JAVADOC Method Level Comments
      *
-     * @param val JAVADOC.
+     * @param val
+     *            JAVADOC.
      *
      * @return JAVADOC.
      */
@@ -81,5 +50,35 @@ public class CsvCollectionConverter
         }
 
         return fromString(val);
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @param string
+     *            JAVADOC.
+     *
+     * @return JAVADOC.
+     */
+    public static Collection<String> fromString(String string) {
+        String[] vals = StringUtils.split(string, ", ");
+
+        return Arrays.asList(vals);
+    }
+
+    /**
+     * JAVADOC Method Level Comments
+     *
+     * @param coll
+     *            JAVADOC.
+     *
+     * @return JAVADOC.
+     */
+    public static String toString(Collection<String> coll) {
+        if (CollectionUtils.isEmpty(coll)) {
+            return null;
+        }
+
+        return StringUtils.join(coll, ',');
     }
 }

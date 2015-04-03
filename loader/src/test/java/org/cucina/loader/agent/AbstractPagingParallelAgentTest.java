@@ -16,9 +16,9 @@ import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
-import org.cucina.core.concurrent.CompletionServiceFactory;
 import org.cucina.core.service.ContextService;
 import org.cucina.core.service.ThreadLocalContextService;
+import org.cucina.loader.concurrent.CompletionServiceFactory;
 import org.cucina.loader.processor.Processor;
 import org.junit.Before;
 import org.junit.Test;

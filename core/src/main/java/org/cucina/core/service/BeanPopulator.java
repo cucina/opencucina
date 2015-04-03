@@ -9,6 +9,7 @@ import java.util.Map;
  *
  * @author $Author: $
  * @version $Revision: $
+ * @deprecated not seemed to be used
   */
 public interface BeanPopulator {
     /**

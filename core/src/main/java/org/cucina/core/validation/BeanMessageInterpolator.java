@@ -43,8 +43,8 @@ import org.springframework.util.Assert;
  *
  * It does not work if the implementation of javax.validation is hibernate.
  *
- * @author $Author: vlevine
- * @version $Revision: $
+ * @author vlevine
+ * @deprecated
  */
 public class BeanMessageInterpolator
     implements MessageInterpolator {

@@ -31,8 +31,7 @@ import org.slf4j.LoggerFactory;
  *                 @Factory(value = "org.cucina.meringue.model.internal.CsvMapValueHandler.fromString")
  *  </pre>
  *
- * @author $Author: $
- * @version $Revision: $
+ * @deprecated
  */
 @SuppressWarnings("rawtypes")
 @Converter

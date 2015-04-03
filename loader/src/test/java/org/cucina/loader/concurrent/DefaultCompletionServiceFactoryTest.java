@@ -1,5 +1,5 @@
 
-package org.cucina.core.concurrent;
+package org.cucina.loader.concurrent;
 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
@@ -7,6 +7,7 @@ import static org.mockito.Mockito.mock;
 import java.util.concurrent.CompletionService;
 import java.util.concurrent.Executor;
 
+import org.cucina.loader.concurrent.DefaultCompletionServiceFactory;
 import org.junit.Test;
 
 

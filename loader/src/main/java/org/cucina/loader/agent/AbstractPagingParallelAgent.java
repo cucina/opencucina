@@ -10,19 +10,15 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.lang3.time.StopWatch;
-
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.Assert;
-
-import org.cucina.core.concurrent.CompletionServiceFactory;
 import org.cucina.core.service.ContextService;
-
+import org.cucina.loader.concurrent.CompletionServiceFactory;
 import org.cucina.loader.processor.Processor;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

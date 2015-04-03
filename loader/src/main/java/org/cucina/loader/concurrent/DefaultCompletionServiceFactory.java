@@ -1,5 +1,5 @@
 
-package org.cucina.core.concurrent;
+package org.cucina.loader.concurrent;
 
 import java.util.concurrent.CompletionService;
 import java.util.concurrent.Executor;

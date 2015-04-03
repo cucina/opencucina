@@ -5,20 +5,22 @@ import java.util.Locale;
 import javax.validation.MessageInterpolator;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cucina.core.service.ContextService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
 import org.springframework.util.Assert;
+
+import org.cucina.core.service.ContextService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Does not work with Hibernate Validation implementation - is never called.
  *
- * @author $Author: $
- * @version $Revision: $
-  */
+ * @deprecated
+ */
 public class ContextServiceMessageInterpolator
     implements MessageInterpolator, MessageSourceAware {
     private static final Logger LOG = LoggerFactory.getLogger(ContextServiceMessageInterpolator.class);
@@ -28,7 +30,8 @@ public class ContextServiceMessageInterpolator
     /**
      * Creates a new ContextServiceMessageInterpolator object.
      *
-     * @param contextService JAVADOC.
+     * @param contextService
+     *            JAVADOC.
      */
     public ContextServiceMessageInterpolator(ContextService contextService) {
         Assert.notNull(contextService, "contextService is null");
@@ -38,7 +41,8 @@ public class ContextServiceMessageInterpolator
     /**
      * JAVADOC Method Level Comments
      *
-     * @param messageSource JAVADOC.
+     * @param messageSource
+     *            JAVADOC.
      */
     @Override
     public void setMessageSource(MessageSource messageSource) {
@@ -48,8 +52,10 @@ public class ContextServiceMessageInterpolator
     /**
      * JAVADOC Method Level Comments
      *
-     * @param messageTemplate JAVADOC.
-     * @param context JAVADOC.
+     * @param messageTemplate
+     *            JAVADOC.
+     * @param context
+     *            JAVADOC.
      *
      * @return JAVADOC.
      */
@@ -61,9 +67,12 @@ public class ContextServiceMessageInterpolator
     /**
      * JAVADOC Method Level Comments
      *
-     * @param messageTemplate JAVADOC.
-     * @param context JAVADOC.
-     * @param locale JAVADOC.
+     * @param messageTemplate
+     *            JAVADOC.
+     * @param context
+     *            JAVADOC.
+     * @param locale
+     *            JAVADOC.
      *
      * @return JAVADOC.
      */
