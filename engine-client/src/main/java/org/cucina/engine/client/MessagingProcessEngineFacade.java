@@ -17,6 +17,7 @@ import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationAdapter;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.Assert;
+
 import org.cucina.engine.server.communication.ConversationContext;
 import org.cucina.engine.server.communication.HistoryRecordDto;
 import org.cucina.engine.server.event.CommitSuccessEvent;
@@ -32,6 +33,7 @@ import org.cucina.engine.server.event.workflow.ObtainHistorySummaryEvent;
 import org.cucina.engine.server.event.workflow.SingleTransitionEvent;
 import org.cucina.engine.server.event.workflow.StartWorkflowEvent;
 import org.cucina.engine.server.event.workflow.ValueEvent;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -365,7 +367,7 @@ public class MessagingProcessEngineFacade
             return null;
         }
 
-        if (reply instanceof RollbackEvent) {
+        if (reply.getPayload() instanceof RollbackEvent) {
             throw new RuntimeException("Rollback on the server");
         }
 

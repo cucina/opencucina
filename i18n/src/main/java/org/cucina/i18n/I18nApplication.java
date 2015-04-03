@@ -1,11 +1,15 @@
 package org.cucina.i18n;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.commons.lang3.ClassUtils;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.ConversionServiceFactoryBean;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.ConverterRegistry;
 import org.springframework.core.convert.support.DefaultConversionService;
@@ -80,18 +84,24 @@ public class I18nApplication {
      * @return JAVADOC.
      */
     @Bean
-    public ConversionService myConversionService(InstanceFactory instanceFactory,
-        MessageRepository messageRepository, I18nService i18nService) {
-        ConversionService conversionService = new DefaultConversionService();
+    public ConversionService myConversionService(MessageRepository messageRepository,
+        I18nService i18nService) {
+        ConversionServiceFactoryBean bean = new ConversionServiceFactoryBean();
 
-        if (conversionService instanceof ConverterRegistry) {
-            ((ConverterRegistry) conversionService).addConverter(new MessageConverter());
-            ((ConverterRegistry) conversionService).addConverter(new ListItemToDtoConverter(
-                    i18nService));
-            ((ConverterRegistry) conversionService).addConverter(new DtoToListItemConverter(
-                    messageRepository));
-        }
+        bean.setConverters(getConverters(messageRepository, i18nService));
+        bean.afterPropertiesSet();
 
-        return conversionService;
+        return bean.getObject();
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private Set<?> getConverters(MessageRepository messageRepository, I18nService i18nService) {
+        Set result = new HashSet();
+
+        result.add(new MessageConverter());
+        result.add(new ListItemToDtoConverter(i18nService));
+        result.add(new DtoToListItemConverter(messageRepository));
+
+        return result;
     }
 }

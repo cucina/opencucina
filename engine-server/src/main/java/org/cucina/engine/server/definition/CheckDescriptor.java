@@ -224,7 +224,7 @@ public class CheckDescriptor
      */
     @Override
     public boolean test(ExecutionContext executionContext) {
-        throw new IllegalArgumentException("Test is not implemented in ConditionDescriptor");
+        throw new IllegalArgumentException("Test is not implemented in CheckDescriptor");
     }
 
     /**

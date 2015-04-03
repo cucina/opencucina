@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
  *          cluster
  */
 @ManagedResource
-@Component
+@Component("clientRegistry")
 public class DefaultClientRegistry
     implements ClientRegistry, ApplicationListener<RegistrationEvent> {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultClientRegistry.class);

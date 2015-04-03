@@ -34,11 +34,6 @@
 		</dependency>
 		<dependency>
 			<groupId>cucina</groupId>
-			<artifactId>engine-server-api</artifactId>
-			<version>0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>cucina</groupId>
 			<artifactId>engine-client</artifactId>
 			<version>0.1</version>
 		</dependency>

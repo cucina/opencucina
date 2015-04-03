@@ -59,4 +59,6 @@ public class OperativeFactoryImplTest {
         factory.releaseConversation("conversationId");
         assertNull(factory.findChannel("conversationId"));
     }
+    
+    // TODO test parallel scenarios
 }

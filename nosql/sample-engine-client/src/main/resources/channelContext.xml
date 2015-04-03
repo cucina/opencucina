@@ -43,10 +43,10 @@
 	<si:channel id="outputAsync" />
 	<jms:outbound-gateway request-channel="outputChannel"
 		reply-channel="outputReplyChannel" message-converter="xmlMessageConverter"
-		request-destination-name="souffle.server.queue" connection-factory="jmsConnectionFactory"
+		request-destination-name="server.queue" connection-factory="jmsConnectionFactory"
 		destination-resolver="myDestinationResolver" />
 	<jms:outbound-channel-adapter channel="outputAsync"
-		destination-name="souffle.server.queue" message-converter="xmlMessageConverter"
+		destination-name="server.queue" message-converter="xmlMessageConverter"
 		connection-factory="jmsConnectionFactory" destination-resolver="myDestinationResolver" />
 	<jms:inbound-gateway request-channel="outputReplyChannel"
 		reply-channel="callbackReply" request-destination-name="engine.client.queue"

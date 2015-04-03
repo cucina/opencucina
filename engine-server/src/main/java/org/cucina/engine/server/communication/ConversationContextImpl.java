@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
  * @author $Author: $
  * @version $Revision: $
  */
-@Component
+@Component("conversationContext")
 public class ConversationContextImpl
     implements ConversationContext {
     private static final Logger LOG = LoggerFactory.getLogger(ConversationContextImpl.class);

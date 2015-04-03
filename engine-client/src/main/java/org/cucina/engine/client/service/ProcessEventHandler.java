@@ -63,6 +63,8 @@ public class ProcessEventHandler
         try {
             WorkflowElementDescriptor source = event.getWorkflowElementDescriptor();
 
+            Assert.notNull(source, "no descriptor in event");
+
             Object pe = loadDomainObject(source.getDomainType(), source.getDomainId());
 
             if (LOG.isDebugEnabled()) {

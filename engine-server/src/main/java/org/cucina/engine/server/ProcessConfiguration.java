@@ -13,12 +13,15 @@ import org.cucina.core.model.Attachment;
 import org.cucina.core.service.ContextService;
 import org.cucina.core.service.ThreadLocalContextService;
 import org.cucina.engine.DefaultProcessEnvironment;
+import org.cucina.engine.ProcessDriver;
 import org.cucina.engine.ProcessEnvironment;
 import org.cucina.engine.TokenFactory;
 import org.cucina.engine.definition.config.ProcessDefinitionParser;
 import org.cucina.engine.definition.config.ProcessDefinitionRegistry;
 import org.cucina.engine.definition.config.xml.DigesterModuleProcessDefinitionParser;
 import org.cucina.engine.model.Workflow;
+import org.cucina.engine.server.communication.ConversationContext;
+import org.cucina.engine.server.utils.MessagingProcessDriver;
 import org.cucina.i18n.api.ListItemService;
 import org.cucina.i18n.api.remote.RemoteListNodeService;
 import org.cucina.security.api.AccessFacade;
@@ -32,6 +35,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.messaging.MessageChannel;
 
 /**
  * JAVADOC for Class Level
@@ -125,6 +129,18 @@ public class ProcessConfiguration {
 				processLocation));
 		dpe.setDefinitionRegistry(definitionRegistry);
 		return dpe;
+	}
+
+	@Bean
+	public ProcessDriver processDriver(ConversationContext conversationContext,
+			MessageChannel workflowCallbackChannel,
+			MessageChannel workflowCallbackReplyChannel) {
+		MessagingProcessDriver driver = new MessagingProcessDriver(
+				conversationContext);
+
+		driver.setRequestChannel(workflowCallbackChannel);
+		driver.setReplyChannel(workflowCallbackReplyChannel);
+		return driver;
 	}
 
 	private List<Resource> findResources(
