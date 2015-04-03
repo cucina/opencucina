@@ -33,5 +33,5 @@ public interface OperativeFactory {
      *
      * @param conversationId JAVADOC.
      */
-    void releaseChannel(String conversationId);
+    void releaseConversation(String conversationId);
 }

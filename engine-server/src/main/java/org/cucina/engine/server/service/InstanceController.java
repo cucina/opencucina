@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +28,7 @@ import org.slf4j.LoggerFactory;
  * @version $Revision: $
  */
 @Controller
-@RequestMapping(value = "/workflowInstance")
+@RequestMapping("/workflowInstance")
 public class InstanceController {
     private static final Logger LOG = LoggerFactory.getLogger(InstanceController.class);
     private static final String[] SUMMARY_COLUMNS = {
@@ -43,7 +44,9 @@ public class InstanceController {
      *            JAVADOC.
      */
     @Autowired
-    public InstanceController(ProcessTokenRepository entityDescriptorRepository) {
+    public InstanceController(
+        @Qualifier("processTokenRepository")
+    ProcessTokenRepository entityDescriptorRepository) {
         Assert.notNull(entityDescriptorRepository, "entityDescriptorRepository is null");
         this.processTokenRepository = entityDescriptorRepository;
     }

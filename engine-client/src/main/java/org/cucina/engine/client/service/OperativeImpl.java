@@ -1,5 +1,6 @@
 package org.cucina.engine.client.service;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.cucina.engine.server.communication.ConversationContext;
 import org.cucina.engine.server.event.CallbackEvent;
 import org.cucina.engine.server.event.CommitEvent;
@@ -33,6 +34,7 @@ public class OperativeImpl
 
     // to get callbacks on this
     private PollableChannel replyChannel;
+    private int timeout = 5000; // TODO make it configurable and self-adjusting
 
     /**
      * Creates a new OperativeImpl object.
@@ -57,6 +59,16 @@ public class OperativeImpl
     }
 
     /**
+     *
+     *
+     * @return .
+     */
+    @Override
+    public MessageChannel getReplyChannel() {
+        return replyChannel;
+    }
+
+    /**
      * JAVADOC Method Level Comments
      *
      * @param request JAVADOC.
@@ -71,8 +83,10 @@ public class OperativeImpl
             LOG.debug("Sent " + request + " on channel " + replyChannel);
         }
 
+        MessageHeaders requestHeaders = request.getHeaders();
+
         while (true) {
-            Message<?> reply = replyChannel.receive(5000);
+            Message<?> reply = replyChannel.receive(timeout);
 
             if (reply == null) {
                 LOG.warn("No reply, possibly timeout");
@@ -89,7 +103,7 @@ public class OperativeImpl
             if (payload instanceof CallbackEvent) {
                 EngineEvent callresult = eventHandler.handleEvent((EngineEvent) payload);
                 Message<?> callmess = MessageBuilder.withPayload(callresult)
-                                                    .copyHeaders(request.getHeaders()).build();
+                                                    .copyHeaders(requestHeaders).build();
 
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Sending callback reply " + callmess + " on " + callbackReplyChannel);
@@ -114,4 +128,14 @@ public class OperativeImpl
             LOG.warn("Payload not handleable " + payload);
         }
     }
+    
+    /**
+	 * Default toString implementation
+	 *
+	 * @return This object as String.
+	 */
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
+	}
 }

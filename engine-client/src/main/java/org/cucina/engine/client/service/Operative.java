@@ -1,21 +1,28 @@
 package org.cucina.engine.client.service;
 
 import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
 
 
 /**
- * JAVADOC Interface Level
+ * 
  *
- * @author $Author: $
- * @version $Revision: $
+ * @author vlevine
   */
 public interface Operative {
     /**
-     * JAVADOC Method Level Comments
      *
-     * @param request JAVADOC.
      *
-     * @return JAVADOC.
+     * @return .
+     */
+    MessageChannel getReplyChannel();
+
+    /**
+     *
+     *
+     * @param request .
+     *
+     * @return .
      */
     Message<?> process(Message<?> request);
 }

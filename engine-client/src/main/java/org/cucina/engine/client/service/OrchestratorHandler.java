@@ -66,7 +66,7 @@ public class OrchestratorHandler
 
             replyChannel.send(reply);
         } finally {
-            operativeFactory.releaseChannel(conversationId);
+            operativeFactory.releaseConversation(conversationId);
         }
     }
 }

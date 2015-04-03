@@ -3,7 +3,14 @@ package org.cucina.engine.client.service;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.pool2.BasePooledObjectFactory;
+import org.apache.commons.pool2.ObjectPool;
+import org.apache.commons.pool2.PooledObject;
+import org.apache.commons.pool2.impl.DefaultPooledObject;
+import org.apache.commons.pool2.impl.GenericObjectPool;
+
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.integration.channel.QueueChannel;
@@ -21,11 +28,12 @@ import org.slf4j.LoggerFactory;
  * @version $Revision: $
   */
 public class OperativeFactoryImpl
-    implements OperativeFactory, ApplicationContextAware {
+    implements OperativeFactory, ApplicationContextAware, InitializingBean {
     private static final Logger LOG = LoggerFactory.getLogger(OperativeFactoryImpl.class);
     private ApplicationContext applicationContext;
-    private Map<String, MessageChannel> channels = new HashMap<String, MessageChannel>();
-    private String operativeName = "operative";
+    private Map<String, Operative> channels = new HashMap<String, Operative>();
+    private ObjectPool<Operative> queuePool;
+    private String operativeBeanName = "operative";
 
     /**
     * JAVADOC Method Level Comments
@@ -45,8 +53,20 @@ public class OperativeFactoryImpl
      *
      * @param operativeName JAVADOC.
      */
-    public void setOperativeName(String operativeName) {
-        this.operativeName = operativeName;
+    public void setOperativeBeanName(String operativeBeanName) {
+        this.operativeBeanName = operativeBeanName;
+    }
+
+    /**
+     *
+     *
+     * @throws Exception .
+     */
+    @Override
+    public void afterPropertiesSet()
+        throws Exception {
+        queuePool = new GenericObjectPool<Operative>(new QueuePoolFactory(applicationContext,
+                    operativeBeanName));
     }
 
     /**
@@ -58,28 +78,23 @@ public class OperativeFactoryImpl
      */
     @Override
     public Operative createOperative(String conversationId) {
-        // TODO have a pool
-        QueueChannel queueChannel = new QueueChannel(10);
+        Operative operative = obtain();
+
+        Assert.notNull(operative, "Failed to get a channel");
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("For conversationId '" + conversationId + "' adding channel " + queueChannel);
+            LOG.debug("For conversationId '" + conversationId + "' adding operative " + operative);
         }
 
-        channels.put(conversationId, queueChannel);
-
-        OperativeImpl operative = applicationContext.getBean(operativeName, OperativeImpl.class);
-
-        Assert.notNull(operative, "No bean " + operativeName + " found");
-
-        operative.setReplyChannel(queueChannel);
+        channels.put(conversationId, operative);
 
         return operative;
     }
 
     /**
-     * JAVADOC Method Level Comments
+     * Used by integration router.
      *
-     * @param conversationId JAVADOC.
+     * @param conversationId .
      *
      * @return JAVADOC.
      */
@@ -89,7 +104,9 @@ public class OperativeFactoryImpl
             LOG.debug("Request for conversationId '" + conversationId + "' " + channels);
         }
 
-        return channels.get(conversationId);
+        Operative op = channels.get(conversationId);
+
+        return (op == null) ? null : op.getReplyChannel();
     }
 
     /**
@@ -98,11 +115,53 @@ public class OperativeFactoryImpl
      * @param operative JAVADOC.
      */
     @Override
-    public void releaseChannel(String conversationId) {
+    public void releaseConversation(String conversationId) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Releasing conversation " + conversationId);
         }
 
-        channels.remove(conversationId);
+        try {
+            queuePool.returnObject(channels.remove(conversationId));
+        } catch (Exception e) {
+            LOG.error("Oops", e);
+        }
+    }
+
+    private Operative obtain() {
+        try {
+            return queuePool.borrowObject();
+        } catch (Exception e) {
+            LOG.error("Oops", e);
+        }
+
+        return null;
+    }
+
+    private static class QueuePoolFactory
+        extends BasePooledObjectFactory<Operative> {
+        private ApplicationContext applicationContext;
+        private String operativeName = "operative";
+
+        public QueuePoolFactory(ApplicationContext applicationContext, String operativeBeanName) {
+            this.applicationContext = applicationContext;
+            this.operativeName = operativeBeanName;
+        }
+
+        @Override
+        public Operative create()
+            throws Exception {
+            OperativeImpl operative = applicationContext.getBean(operativeName, OperativeImpl.class);
+
+            Assert.notNull(operative, "No bean " + operativeName + " found");
+
+            operative.setReplyChannel(new QueueChannel(10));
+
+            return operative;
+        }
+
+        @Override
+        public PooledObject<Operative> wrap(Operative q) {
+            return new DefaultPooledObject<Operative>(q);
+        }
     }
 }
