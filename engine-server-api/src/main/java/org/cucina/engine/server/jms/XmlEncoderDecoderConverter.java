@@ -84,6 +84,12 @@ public class XmlEncoderDecoderConverter
 
         message.readBytes(bytes);
 
+        try {
+            LOG.trace("Message bytes:" + new String(bytes, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            //
+        }
+
         return decode(bytes);
     }
 
@@ -94,6 +100,9 @@ public class XmlEncoderDecoderConverter
     private Object convertFromTextMessage(TextMessage message)
         throws JMSException {
         String text = message.getText();
+
+        LOG.trace("Message text:" + text);
+
         byte[] bytes;
 
         try {

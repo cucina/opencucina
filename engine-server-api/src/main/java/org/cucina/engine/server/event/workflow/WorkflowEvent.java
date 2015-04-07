@@ -1,9 +1,7 @@
-
 package org.cucina.engine.server.event.workflow;
 
-import java.io.Serializable;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import org.cucina.engine.server.event.OriginatedEngineEvent;
 
 
@@ -16,7 +14,7 @@ import org.cucina.engine.server.event.OriginatedEngineEvent;
 public abstract class WorkflowEvent
     extends OriginatedEngineEvent {
     private static final long serialVersionUID = 675264777733240826L;
-    private Serializable id;
+    private Object id;
     private String type;
 
     /**
@@ -40,7 +38,7 @@ public abstract class WorkflowEvent
      *
      * @param id JAVADOC.
      */
-    public void setId(Serializable id) {
+    public void setId(Object id) {
         this.id = id;
     }
 
@@ -49,7 +47,7 @@ public abstract class WorkflowEvent
      *
      * @return JAVADOC.
      */
-    public Serializable getId() {
+    public Object getId() {
         return id;
     }
 

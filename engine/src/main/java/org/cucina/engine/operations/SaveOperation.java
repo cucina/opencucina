@@ -1,9 +1,10 @@
 package org.cucina.engine.operations;
 
-import org.cucina.engine.ExecutionContext;
-import org.cucina.engine.repository.DomainRepository;
 import org.springframework.data.domain.Persistable;
 import org.springframework.util.Assert;
+
+import org.cucina.engine.ExecutionContext;
+import org.cucina.engine.repository.DomainRepository;
 
 
 /**
@@ -34,7 +35,7 @@ public class SaveOperation
     */
     @Override
     public void execute(ExecutionContext executionContext) {
-        Persistable<Long> entity = executionContext.getToken().getDomainObject();
+        Persistable<?> entity = executionContext.getToken().getDomainObject();
 
         domainRepository.save(entity);
         executionContext.getToken().setDomainObject(entity);

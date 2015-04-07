@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.mockito.Mock;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 import org.mockito.MockitoAnnotations;
@@ -36,11 +37,11 @@ public class TransitionEventListenerTest {
     @Mock
     private ProcessEnvironment workflowEnvironment;
     @Mock
-    private TokenRepository tokenRepository;
-    private TransitionEventListener listener;
-    @Mock
     private ProcessService workflowService;
     private ProcessToken token;
+    @Mock
+    private TokenRepository tokenRepository;
+    private TransitionEventListener listener;
 
     /**
      * JAVADOC Method Level Comments
@@ -54,6 +55,7 @@ public class TransitionEventListenerTest {
         domain = new Foo(1L);
         token = new ProcessToken();
         params = new HashMap<String, Object>();
+        doReturn(domain).when(domainRepository).load("Foo", domain.getId());
     }
 
     /**
@@ -61,12 +63,11 @@ public class TransitionEventListenerTest {
      */
     @Test
     public void testOnApplicationEvent() {
-        when(domainRepository.load(domain.getApplicationType(), domain.getId())).thenReturn(domain);
         when(tokenRepository.findByDomain(domain)).thenReturn(token);
         when(workflowService.executeTransition(token, TRANSITION_ID, params)).thenReturn(token);
 
         listener.onApplicationEvent(new TransitionEvent(TRANSITION_ID, "notNeededButMaybeLater",
-                domain.getApplicationType(), domain.getId(), params));
+                "Foo", domain.getId(), params));
     }
 
     /**
@@ -74,13 +75,12 @@ public class TransitionEventListenerTest {
      */
     @Test(expected = CheckNotMetException.class)
     public void testOnApplicationEventConditionNotMet() {
-        when(domainRepository.load(domain.getApplicationType(), domain.getId())).thenReturn(domain);
         when(tokenRepository.findByDomain(domain)).thenReturn(token);
         when(workflowService.executeTransition(token, TRANSITION_ID, params))
             .thenThrow(new CheckNotMetException("ovd"));
 
         listener.onApplicationEvent(new TransitionEvent(TRANSITION_ID, "notNeededButMaybeLater",
-                domain.getApplicationType(), domain.getId(), params));
+                "Foo", domain.getId(), params));
     }
 
     /**
@@ -88,11 +88,9 @@ public class TransitionEventListenerTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testOnApplicationEventNoDomain() {
-        when(domainRepository.load(domain.getApplicationType(), domain.getId())).thenReturn(domain);
-
         try {
             listener.onApplicationEvent(new TransitionEvent(TRANSITION_ID,
-                    "notNeededButMaybeLater", domain.getApplicationType(), domain.getId(), params));
+                    "notNeededButMaybeLater", "Foo", domain.getId(), params));
         } finally {
         }
     }
@@ -102,11 +100,10 @@ public class TransitionEventListenerTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testOnApplicationEventNoToken() {
-        when(domainRepository.load(domain.getApplicationType(), domain.getId())).thenReturn(domain);
         when(tokenRepository.findByDomain(domain)).thenReturn(null);
 
         listener.onApplicationEvent(new TransitionEvent(TRANSITION_ID, "notNeededButMaybeLater",
-                domain.getApplicationType(), domain.getId(), params));
+                "Foo", domain.getId(), params));
     }
 
     /**
@@ -114,12 +111,11 @@ public class TransitionEventListenerTest {
      */
     @Test(expected = SignalFailedException.class)
     public void testOnApplicationEventSignalFailedException() {
-        when(domainRepository.load(domain.getApplicationType(), domain.getId())).thenReturn(domain);
         when(tokenRepository.findByDomain(domain)).thenReturn(token);
         when(workflowService.executeTransition(token, TRANSITION_ID, params))
             .thenThrow(new SignalFailedException("ovd"));
 
         listener.onApplicationEvent(new TransitionEvent(TRANSITION_ID, "notNeededButMaybeLater",
-                domain.getApplicationType(), domain.getId(), params));
+                "Foo", domain.getId(), params));
     }
 }

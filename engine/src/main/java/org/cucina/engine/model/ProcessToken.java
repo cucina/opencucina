@@ -1,5 +1,6 @@
 package org.cucina.engine.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -38,8 +39,8 @@ public class ProcessToken
     implements Token, Versioned {
     private static final long serialVersionUID = -5610021631597142222L;
     private List<HistoryRecord> histories;
-    private Long domainObjectId;
-    private Persistable<Long> domainObject;
+    private Serializable domainObjectId;
+    private Persistable<?extends Serializable> domainObject;
     private Set<ProcessToken> children;
     private String domainObjectType;
     private String placeId;
@@ -73,7 +74,7 @@ public class ProcessToken
      * @param domainObject
      *            JAVADOC.
      */
-    public void setDomainObject(Persistable<Long> domainObject) {
+    public void setDomainObject(Persistable<?extends Serializable> domainObject) {
         this.domainObject = domainObject;
     }
 
@@ -84,7 +85,7 @@ public class ProcessToken
      * @return domainObject PersistableObject.
      */
     @Transient
-    public Persistable<Long> getDomainObject() {
+    public Persistable<?extends Serializable> getDomainObject() {
         return domainObject;
     }
 
@@ -94,7 +95,7 @@ public class ProcessToken
      * @param expiryDate
      *            JAVADOC.
      */
-    public void setDomainObjectId(Long domainObjectId) {
+    public void setDomainObjectId(Serializable domainObjectId) {
         this.domainObjectId = domainObjectId;
     }
 
@@ -106,7 +107,7 @@ public class ProcessToken
      */
     @Basic
     @Column(nullable = false)
-    public Long getDomainObjectId() {
+    public Serializable getDomainObjectId() {
         return this.domainObjectId;
     }
 

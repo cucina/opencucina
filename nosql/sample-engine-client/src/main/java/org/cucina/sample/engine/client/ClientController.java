@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import org.cucina.engine.client.ProcessEngineFacade;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  *
@@ -18,6 +21,7 @@ import org.cucina.engine.client.ProcessEngineFacade;
 @RestController
 @RequestMapping("/client")
 public class ClientController {
+    private static final Logger LOG = LoggerFactory.getLogger(ClientController.class);
     @Autowired
     private ItemRepository itemRepository;
     @Autowired
@@ -32,8 +36,13 @@ public class ClientController {
         Item item = new Item();
 
         itemRepository.save(item);
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Starting for Item " + item.getId());
+        }
+
         Assert.isTrue(processEngineFacade.startWorkflow(Item.class.getSimpleName(),
-                item.getId().longValue(), null), "Failed to start process");
+                item.getId().toString(), null), "Failed to start process");
 
         return item;
     }

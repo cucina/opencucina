@@ -11,6 +11,7 @@ import org.junit.Test;
 import static org.mockito.Matchers.anyObject;
 
 import org.mockito.Mock;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -104,7 +105,7 @@ public class SplitTest {
 
         Foo foo = new Foo();
 
-        when(token.getDomainObject()).thenReturn(foo);
+        doReturn(foo).when(token).getDomainObject();
         when(executionContext.getTokenFactory()).thenReturn(tokenFactory);
 
         Token tok1 = mock(Token.class);

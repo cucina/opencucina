@@ -4,7 +4,7 @@ package org.cucina.engine.server.event;
 import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.cucina.engine.server.definition.WorkflowElementDescriptor;
+import org.cucina.engine.server.definition.WorkflowElementDto;
 
 
 /**
@@ -17,14 +17,14 @@ public class CallbackEvent
     extends OriginatedEngineEvent {
     private static final long serialVersionUID = 1837060619272315839L;
     private Map<String, Object> parameters;
-    private WorkflowElementDescriptor workflowElementDescriptor;
+    private WorkflowElementDto workflowElementDescriptor;
 
     /**
     * Creates a new CallbackEvent object.
     *
     * @param element JAVADOC.
     */
-    public CallbackEvent(WorkflowElementDescriptor element, Map<String, Object> parameters,
+    public CallbackEvent(WorkflowElementDto element, Map<String, Object> parameters,
         String applicationName) {
         super(element);
         setApplicationName(applicationName);
@@ -61,7 +61,7 @@ public class CallbackEvent
      *
      * @param workflowElementDescriptor JAVADOC.
      */
-    public void setWorkflowElementDescriptor(WorkflowElementDescriptor workflowElementDescriptor) {
+    public void setWorkflowElementDescriptor(WorkflowElementDto workflowElementDescriptor) {
         this.workflowElementDescriptor = workflowElementDescriptor;
     }
 
@@ -70,7 +70,7 @@ public class CallbackEvent
      *
      * @return JAVADOC.
      */
-    public WorkflowElementDescriptor getWorkflowElementDescriptor() {
+    public WorkflowElementDto getWorkflowElementDescriptor() {
         return workflowElementDescriptor;
     }
 

@@ -45,7 +45,7 @@ public class ProcessTokenRepositoryImplTest
 
         ed.setApplicationName("client");
         ed.setApplicationType("Token");
-        ed.setLocalId(111L);
+        ed.setRemoteId("111");
         getEntityManager().persist(ed);
 
         ProcessToken token = getInstanceFactory().getBean(ProcessToken.class.getSimpleName());

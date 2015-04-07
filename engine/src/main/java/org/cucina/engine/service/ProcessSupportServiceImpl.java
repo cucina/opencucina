@@ -1,5 +1,7 @@
 package org.cucina.engine.service;
 
+import java.io.Serializable;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -224,16 +226,16 @@ public class ProcessSupportServiceImpl
      */
     @Override
     @Transactional
-    public Map<Long, Collection<String>> listAllTransitions(Collection<Long> ids,
+    public Map<Serializable, Collection<String>> listAllTransitions(Collection<Serializable> ids,
         String applicationType) {
         Collection<ProcessToken> tokens = tokenRepository.findByApplicationTypeAndIds(applicationType,
-                ids.toArray(new Long[ids.size()]));
+                ids.toArray(new Serializable[ids.size()]));
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Loaded " + tokens.size() + " for ids " + ids);
         }
 
-        Map<Long, Collection<String>> results = new HashMap<Long, Collection<String>>();
+        Map<Serializable, Collection<String>> results = new HashMap<Serializable, Collection<String>>();
 
         if (CollectionUtils.isNotEmpty(tokens)) {
             for (ProcessToken token : tokens) {
@@ -258,7 +260,7 @@ public class ProcessSupportServiceImpl
      */
     @Override
     @Transactional
-    public Collection<String> listTransitions(Collection<Long> ids, String applicationType) {
+    public Collection<String> listTransitions(Collection<Serializable> ids, String applicationType) {
         Token token = loadLastToken(ids, applicationType);
 
         return processEnvironment.getService().listTransitions(token, null);
@@ -276,7 +278,7 @@ public class ProcessSupportServiceImpl
      */
     @Override
     @Transactional
-    public Collection<Map<String, Object>> listWorkflowProperties(Collection<Long> ids,
+    public Collection<Map<String, Object>> listWorkflowProperties(Collection<Serializable> ids,
         String applicationType) {
         if (searchService == null) {
             LOG.info("SearchService is null, no results for listWorkflowProperties");
@@ -373,12 +375,12 @@ public class ProcessSupportServiceImpl
      */
     @Override
     @Transactional
-    public void makeBulkTransition(Map<Long, Integer> entities, String applicationType,
+    public void makeBulkTransition(Map<Serializable, Integer> entities, String applicationType,
         String transitionId, String comment, String approvedAs, String assignedTo,
         Map<String, Object> extraParams, ListItemDto reason, Attachment attachment) {
         try {
             Collection<ProcessToken> tokens = tokenRepository.findByApplicationTypeAndIds(applicationType,
-                    entities.keySet().toArray(new Long[entities.size()]));
+                    entities.keySet().toArray(new Serializable[entities.size()]));
 
             Assert.notEmpty(tokens, "Null tokens");
 
@@ -450,7 +452,7 @@ public class ProcessSupportServiceImpl
      */
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void makeTransition(Long id, String applicationType, String transitionId,
+    public void makeTransition(Serializable id, String applicationType, String transitionId,
         String comment, String approvedAs, String assignedTo, Map<String, Object> extraParams,
         Attachment attachment) {
         try {
@@ -496,7 +498,7 @@ public class ProcessSupportServiceImpl
      * @return JAVADOC.
      */
     @Override
-    public List<HistoryRecord> obtainHistory(Long id, String applicationType) {
+    public List<HistoryRecord> obtainHistory(Serializable id, String applicationType) {
         return tokenRepository.findHistoryRecordsByDomainObjectIdAndDomainObjectType(id,
             applicationType);
     }
@@ -513,7 +515,7 @@ public class ProcessSupportServiceImpl
      */
     @Override
     @Transactional(readOnly = true)
-    public List<Map<Object, Object>> obtainHistorySummary(Long id, String applicationType) {
+    public List<Map<Object, Object>> obtainHistorySummary(Serializable id, String applicationType) {
         Assert.notNull(id, "id must be provided!");
         Assert.hasText(applicationType, "applicationType is required!");
 
@@ -531,23 +533,6 @@ public class ProcessSupportServiceImpl
     }
 
     /**
-     * Creates and starts a workflow for it if one exists.
-     *
-     * @param entity
-     *            PersistableEntity.
-     * @param parameters
-     *            Map<String, Object>.
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    public Token startWorkflow(PersistableEntity entity, Map<String, Object> parameters) {
-        Assert.notNull(entity, "entity must be provided as a parameter");
-
-        return startWorkflow(entity, entity.getApplicationType(), parameters);
-    }
-
-    /**
      * JAVADOC Method Level Comments
      *
      * @param entity
@@ -560,8 +545,7 @@ public class ProcessSupportServiceImpl
      * @return JAVADOC.
      */
     @Override
-    public Token startWorkflow(PersistableEntity entity, String processId,
-        Map<String, Object> parameters) {
+    public Token startWorkflow(Object entity, String processId, Map<String, Object> parameters) {
         Assert.notNull(entity, "entity must be provided as a parameter");
         Assert.hasText(processId, "processId cannot be empty");
 
@@ -580,11 +564,11 @@ public class ProcessSupportServiceImpl
         return token;
     }
 
-    private Token loadLastToken(Collection<Long> ids, String applicationType) {
+    private Token loadLastToken(Collection<Serializable> ids, String applicationType) {
         Assert.notNull(ids, "Ids is null");
 
         Collection<ProcessToken> tokens = tokenRepository.findByApplicationTypeAndIds(applicationType,
-                ids.toArray(new Long[ids.size()]));
+                ids.toArray(new Serializable[ids.size()]));
 
         Assert.notNull(tokens, "Failed to load tokens for ids " + ids);
 

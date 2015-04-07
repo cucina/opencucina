@@ -36,14 +36,19 @@ public interface Token {
      *
      * @param domainObject JAVADOC.
      */
-    void setDomainObject(Persistable<Long> domainObject);
+    void setDomainObject(Persistable<?> domainObject);
 
+    /**
+     *
+     *
+     * @return .
+     */
     /**
      * Gets the domain object this is linked to
      *
-     * @return JAVADOC.
+     * @return .
      */
-    Persistable<Long> getDomainObject();
+    Persistable<?> getDomainObject();
 
     /**
      * Sets parent token

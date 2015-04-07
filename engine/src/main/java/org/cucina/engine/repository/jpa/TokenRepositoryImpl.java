@@ -1,5 +1,7 @@
 package org.cucina.engine.repository.jpa;
 
+import java.io.Serializable;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -104,7 +106,8 @@ public class TokenRepositoryImpl
      */
     @Override
     @Transactional
-    public Collection<ProcessToken> findByApplicationTypeAndIds(String applicationType, Long... ids) {
+    public Collection<ProcessToken> findByApplicationTypeAndIds(String applicationType,
+        Serializable... ids) {
         Assert.notNull(applicationType, "type cannot be null");
 
         if (ArrayUtils.isEmpty(ids)) {
@@ -117,9 +120,8 @@ public class TokenRepositoryImpl
 
         CriteriaQuery<Tuple> tcq = cb.createTupleQuery();
         Root<ProcessToken> rt = tcq.from(ProcessToken.class);
-        Path<Object> pid = rt.get("domainObjectId");
-        Predicate tokp = cb.and(cb.equal(rt.get("domainObjectType"), applicationType),
-                pid.in((Object[]) ids));
+        Path<Serializable> pid = rt.get("domainObjectId");
+        Predicate tokp = cb.and(cb.equal(rt.get("domainObjectType"), applicationType), pid.in(ids));
 
         Class<?extends PersistableEntity> clazz = resolveClass(applicationType);
         Root<?extends PersistableEntity> rc = tcq.from(clazz);
@@ -149,7 +151,7 @@ public class TokenRepositoryImpl
      */
     @Override
     @Transactional
-    public ProcessToken findByDomain(Persistable<Long> domain) {
+    public ProcessToken findByDomain(Persistable<?> domain) {
         Assert.notNull(domain, "Domain is null");
 
         BeanWrapper bw = new BeanWrapperImpl(domain);
@@ -209,8 +211,8 @@ public class TokenRepositoryImpl
     }
 
     @Override
-    public List<HistoryRecord> findHistoryRecordsByDomainObjectIdAndDomainObjectType(Long id,
-        String applicationType) {
+    public List<HistoryRecord> findHistoryRecordsByDomainObjectIdAndDomainObjectType(
+        Serializable id, String applicationType) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<HistoryRecord> cq = cb.createQuery(HistoryRecord.class);
         Root<ProcessToken> token = cq.from(ProcessToken.class);
@@ -254,7 +256,7 @@ public class TokenRepositoryImpl
         Assert.notNull(token.getDomainObject(), "token must have a domainObject");
 
         if (token.getDomainObject().getId() == null) {
-            Persistable<Long> domain = token.getDomainObject();
+            Persistable<?extends Serializable> domain = token.getDomainObject();
 
             entityManager.persist(domain);
 

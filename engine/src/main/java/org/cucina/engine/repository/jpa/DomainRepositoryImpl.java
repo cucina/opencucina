@@ -1,5 +1,7 @@
 package org.cucina.engine.repository.jpa;
 
+import java.io.Serializable;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -56,7 +58,7 @@ public class DomainRepositoryImpl
      * @param domain JAVADOC.
      */
     @Override
-    public void delete(Persistable<Long> domain) {
+    public void delete(Persistable<?extends Serializable> domain) {
         entityManager.remove(domain);
     }
 
@@ -70,7 +72,7 @@ public class DomainRepositoryImpl
      */
     @SuppressWarnings("unchecked")
     @Override
-    public Persistable<Long> load(String type, Long id) {
+    public Persistable<?extends Serializable> load(String type, Serializable id) {
         Class<?> clazz = instanceFactory.getClassType(type);
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<?> cq = cb.createQuery(clazz);
@@ -79,7 +81,7 @@ public class DomainRepositoryImpl
         cq.where(cb.equal(token.get("id"), id));
 
         try {
-            return (Persistable<Long>) entityManager.createQuery(cq).getSingleResult();
+            return (Persistable<?extends Serializable>) entityManager.createQuery(cq).getSingleResult();
         } catch (Exception e) {
             LOG.info("Oops", e);
 
@@ -93,7 +95,7 @@ public class DomainRepositoryImpl
      * @param domain JAVADOC.
      */
     @Override
-    public void save(Persistable<Long> domain) {
+    public void save(Persistable<?extends Serializable> domain) {
         if (domain.isNew()) {
             entityManager.persist(domain);
         } else {

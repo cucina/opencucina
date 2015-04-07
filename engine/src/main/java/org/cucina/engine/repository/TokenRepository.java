@@ -1,11 +1,11 @@
 package org.cucina.engine.repository;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.repository.Repository;
-
 import org.cucina.engine.model.HistoryRecord;
 import org.cucina.engine.model.ProcessToken;
 
@@ -29,7 +29,7 @@ public interface TokenRepository
      *
      * @return JAVADOC.
      */
-    List<HistoryRecord> findHistoryRecordsByDomainObjectIdAndDomainObjectType(Long id,
+    List<HistoryRecord> findHistoryRecordsByDomainObjectIdAndDomainObjectType(Serializable id,
         String applicationType);
 
     /**
@@ -54,7 +54,7 @@ public interface TokenRepository
      *
      * @return JAVADOC.
      */
-    Collection<ProcessToken> findByApplicationTypeAndIds(String applicationType, Long... ids);
+    Collection<ProcessToken> findByApplicationTypeAndIds(String applicationType, Serializable... ids);
 
     /**
     * Load token for the identified object
@@ -63,7 +63,7 @@ public interface TokenRepository
     *
     * @return JAVADOC.
     */
-    ProcessToken findByDomain(Persistable<Long> domain);
+    ProcessToken findByDomain(Persistable<?> domain);
 
     /**
      * Load the ids of domain objects which have this <code>worklfowId</code> and this <code>placeId</code>.

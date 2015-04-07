@@ -1,11 +1,13 @@
 
 package org.cucina.engine.search;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
@@ -65,7 +67,7 @@ public class UnrestrictedTransitionsAppender
             }
         }
 
-        Map<Long, Collection<String>> transitionsById = workflowSupportService.listAllTransitions(new HashSet<Long>(
+        Map<Serializable, Collection<String>> transitionsById = workflowSupportService.listAllTransitions(new HashSet<Serializable>(
                     resultsById.keySet()), applicationType);
 
         if (MapUtils.isEmpty(transitionsById)) {
@@ -74,7 +76,7 @@ public class UnrestrictedTransitionsAppender
             return;
         }
 
-        for (Map.Entry<Long, Collection<String>> entry : transitionsById.entrySet()) {
+        for (Entry<Serializable, Collection<String>> entry : transitionsById.entrySet()) {
             Map<String, Object> result = resultsById.get(entry.getKey());
 
             if (result == null) {

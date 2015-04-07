@@ -1,5 +1,6 @@
 package org.cucina.engine.client;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ public interface ProcessEngineFacade {
      *
      * @return .
      */
-    Collection<String> listTransitions(Collection<Long> ids, String applicationType);
+    Collection<String> listTransitions(Collection<Serializable> ids, String applicationType);
 
     /**
      *
@@ -31,7 +32,7 @@ public interface ProcessEngineFacade {
      *
      * @return .
      */
-    Collection<Map<String, Object>> listWorkflowProperties(Collection<Long> ids,
+    Collection<Map<String, Object>> listWorkflowProperties(Collection<Serializable> ids,
         String applicationType);
 
     /**
@@ -55,7 +56,7 @@ public interface ProcessEngineFacade {
      * @param extraParams .
      * @param attachment .
      */
-    void makeTransition(String entityType, Long id, String transitionId, String comment,
+    void makeTransition(String entityType, Serializable id, String transitionId, String comment,
         String approvedAs, String assignedTo, Map<String, Object> extraParams, Object attachment);
 
     /**
@@ -71,7 +72,7 @@ public interface ProcessEngineFacade {
      * @param reason .
      * @param attachment .
      */
-    void bulkTransition(Map<Long, Integer> entities, String entityType, String transitionId,
+    void bulkTransition(Map<Serializable, Integer> entities, String entityType, String transitionId,
         String comment, String approvedAs, String assignedTo, Map<String, Object> extraParams,
         String reason, Object attachment);
 
@@ -83,7 +84,7 @@ public interface ProcessEngineFacade {
      *
      * @return .
      */
-    List<HistoryRecordDto> obtainHistory(Long id, String applicationType);
+    List<HistoryRecordDto> obtainHistory(Serializable id, String applicationType);
 
     /**
      *
@@ -93,7 +94,7 @@ public interface ProcessEngineFacade {
      *
      * @return .
      */
-    List<Map<String, Object>> obtainHistorySummary(Long id, String applicationType);
+    List<Map<String, Object>> obtainHistorySummary(Serializable id, String applicationType);
 
     /**
      *
@@ -105,7 +106,7 @@ public interface ProcessEngineFacade {
      *
      * @return .
      */
-    boolean startWorkflow(String entityType, Long id, String workflowId,
+    boolean startWorkflow(String entityType, Serializable id, String workflowId,
         Map<String, Object> parameters);
 
     /**
@@ -117,5 +118,5 @@ public interface ProcessEngineFacade {
      *
      * @return .
      */
-    boolean startWorkflow(String entityType, Long id, Map<String, Object> parameters);
+    boolean startWorkflow(String entityType, Serializable id, Map<String, Object> parameters);
 }

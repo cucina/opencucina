@@ -1,5 +1,6 @@
-
 package org.cucina.engine.server.event.workflow;
+
+import java.io.Serializable;
 
 import java.util.Collection;
 
@@ -15,7 +16,7 @@ import org.cucina.engine.server.event.GetValueEvent;
 public class ListAllTransitionsEvent
     extends GetValueEvent {
     private static final long serialVersionUID = 2822971108610601836L;
-    private Collection<Long> ids;
+    private Collection<Serializable> ids;
     private String applicationType;
 
     /**
@@ -56,7 +57,7 @@ public class ListAllTransitionsEvent
      *
      * @param ids JAVADOC.
      */
-    public void setIds(Collection<Long> ids) {
+    public void setIds(Collection<Serializable> ids) {
         this.ids = ids;
     }
 
@@ -65,7 +66,7 @@ public class ListAllTransitionsEvent
      *
      * @return JAVADOC.
      */
-    public Collection<Long> getIds() {
+    public Collection<Serializable> getIds() {
         return ids;
     }
 }

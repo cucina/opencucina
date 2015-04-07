@@ -1,29 +1,30 @@
 package org.cucina.engine.server.utils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import org.springframework.messaging.Message;
-
 import org.cucina.engine.model.HistoryRecord;
 import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.repository.TokenRepository;
 import org.cucina.engine.server.event.CompensateEvent;
 import org.cucina.engine.server.testassist.Foo;
 import org.cucina.engine.server.utils.CompensateMessageHandler;
+
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 
 import org.mockito.Mock;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+
+import static org.mockito.Mockito.*;
 
 import org.mockito.MockitoAnnotations;
 
@@ -73,7 +74,7 @@ public class CompensateMessageHandlerTest {
 
         Collection<ProcessToken> tokens = Collections.singleton(token);
 
-        when(tokenRepository.findByApplicationTypeAndIds(eq("Foo"), any(Long[].class)))
+        when(tokenRepository.findByApplicationTypeAndIds(eq("Foo"), any(Serializable[].class)))
             .thenReturn(tokens);
 
         Message<CompensateEvent> message = mock(Message.class);
@@ -98,11 +99,11 @@ public class CompensateMessageHandlerTest {
         ProcessToken token = mock(ProcessToken.class);
         Foo foo = new Foo();
 
-        when(token.getDomainObject()).thenReturn(foo);
+        doReturn(foo).when(token).getDomainObject();
 
         Collection<ProcessToken> tokens = Collections.singleton(token);
 
-        when(tokenRepository.findByApplicationTypeAndIds(eq("Foo"), any(Long[].class)))
+        when(tokenRepository.findByApplicationTypeAndIds(eq("Foo"), any(Serializable[].class)))
             .thenReturn(tokens);
 
         Message<CompensateEvent> message = mock(Message.class);

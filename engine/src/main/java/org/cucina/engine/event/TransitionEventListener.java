@@ -1,6 +1,13 @@
 package org.cucina.engine.event;
 
+import java.io.Serializable;
+
 import java.util.Map;
+
+import org.springframework.context.ApplicationListener;
+import org.springframework.data.domain.Persistable;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import org.cucina.engine.CheckNotMetException;
 import org.cucina.engine.ProcessEnvironment;
@@ -8,12 +15,9 @@ import org.cucina.engine.SignalFailedException;
 import org.cucina.engine.definition.Token;
 import org.cucina.engine.repository.DomainRepository;
 import org.cucina.engine.repository.TokenRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationListener;
-import org.springframework.data.domain.Persistable;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 
 /**
@@ -26,8 +30,8 @@ public class TransitionEventListener
     implements ApplicationListener<TransitionEvent> {
     private static final Logger LOG = LoggerFactory.getLogger(TransitionEventListener.class);
     private DomainRepository domainRepository;
-    private TokenRepository tokenRepository;
     private ProcessEnvironment workflowEnvironment;
+    private TokenRepository tokenRepository;
 
     /**
      * Creates a new TransitionEventListener object.
@@ -56,10 +60,10 @@ public class TransitionEventListener
     public void onApplicationEvent(TransitionEvent transitionEvent) {
         String transitionId = (String) transitionEvent.getSource();
         String applicationType = transitionEvent.getApplicationType();
-        Long id = transitionEvent.getId();
+        Serializable id = transitionEvent.getId();
         Map<String, Object> parameters = transitionEvent.getParameters();
 
-        Persistable<Long> domain = domainRepository.load(applicationType, id);
+        Persistable<?extends Serializable> domain = domainRepository.load(applicationType, id);
 
         Assert.notNull(domain,
             "domain, type [" + applicationType + "], id [" + id + "] does not exist in db");

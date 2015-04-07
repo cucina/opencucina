@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  * @version $Revision: $
   */
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "classType")
-public interface WorkflowElementDescriptor {
+public interface WorkflowElementDto {
     /**
      * Application where the component lives
      *

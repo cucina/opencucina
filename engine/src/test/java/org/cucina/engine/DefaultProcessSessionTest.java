@@ -12,6 +12,7 @@ import org.junit.Test;
 import static org.mockito.Matchers.any;
 
 import org.mockito.Mock;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -19,7 +20,7 @@ import org.mockito.MockitoAnnotations;
 
 
 /**
- * @author Rob Harrop
+ * @author vlevine
  */
 public class DefaultProcessSessionTest {
     @Mock
@@ -55,7 +56,8 @@ public class DefaultProcessSessionTest {
         domainObject.setValue(90);
         when(tokenX.getPlaceId()).thenReturn("start").thenReturn("start").thenReturn("decision")
             .thenReturn("decision").thenReturn("decision").thenReturn("coke");
-        when(tokenX.getDomainObject()).thenReturn(domainObject);
+        doReturn(domainObject).when(tokenX).getDomainObject();
+
         when(executor.test(any(Check.class), any(ExecutionContext.class))).thenReturn(true);
 
         Token token = session.startProcessInstance(domainObject, null, null);
@@ -82,7 +84,8 @@ public class DefaultProcessSessionTest {
 
         when(tokenX.getPlaceId()).thenReturn("start").thenReturn("start").thenReturn("decision")
             .thenReturn("decision").thenReturn("decision").thenReturn("coke");
-        when(tokenX.getDomainObject()).thenReturn(domainObject);
+        doReturn(domainObject).when(tokenX).getDomainObject();
+
         when(executor.test(any(Check.class), any(ExecutionContext.class))).thenReturn(true);
 
         Token token = session.startProcessInstance(domainObject, null, null);

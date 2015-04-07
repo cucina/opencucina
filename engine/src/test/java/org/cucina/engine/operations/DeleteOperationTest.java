@@ -6,9 +6,9 @@ import org.cucina.engine.repository.DomainRepository;
 import org.cucina.engine.testassist.Foo;
 
 import org.junit.Test;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 
 /**
@@ -26,7 +26,7 @@ public class DeleteOperationTest {
         Foo foo = new Foo();
         Token token = mock(Token.class);
 
-        when(token.getDomainObject()).thenReturn(foo);
+        doReturn(foo).when(token).getDomainObject();
 
         DomainRepository repo = mock(DomainRepository.class);
 

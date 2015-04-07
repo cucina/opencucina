@@ -3,7 +3,9 @@ package org.cucina.engine.server;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.ClassUtils;
 import org.cucina.core.CompositeInstanceFactory;
@@ -21,6 +23,8 @@ import org.cucina.engine.definition.config.ProcessDefinitionRegistry;
 import org.cucina.engine.definition.config.xml.DigesterModuleProcessDefinitionParser;
 import org.cucina.engine.model.Workflow;
 import org.cucina.engine.server.communication.ConversationContext;
+import org.cucina.engine.server.converters.CheckDtoConverter;
+import org.cucina.engine.server.converters.OperationDtoConverter;
 import org.cucina.engine.server.utils.MessagingProcessDriver;
 import org.cucina.i18n.api.ListItemService;
 import org.cucina.i18n.api.remote.RemoteListNodeService;
@@ -33,6 +37,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ConversionServiceFactoryBean;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.messaging.MessageChannel;
@@ -136,11 +143,23 @@ public class ProcessConfiguration {
 			MessageChannel workflowCallbackChannel,
 			MessageChannel workflowCallbackReplyChannel) {
 		MessagingProcessDriver driver = new MessagingProcessDriver(
-				conversationContext);
+				conversationContext, conversionService());
 
 		driver.setRequestChannel(workflowCallbackChannel);
 		driver.setReplyChannel(workflowCallbackReplyChannel);
 		return driver;
+	}
+
+	private ConversionService conversionService() {
+		ConversionServiceFactoryBean factoryBean = new ConversionServiceFactoryBean();
+		Set<Converter<?, ?>> cons = new HashSet<Converter<?, ?>>();
+
+		cons.add(new CheckDtoConverter());
+		cons.add(new OperationDtoConverter());
+		factoryBean.setConverters(cons);
+		factoryBean.afterPropertiesSet();
+
+		return factoryBean.getObject();
 	}
 
 	private List<Resource> findResources(

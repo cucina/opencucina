@@ -74,7 +74,8 @@ public class TokenFactoryImplTest {
     public void testCreateToken() {
         InstanceFactory instanceFactory = mock(InstanceFactory.class);
 
-        when(instanceFactory.getBean(ProcessToken.class.getSimpleName())).thenReturn(new ProcessToken());
+        when(instanceFactory.getBean(ProcessToken.class.getSimpleName()))
+            .thenReturn(new ProcessToken());
 
         Foo foo = new Foo(123L);
 

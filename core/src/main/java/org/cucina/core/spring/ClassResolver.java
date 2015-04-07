@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Attempts to instantiate an object of the given type
  *
- * @deprecated
  */
 public class ClassResolver
     implements BeanResolver {

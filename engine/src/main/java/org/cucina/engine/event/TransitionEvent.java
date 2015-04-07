@@ -1,6 +1,7 @@
 
 package org.cucina.engine.event;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -18,7 +19,7 @@ import org.springframework.context.ApplicationEvent;
 public class TransitionEvent
     extends ApplicationEvent {
     private static final long serialVersionUID = 1L;
-    private Long id;
+    private Serializable id;
     private Map<String, Object> parameters;
     private String applicationType;
     private String workflowId;
@@ -32,7 +33,7 @@ public class TransitionEvent
      * @param applicationType JAVADOC.
      * @param ids Long.
      */
-    public TransitionEvent(String transitionId, String workflowId, String applicationType, Long id,
+    public TransitionEvent(String transitionId, String workflowId, String applicationType, Serializable id,
         Map<String, Object> parameters) {
         super(transitionId);
         this.parameters = parameters;
@@ -55,7 +56,7 @@ public class TransitionEvent
      *
      * @return JAVADOC.
      */
-    public Long getId() {
+    public Serializable getId() {
         return id;
     }
 

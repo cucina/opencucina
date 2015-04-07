@@ -1,6 +1,5 @@
 package org.cucina.engine.server.utils;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.data.domain.Persistable;
 import org.springframework.integration.gateway.MessagingGatewaySupport;
 import org.springframework.util.Assert;
 
@@ -18,12 +18,15 @@ import org.cucina.engine.ProcessDriver;
 import org.cucina.engine.definition.Check;
 import org.cucina.engine.definition.Operation;
 import org.cucina.engine.server.communication.ConversationContext;
+import org.cucina.engine.server.definition.AbstractElementDescriptor;
 import org.cucina.engine.server.definition.CheckDescriptor;
 import org.cucina.engine.server.definition.OperationDescriptor;
+import org.cucina.engine.server.definition.WorkflowElementDto;
 import org.cucina.engine.server.event.BooleanEvent;
 import org.cucina.engine.server.event.CallbackEvent;
 import org.cucina.engine.server.event.EngineEvent;
 import org.cucina.engine.server.event.RollbackEvent;
+import org.cucina.engine.server.model.EntityDescriptor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +43,7 @@ public class MessagingProcessDriver
     implements ProcessDriver {
     private static final Logger LOG = LoggerFactory.getLogger(MessagingProcessDriver.class);
     private ConversationContext conversationContext;
+    private ConversionService conversionService;
     private ProcessDriver localDriver;
 
     /**
@@ -49,9 +53,12 @@ public class MessagingProcessDriver
     * @param localDriver JAVADOC.
     * @param applicationName JAVADOC.
     */
-    public MessagingProcessDriver(ConversationContext conversationContext) {
+    public MessagingProcessDriver(ConversationContext conversationContext,
+        ConversionService conversionService) {
         Assert.notNull(conversationContext, "conversationContext is null");
         this.conversationContext = conversationContext;
+        Assert.notNull(conversionService, "conversionService is null");
+        this.conversionService = conversionService;
     }
 
     /**
@@ -80,33 +87,16 @@ public class MessagingProcessDriver
             }
 
             if (action instanceof OperationDescriptor) {
-                OperationDescriptor wed = (OperationDescriptor) action;
-                BeanWrapper beanWrapper = new BeanWrapperImpl(executionContext.getToken()
-                                                                              .getDomainObject());
+                OperationDescriptor aed = (OperationDescriptor) action;
+                Object result = process(aed, executionContext);
 
-                wed.setDomainType((String) beanWrapper.getPropertyValue("applicationType"));
-                wed.setDomainId(executionContext.getToken().getDomainObject().getId());
+                LOG.debug("Action result is :'" + result + "'");
 
-                String application = wed.getApplication();
+                if (result instanceof Map<?, ?>) {
+                    executionContext.getParameters()
+                                    .putAll((Map<?extends String, ?extends Object>) result);
 
-                if (StringUtils.isEmpty(application)) {
-                    executeLocal(wed, executionContext);
-                } else {
-                    CallbackEvent event = new CallbackEvent(wed, executionContext.getParameters(),
-                            application);
-
-                    event.setConversationId(conversationContext.getConversationId());
-
-                    Object result = sendAndReceive(event);
-
-                    LOG.debug("Action result is :'" + result + "'");
-
-                    if (result instanceof Map<?, ?>) {
-                        executionContext.getParameters()
-                                        .putAll((Map<?extends String, ?extends Object>) result);
-
-                        continue;
-                    }
+                    continue;
                 }
             } else {
                 // this should not happen with workflow-rules-definition.xml
@@ -135,24 +125,7 @@ public class MessagingProcessDriver
         if (condition instanceof CheckDescriptor) {
             CheckDescriptor ced = (CheckDescriptor) condition;
 
-            BeanWrapper beanWrapper = new BeanWrapperImpl(executionContext.getToken()
-                                                                          .getDomainObject());
-
-            ced.setDomainType((String) beanWrapper.getPropertyValue("applicationType"));
-            ced.setDomainId(executionContext.getToken().getDomainObject().getId());
-
-            String application = ced.getApplication();
-
-            if (StringUtils.isEmpty(application)) {
-                return testLocal(ced, executionContext);
-            }
-
-            CallbackEvent event = new CallbackEvent(ced, executionContext.getParameters(),
-                    application);
-
-            event.setConversationId(conversationContext.getConversationId());
-
-            Object result = sendAndReceive(event);
+            Object result = process(ced, executionContext);
 
             LOG.debug("Remote condition returned result:'" + result + "'");
 
@@ -187,19 +160,32 @@ public class MessagingProcessDriver
         }
     }
 
-    private void executeLocal(OperationDescriptor op, ExecutionContext context) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Local execution");
+    private Object process(AbstractElementDescriptor descriptor, ExecutionContext context) {
+        String application = (String) descriptor.get("application");
+        BeanWrapper beanWrapper = new BeanWrapperImpl(context.getToken().getDomainObject());
+
+        descriptor.put("domainType", beanWrapper.getPropertyValue("applicationType"));
+
+        Persistable<?> po = context.getToken().getDomainObject();
+
+        descriptor.put("domainId",
+            (po instanceof EntityDescriptor) ? ((EntityDescriptor) po).getRemoteId() : po.getId());
+
+        if (StringUtils.isEmpty(application)) {
+            throw new IllegalArgumentException("application is not specified");
+
+            //return testLocal(ced, executionContext);
         }
 
-        localDriver.execute(Collections.<Operation>singletonList(op), context);
+        return sendAndReceive(conversionService.convert(descriptor, WorkflowElementDto.class),
+            context);
     }
 
-    private boolean testLocal(CheckDescriptor check, ExecutionContext context) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Local test");
-        }
+    private Object sendAndReceive(WorkflowElementDto wed, ExecutionContext ec) {
+        CallbackEvent event = new CallbackEvent(wed, ec.getParameters(), wed.getApplication());
 
-        return localDriver.test(check, context);
+        event.setConversationId(conversationContext.getConversationId());
+
+        return sendAndReceive(event);
     }
 }

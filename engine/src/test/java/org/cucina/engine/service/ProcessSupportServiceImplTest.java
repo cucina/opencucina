@@ -1,5 +1,6 @@
 package org.cucina.engine.service;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -9,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.cucina.core.model.Attachment;
-
 import org.cucina.engine.ProcessEnvironment;
 import org.cucina.engine.definition.Decision;
 import org.cucina.engine.definition.EndStation;
@@ -25,13 +25,12 @@ import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.repository.HistoryRecordRepository;
 import org.cucina.engine.repository.TokenRepository;
 import org.cucina.engine.testassist.Foo;
-
 import org.cucina.search.SearchBeanFactory;
 import org.cucina.search.SearchService;
 import org.cucina.search.query.SearchBean;
 import org.cucina.search.query.SearchResults;
-
 import org.cucina.security.api.AccessFacade;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -41,13 +40,14 @@ import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
-
 import org.mockito.ArgumentMatcher;
+
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
 
 import org.mockito.Mock;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -110,7 +110,7 @@ public class ProcessSupportServiceImplTest {
      * JAVADOC Method Level Comments
      */
     public void listWorkflowProperties() {
-        Collection<Long> ids = new HashSet<Long>();
+        Collection<Serializable> ids = new HashSet<Serializable>();
 
         ids.add(12L);
 
@@ -215,7 +215,7 @@ public class ProcessSupportServiceImplTest {
         when(processService.startProcess(foo, "Foo", null, params)).thenReturn(token);
         when(processEnvironment.getService()).thenReturn(processService);
 
-        assertEquals("Should have returned token", token, service.startWorkflow(foo, params));
+        assertEquals("Should have returned token", token, service.startWorkflow(foo, "Foo", params));
 
         verify(tokenRepository).save(token);
     }
@@ -231,7 +231,7 @@ public class ProcessSupportServiceImplTest {
         when(processService.startProcess(foo, "Foo", null, params)).thenReturn(null);
         when(processEnvironment.getService()).thenReturn(processService);
 
-        assertNull("Should have returned null value", service.startWorkflow(foo, params));
+        assertNull("Should have returned null value", service.startWorkflow(foo, "Foo", params));
     }
 
     /**
@@ -256,7 +256,7 @@ public class ProcessSupportServiceImplTest {
         when(processEnvironment.getProcessDefinitionHelper()).thenReturn(helper);
         when(processEnvironment.getService()).thenReturn(processService);
 
-        Map<Long, Integer> map = new HashMap<Long, Integer>();
+        Map<Serializable, Integer> map = new HashMap<Serializable, Integer>();
 
         map.put(100L, 0);
 
@@ -264,7 +264,7 @@ public class ProcessSupportServiceImplTest {
 
         token.setProcessDefinitionId("workflowDefinitionId");
         result.add(token);
-        when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Long[].class)))
+        when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Serializable[].class)))
             .thenReturn(result);
         service.setTokenRepository(tokenRepository);
         service.makeBulkTransition(map, "Foo", "transitionId", "comment", null, null, null, null, null);
@@ -383,10 +383,10 @@ public class ProcessSupportServiceImplTest {
 
         tokens.add(token1);
         tokens.add(token2);
-        when(tokenRepository.findByApplicationTypeAndIds(eq(Foo.TYPE), any(Long[].class)))
+        when(tokenRepository.findByApplicationTypeAndIds(eq(Foo.TYPE), any(Serializable[].class)))
             .thenReturn(tokens);
 
-        Map<Long, Collection<String>> results = service.listAllTransitions(Collections.<Long>singleton(
+        Map<Serializable, Collection<String>> results = service.listAllTransitions(Collections.<Serializable>singleton(
                     100L), Foo.TYPE);
 
         assertEquals("Incorrect number results", 2, results.size());
@@ -422,10 +422,10 @@ public class ProcessSupportServiceImplTest {
 
         token.setProcessDefinitionId("workflowDefinitionId");
         result.add(token);
-        when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Long[].class)))
+        when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Serializable[].class)))
             .thenReturn(result);
         assertTrue("Not containing hello",
-            service.listTransitions(Collections.<Long>singleton(100L), "Foo").contains("hello"));
+            service.listTransitions(Collections.<Serializable>singleton(100L), "Foo").contains("hello"));
     }
 
     /**
@@ -472,9 +472,9 @@ public class ProcessSupportServiceImplTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testNoToken() {
-        Map<Long, Integer> map = new HashMap<Long, Integer>();
+        Map<Serializable, Integer> map = new HashMap<Serializable, Integer>();
 
-        when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Long[].class)))
+        when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Serializable[].class)))
             .thenReturn(null);
         service.makeBulkTransition(map, "Foo", "transitionId", null, null, null, null, null, null);
     }
@@ -551,7 +551,7 @@ public class ProcessSupportServiceImplTest {
         when(processEnvironment.getProcessDefinitionHelper()).thenReturn(helper);
         when(processEnvironment.getService()).thenReturn(processService);
 
-        Map<Long, Integer> map = new HashMap<Long, Integer>();
+        Map<Serializable, Integer> map = new HashMap<Serializable, Integer>();
 
         map.put(100L, 0);
 
@@ -560,7 +560,7 @@ public class ProcessSupportServiceImplTest {
         token.setProcessDefinitionId("workflowDefinitionId");
         result.add(token);
 
-        when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Long[].class)))
+        when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Serializable[].class)))
             .thenReturn(result);
         tokenRepository.save(token);
         service.makeBulkTransition(map, "Foo", "transitionId", comments, null, null, null, null,

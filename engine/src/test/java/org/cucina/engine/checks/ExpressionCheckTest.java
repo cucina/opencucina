@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.mockito.Mock;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 import org.mockito.MockitoAnnotations;
@@ -93,7 +94,7 @@ public class ExpressionCheckTest {
         throws Exception {
         MockitoAnnotations.initMocks(this);
         when(executorFactory.getExpressionExecutor()).thenReturn(expressionExecutor);
-        when(token.getDomainObject()).thenReturn(localFoo);
+        doReturn(localFoo).when(token).getDomainObject();
         action = new ExpressionCheck();
         action.setExpression(EXPRESSION);
     }

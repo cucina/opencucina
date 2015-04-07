@@ -22,7 +22,7 @@ public class EntityDescriptor
 
     /** This is a field JAVADOC */
     public static final String APPLICATION_TYPE_PROP = "applicationType";
-    private Long localId;
+    private String remoteId;
     private String applicationName;
     private String applicationType;
 
@@ -40,9 +40,9 @@ public class EntityDescriptor
      * @param refid
      *            JAVADOC.
      */
-    public EntityDescriptor(String applicationType, Long id, String applicationName) {
+    public EntityDescriptor(String applicationType, String id, String applicationName) {
         this.applicationType = applicationType;
-        this.localId = id;
+        this.remoteId = id;
         this.applicationName = applicationName;
     }
 
@@ -54,7 +54,7 @@ public class EntityDescriptor
      */
     public EntityDescriptor(PersistableEntity entity) {
         this.applicationType = entity.getApplicationType();
-        this.localId = entity.getId();
+        this.remoteId = entity.getId().toString();
     }
 
     /**
@@ -102,8 +102,8 @@ public class EntityDescriptor
      * @param localId
      *            JAVADOC.
      */
-    public void setLocalId(Long localId) {
-        this.localId = localId;
+    public void setRemoteId(String remoteId) {
+        this.remoteId = remoteId;
     }
 
     /**
@@ -111,8 +111,8 @@ public class EntityDescriptor
      *
      * @return JAVADOC.
      */
-    public Long getLocalId() {
-        return localId;
+    public String getRemoteId() {
+        return remoteId;
     }
 
     /**

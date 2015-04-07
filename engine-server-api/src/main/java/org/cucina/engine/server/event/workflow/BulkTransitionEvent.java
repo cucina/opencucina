@@ -1,5 +1,6 @@
 package org.cucina.engine.server.event.workflow;
 
+import java.io.Serializable;
 import java.util.Map;
 
 
@@ -12,7 +13,7 @@ import java.util.Map;
 public class BulkTransitionEvent
     extends WorkflowEvent {
     private static final long serialVersionUID = 1L;
-    private Map<Long, Integer> entities;
+    private Map<Serializable, Integer> entities;
     private Map<String, Object> extraParams;
     private Object attachment;
     private String approvedAs;
@@ -113,7 +114,7 @@ public class BulkTransitionEvent
      *
      * @param entities JAVADOC.
      */
-    public void setEntities(Map<Long, Integer> entities) {
+    public void setEntities(Map<Serializable, Integer> entities) {
         this.entities = entities;
     }
 
@@ -122,7 +123,7 @@ public class BulkTransitionEvent
      *
      * @return JAVADOC.
      */
-    public Map<Long, Integer> getEntities() {
+    public Map<Serializable, Integer> getEntities() {
         return entities;
     }
 

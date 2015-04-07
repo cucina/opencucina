@@ -15,19 +15,19 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
 /**
- * JAVADOC for Class Level
  *
- * @author $Author: $
- * @version $Revision: $
+ *
+ * @author vlevine
   */
-public class DefaultWorkflowServiceTest {
+public class DefaultProcessServiceTest {
     /**
-     * JAVADOC Method Level Comments
+     *
      */
     @Test
     public void testExecuteTransition() {
@@ -53,7 +53,7 @@ public class DefaultWorkflowServiceTest {
     }
 
     /**
-     * JAVADOC Method Level Comments
+     *
      */
     @Test
     public void testListTransitions() {
@@ -84,7 +84,7 @@ public class DefaultWorkflowServiceTest {
     }
 
     /**
-     * JAVADOC Method Level Comments
+     *
      */
     @Test
     public void testStartWorkflowObjectStringMapOfStringObject() {
@@ -92,7 +92,7 @@ public class DefaultWorkflowServiceTest {
         Map<String, Object> params = new HashMap<String, Object>();
         Token token = mock(Token.class);
 
-        when(token.getDomainObject()).thenReturn(foo);
+        doReturn(foo).when(token).getDomainObject();
 
         ProcessSession session = mock(ProcessSession.class);
 
@@ -109,7 +109,7 @@ public class DefaultWorkflowServiceTest {
     }
 
     /**
-     * JAVADOC Method Level Comments
+     *
      */
     @Test
     public void testStartWorkflowObjectStringStringMapOfStringObject() {
@@ -117,7 +117,7 @@ public class DefaultWorkflowServiceTest {
         Map<String, Object> params = new HashMap<String, Object>();
         Token token = mock(Token.class);
 
-        when(token.getDomainObject()).thenReturn(foo);
+        doReturn(foo).when(token).getDomainObject();
 
         ProcessSession session = mock(ProcessSession.class);
 

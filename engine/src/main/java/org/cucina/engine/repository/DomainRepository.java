@@ -1,5 +1,7 @@
 package org.cucina.engine.repository;
 
+import java.io.Serializable;
+
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.repository.Repository;
 
@@ -11,13 +13,13 @@ import org.springframework.data.repository.Repository;
  * @version $Revision: $
   */
 public interface DomainRepository
-    extends Repository<Persistable<Long>, Long> {
+    extends Repository<Persistable<?extends Serializable>, Serializable> {
     /**
      * JAVADOC Method Level Comments
      *
      * @param domain JAVADOC.
      */
-    void delete(Persistable<Long> domain);
+    void delete(Persistable<?extends Serializable> domain);
 
     /**
      * JAVADOC Method Level Comments
@@ -27,12 +29,12 @@ public interface DomainRepository
      *
      * @return JAVADOC.
      */
-    Persistable<Long> load(String type, Long id);
+    Persistable<?extends Serializable> load(String type, Serializable id);
 
     /**
      * JAVADOC Method Level Comments
      *
      * @param domain JAVADOC.
      */
-    void save(Persistable<Long> domain);
+    void save(Persistable<?extends Serializable> domain);
 }

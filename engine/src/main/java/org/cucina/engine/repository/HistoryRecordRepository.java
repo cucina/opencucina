@@ -1,9 +1,9 @@
 package org.cucina.engine.repository;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.springframework.data.repository.Repository;
-
 import org.cucina.engine.model.HistoryRecord;
 
 
@@ -22,5 +22,5 @@ public interface HistoryRecordRepository
      *
      * @return JAVADOC.
      */
-    List<HistoryRecord> findByIdAndApplicationType(Long id, String applicationType);
+    List<HistoryRecord> findByIdAndApplicationType(Serializable id, String applicationType);
 }

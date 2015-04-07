@@ -1,6 +1,7 @@
 
 package org.cucina.engine.search;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -55,7 +56,7 @@ public class WorkflowPropertiesAppender
             return;
         }
 
-        Map<Long, Map<String, Object>> resultsById = new HashMap<Long, Map<String, Object>>();
+        Map<Serializable, Map<String, Object>> resultsById = new HashMap<Serializable, Map<String, Object>>();
 
         for (Map<String, Object> result : results) {
             Long id = (Long) result.get("id");
@@ -65,7 +66,7 @@ public class WorkflowPropertiesAppender
             }
         }
 
-        Collection<Map<String, Object>> workflowPropsById = workflowSupportService.listWorkflowProperties(new HashSet<Long>(
+        Collection<Map<String, Object>> workflowPropsById = workflowSupportService.listWorkflowProperties(new HashSet<Serializable>(
                     resultsById.keySet()), applicationType);
 
         if (CollectionUtils.isEmpty(workflowPropsById)) {

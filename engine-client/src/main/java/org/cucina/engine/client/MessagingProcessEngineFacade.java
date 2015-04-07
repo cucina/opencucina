@@ -1,5 +1,6 @@
 package org.cucina.engine.client;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -17,7 +18,6 @@ import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationAdapter;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.Assert;
-
 import org.cucina.engine.server.communication.ConversationContext;
 import org.cucina.engine.server.communication.HistoryRecordDto;
 import org.cucina.engine.server.event.CommitSuccessEvent;
@@ -33,7 +33,6 @@ import org.cucina.engine.server.event.workflow.ObtainHistorySummaryEvent;
 import org.cucina.engine.server.event.workflow.SingleTransitionEvent;
 import org.cucina.engine.server.event.workflow.StartWorkflowEvent;
 import org.cucina.engine.server.event.workflow.ValueEvent;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -89,10 +88,10 @@ public class MessagingProcessEngineFacade
      *            JAVADOC.
      */
     @Override
-    public void bulkTransition(Map<Long, Integer> entities, String entityType, String transitionId,
-        String comment, String approvedAs, String assignedTo, Map<String, Object> extraParams,
-        String reason, Object attachment) {
-        registerTxHandler(entityType, entities.keySet().toArray(new Long[entities.size()]));
+    public void bulkTransition(Map<Serializable, Integer> entities, String entityType,
+        String transitionId, String comment, String approvedAs, String assignedTo,
+        Map<String, Object> extraParams, String reason, Object attachment) {
+        registerTxHandler(entityType, entities.keySet().toArray(new Serializable[entities.size()]));
 
         BulkTransitionEvent event = new BulkTransitionEvent(entityType, applicationName);
 
@@ -124,7 +123,7 @@ public class MessagingProcessEngineFacade
      * @return JAVADOC.
      */
     @Override
-    public Collection<String> listTransitions(Collection<Long> ids, String applicationType) {
+    public Collection<String> listTransitions(Collection<Serializable> ids, String applicationType) {
         ListTransitionsEvent event = new ListTransitionsEvent(applicationType, applicationName);
 
         event.setApplicationType(applicationType);
@@ -144,7 +143,7 @@ public class MessagingProcessEngineFacade
      * @return JAVADOC.
      */
     @Override
-    public Collection<Map<String, Object>> listWorkflowProperties(Collection<Long> ids,
+    public Collection<Map<String, Object>> listWorkflowProperties(Collection<Serializable> ids,
         String applicationType) {
         ListWorkflowPropertiesEvent event = new ListWorkflowPropertiesEvent(applicationType,
                 applicationName);
@@ -193,7 +192,7 @@ public class MessagingProcessEngineFacade
      *            JAVADOC.
      */
     @Override
-    public void makeTransition(String entityType, Long id, String transitionId, String comment,
+    public void makeTransition(String entityType, Serializable id, String transitionId, String comment,
         String approvedAs, String assignedTo, Map<String, Object> extraParams, Object attachment) {
         registerTxHandler(entityType, id);
 
@@ -226,7 +225,7 @@ public class MessagingProcessEngineFacade
      * @return JAVADOC.
      */
     @Override
-    public List<HistoryRecordDto> obtainHistory(Long id, String applicationType) {
+    public List<HistoryRecordDto> obtainHistory(Serializable id, String applicationType) {
         ObtainHistoryEvent event = new ObtainHistoryEvent(applicationType, applicationName);
 
         event.setApplicationType(applicationType);
@@ -246,7 +245,7 @@ public class MessagingProcessEngineFacade
      * @return JAVADOC.
      */
     @Override
-    public List<Map<String, Object>> obtainHistorySummary(Long id, String applicationType) {
+    public List<Map<String, Object>> obtainHistorySummary(Serializable id, String applicationType) {
         ObtainHistorySummaryEvent event = new ObtainHistorySummaryEvent(applicationType,
                 applicationName);
 
@@ -281,7 +280,7 @@ public class MessagingProcessEngineFacade
      * @return JAVADOC.
      */
     @Override
-    public boolean startWorkflow(String entityType, Long id, Map<String, Object> parameters) {
+    public boolean startWorkflow(String entityType, Serializable id, Map<String, Object> parameters) {
         return startWorkflow(entityType, id, entityType, parameters);
     }
 
@@ -298,7 +297,7 @@ public class MessagingProcessEngineFacade
      * @return JAVADOC.
      */
     @Override
-    public boolean startWorkflow(String entityType, Long id, String workflowId,
+    public boolean startWorkflow(String entityType, Serializable id, String workflowId,
         Map<String, Object> parameters) {
         registerTxHandler(entityType, id);
 
@@ -324,7 +323,7 @@ public class MessagingProcessEngineFacade
                              .setHeader(ConversationContext.CONVERSATION_ID, conversationId).build();
     }
 
-    private void handleStatus(int status, String type, Long... ids) {
+    private void handleStatus(int status, String type, Serializable... ids) {
         Message<?> callmess;
 
         if (TransactionSynchronization.STATUS_COMMITTED == status) {
@@ -342,7 +341,7 @@ public class MessagingProcessEngineFacade
         asyncChannel.send(callmess);
     }
 
-    private void registerTxHandler(final String entityType, final Long... ids) {
+    private void registerTxHandler(final String entityType, final Serializable... ids) {
         if (TransactionSynchronizationManager.isSynchronizationActive()) {
             TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
                     @Override

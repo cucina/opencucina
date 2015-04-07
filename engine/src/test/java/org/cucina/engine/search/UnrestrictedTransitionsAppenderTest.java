@@ -1,5 +1,6 @@
 package org.cucina.engine.search;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,15 +8,18 @@ import java.util.Map;
 
 import org.cucina.engine.service.ProcessSupportService;
 import org.cucina.engine.testassist.Foo;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import static org.mockito.Matchers.anyCollection;
 import static org.mockito.Matchers.anyString;
 
 import org.mockito.Mock;
+
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -64,7 +68,7 @@ public class UnrestrictedTransitionsAppenderTest {
         results.add(result2);
         results.add(result3);
 
-        Collection<Long> ids = new HashSet<Long>();
+        Collection<Serializable> ids = new HashSet<Serializable>();
 
         ids.add(1L);
         ids.add(2L);
@@ -78,7 +82,7 @@ public class UnrestrictedTransitionsAppenderTest {
 
         transitions2.add("fred");
 
-        Map<Long, Collection<String>> transitionsById = new HashMap<Long, Collection<String>>();
+        Map<Serializable, Collection<String>> transitionsById = new HashMap<Serializable, Collection<String>>();
 
         transitionsById.put(1L, transitions1);
         transitionsById.put(2L, transitions2);
@@ -129,13 +133,13 @@ public class UnrestrictedTransitionsAppenderTest {
         results.add(result2);
         results.add(result3);
 
-        Collection<Long> ids = new HashSet<Long>();
+        Collection<Serializable> ids = new HashSet<Serializable>();
 
         ids.add(1L);
         ids.add(2L);
 
         when(workflowSupportService.listAllTransitions(ids, Foo.TYPE))
-            .thenReturn(new HashMap<Long, Collection<String>>());
+            .thenReturn(new HashMap<Serializable, Collection<String>>());
 
         appender.doModify(Foo.TYPE, results);
 

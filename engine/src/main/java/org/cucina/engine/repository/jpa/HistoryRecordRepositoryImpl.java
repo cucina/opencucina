@@ -1,5 +1,6 @@
 package org.cucina.engine.repository.jpa;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -43,7 +44,7 @@ public class HistoryRecordRepositoryImpl
      * @return JAVADOC.
      */
     @Override
-    public List<HistoryRecord> findByIdAndApplicationType(Long id, String applicationType) {
+    public List<HistoryRecord> findByIdAndApplicationType(Serializable id, String applicationType) {
         //  "select hr.id as id, hr.status as status, hr.comments as comments, hr.modifiedBy as modifiedBy," +
         //" hr.modifiedDate as modifiedDate, hr.approvedBy as approvedBy, hrReason, hrAttachment.id as attachmentId " +
         //"from HistoryRecord hr left join hr.reason as hrReason left join hr.attachment as hrAttachment " +

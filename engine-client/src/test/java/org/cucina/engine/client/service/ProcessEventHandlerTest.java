@@ -3,7 +3,7 @@ package org.cucina.engine.client.service;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.expression.BeanResolver;
+import org.springframework.core.convert.ConversionService;
 
 import org.cucina.engine.client.Check;
 import org.cucina.engine.client.Operation;
@@ -20,6 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.mockito.MockitoAnnotations;
@@ -34,9 +35,9 @@ import org.mockito.MockitoAnnotations;
 public class ProcessEventHandlerTest {
     private static final String APPLICATION_NAME = "an";
     @Mock
-    private BeanResolver beanResolver;
-    @Mock
     private Check check;
+    @Mock
+    private ConversionService conversionService;
     @Mock
     private DomainFindingService domainFindingService;
     private Foo foo;
@@ -53,7 +54,7 @@ public class ProcessEventHandlerTest {
     public void setUp()
         throws Exception {
         MockitoAnnotations.initMocks(this);
-        handler = new ProcessEventHandler(beanResolver, domainFindingService);
+        handler = new ProcessEventHandler(domainFindingService, conversionService);
         foo = new Foo();
 
         when(domainFindingService.find("Foo", 100L)).thenReturn(foo);
@@ -73,7 +74,7 @@ public class ProcessEventHandlerTest {
         element.setDomainId(100L);
         element.setDomainType("Foo");
 
-        when(beanResolver.resolve(null, "path")).thenReturn(check);
+        when(conversionService.convert(element, Check.class)).thenReturn(check);
 
         Map<String, Object> parameters = new HashMap<String, Object>();
 
@@ -83,6 +84,7 @@ public class ProcessEventHandlerTest {
         EngineEvent re = handler.handleEvent(event);
 
         assertTrue(((BooleanEvent) re).isResult());
+        verify(check).test(foo, parameters);
     }
 
     /**
@@ -99,12 +101,13 @@ public class ProcessEventHandlerTest {
         element.setDomainId(100L);
         element.setDomainType("Foo");
 
-        when(beanResolver.resolve(null, "path")).thenReturn(action);
+        when(conversionService.convert(element, Operation.class)).thenReturn(action);
 
         Map<String, Object> parameters = new HashMap<String, Object>();
         CallbackEvent event = new CallbackEvent(element, parameters, APPLICATION_NAME);
         EngineEvent re = handler.handleEvent(event);
 
+        verify(action).execute(foo, parameters);
         System.err.println(((ActionResultEvent) re).getSource());
     }
 }

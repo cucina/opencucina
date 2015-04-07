@@ -1,5 +1,7 @@
 package org.cucina.engine.repository.jpa;
 
+import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,7 +88,7 @@ public class TokenRepositoryImplTest {
         trepo.save(wf);
         verify(em).persist(wf);
         assertEquals("Foo", wf.getDomainObjectType());
-        assertEquals(111L, wf.getDomainObjectId().longValue());
+        assertEquals(111L, wf.getDomainObjectId());
     }
 
     /**
@@ -102,7 +104,7 @@ public class TokenRepositoryImplTest {
         verify(em).merge(foo);
         verify(em).persist(wf);
         assertEquals("Foo", wf.getDomainObjectType());
-        assertEquals(111L, wf.getDomainObjectId().longValue());
+        assertEquals(111L, wf.getDomainObjectId());
     }
 
     /**
@@ -213,7 +215,7 @@ public class TokenRepositoryImplTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testLoadTokens() {
-        Long[] ids = new Long[] { 1L };
+        Serializable[] ids = new Serializable[] { 1L };
 
         CriteriaQuery<Tuple> tcq = mock(CriteriaQuery.class);
 

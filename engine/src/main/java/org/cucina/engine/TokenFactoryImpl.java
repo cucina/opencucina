@@ -1,21 +1,24 @@
 package org.cucina.engine;
 
-import org.cucina.core.InstanceFactory;
-import org.cucina.core.model.PersistableEntity;
-import org.cucina.core.spring.SingletonBeanFactory;
-import org.cucina.engine.definition.ProcessDefinition;
-import org.cucina.engine.definition.Token;
-import org.cucina.engine.model.ProcessToken;
-import org.cucina.engine.repository.TokenRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.data.domain.Persistable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+
+import org.cucina.core.InstanceFactory;
+import org.cucina.core.spring.SingletonBeanFactory;
+
+import org.cucina.engine.definition.ProcessDefinition;
+import org.cucina.engine.definition.Token;
+import org.cucina.engine.model.ProcessToken;
+import org.cucina.engine.repository.TokenRepository;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -119,9 +122,9 @@ public class TokenFactoryImpl
     public Token createToken(ProcessDefinition definition, Object domainObject) {
         Assert.notNull(definition, "The 'definition' parameter cannot be null.");
         Assert.notNull(domainObject, "The 'domainObject' parameter cannot be null.");
-        Assert.isInstanceOf(PersistableEntity.class, domainObject);
+        Assert.isInstanceOf(Persistable.class, domainObject);
 
-        PersistableEntity entity = (PersistableEntity) domainObject;
+        Persistable<?> entity = (Persistable<?>) domainObject;
 
         if (entity.getId() != null) {
             // call to tokenRepository to find an existing one for the object

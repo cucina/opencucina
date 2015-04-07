@@ -7,7 +7,9 @@ import java.util.Map;
 
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
+
 import org.cucina.core.spring.ExpressionExecutor;
+
 import org.cucina.engine.DefaultExecutionContext;
 import org.cucina.engine.ExecutionContext;
 import org.cucina.engine.ProcessDriverFactory;
@@ -15,15 +17,15 @@ import org.cucina.engine.definition.Token;
 import org.cucina.engine.email.UserAccessorBean;
 import org.cucina.engine.event.EmailEvent;
 import org.cucina.engine.testassist.Foo;
-
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -62,7 +64,7 @@ public class EmailOperationTest {
         throws Exception {
         MockitoAnnotations.initMocks(this);
         when(executorFactory.getExpressionExecutor()).thenReturn(expressionExecutor);
-        when(token.getDomainObject()).thenReturn(localFoo);
+        doReturn(localFoo).when(token).getDomainObject();
 
         users = getUsers(2);
 

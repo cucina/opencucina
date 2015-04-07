@@ -1,11 +1,11 @@
 package org.cucina.engine.service;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import org.cucina.core.model.Attachment;
-import org.cucina.core.model.PersistableEntity;
 import org.cucina.engine.definition.Token;
 import org.cucina.engine.definition.Transition;
 import org.cucina.engine.model.HistoryRecord;
@@ -41,7 +41,7 @@ public interface ProcessSupportService {
      *
      * @return JAVADOC.
      */
-    Map<Long, Collection<String>> listAllTransitions(Collection<Long> ids, String applicationType);
+    Map<Serializable, Collection<String>> listAllTransitions(Collection<Serializable> ids, String applicationType);
 
     /**
      * Extract names of possible transitions for these objects. Assumption is
@@ -54,7 +54,7 @@ public interface ProcessSupportService {
      *
      * @return JAVADOC.
      */
-    Collection<String> listTransitions(Collection<Long> ids, String applicationType);
+    Collection<String> listTransitions(Collection<Serializable> ids, String applicationType);
 
     /**
      * JAVADOC Method Level Comments
@@ -64,7 +64,7 @@ public interface ProcessSupportService {
      *
      * @return JAVADOC.
      */
-    Collection<Map<String, Object>> listWorkflowProperties(Collection<Long> ids,
+    Collection<Map<String, Object>> listWorkflowProperties(Collection<Serializable> ids,
         String applicationType);
 
     /**
@@ -98,7 +98,7 @@ public interface ProcessSupportService {
      * @param attachment
      *            JAVADOC.
      */
-    void makeBulkTransition(Map<Long, Integer> entities, String applicationType, String transitionId,
+    void makeBulkTransition(Map<Serializable, Integer> entities, String applicationType, String transitionId,
         String comment, String approvedAs, String assignedTo, Map<String, Object> extraParams,
         ListItemDto listNodeDto, Attachment attachment);
 
@@ -120,7 +120,7 @@ public interface ProcessSupportService {
      * @param attachment
      *            JAVADOC.
      */
-    void makeTransition(Long id, String applicationType, String transitionId, String comment,
+    void makeTransition(Serializable id, String applicationType, String transitionId, String comment,
         String approvedAs, String assignedTo, Map<String, Object> extraParams, Attachment attachment);
 
     /**
@@ -133,7 +133,7 @@ public interface ProcessSupportService {
      *
      * @return JAVADOC.
      */
-    List<HistoryRecord> obtainHistory(Long id, String applicationType);
+    List<HistoryRecord> obtainHistory(Serializable id, String applicationType);
 
     /**
      * Obtain a summary of the history information.
@@ -145,20 +145,8 @@ public interface ProcessSupportService {
      *
      * @return JAVADOC.
      */
-    List<Map<Object, Object>> obtainHistorySummary(Long id, String applicationType);
-
-    /**
-     * Starts and persists workflow and entity
-     *
-     * @param entity
-     *            PersistableEntity.
-     * @param parameters
-     *            Map<String, Object>.
-     *
-     * @return JAVADOC.
-     */
-    Token startWorkflow(PersistableEntity entity, Map<String, Object> parameters);
-
+    List<Map<Object, Object>> obtainHistorySummary(Serializable id, String applicationType);
+   
     /**
      * Starts and persists workflow and entity
      *
@@ -170,5 +158,5 @@ public interface ProcessSupportService {
      *
      * @return JAVADOC.
      */
-    Token startWorkflow(PersistableEntity entity, String workflowId, Map<String, Object> parameters);
+    Token startWorkflow(Object entity, String workflowId, Map<String, Object> parameters);
 }

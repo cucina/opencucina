@@ -1,10 +1,6 @@
-
 package org.cucina.engine.server.definition;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -16,199 +12,101 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @version $Revision: $
  */
 public class CheckDescriptorDto
-    implements WorkflowElementDescriptor, Map<String, Object> {
+    implements WorkflowElementDto {
     private HashMap<String, Object> properties = new HashMap<String, Object>();
+    private Object domainId;
+    private String application;
+    private String domainType;
+    private String path;
 
     /**
-     * JAVADOC Method Level Comments
      *
-     * @param application JAVADOC.
+     *
+     * @param application .
      */
     public void setApplication(String application) {
-        properties.put("application", application);
+        this.application = application;
     }
 
     /**
-     * JAVADOC Method Level Comments
      *
-     * @return JAVADOC.
+     *
+     * @return .
      */
     public String getApplication() {
-        return (String) properties.get("application");
+        return application;
     }
 
     /**
-    * JAVADOC Method Level Comments
-    *
-    * @param domainId
-    *            JAVADOC.
-    */
-    public void setDomainId(Object domainId) {
-        properties.put("domainId", domainId);
-    }
-
-    /**
-     * JAVADOC Method Level Comments
      *
-     * @return JAVADOC.
+     *
+     * @param domainId .
      */
-    @Override
-    public Object getDomainId() {
-        return properties.get("domainId");
+    public void setDomainId(Object domainId) {
+        this.domainId = domainId;
     }
 
     /**
-     * JAVADOC Method Level Comments
      *
-     * @param domainType
-     *            JAVADOC.
+     *
+     * @return .
+     */
+    public Object getDomainId() {
+        return domainId;
+    }
+
+    /**
+     *
+     *
+     * @param domainType .
      */
     public void setDomainType(String domainType) {
-        properties.put("domainType", domainType);
+        this.domainType = domainType;
     }
 
     /**
-     * JAVADOC Method Level Comments
      *
-     * @return JAVADOC.
+     *
+     * @return .
      */
-    @Override
     public String getDomainType() {
-        return (String) properties.get("domainType");
+        return domainType;
     }
 
     /**
-     * JAVADOC Method Level Comments
      *
-     * @return JAVADOC.
-     */
-    public boolean isEmpty() {
-        return properties.isEmpty();
-    }
-
-    /**
-     * JAVADOC Method Level Comments
      *
-     * @param path
-     *            JAVADOC.
+     * @param path .
      */
     public void setPath(String path) {
-        properties.put("path", path);
+        this.path = path;
     }
 
     /**
-     * JAVADOC Method Level Comments
      *
-     * @return JAVADOC.
+     *
+     * @return .
      */
     public String getPath() {
-        return (String) get("path");
+        return path;
     }
 
     /**
-     * JAVADOC Method Level Comments
+     * Set properties
+     *
+     * @param properties HashMap<String, Object>
      */
-    public void clear() {
-        properties.clear();
+    public void setProperties(HashMap<String, Object> properties) {
+        this.properties = properties;
     }
 
     /**
-     * JAVADOC Method Level Comments
+     * Get properties
      *
-     * @param key
-     *            JAVADOC.
-     *
-     * @return JAVADOC.
+     * @return HashMap<String, Object>
      */
-    public boolean containsKey(Object key) {
-        return properties.containsKey(key);
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param value
-     *            JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    public boolean containsValue(Object value) {
-        return properties.containsValue(value);
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    public Set<java.util.Map.Entry<String, Object>> entrySet() {
-        return properties.entrySet();
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param key
-     *            JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    public Object get(Object key) {
-        return properties.get(key);
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    public Set<String> keySet() {
-        return properties.keySet();
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param key
-     *            JAVADOC.
-     * @param value
-     *            JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    public Object put(String key, Object value) {
-        return properties.put(key, value);
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param m
-     *            JAVADOC.
-     */
-    public void putAll(Map<?extends String, ?extends Object> m) {
-        properties.putAll(m);
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param key
-     *            JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    public Object remove(Object key) {
-        return properties.remove(key);
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    public int size() {
-        return properties.size();
+    public HashMap<String, Object> getProperties() {
+        return properties;
     }
 
     /**
@@ -220,31 +118,4 @@ public class CheckDescriptorDto
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
     }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    public Collection<Object> values() {
-        return properties.values();
-    }
-
-	/**
-	 * Get properties
-	 * 
-	 * @return HashMap<String, Object>
-	 */
-	public HashMap<String, Object> getProperties() {
-		return properties;
-	}
-
-	/**
-	 * Set properties
-	 * 
-	 * @param properties HashMap<String, Object>
-	 */
-	public void setProperties(HashMap<String, Object> properties) {
-		this.properties = properties;
-	}
 }

@@ -1,5 +1,7 @@
 package org.cucina.engine.server.event;
 
+import java.io.Serializable;
+
 
 /**
  * JAVADOC for Class Level
@@ -11,7 +13,7 @@ public class CompensateEvent
     extends EngineEvent {
     private static final long serialVersionUID = 3984488467230882388L;
     private String type;
-    private Long[] ids;
+    private Serializable[] ids;
 
     /**
     * Creates a new CompensateEvent object.
@@ -31,7 +33,7 @@ public class CompensateEvent
     /**
      * JAVADOC Method Level Comments
      */
-    public void setIds(Long... ids) {
+    public void setIds(Serializable... ids) {
         this.ids = ids;
     }
 
@@ -40,7 +42,7 @@ public class CompensateEvent
      *
      * @return JAVADOC.
      */
-    public Long[] getIds() {
+    public Serializable[] getIds() {
         return ids;
     }
 

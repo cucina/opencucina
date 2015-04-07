@@ -1,5 +1,6 @@
-
 package org.cucina.engine.server.event.workflow;
+
+import java.io.Serializable;
 
 import org.cucina.engine.server.event.GetValueEvent;
 
@@ -13,7 +14,7 @@ import org.cucina.engine.server.event.GetValueEvent;
 public class ObtainHistorySummaryEvent
     extends GetValueEvent {
     private static final long serialVersionUID = -7479820901125310024L;
-    private Long id;
+    private Serializable id;
     private String applicationType;
 
     /**
@@ -54,7 +55,7 @@ public class ObtainHistorySummaryEvent
      *
      * @param id JAVADOC.
      */
-    public void setId(Long id) {
+    public void setId(Serializable id) {
         this.id = id;
     }
 
@@ -63,7 +64,7 @@ public class ObtainHistorySummaryEvent
      *
      * @return JAVADOC.
      */
-    public Long getId() {
+    public Serializable getId() {
         return id;
     }
 }

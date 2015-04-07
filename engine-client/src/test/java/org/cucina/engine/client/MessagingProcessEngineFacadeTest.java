@@ -1,5 +1,7 @@
 package org.cucina.engine.client;
 
+import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -16,7 +18,7 @@ import org.springframework.messaging.SubscribableChannel;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.transaction.support.TransactionSynchronizationUtils;
-import org.cucina.engine.client.MessagingProcessEngineFacade;
+
 import org.cucina.engine.server.communication.HistoryRecordDto;
 import org.cucina.engine.server.event.CommitSuccessEvent;
 import org.cucina.engine.server.event.CompensateEvent;
@@ -25,27 +27,28 @@ import org.cucina.engine.server.event.workflow.BulkTransitionEvent;
 import org.cucina.engine.server.event.workflow.SingleTransitionEvent;
 import org.cucina.engine.server.event.workflow.StartWorkflowEvent;
 import org.cucina.engine.server.event.workflow.ValueEvent;
-import org.junit.After;
 
+import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 
+import org.mockito.ArgumentCaptor;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 
 import org.mockito.Mock;
-
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import org.mockito.MockitoAnnotations;
+
 import org.mockito.invocation.InvocationOnMock;
+
 import org.mockito.stubbing.Answer;
 
 
@@ -119,7 +122,7 @@ public class MessagingProcessEngineFacadeTest {
 
         reply.setValue(source);
 
-        Collection<Long> ids = Collections.singleton(100L);
+        Collection<Serializable> ids = Collections.<Serializable>singleton(100L);
         Collection<String> result = facade.listTransitions(ids, "applicationType");
 
         assertNotNull("Result is null", result);
@@ -136,7 +139,7 @@ public class MessagingProcessEngineFacadeTest {
         source.add(Collections.<String, Object>singletonMap("key", "value"));
         reply.setValue(source);
 
-        Collection<Long> ids = Collections.singleton(100L);
+        Collection<Serializable> ids = Collections.<Serializable>singleton(100L);
         Collection<Map<String, Object>> result = facade.listWorkflowProperties(ids,
                 "applicationType");
 
@@ -165,7 +168,7 @@ public class MessagingProcessEngineFacadeTest {
      */
     @Test
     public void testNoTxBulkTransition() {
-        Map<Long, Integer> entities = new HashMap<Long, Integer>();
+        Map<Serializable, Integer> entities = new HashMap<Serializable, Integer>();
 
         entities.put(3L, 20);
         facade.bulkTransition(entities, "applicationType", "transitionId", "comment", "approvedAs",
@@ -271,7 +274,7 @@ public class MessagingProcessEngineFacadeTest {
 
         CompensateEvent cse = (CompensateEvent) m.getPayload();
 
-        long id = cse.getIds()[0];
+        Object id = cse.getIds()[0];
 
         assertEquals(1L, id);
         assertEquals("entityType", cse.getType());
@@ -298,7 +301,7 @@ public class MessagingProcessEngineFacadeTest {
 
         CommitSuccessEvent cse = (CommitSuccessEvent) m.getPayload();
 
-        long id = ((Long[]) cse.getSource())[0];
+        Object id = ((Object[]) cse.getSource())[0];
 
         assertEquals(1L, id);
     }
