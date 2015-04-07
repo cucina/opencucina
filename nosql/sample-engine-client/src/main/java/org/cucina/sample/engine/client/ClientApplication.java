@@ -141,6 +141,7 @@ public class ClientApplication {
         return facade;
     }
 
+    
     private ConversionService conversionService(ApplicationContext applicationContext) {
         BeanFactoryResolver beanResolver = new BeanFactoryResolver(applicationContext) {
                 @Override

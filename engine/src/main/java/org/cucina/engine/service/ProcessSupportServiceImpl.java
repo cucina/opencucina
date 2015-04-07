@@ -545,6 +545,7 @@ public class ProcessSupportServiceImpl
      * @return JAVADOC.
      */
     @Override
+    @Transactional
     public Token startWorkflow(Object entity, String processId, Map<String, Object> parameters) {
         Assert.notNull(entity, "entity must be provided as a parameter");
         Assert.hasText(processId, "processId cannot be empty");

@@ -1,5 +1,9 @@
 package org.cucina.engine.client.converters;
 
+import java.util.Map;
+
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.expression.AccessException;
 import org.springframework.expression.BeanResolver;
@@ -42,18 +46,26 @@ public class DtoCheckConverter
     public Check convert(WorkflowElementDto source) {
         String path = source.getPath();
 
-        Object obj;
+        Object check;
 
         try {
-            obj = beanResolver.resolve(null, path);
+            check = beanResolver.resolve(null, path);
         } catch (AccessException e) {
             LOG.error("Oops", e);
 
             return null;
         }
 
-        Assert.isInstanceOf(Check.class, obj, "bean found at path:'" + path + "' is not a Check");
+        Assert.isInstanceOf(Check.class, check, "bean found at path:'" + path + "' is not a Check");
 
-        return (Check) obj;
+        BeanWrapper bw = new BeanWrapperImpl(check);
+
+        for (Map.Entry<String, Object> entry : source.getProperties().entrySet()) {
+            if (bw.isWritableProperty(entry.getKey())) {
+                bw.setPropertyValue(entry.getKey(), entry.getValue());
+            }
+        }
+
+        return (Check) check;
     }
 }

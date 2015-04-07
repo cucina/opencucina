@@ -1,5 +1,9 @@
 package org.cucina.engine.client.converters;
 
+import java.util.Map;
+
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.expression.AccessException;
 import org.springframework.expression.BeanResolver;
@@ -42,19 +46,27 @@ public class DtoOperationConverter
     public Operation convert(WorkflowElementDto source) {
         String path = source.getPath();
 
-        Object obj;
+        Object op;
 
         try {
-            obj = beanResolver.resolve(null, path);
+            op = beanResolver.resolve(null, path);
         } catch (AccessException e) {
             LOG.error("Oops", e);
 
             return null;
         }
 
-        Assert.isInstanceOf(Operation.class, obj,
+        Assert.isInstanceOf(Operation.class, op,
             "bean found at path:'" + path + "' is not a Operation");
 
-        return (Operation) obj;
+        BeanWrapper bw = new BeanWrapperImpl(op);
+
+        for (Map.Entry<String, Object> entry : source.getProperties().entrySet()) {
+            if (bw.isWritableProperty(entry.getKey())) {
+                bw.setPropertyValue(entry.getKey(), entry.getValue());
+            }
+        }
+
+        return (Operation) op;
     }
 }

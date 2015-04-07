@@ -13,7 +13,7 @@ import org.springframework.messaging.Message;
  * @author $Author: $
  * @version $Revision: $
   */
-public interface MessagingWorkflowServiceHandler {
+public interface MessagingProcessServiceHandler {
     /**
      * JAVADOC Method Level Comments
      *

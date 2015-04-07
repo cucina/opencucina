@@ -1,6 +1,7 @@
 package org.cucina.engine.client;
 
 import java.io.Serializable;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -18,8 +19,10 @@ import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationAdapter;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.Assert;
+
 import org.cucina.engine.server.communication.ConversationContext;
 import org.cucina.engine.server.communication.HistoryRecordDto;
+import org.cucina.engine.server.event.CommitEvent;
 import org.cucina.engine.server.event.CommitSuccessEvent;
 import org.cucina.engine.server.event.CompensateEvent;
 import org.cucina.engine.server.event.RegistrationEvent;
@@ -33,6 +36,7 @@ import org.cucina.engine.server.event.workflow.ObtainHistorySummaryEvent;
 import org.cucina.engine.server.event.workflow.SingleTransitionEvent;
 import org.cucina.engine.server.event.workflow.StartWorkflowEvent;
 import org.cucina.engine.server.event.workflow.ValueEvent;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -192,8 +196,9 @@ public class MessagingProcessEngineFacade
      *            JAVADOC.
      */
     @Override
-    public void makeTransition(String entityType, Serializable id, String transitionId, String comment,
-        String approvedAs, String assignedTo, Map<String, Object> extraParams, Object attachment) {
+    public void makeTransition(String entityType, Serializable id, String transitionId,
+        String comment, String approvedAs, String assignedTo, Map<String, Object> extraParams,
+        Object attachment) {
         registerTxHandler(entityType, id);
 
         SingleTransitionEvent event = new SingleTransitionEvent(entityType, applicationName);
@@ -307,13 +312,23 @@ public class MessagingProcessEngineFacade
         event.setId(id);
         event.setParameters(parameters);
 
-        ValueEvent reply = sendForReply(event);
+        Object reply = sendForReply(event);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Reply:" + reply);
         }
 
-        return (Boolean) reply.getValue();
+        if (reply instanceof CommitEvent) {
+            return true;
+        }
+
+        // TODO is it a case for rollback if the result is false or not a
+        // CommitEvent at all ?
+        if (reply instanceof ValueEvent) {
+            return (Boolean) ((ValueEvent) reply).getValue();
+        }
+
+        return false;
     }
 
     private Message<?> buildMessage(Object payload) {

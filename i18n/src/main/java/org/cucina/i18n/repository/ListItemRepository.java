@@ -14,7 +14,7 @@ import org.springframework.data.repository.Repository;
   */
 public interface ListItemRepository
     extends Repository<ListItem, Long> {
-	String LISTNODE_REPOSITORY_ID="listNodeRepository";
+	String LISTNODE_REPOSITORY_ID="listItemRepository";
   
     /**
      * Load <code>ListNode</code> by id.

@@ -1,5 +1,6 @@
-
 package org.cucina.engine.server.definition;
+
+import java.util.HashMap;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -7,36 +8,42 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 /**
  * Describes a workflow component
  *
- * @author $Author: $
- * @version $Revision: $
+ * @author vlevine
   */
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "classType")
 public interface WorkflowElementDto {
     /**
-     * Application where the component lives
      *
-     * @return JAVADOC.
+     *
+     * @return .
      */
     String getApplication();
 
     /**
-     * JAVADOC Method Level Comments
      *
-     * @return JAVADOC.
+     *
+     * @return .
      */
     Object getDomainId();
 
     /**
-     * JAVADOC Method Level Comments
      *
-     * @return JAVADOC.
+     *
+     * @return .
      */
     String getDomainType();
 
     /**
-     * JAVADOC Method Level Comments
      *
-     * @return JAVADOC.
+     *
+     * @return .
      */
     String getPath();
+
+    /**
+     *
+     *
+     * @return .
+     */
+    HashMap<String, Object> getProperties();
 }

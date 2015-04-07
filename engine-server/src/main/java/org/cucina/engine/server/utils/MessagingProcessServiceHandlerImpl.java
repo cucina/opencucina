@@ -45,9 +45,9 @@ import org.slf4j.LoggerFactory;
  * @version $Revision: $
   */
 @Component("messagingWorkflowHandler")
-public class MessagingWorkflowServiceHandlerImpl
-    implements MessagingWorkflowServiceHandler {
-    private static final Logger LOG = LoggerFactory.getLogger(MessagingWorkflowServiceHandlerImpl.class);
+public class MessagingProcessServiceHandlerImpl
+    implements MessagingProcessServiceHandler {
+    private static final Logger LOG = LoggerFactory.getLogger(MessagingProcessServiceHandlerImpl.class);
     private ConversationContext conversationContext;
     private ListItemService listNodeService;
     private ProcessSupportService processSupportService;
@@ -60,7 +60,7 @@ public class MessagingWorkflowServiceHandlerImpl
      * @param processSupportService JAVADOC.
      */
     @Autowired
-    public MessagingWorkflowServiceHandlerImpl(ConversationContext conversationContext,
+    public MessagingProcessServiceHandlerImpl(ConversationContext conversationContext,
         ListItemService listNodeService, ProcessSupportService processSupportService) {
         Assert.notNull(conversationContext, "conversationContext is null");
         this.conversationContext = conversationContext;
