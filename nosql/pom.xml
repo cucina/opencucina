@@ -31,6 +31,5 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>security</module>
-    <module>sample-engine-client</module>
   </modules>
 </project>

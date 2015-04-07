@@ -59,7 +59,7 @@ public class ELExpressionExecutor
             }
 
             if (LOG.isDebugEnabled()) {
-                LOG.debug("expressionFrom [" + expression + "]");
+                LOG.debug("evaluating expression [" + expression + "]");
             }
 
             return (T) parser.parseExpression(expression).getValue(evaluationContext);
@@ -89,7 +89,7 @@ public class ELExpressionExecutor
             }
 
             if (LOG.isDebugEnabled()) {
-                LOG.debug("expressionFrom [" + expression + "]");
+                LOG.debug("setting expression [" + expression + "]");
             }
 
             parser.parseExpression(expression).setValue(evaluationContext, value);

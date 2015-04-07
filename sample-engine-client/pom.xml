@@ -4,13 +4,12 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>nosql</groupId>
-		<artifactId>nosql</artifactId>
+		<groupId>cucina</groupId>
+		<artifactId>cucina</artifactId>
 		<version>0.1</version>
 	</parent>
 	<artifactId>sample-engine-client</artifactId>
 	<name>sample-engine-client</name>
-	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -35,6 +34,11 @@
 		<dependency>
 			<groupId>cucina</groupId>
 			<artifactId>engine-client</artifactId>
+			<version>0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>cucina</groupId>
+			<artifactId>cucina-core</artifactId>
 			<version>0.1</version>
 		</dependency>
 	</dependencies>

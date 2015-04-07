@@ -314,10 +314,6 @@ public class MessagingProcessEngineFacade
 
         Object reply = sendForReply(event);
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Reply:" + reply);
-        }
-
         if (reply instanceof CommitEvent) {
             return true;
         }

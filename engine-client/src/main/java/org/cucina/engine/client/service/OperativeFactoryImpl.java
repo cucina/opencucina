@@ -8,15 +8,15 @@ import org.apache.commons.pool2.ObjectPool;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.apache.commons.pool2.impl.GenericObjectPool;
-
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.integration.channel.QueueChannel;
+import org.springframework.jmx.export.annotation.ManagedAttribute;
+import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.util.Assert;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
  * @author $Author: $
  * @version $Revision: $
   */
+@ManagedResource
 public class OperativeFactoryImpl
     implements OperativeFactory, ApplicationContextAware, InitializingBean {
     private static final Logger LOG = LoggerFactory.getLogger(OperativeFactoryImpl.class);
@@ -46,6 +47,16 @@ public class OperativeFactoryImpl
     public void setApplicationContext(ApplicationContext applicationContext)
         throws BeansException {
         this.applicationContext = applicationContext;
+    }
+
+    /**
+     *
+     *
+     * @return .
+     */
+    @ManagedAttribute
+    public String[] getConversations() {
+        return channels.keySet().toArray(new String[channels.size()]);
     }
 
     /**

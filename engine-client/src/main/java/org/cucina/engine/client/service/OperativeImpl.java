@@ -1,18 +1,21 @@
 package org.cucina.engine.client.service;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.cucina.engine.server.communication.ConversationContext;
-import org.cucina.engine.server.event.CallbackEvent;
-import org.cucina.engine.server.event.CommitEvent;
-import org.cucina.engine.server.event.EngineEvent;
-import org.cucina.engine.server.event.RollbackEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.PollableChannel;
 import org.springframework.messaging.support.MessageBuilder;
+
+import org.cucina.engine.server.communication.ConversationContext;
+import org.cucina.engine.server.event.CallbackEvent;
+import org.cucina.engine.server.event.CommitEvent;
+import org.cucina.engine.server.event.EngineEvent;
+import org.cucina.engine.server.event.RollbackEvent;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -80,7 +83,7 @@ public class OperativeImpl
         requestChannel.send(request);
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Sent " + request + " on channel " + replyChannel);
+            LOG.debug("Sent " + request + " on channel " + requestChannel);
         }
 
         MessageHeaders requestHeaders = request.getHeaders();
@@ -99,6 +102,10 @@ public class OperativeImpl
             }
 
             Object payload = reply.getPayload();
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Payload=" + payload);
+            }
 
             if (payload instanceof CallbackEvent) {
                 EngineEvent callresult = eventHandler.handleEvent((EngineEvent) payload);
@@ -128,14 +135,14 @@ public class OperativeImpl
             LOG.warn("Payload not handleable " + payload);
         }
     }
-    
+
     /**
-	 * Default toString implementation
-	 *
-	 * @return This object as String.
-	 */
-	@Override
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
-	}
+         * Default toString implementation
+         *
+         * @return This object as String.
+         */
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
 }

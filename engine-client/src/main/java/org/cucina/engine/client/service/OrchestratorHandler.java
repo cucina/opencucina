@@ -64,8 +64,16 @@ public class OrchestratorHandler
         try {
             Message<?> reply = operative.process(message);
 
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("reply=" + reply);
+            }
+
             replyChannel.send(reply);
         } finally {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Releasing conversation '" + conversationId + "'");
+            }
+
             operativeFactory.releaseConversation(conversationId);
         }
     }

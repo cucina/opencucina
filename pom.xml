@@ -125,8 +125,10 @@
 		<module>engine-server-api</module>
 		<module>engine-server</module>
 		<module>engine-client</module>
+		<module>sample-engine-client</module>
 		<module>i18n</module>
 		<module>nosql</module>
+		
 <!-- 		<module>loader</module> -->
 	</modules>
 	<profiles>

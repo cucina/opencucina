@@ -59,7 +59,7 @@
 	<si:payload-type-router input-channel="outputReplyChannel"
 		default-output-channel="unroutableReplyChannel">
 		<si:mapping type="org.cucina.engine.server.event.workflow.ValueEvent"
-			channel="workflowReplyChannel" />
+			channel="workflowReply" />
 		<si:mapping type="org.cucina.engine.server.event.CallbackEvent"
 			channel="conversationReplyChannel" />
 		<si:mapping type="org.cucina.engine.server.event.CommitEvent"

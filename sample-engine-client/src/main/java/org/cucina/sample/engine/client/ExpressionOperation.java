@@ -76,7 +76,7 @@ public class ExpressionOperation
 
         if (StringUtils.isNotEmpty(expressionTo)) {
             if (LOG.isDebugEnabled()) {
-                LOG.debug("expressionFrom [" + expressionTo + "]");
+                LOG.debug("expressionTo [" + expressionTo + "]");
             }
 
             expressionExecutor.set(domain, expressionTo, value);

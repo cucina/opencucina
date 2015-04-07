@@ -1,7 +1,5 @@
 package org.cucina.sample.engine.client;
 
-import java.math.BigInteger;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -55,19 +53,6 @@ public class ClientApplication {
     /**
      *
      *
-     * @param args
-     *            .
-     *
-     * @throws Exception .
-     */
-    public static void main(String[] args)
-        throws Exception {
-        SpringApplication.run(ClientApplication.class, args);
-    }
-
-    /**
-     *
-     *
      * @param applicationContext .
      *
      * @return .
@@ -84,11 +69,24 @@ public class ClientApplication {
                         LOG.debug("Loading Item with id " + id);
                     }
 
-                    return itemRepository.findOne(new BigInteger(id.toString()));
+                    return itemRepository.findOne(new Long(id.toString()));
                 }
             };
 
         return new ProcessEventHandler(domainFindingService, conversionService(applicationContext));
+    }
+
+    /**
+     *
+     *
+     * @param args
+     *            .
+     *
+     * @throws Exception .
+     */
+    public static void main(String[] args)
+        throws Exception {
+        SpringApplication.run(ClientApplication.class, args);
     }
 
     /**
@@ -141,7 +139,6 @@ public class ClientApplication {
         return facade;
     }
 
-    
     private ConversionService conversionService(ApplicationContext applicationContext) {
         BeanFactoryResolver beanResolver = new BeanFactoryResolver(applicationContext) {
                 @Override

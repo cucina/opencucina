@@ -1,8 +1,9 @@
 package org.cucina.sample.engine.client;
 
-import java.math.BigInteger;
-
-import org.springframework.data.mongodb.core.mapping.Document;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 
 /**
@@ -10,18 +11,18 @@ import org.springframework.data.mongodb.core.mapping.Document;
  *
  * @author vlevine
   */
-@Document
+@Entity
 public class Item {
-    private BigInteger id;
+    private Long id;
     private String name;
     private String status;
 
     /**
-    *
-    *
-    * @param id .
-    */
-    public void setId(BigInteger id) {
+     *
+     *
+     * @param id .
+     */
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -30,7 +31,9 @@ public class Item {
      *
      * @return .
      */
-    public BigInteger getId() {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long getId() {
         return id;
     }
 
