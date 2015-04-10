@@ -11,7 +11,7 @@ import java.util.Map;
  * @version $Revision: $
   */
 public class StartWorkflowEvent
-    extends WorkflowEvent {
+    extends ProcessEvent {
     private static final long serialVersionUID = -2588190857865779918L;
     private Map<String, Object> parameters;
 

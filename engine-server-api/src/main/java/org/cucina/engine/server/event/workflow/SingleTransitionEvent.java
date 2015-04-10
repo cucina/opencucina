@@ -10,7 +10,7 @@ import java.util.Map;
  * @version $Revision: $
   */
 public class SingleTransitionEvent
-    extends WorkflowEvent {
+    extends ProcessEvent {
     private static final long serialVersionUID = 1L;
     private Map<String, Object> extraParams;
     private Object attachment;

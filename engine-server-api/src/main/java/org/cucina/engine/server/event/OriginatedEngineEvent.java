@@ -12,7 +12,6 @@ public abstract class OriginatedEngineEvent
     extends EngineEvent {
     private static final long serialVersionUID = -3806305660477926L;
     private String applicationName;
-    private String conversationId;
 
     /**
     * Creates a new OriginatedEvent object.
@@ -46,23 +45,5 @@ public abstract class OriginatedEngineEvent
      */
     public String getApplicationName() {
         return applicationName;
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param conversationId JAVADOC.
-     */
-    public void setConversationId(String conversationId) {
-        this.conversationId = conversationId;
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    public String getConversationId() {
-        return conversationId;
     }
 }

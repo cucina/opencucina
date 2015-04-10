@@ -29,7 +29,7 @@ import org.cucina.engine.server.event.RegistrationEvent;
 import org.cucina.engine.server.event.RollbackEvent;
 import org.cucina.engine.server.event.workflow.BulkTransitionEvent;
 import org.cucina.engine.server.event.workflow.ListTransitionsEvent;
-import org.cucina.engine.server.event.workflow.ListWorkflowPropertiesEvent;
+import org.cucina.engine.server.event.workflow.ListProcessPropertiesEvent;
 import org.cucina.engine.server.event.workflow.LoadTransitionInfoEvent;
 import org.cucina.engine.server.event.workflow.ObtainHistoryEvent;
 import org.cucina.engine.server.event.workflow.ObtainHistorySummaryEvent;
@@ -149,7 +149,7 @@ public class MessagingProcessEngineFacade
     @Override
     public Collection<Map<String, Object>> listWorkflowProperties(Collection<Serializable> ids,
         String applicationType) {
-        ListWorkflowPropertiesEvent event = new ListWorkflowPropertiesEvent(applicationType,
+        ListProcessPropertiesEvent event = new ListProcessPropertiesEvent(applicationType,
                 applicationName);
 
         event.setApplicationType(applicationType);

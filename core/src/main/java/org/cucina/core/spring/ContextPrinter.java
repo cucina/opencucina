@@ -29,7 +29,7 @@ public class ContextPrinter {
         Collections.sort(list);
 
         for (String string : list) {
-            log.trace(string);
+            log.trace(string + " of type:" + context.getBean(string).getClass().getName());
         }
     }
 }

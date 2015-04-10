@@ -1,4 +1,4 @@
-package org.cucina.sample.engine.client;
+package org.cucina.sample.engine.client.app;
 
 import java.util.Map;
 

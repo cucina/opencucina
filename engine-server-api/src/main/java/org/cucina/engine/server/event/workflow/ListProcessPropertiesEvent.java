@@ -13,7 +13,7 @@ import org.cucina.engine.server.event.GetValueEvent;
  * @author $Author: $
  * @version $Revision: $
   */
-public class ListWorkflowPropertiesEvent
+public class ListProcessPropertiesEvent
     extends GetValueEvent {
     private static final long serialVersionUID = 2822971108610601836L;
     private Collection<Serializable> ids;
@@ -24,14 +24,14 @@ public class ListWorkflowPropertiesEvent
     *
     * @param source JAVADOC.
     */
-    public ListWorkflowPropertiesEvent(Object source, String applicationName) {
+    public ListProcessPropertiesEvent(Object source, String applicationName) {
         super(source, applicationName);
     }
 
     /**
      * Creates a new ListWorkflowPropertiesEvent object.
      */
-    public ListWorkflowPropertiesEvent() {
+    public ListProcessPropertiesEvent() {
     }
 
     /**

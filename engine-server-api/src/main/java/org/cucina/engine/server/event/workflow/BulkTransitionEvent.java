@@ -11,7 +11,7 @@ import java.util.Map;
  * @version $Revision: $
   */
 public class BulkTransitionEvent
-    extends WorkflowEvent {
+    extends ProcessEvent {
     private static final long serialVersionUID = 1L;
     private Map<Serializable, Integer> entities;
     private Map<String, Object> extraParams;

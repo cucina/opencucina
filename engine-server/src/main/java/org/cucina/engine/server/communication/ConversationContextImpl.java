@@ -2,10 +2,14 @@ package org.cucina.engine.server.communication;
 
 import java.util.Random;
 
+import org.apache.commons.lang3.StringUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+
 import org.cucina.core.service.ContextService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,8 +60,12 @@ public class ConversationContextImpl
     * @return JAVADOC.
     */
     @Override
-    public String getConversationId() {
+    public String getConversationId(boolean startNew) {
         String conversationId = contextService.get(CONVERSATION_ID);
+
+        if (startNew && StringUtils.isEmpty(conversationId)) {
+            conversationId = startConversation();
+        }
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Conversation id is [" + conversationId + "]");
@@ -66,20 +74,8 @@ public class ConversationContextImpl
         return conversationId;
     }
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    public String startConversation() {
-        String conversationId = getConversationId();
-
-        Assert.isNull(conversationId,
-            "Cannot start new conversation as there is an existing one in progress with id [" +
-            conversationId + "]");
-
-        conversationId = CONVERSATION_ID_PREFIX + random.nextInt(Integer.MAX_VALUE);
+    private String startConversation() {
+        String conversationId = CONVERSATION_ID_PREFIX + random.nextInt(Integer.MAX_VALUE);
 
         this.setConversationId(conversationId);
 

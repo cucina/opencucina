@@ -184,8 +184,6 @@ public class MessagingProcessDriver
     private Object sendAndReceive(WorkflowElementDto wed, ExecutionContext ec) {
         CallbackEvent event = new CallbackEvent(wed, ec.getParameters(), wed.getApplication());
 
-        event.setConversationId(conversationContext.getConversationId());
-
         return sendAndReceive(event);
     }
 }

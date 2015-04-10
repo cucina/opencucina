@@ -11,7 +11,7 @@ import org.cucina.engine.server.event.OriginatedEngineEvent;
  * @author $Author: $
  * @version $Revision: $
   */
-public abstract class WorkflowEvent
+public abstract class ProcessEvent
     extends OriginatedEngineEvent {
     private static final long serialVersionUID = 675264777733240826L;
     private Object id;
@@ -22,7 +22,7 @@ public abstract class WorkflowEvent
     *
     * @param source JAVADOC.
     */
-    public WorkflowEvent(Object source, String applicationName) {
+    public ProcessEvent(Object source, String applicationName) {
         super(source);
         setApplicationName(applicationName);
     }
@@ -30,7 +30,7 @@ public abstract class WorkflowEvent
     /**
      * Creates a new WorkflowEvent object. Needs it for JSON.
      */
-    public WorkflowEvent() {
+    public ProcessEvent() {
     }
 
     /**

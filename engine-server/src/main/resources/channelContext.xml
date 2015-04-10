@@ -13,16 +13,14 @@
 		connection-factory="jmsConnectionFactory" destination-resolver="myDestinationResolver" />
 	<bean id="xmlMessageConverter" class="org.cucina.engine.server.jms.XmlEncoderDecoderConverter" />
 	<si:channel id="inboundChannel" />
-	<si:channel id="outboundChannelConversation" />
-	<si:header-enricher input-channel="outboundChannelConversation"
-		output-channel="outboundChannel">
-		<si:header name="conversationId" expression="@conversationContext.getConversationId()" />
-	</si:header-enricher>
+	<si:transformer ref="inboundConversationPuller"
+		input-channel="inboundChannel" output-channel="inboundChannelC" />
+	<si:channel id="inboundChannelC" />
 	<si:channel id="outboundChannel" />
 	<si:channel id="unroutableChannel" />
 	<si:logging-channel-adapter channel="unroutableChannel"
 		level="WARN" logger-name="Unroutable.Request" />
-	<si:payload-type-router input-channel="inboundChannel"
+	<si:payload-type-router input-channel="inboundChannelC"
 		default-output-channel="unroutableChannel">
 		<si:mapping type="org.cucina.engine.server.event.workflow.GetValueEvent"
 			channel="getValueChannel" />
@@ -38,14 +36,10 @@
 		output-channel="outboundChannel" ref="compensateHandler" />
 	<si:channel id="getValueChannel" />
 	<si:service-activator input-channel="getValueChannel"
-		output-channel="outboundChannel" ref="messagingWorkflowHandler"
-		method="getValue" />
-
+		output-channel="outboundChannel" ref="getValueHandler" />
 	<si:channel id="workflowChannel" />
 	<si:service-activator input-channel="workflowChannel"
-		output-channel="outboundChannel" ref="messagingWorkflowHandler"
-		method="act" />
-
+		output-channel="outboundChannel" ref="messageProcessHandler" />
 	<si:channel id="registrationChannel" />
 	<si:service-activator input-channel="registrationChannel"
 		expression="@clientRegistry.addRegistration(payload.applicationName, payload.destinationName)" />
@@ -59,7 +53,8 @@
 			method="findProtocol" />
 		<si:header name="destinationName" ref="registryUrlExtractor"
 			method="findDestinationName" />
-		<si:header name="conversationId" expression="@conversationContext.getConversationId()" />
+		<si:header name="conversationId"
+			expression="@conversationContext.getConversationId(true)" />
 	</si:header-enricher>
 
 	<si:channel id="workflowCallbackChannelT" />

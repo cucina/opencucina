@@ -1,7 +1,5 @@
 package org.cucina.engine.server.communication;
 
-import org.springframework.transaction.support.TransactionSynchronizationManager;
-
 import org.cucina.core.service.ContextService;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -48,7 +46,7 @@ public class ConversationContextImplTest {
     public void testCreateConversationId() {
         when(contextService.get(ConversationContextImpl.CONVERSATION_ID)).thenReturn(null);
 
-        String conversationId = context.startConversation();
+        String conversationId = context.getConversationId(true);
 
         assertNotNull("Should have generated new id", conversationId);
         assertEquals("incorrect id", 0,
@@ -62,7 +60,7 @@ public class ConversationContextImplTest {
     @Test
     public void testGetConversationIdExists() {
         when(contextService.get(ConversationContextImpl.CONVERSATION_ID)).thenReturn("convId");
-        assertEquals("incorrect id", "convId", context.getConversationId());
+        assertEquals("incorrect id", "convId", context.getConversationId(false));
     }
 
     /**
@@ -70,17 +68,6 @@ public class ConversationContextImplTest {
      */
     @Test
     public void testGetConversationIdNotExists() {
-        assertNull("Shouldn't barf if null", context.getConversationId());
-    }
-
-    /**
-     * Tests that we have runtime exception if conversation already started
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void testStartConversationAlreadyExists() {
-        TransactionSynchronizationManager.initSynchronization();
-        when(contextService.get(ConversationContextImpl.CONVERSATION_ID)).thenReturn("convId");
-
-        context.startConversation();
+        assertNull("Shouldn't barf if null", context.getConversationId(false));
     }
 }
