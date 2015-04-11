@@ -17,8 +17,8 @@ import org.cucina.engine.service.ProcessSupportService;
 
 
 
-public class SingleTransitionEventHandlerTest {
-	private SingleTransitionEventHandler handler;
+public class SingleTransitionHandlerTest {
+	private SingleTransitionHandler handler;
 
 	@Mock
 	private ProcessSupportService processSupportService;
@@ -26,7 +26,7 @@ public class SingleTransitionEventHandlerTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		handler = new SingleTransitionEventHandler(processSupportService);
+		handler = new SingleTransitionHandler(processSupportService);
 	}
 
 	@Test

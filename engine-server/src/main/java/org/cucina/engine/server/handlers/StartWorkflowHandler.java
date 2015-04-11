@@ -15,7 +15,7 @@ import org.cucina.engine.service.ProcessSupportService;
  * @author vlevine
   */
 @Component
-public class StartWorkflowEventHandler
+public class StartWorkflowHandler
     extends AbstractProcessEventHandler<StartWorkflowEvent> {
     /**
      * Creates a new StartWorkflowEventHandler object.
@@ -23,7 +23,7 @@ public class StartWorkflowEventHandler
      * @param processSupportService .
      */
     @Autowired
-    public StartWorkflowEventHandler(ProcessSupportService processSupportService) {
+    public StartWorkflowHandler(ProcessSupportService processSupportService) {
         super(processSupportService);
     }
 

@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>cucina</groupId>
 		<artifactId>cucina</artifactId>
-		<version>0.1</version>
+		<version>0.2</version>
 	</parent>
 	<artifactId>sample-engine-client</artifactId>
 	<name>sample-engine-client</name>
@@ -34,12 +34,12 @@
 		<dependency>
 			<groupId>cucina</groupId>
 			<artifactId>engine-client</artifactId>
-			<version>0.1</version>
+			<version>0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>cucina</groupId>
 			<artifactId>cucina-core</artifactId>
-			<version>0.1</version>
+			<version>0.2</version>
 		</dependency>
 	</dependencies>
 	<build>

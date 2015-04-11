@@ -1,10 +1,7 @@
 package org.cucina.engine.server.event.workflow;
 
 import java.io.Serializable;
-
 import java.util.Collection;
-
-import org.cucina.engine.server.event.GetValueEvent;
 
 
 /**

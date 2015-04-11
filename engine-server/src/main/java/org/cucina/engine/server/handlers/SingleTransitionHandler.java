@@ -15,7 +15,7 @@ import org.cucina.engine.service.ProcessSupportService;
  * @author vlevine
   */
 @Component
-public class SingleTransitionEventHandler
+public class SingleTransitionHandler
     extends AbstractProcessEventHandler<SingleTransitionEvent> {
     /**
      * Creates a new StartWorkflowEventHandler object.
@@ -23,7 +23,7 @@ public class SingleTransitionEventHandler
      * @param processSupportService .
      */
     @Autowired
-    public SingleTransitionEventHandler(ProcessSupportService processSupportService) {
+    public SingleTransitionHandler(ProcessSupportService processSupportService) {
         super(processSupportService);
     }
 

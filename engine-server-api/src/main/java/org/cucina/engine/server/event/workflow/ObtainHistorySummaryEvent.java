@@ -2,8 +2,6 @@ package org.cucina.engine.server.event.workflow;
 
 import java.io.Serializable;
 
-import org.cucina.engine.server.event.GetValueEvent;
-
 
 /**
  * JAVADOC for Class Level

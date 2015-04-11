@@ -27,7 +27,7 @@ import org.mockito.MockitoAnnotations;
  */
 @Component
 public class LoadTransitionsInfoHandlerTest {
-    private LoadTransitionsInfoHandler handler;
+    private LoadTransitionInfoHandler handler;
     @Mock
     private ProcessSupportService processSupportService;
 
@@ -40,7 +40,7 @@ public class LoadTransitionsInfoHandlerTest {
     public void setUp()
         throws Exception {
         MockitoAnnotations.initMocks(this);
-        handler = new LoadTransitionsInfoHandler(processSupportService);
+        handler = new LoadTransitionInfoHandler(processSupportService);
     }
 
     /**

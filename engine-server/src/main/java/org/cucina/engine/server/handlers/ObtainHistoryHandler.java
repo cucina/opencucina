@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -29,7 +30,7 @@ public class ObtainHistoryHandler extends AbstractGetValueHandler<ObtainHistoryE
 	 */
 	@Autowired
 	public ObtainHistoryHandler(ProcessSupportService processSupportService,
-			ConversionService conversionService) {
+			@Qualifier("myConversionService") ConversionService conversionService) {
 		super(processSupportService);
 		Assert.notNull(conversionService, "conversionService is null");
 		this.conversionService = conversionService;

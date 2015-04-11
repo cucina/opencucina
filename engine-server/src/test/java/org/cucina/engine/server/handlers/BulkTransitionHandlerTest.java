@@ -27,8 +27,8 @@ import org.cucina.i18n.api.ListItemService;
  *
  * @author vlevine
  */
-public class BulkTransitionEventHandlerTest {
-	private BulkTransitionEventHandler handler;
+public class BulkTransitionHandlerTest {
+	private BulkTransitionHandler handler;
 
 	@Mock
 	private ListItemService listItemService;
@@ -44,7 +44,7 @@ public class BulkTransitionEventHandlerTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		handler = new BulkTransitionEventHandler(processSupportService, listItemService);
+		handler = new BulkTransitionHandler(processSupportService, listItemService);
 	}
 
 	/**

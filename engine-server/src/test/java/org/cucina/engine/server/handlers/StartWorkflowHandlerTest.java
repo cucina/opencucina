@@ -23,8 +23,8 @@ import org.cucina.engine.server.event.workflow.StartWorkflowEvent;
 import org.cucina.engine.server.model.EntityDescriptor;
 import org.cucina.engine.service.ProcessSupportService;
 
-public class StartWorkflowEventHandlerTest {
-	private StartWorkflowEventHandler handler;
+public class StartWorkflowHandlerTest {
+	private StartWorkflowHandler handler;
 
 	@Mock
 	private ProcessSupportService processSupportService;
@@ -32,7 +32,7 @@ public class StartWorkflowEventHandlerTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		handler = new StartWorkflowEventHandler(processSupportService);
+		handler = new StartWorkflowHandler(processSupportService);
 	}
 
 	@Test

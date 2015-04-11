@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>nosql</groupId>
 		<artifactId>nosql</artifactId>
-		<version>0.1</version>
+		<version>0.2</version>
 	</parent>
 	<artifactId>security</artifactId>
 	<name>security</name>
@@ -18,7 +18,7 @@
 		<dependency>
 			<groupId>cucina</groupId>
 			<artifactId>cucina-security-api</artifactId>
-			<version>0.1</version>
+			<version>0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>

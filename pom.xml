@@ -10,7 +10,7 @@
 	<groupId>cucina</groupId>
 	<artifactId>cucina</artifactId>
 	<packaging>pom</packaging>
-	<version>0.1</version>
+	<version>0.2</version>
 	<name>cucina</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>

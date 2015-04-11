@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>cucina</artifactId>
 		<groupId>cucina</groupId>
-		<version>0.1</version>
+		<version>0.2</version>
 	</parent>
 	<artifactId>cucina-search</artifactId>
 	<name>search</name>
@@ -15,17 +15,17 @@
 		<dependency>
 			<groupId>cucina</groupId>
 			<artifactId>cucina-core</artifactId>
-			<version>0.1</version>
+			<version>0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>cucina</groupId>
 			<artifactId>cucina-security-api</artifactId>
-			<version>0.1</version>
+			<version>0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>cucina</groupId>
 			<artifactId>cucina-i18n-api</artifactId>
-			<version>0.1</version>
+			<version>0.2</version>
 		</dependency>
 	</dependencies>
 </project>

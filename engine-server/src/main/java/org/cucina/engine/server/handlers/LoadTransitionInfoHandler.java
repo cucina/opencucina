@@ -13,7 +13,7 @@ import org.cucina.engine.service.ProcessSupportService;
  * @author vlevine
  */
 @Component
-public class LoadTransitionsInfoHandler
+public class LoadTransitionInfoHandler
     extends AbstractGetValueHandler<LoadTransitionInfoEvent> {
     /**
      * Creates a new ListActionableTransitionsHandler object.
@@ -21,7 +21,7 @@ public class LoadTransitionsInfoHandler
      * @param processSupportService .
      */
     @Autowired
-    public LoadTransitionsInfoHandler(ProcessSupportService processSupportService) {
+    public LoadTransitionInfoHandler(ProcessSupportService processSupportService) {
         super(processSupportService);
     }
 

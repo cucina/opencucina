@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>cucina</groupId>
 		<artifactId>cucina</artifactId>
-		<version>0.1</version>
+		<version>0.2</version>
 	</parent>
 	<groupId>nosql</groupId>
 	<artifactId>nosql</artifactId>

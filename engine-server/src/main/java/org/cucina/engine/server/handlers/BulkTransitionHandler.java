@@ -24,9 +24,9 @@ import org.slf4j.LoggerFactory;
  * @author vlevine
   */
 @Component
-public class BulkTransitionEventHandler
+public class BulkTransitionHandler
     extends AbstractProcessEventHandler<BulkTransitionEvent> {
-    private static final Logger LOG = LoggerFactory.getLogger(BulkTransitionEventHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BulkTransitionHandler.class);
     private ListItemService listItemService;
 
     /**
@@ -35,7 +35,7 @@ public class BulkTransitionEventHandler
      * @param processSupportService .
      */
     @Autowired
-    public BulkTransitionEventHandler(ProcessSupportService processSupportService,
+    public BulkTransitionHandler(ProcessSupportService processSupportService,
         ListItemService listItemService) {
         super(processSupportService);
         Assert.notNull(listItemService, "listItemService is null");

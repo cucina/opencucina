@@ -1,5 +1,7 @@
 
-package org.cucina.engine.server.event;
+package org.cucina.engine.server.event.workflow;
+
+import org.cucina.engine.server.event.OriginatedEngineEvent;
 
 
 /**

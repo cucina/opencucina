@@ -22,27 +22,80 @@
 		level="WARN" logger-name="Unroutable.Request" />
 	<si:payload-type-router input-channel="inboundChannelC"
 		default-output-channel="unroutableChannel">
-		<si:mapping type="org.cucina.engine.server.event.workflow.GetValueEvent"
-			channel="getValueChannel" />
-		<si:mapping type="org.cucina.engine.server.event.workflow.WorkflowEvent"
-			channel="workflowChannel" />
+		<si:mapping
+			type="org.cucina.engine.server.event.workflow.BulkTransitionEvent"
+			channel="bulkTransitionChannel" />
+		<si:mapping
+			type="org.cucina.engine.server.event.workflow.ListActionableTransitionsEvent"
+			channel="listActionableTransitionsChannel" />
+		<si:mapping
+			type="org.cucina.engine.server.event.workflow.ListAllTransitionsEvent"
+			channel="listAllTransitionsChannel" />
+		<si:mapping
+			type="org.cucina.engine.server.event.workflow.ListProcessPropertiesEvent"
+			channel="listProcessPropertiesChannel" />
+		<si:mapping
+			type="org.cucina.engine.server.event.workflow.ListTransitionsEvent"
+			channel="listTransitionsChannel" />
+		<si:mapping
+			type="org.cucina.engine.server.event.workflow.LoadTransitionInfoEvent"
+			channel="loadTransitionInfoChannel" />
+		<si:mapping
+			type="org.cucina.engine.server.event.workflow.ObtainHistoryEvent"
+			channel="obtainHistoryChannel" />
+		<si:mapping
+			type="org.cucina.engine.server.event.workflow.ObtainHistorySummaryEvent"
+			channel="obtainHistorySummaryChannel" />
+		<si:mapping
+			type="org.cucina.engine.server.event.workflow.SingleTransitionEvent"
+			channel="singleTransitionChannel" />
+		<si:mapping
+			type="org.cucina.engine.server.event.workflow.StartWorkflowEvent"
+			channel="startWorkflowChannel" />
+
 		<si:mapping type="org.cucina.engine.server.event.RegistrationEvent"
 			channel="registrationChannel" />
 		<si:mapping type="org.cucina.engine.server.event.CompensateEvent"
 			channel="compensateChannel" />
 	</si:payload-type-router>
-	<si:channel id="compensateChannel" />
-	<si:service-activator input-channel="compensateChannel"
-		output-channel="outboundChannel" ref="compensateHandler" />
-	<si:channel id="getValueChannel" />
-	<si:service-activator input-channel="getValueChannel"
-		output-channel="outboundChannel" ref="getValueHandler" />
-	<si:channel id="workflowChannel" />
-	<si:service-activator input-channel="workflowChannel"
-		output-channel="outboundChannel" ref="messageProcessHandler" />
+
+	<si:channel id="bulkTransitionChannel" />
+	<si:service-activator input-channel="bulkTransitionChannel"
+		output-channel="outboundChannel" ref="bulkTransitionHandler" />
+	<si:channel id="listActionableTransitionsChannel" />
+	<si:service-activator input-channel="listActionableTransitionsChannel"
+		output-channel="outboundChannel" ref="listActionableTransitionsHandler" />
+	<si:channel id="listAllTransitionsChannel" />
+	<si:service-activator input-channel="listAllTransitionsChannel"
+		output-channel="outboundChannel" ref="listAllTransitionsHandler" />
+	<si:channel id="listProcessPropertiesChannel" />
+	<si:service-activator input-channel="listProcessPropertiesChannel"
+		output-channel="outboundChannel" ref="listProcessPropertiesHandler" />
+	<si:channel id="listTransitionsChannel" />
+	<si:service-activator input-channel="listTransitionsChannel"
+		output-channel="outboundChannel" ref="listTransitionsHandler" />
+	<si:channel id="loadTransitionInfoChannel" />
+	<si:service-activator input-channel="loadTransitionInfoChannel"
+		output-channel="outboundChannel" ref="loadTransitionInfoHandler" />
+	<si:channel id="obtainHistoryChannel" />
+	<si:service-activator input-channel="obtainHistoryChannel"
+		output-channel="outboundChannel" ref="obtainHistoryHandler" />
+	<si:channel id="obtainHistorySummaryChannel" />
+	<si:service-activator input-channel="obtainHistorySummaryChannel"
+		output-channel="outboundChannel" ref="obtainHistorySummaryHandler" />
+	<si:channel id="singleTransitionChannel" />
+	<si:service-activator input-channel="singleTransitionChannel"
+		output-channel="outboundChannel" ref="singleTransitionHandler" />
+	<si:channel id="startWorkflowChannel" />
+	<si:service-activator input-channel="startWorkflowChannel"
+		output-channel="outboundChannel" ref="startWorkflowHandler" />
+
 	<si:channel id="registrationChannel" />
 	<si:service-activator input-channel="registrationChannel"
 		expression="@clientRegistry.addRegistration(payload.applicationName, payload.destinationName)" />
+	<si:channel id="compensateChannel" />
+	<si:service-activator input-channel="compensateChannel"
+		output-channel="outboundChannel" ref="compensateHandler" />
 
 	<si:channel id="workflowCallbackChannel" />
 	<si:channel id="workflowCallbackReplyChannel" />
