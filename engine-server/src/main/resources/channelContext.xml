@@ -12,15 +12,17 @@
 		reply-channel="outboundChannel" message-converter="xmlMessageConverter"
 		connection-factory="jmsConnectionFactory" destination-resolver="myDestinationResolver" />
 	<bean id="xmlMessageConverter" class="org.cucina.engine.server.jms.XmlEncoderDecoderConverter" />
-	<si:channel id="inboundChannel" />
-	<si:transformer ref="inboundConversationPuller"
-		input-channel="inboundChannel" output-channel="inboundChannelC" />
-	<si:channel id="inboundChannelC" />
+	<si:channel id="inboundChannel">
+		<si:interceptors>
+			<bean class="org.cucina.core.spring.integration.SpelChannelInterceptor"
+				p:expression="@conversationContext.setConversationId(headers['conversationId'])" />
+		</si:interceptors>
+	</si:channel>
 	<si:channel id="outboundChannel" />
 	<si:channel id="unroutableChannel" />
 	<si:logging-channel-adapter channel="unroutableChannel"
 		level="WARN" logger-name="Unroutable.Request" />
-	<si:payload-type-router input-channel="inboundChannelC"
+	<si:payload-type-router input-channel="inboundChannel"
 		default-output-channel="unroutableChannel">
 		<si:mapping
 			type="org.cucina.engine.server.event.workflow.BulkTransitionEvent"

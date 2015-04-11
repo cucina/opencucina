@@ -10,7 +10,9 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.stereotype.Component;
+
 import org.cucina.engine.server.event.RegistrationEvent;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,6 +76,10 @@ public class DefaultClientRegistry
      *            JAVADOC.
      */
     public void addRegistration(String applicationName, String destinationName) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Adding '" + applicationName + "' @ '" + destinationName + "'");
+        }
+
         appDestination.put(applicationName, new DestinationDescriptor(destinationName));
     }
 
