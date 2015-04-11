@@ -71,7 +71,7 @@ public class EnvironmentBeanDefinitionParser
         Collection<String> resnames = new ArrayList<String>();
 
         for (Element relement : resources) {
-            resnames.add(relement.getTextContent());
+            resnames.add(relement.getNodeValue());
         }
 
         builder.addPropertyValue("definitionResources", buildResources(resnames));
@@ -81,7 +81,7 @@ public class EnvironmentBeanDefinitionParser
         List<BeanReference> lisnames = new ManagedList<BeanReference>();
 
         for (Element lelement : listeners) {
-            lisnames.add(new RuntimeBeanReference(lelement.getTextContent()));
+            lisnames.add(new RuntimeBeanReference(lelement.getNodeValue()));
         }
 
         builder.addPropertyValue("workflowListeners", lisnames);

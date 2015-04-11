@@ -43,14 +43,14 @@ public class EnvironmentBeanDefinitionParserTest {
 
         when(defel.getNodeName()).thenReturn("definition");
         when(defel.getLocalName()).thenReturn(null);
-        when(defel.getTextContent()).thenReturn("simple.xml");
+        when(defel.getNodeValue()).thenReturn("simple.xml");
         when(nodelist.item(0)).thenReturn(defel);
 
         Element lisel = mock(Element.class);
 
         when(lisel.getNodeName()).thenReturn("listenerRef");
         when(lisel.getLocalName()).thenReturn(null);
-        when(lisel.getTextContent()).thenReturn("hohoListener");
+        when(lisel.getNodeValue()).thenReturn("hohoListener");
         when(nodelist.item(1)).thenReturn(lisel);
         when(element.getChildNodes()).thenReturn(nodelist);
 
