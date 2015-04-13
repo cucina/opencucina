@@ -46,8 +46,11 @@ import org.cucina.engine.client.MessagingProcessEngineFacade;
 import org.cucina.engine.client.ProcessEngineFacade;
 import org.cucina.engine.client.converters.DtoCheckConverter;
 import org.cucina.engine.client.converters.DtoOperationConverter;
+import org.cucina.engine.client.service.ApplicationRegistrator;
 import org.cucina.engine.client.service.EventHandler;
 import org.cucina.engine.client.service.ProcessEventHandler;
+import org.cucina.engine.client.service.TransactionHandler;
+import org.cucina.engine.client.service.TransactionHandlerImpl;
 import org.cucina.engine.server.communication.ConversationContext;
 import org.cucina.engine.server.event.CallbackEvent;
 import org.cucina.sample.engine.client.app.ItemRepository;
@@ -60,8 +63,7 @@ import org.cucina.sample.engine.client.app.ItemRepository;
 @Configuration
 @ImportResource(value = "classpath:/channelContext.xml")
 public class ConversationConfiguration {
-	private static final Logger LOG = LoggerFactory
-			.getLogger(ConversationConfiguration.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ConversationConfiguration.class);
 
 	/**
 	 *
@@ -118,20 +120,17 @@ public class ConversationConfiguration {
 	 * @return .
 	 */
 	@Bean
-	public WebRequestInterceptor conversationInterceptor(
-			final ContextService contextService) {
+	public WebRequestInterceptor conversationInterceptor(final ContextService contextService) {
 		return new WebRequestInterceptor() {
 			@Override
-			public void afterCompletion(WebRequest request, Exception ex)
-					throws Exception {
+			public void afterCompletion(WebRequest request, Exception ex) throws Exception {
 				if (LOG.isDebugEnabled()) {
 					LOG.debug("afterCompletion:" + request + " : " + ex);
 				}
 			}
 
 			@Override
-			public void postHandle(WebRequest request, ModelMap model)
-					throws Exception {
+			public void postHandle(WebRequest request, ModelMap model) throws Exception {
 				if (LOG.isDebugEnabled()) {
 					LOG.debug("postHandle:" + request + " : " + model);
 				}
@@ -149,7 +148,6 @@ public class ConversationConfiguration {
 		};
 	}
 
-	
 	/**
 	 *
 	 *
@@ -158,8 +156,7 @@ public class ConversationConfiguration {
 	 * @return .
 	 */
 	@Bean
-	public EventHandler<CallbackEvent> eventHandler(
-			ApplicationContext applicationContext,
+	public EventHandler<CallbackEvent> eventHandler(ApplicationContext applicationContext,
 			final ItemRepository itemRepository) {
 		return new ProcessEventHandler((String type, Object id) -> {
 			Assert.notNull(id, "id is null");
@@ -180,26 +177,22 @@ public class ConversationConfiguration {
 	 * @return .
 	 */
 	@Bean
-	public DestinationResolver myDestinationResolver(
-			final Environment environment) {
+	public DestinationResolver myDestinationResolver(final Environment environment) {
 		return new DestinationResolver() {
 			private DestinationResolver dynamicDestinationResolver = new DynamicDestinationResolver();
 
 			@Override
-			public Destination resolveDestinationName(Session session,
-					String destinationName, boolean pubSubDomain)
-					throws JMSException {
-				String dname = environment.getProperty("jms.destination."
-						+ destinationName, destinationName);
+			public Destination resolveDestinationName(Session session, String destinationName,
+					boolean pubSubDomain) throws JMSException {
+				String dname = environment.getProperty("jms.destination." + destinationName,
+						destinationName);
 
 				if (LOG.isDebugEnabled()) {
-					LOG.debug("Resolved destination '" + destinationName
-							+ "' to '" + dname + "'");
+					LOG.debug("Resolved destination '" + destinationName + "' to '" + dname + "'");
 				}
 
-				return dynamicDestinationResolver.resolveDestinationName(
-						session, resolveName(environment, destinationName),
-						pubSubDomain);
+				return dynamicDestinationResolver.resolveDestinationName(session,
+						resolveName(environment, destinationName), pubSubDomain);
 			}
 		};
 	}
@@ -216,16 +209,26 @@ public class ConversationConfiguration {
 	 */
 	@Bean
 	public ProcessEngineFacade processEngineFacade(
-			@Qualifier("outputAsync") MessageChannel asyncChannel,
 			@Qualifier("orchestrateChannel") MessageChannel orchestrateChannel,
-			@Qualifier("workflowReply") MessageChannel workflowReply,
-			Environment environment) {
+			@Qualifier("workflowReply") MessageChannel workflowReply) {
 		MessagingProcessEngineFacade facade = new MessagingProcessEngineFacade();
 
 		facade.setRequestChannel(orchestrateChannel);
 		facade.setReplyChannel(workflowReply);
 
 		return facade;
+	}
+
+	@Bean
+	public TransactionHandler transactionHandler(
+			@Qualifier("outputAsync") MessageChannel asyncChannel) {
+		return new TransactionHandlerImpl(asyncChannel);
+	}
+
+	@Bean
+	public ApplicationRegistrator applicationRegistrator(
+			@Qualifier("outputAsync") MessageChannel asyncChannel) {
+		return new ApplicationRegistrator("client", "myQueue", asyncChannel);
 	}
 
 	/**
@@ -251,9 +254,7 @@ public class ConversationConfiguration {
 			@Override
 			public Object invoke(MethodInvocation mi) throws Throwable {
 				if (LOG.isDebugEnabled()) {
-					LOG.debug("Before "
-							+ contextService
-									.get(ConversationContext.CONVERSATION_ID));
+					LOG.debug("Before " + contextService.get(ConversationContext.CONVERSATION_ID));
 				}
 
 				// TODO either start a conversation or bind to an existing one
@@ -261,37 +262,31 @@ public class ConversationConfiguration {
 				//
 				try {
 					return mi.proceed();
-				}
-				catch (RuntimeException e) {
+				} catch (RuntimeException e) {
 					// rolledback locally, make sure it is propagated
 					// clean up the conversation , if it is not cleaned up
 					//
 					//
 					throw e;
-				}
-				finally {
+				} finally {
 					if (LOG.isDebugEnabled()) {
 						LOG.debug("After "
-								+ contextService
-										.get(ConversationContext.CONVERSATION_ID));
+								+ contextService.get(ConversationContext.CONVERSATION_ID));
 					}
 				}
 			}
 		};
 	}
 
-	private ConversionService conversionService(
-			ApplicationContext applicationContext) {
+	private ConversionService conversionService(ApplicationContext applicationContext) {
 		// TODO should be also able to resolve a url to a bean/method
-		BeanFactoryResolver beanResolver = new BeanFactoryResolver(
-				applicationContext) {
+		BeanFactoryResolver beanResolver = new BeanFactoryResolver(applicationContext) {
 			@Override
 			public Object resolve(EvaluationContext context, String beanName)
 					throws AccessException {
-				return super.resolve(
-						context,
-						(beanName.startsWith("bean:") ? beanName
-								.substring("bean:".length()) : beanName));
+				return super.resolve(context,
+						(beanName.startsWith("bean:") ? beanName.substring("bean:".length())
+								: beanName));
 			}
 		};
 
@@ -305,14 +300,13 @@ public class ConversationConfiguration {
 
 		return factoryBean.getObject();
 	}
-	
+
 	private String resolveName(Environment environment, String destinationName) {
-		String dname = environment.getProperty("jms.destination."
-				+ destinationName, destinationName);
+		String dname = environment.getProperty("jms.destination." + destinationName,
+				destinationName);
 
 		if (LOG.isDebugEnabled()) {
-			LOG.debug("Resolved destination '" + destinationName + "' to '"
-					+ dname + "'");
+			LOG.debug("Resolved destination '" + destinationName + "' to '" + dname + "'");
 		}
 
 		return dname;
