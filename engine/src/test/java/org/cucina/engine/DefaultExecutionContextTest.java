@@ -1,23 +1,20 @@
-
 package org.cucina.engine;
-
-import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
 import java.util.Map;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 
 /**
- * JAVADOC for Class Level
+ * 
  *
- * @author $Author: $
- * @version $Revision: $
+ * @author vlevine
   */
 public class DefaultExecutionContextTest {
     /**
-     * JAVADOC Method Level Comments
+     *
      */
     @Test
     public void testAddParameter() {
@@ -28,7 +25,7 @@ public class DefaultExecutionContextTest {
     }
 
     /**
-     * JAVADOC Method Level Comments
+     *
      */
     @Test
     public void testSetParameters() {
