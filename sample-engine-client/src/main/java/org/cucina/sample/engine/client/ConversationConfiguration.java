@@ -217,14 +217,12 @@ public class ConversationConfiguration {
 	@Bean
 	public ProcessEngineFacade processEngineFacade(
 			@Qualifier("outputAsync") MessageChannel asyncChannel,
-			@Qualifier("workflowRequest") MessageChannel workflowRequest,
+			@Qualifier("orchestrateChannel") MessageChannel orchestrateChannel,
 			@Qualifier("workflowReply") MessageChannel workflowReply,
 			Environment environment) {
-		MessagingProcessEngineFacade facade = new MessagingProcessEngineFacade(
-				"client", resolveName(environment, "engine.client.queue"),
-				asyncChannel);
+		MessagingProcessEngineFacade facade = new MessagingProcessEngineFacade();
 
-		facade.setRequestChannel(workflowRequest);
+		facade.setRequestChannel(orchestrateChannel);
 		facade.setReplyChannel(workflowReply);
 
 		return facade;

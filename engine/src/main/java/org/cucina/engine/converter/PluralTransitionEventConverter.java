@@ -1,31 +1,32 @@
-
 package org.cucina.engine.converter;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cucina.engine.event.PluralTransitionEvent;
-import org.cucina.engine.model.HistoryRecord;
+
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.util.Assert;
 
+import org.cucina.engine.event.PluralTransitionEvent;
+import org.cucina.engine.model.HistoryRecord;
+
 
 /**
- * Converter of String of format <type>:<workflowId>:<transition> or <type>:<workflowId>:<transition>:<comment>
- * into a BulkTransitionEvent.
+ * Converter of String of format <type>:<workflowId>:<transition> or
+ * <type>:<workflowId>:<transition>:<comment> into a
+ * {@link org.cucina.engine.event.PluralTransitionEvent}.
  *
- * @author $Author: $
- * @version $Revision: $
-  */
-public class BulkTransitionEventConverter
+ * @author vlevine
+ */
+public class PluralTransitionEventConverter
     implements Converter<String, PluralTransitionEvent> {
     /** This is a field JAVADOC */
     public static final String DEFAULT_COMMENT = "Transitioned by system";
 
     /**
-     * Convert String into BulkTransitionEvent, barfs if String split on ':' does not result in
-     * at least two tokens.
+     * Convert String into {@link org.cucina.engine.event.PluralTransitionEvent}
+     * , barfs if String split on ':' does not result in at least two tokens.
      *
      * @param source String.
      *

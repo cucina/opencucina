@@ -8,15 +8,6 @@
 	http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.1.xsd
 	http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms-4.1.xsd">
 	<bean id="xmlMessageConverter" class="org.cucina.engine.server.jms.XmlEncoderDecoderConverter" />
-	<si:channel id="workflowRequest" />
-	<si:channel id="unroutableRequestChannel" />
-	<si:logging-channel-adapter channel="unroutableRequestChannel"
-		level="ERROR" logger-name="Unroutable.Request" />
-	<si:payload-type-router input-channel="workflowRequest"
-		default-output-channel="unroutableRequestChannel">
-		<si:mapping type="org.cucina.engine.server.event.EngineEvent"
-			channel="orchestrateChannel" />
-	</si:payload-type-router>
 	<si:channel id="outputChannel" />
 	<si:channel id="orchestrateChannel" />
 	<bean id="orchestratorHandler" class="org.cucina.engine.client.service.OrchestratorHandler"

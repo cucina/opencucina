@@ -17,12 +17,12 @@ import org.junit.Test;
  * @author $Author: $
  * @version $Revision: $
   */
-public class BulkTransitionEventConverterTest {
+public class PluralTransitionEventConverterTest {
     private static final String TYPE = "type";
     private static final String WORKFLOW_ID = "workflow";
     private static final String TRANSITION = "transition";
     private static final String COMMENT = "My comment";
-    private BulkTransitionEventConverter converter;
+    private PluralTransitionEventConverter converter;
 
     /**
      * Creates including comment
@@ -51,7 +51,7 @@ public class BulkTransitionEventConverterTest {
         assertEquals("Incorrect type", TYPE, event.getApplicationType());
         assertEquals("Incorrect workflowId", WORKFLOW_ID, event.getWorkflowId());
         assertEquals("Incorrect transition", TRANSITION, event.getSource());
-        assertEquals("Incorrect comment", BulkTransitionEventConverter.DEFAULT_COMMENT,
+        assertEquals("Incorrect comment", PluralTransitionEventConverter.DEFAULT_COMMENT,
             event.getParameters().get(HistoryRecord.COMMENTS_PROPERTY));
     }
 
@@ -68,7 +68,7 @@ public class BulkTransitionEventConverterTest {
      */
     @Before
     public void setup() {
-        converter = new BulkTransitionEventConverter();
+        converter = new PluralTransitionEventConverter();
     }
 
     /**

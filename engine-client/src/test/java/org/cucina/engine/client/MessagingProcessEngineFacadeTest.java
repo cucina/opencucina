@@ -9,40 +9,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.SubscribableChannel;
-import org.springframework.transaction.support.TransactionSynchronization;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
-import org.springframework.transaction.support.TransactionSynchronizationUtils;
+import org.springframework.test.util.ReflectionTestUtils;
 
+import org.cucina.engine.client.service.TransactionHandler;
 import org.cucina.engine.server.communication.HistoryRecordDto;
-import org.cucina.engine.server.event.CommitSuccessEvent;
-import org.cucina.engine.server.event.CompensateEvent;
-import org.cucina.engine.server.event.RegistrationEvent;
 import org.cucina.engine.server.event.workflow.BulkTransitionEvent;
 import org.cucina.engine.server.event.workflow.SingleTransitionEvent;
 import org.cucina.engine.server.event.workflow.StartWorkflowEvent;
 import org.cucina.engine.server.event.workflow.ValueEvent;
-
-import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import org.mockito.ArgumentCaptor;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 
 import org.mockito.Mock;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import org.mockito.MockitoAnnotations;
@@ -56,9 +45,8 @@ import org.mockito.stubbing.Answer;
  *
  *
  * @author vlevine
-  */
+ */
 public class MessagingProcessEngineFacadeTest {
-    private static final String APPLICATION_NAME = "applicationName";
     @Mock
     private MessageChannel asyncChannel;
     @Mock
@@ -67,6 +55,8 @@ public class MessagingProcessEngineFacadeTest {
     private Object requestPayload;
     @Mock
     private SubscribableChannel replyChannel;
+    @Mock
+    private TransactionHandler transactionHandler;
     private ValueEvent reply;
 
     /**
@@ -78,7 +68,7 @@ public class MessagingProcessEngineFacadeTest {
     public void setUp()
         throws Exception {
         MockitoAnnotations.initMocks(this);
-        facade = new MessagingProcessEngineFacade(APPLICATION_NAME, "myQueue", asyncChannel);
+        facade = new MessagingProcessEngineFacade();
         facade.setRequestChannel(requestChannel);
         facade.setReplyChannel(replyChannel);
         reply = new ValueEvent(this);
@@ -101,18 +91,8 @@ public class MessagingProcessEngineFacadeTest {
     }
 
     /**
-     *
-     */
-    @After
-    public void cleanup() {
-        if (TransactionSynchronizationManager.isSynchronizationActive()) {
-            TransactionSynchronizationManager.clearSynchronization();
-        }
-    }
-
-    /**
-     *
-     */
+    *
+    */
     @Test
     public void testListTransitions() {
         Collection<String> source = new ArrayList<String>();
@@ -130,8 +110,8 @@ public class MessagingProcessEngineFacadeTest {
     }
 
     /**
-     *
-     */
+    *
+    */
     @Test
     public void testListWorkflowProperties() {
         Collection<Map<String, Object>> source = new ArrayList<Map<String, Object>>();
@@ -148,8 +128,8 @@ public class MessagingProcessEngineFacadeTest {
     }
 
     /**
-     *
-     */
+    *
+    */
     @Test
     public void testLoadTransitionInfo() {
         Collection<Map<String, String>> source = new ArrayList<Map<String, String>>();
@@ -164,33 +144,39 @@ public class MessagingProcessEngineFacadeTest {
     }
 
     /**
-     *
-     */
+    *
+    */
     @Test
     public void testNoTxBulkTransition() {
+        ReflectionTestUtils.setField(facade, "transactionHandler", transactionHandler);
+
         Map<Serializable, Integer> entities = new HashMap<Serializable, Integer>();
 
         entities.put(3L, 20);
         facade.bulkTransition(entities, "applicationType", "transitionId", "comment", "approvedAs",
             "assignedTo", null, "reason", null);
         assertTrue(requestPayload instanceof BulkTransitionEvent);
+        verify(transactionHandler).registerTxHandler("applicationType", 3L);
     }
 
     /**
-     *
-     */
+    *
+    */
     @Test
     public void testNoTxMakeTransition() {
+    	ReflectionTestUtils.setField(facade, "transactionHandler", transactionHandler);
         facade.makeTransition("entityType", 2L, "transitionId", "comment", "approvedAs",
             "assignedTo", null, null);
         assertTrue(requestPayload instanceof SingleTransitionEvent);
+        verify(transactionHandler).registerTxHandler("entityType", 2L);
     }
 
     /**
-     *
-     */
+    *
+    */
     @Test
     public void testNoTxStartWorkflow() {
+    	ReflectionTestUtils.setField(facade, "transactionHandler", transactionHandler);
         reply.setValue(true);
         assertTrue(facade.startWorkflow("entityType", 1L, null));
         assertTrue(requestPayload instanceof StartWorkflowEvent);
@@ -199,12 +185,12 @@ public class MessagingProcessEngineFacadeTest {
 
         assertEquals("entityType", event.getType());
         assertEquals(1L, event.getId());
-        assertEquals(APPLICATION_NAME, event.getApplicationName());
+        verify(transactionHandler).registerTxHandler("entityType", 1L);
     }
 
     /**
-     *
-     */
+    *
+    */
     @Test
     public void testObtainHistory() {
         List<HistoryRecordDto> source = new ArrayList<HistoryRecordDto>();
@@ -219,8 +205,8 @@ public class MessagingProcessEngineFacadeTest {
     }
 
     /**
-     *
-     */
+    *
+    */
     @Test
     public void testObtainHistorySummary() {
         List<Map<String, Object>> source = new ArrayList<Map<String, Object>>();
@@ -232,77 +218,5 @@ public class MessagingProcessEngineFacadeTest {
 
         assertNotNull("Result is null", result);
         assertEquals(source, result);
-    }
-
-    /**
-     *
-     */
-    @SuppressWarnings("rawtypes")
-    @Test
-    public void testOnApplicationEvent() {
-        facade.onApplicationEvent(new ContextRefreshedEvent(mock(ApplicationContext.class)));
-
-        ArgumentCaptor<Message> messc = ArgumentCaptor.forClass(Message.class);
-
-        verify(asyncChannel).send(messc.capture());
-
-        Message<?> message = messc.getValue();
-        RegistrationEvent event = (RegistrationEvent) message.getPayload();
-
-        assertEquals("jms://myQueue", event.getDestinationName());
-        assertEquals(APPLICATION_NAME, event.getApplicationName());
-    }
-
-    /**
-     *
-     */
-    @SuppressWarnings("rawtypes")
-    @Test
-    public void testTxFailStartWorkflow() {
-        TransactionSynchronizationManager.initSynchronization();
-        reply.setValue(true);
-        assertTrue(facade.startWorkflow("entityType", 1L, null));
-        TransactionSynchronizationUtils.triggerAfterCompletion(TransactionSynchronization.STATUS_ROLLED_BACK);
-
-        ArgumentCaptor<Message> mac = ArgumentCaptor.forClass(Message.class);
-
-        verify(asyncChannel).send(mac.capture());
-
-        Message<?> m = mac.getValue();
-
-        assertTrue(m.getPayload() instanceof CompensateEvent);
-
-        CompensateEvent cse = (CompensateEvent) m.getPayload();
-
-        Object id = cse.getIds()[0];
-
-        assertEquals(1L, id);
-        assertEquals("entityType", cse.getType());
-    }
-
-    /**
-     *
-     */
-    @SuppressWarnings("rawtypes")
-    @Test
-    public void testTxStartWorkflow() {
-        TransactionSynchronizationManager.initSynchronization();
-        reply.setValue(true);
-        assertTrue(facade.startWorkflow("entityType", 1L, null));
-        TransactionSynchronizationUtils.triggerAfterCompletion(TransactionSynchronization.STATUS_COMMITTED);
-
-        ArgumentCaptor<Message> mac = ArgumentCaptor.forClass(Message.class);
-
-        verify(asyncChannel).send(mac.capture());
-
-        Message<?> m = mac.getValue();
-
-        assertTrue(m.getPayload() instanceof CommitSuccessEvent);
-
-        CommitSuccessEvent cse = (CommitSuccessEvent) m.getPayload();
-
-        Object id = ((Object[]) cse.getSource())[0];
-
-        assertEquals(1L, id);
     }
 }

@@ -1,29 +1,19 @@
 package org.cucina.engine.client;
 
 import java.io.Serializable;
-
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.gateway.MessagingGatewaySupport;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.ErrorMessage;
-import org.springframework.transaction.support.TransactionSynchronization;
-import org.springframework.transaction.support.TransactionSynchronizationAdapter;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
-import org.springframework.util.Assert;
 
+import org.cucina.engine.client.service.TransactionHandler;
 import org.cucina.engine.server.communication.HistoryRecordDto;
 import org.cucina.engine.server.event.CommitEvent;
-import org.cucina.engine.server.event.CommitSuccessEvent;
-import org.cucina.engine.server.event.CompensateEvent;
-import org.cucina.engine.server.event.RegistrationEvent;
 import org.cucina.engine.server.event.RollbackEvent;
 import org.cucina.engine.server.event.workflow.BulkTransitionEvent;
 import org.cucina.engine.server.event.workflow.ListProcessPropertiesEvent;
@@ -47,25 +37,11 @@ import org.slf4j.LoggerFactory;
  */
 public class MessagingProcessEngineFacade
     extends MessagingGatewaySupport
-    implements ProcessEngineFacade, ApplicationListener<ContextRefreshedEvent> {
+    implements ProcessEngineFacade {
     private static final Logger LOG = LoggerFactory.getLogger(MessagingProcessEngineFacade.class);
-    private MessageChannel asyncChannel;
-    private String applicationName;
-    private String myQueue;
-
-    /**
-     * Creates a new MessagingWorkflowSupportService object.
-     *
-     * @param myQueue
-     *            JAVADOC.
-     */
-    public MessagingProcessEngineFacade(String applicationName, String myQueue,
-        MessageChannel asyncChannel) {
-        this.myQueue = myQueue;
-        this.applicationName = applicationName;
-        Assert.notNull(asyncChannel, "asyncChannel is null");
-        this.asyncChannel = asyncChannel;
-    }
+    private String applicationName = "remove applicatioName from MessagingProcessEngineFacade";
+    @Autowired
+    private TransactionHandler transactionHandler;
 
     /**
      * Bulk transition
@@ -93,7 +69,8 @@ public class MessagingProcessEngineFacade
     public void bulkTransition(Map<Serializable, Integer> entities, String entityType,
         String transitionId, String comment, String approvedAs, String assignedTo,
         Map<String, Object> extraParams, String reason, Object attachment) {
-        registerTxHandler(entityType, entities.keySet().toArray(new Serializable[entities.size()]));
+        transactionHandler.registerTxHandler(entityType,
+            entities.keySet().toArray(new Serializable[entities.size()]));
 
         BulkTransitionEvent event = new BulkTransitionEvent(entityType, applicationName);
 
@@ -197,7 +174,7 @@ public class MessagingProcessEngineFacade
     public void makeTransition(String entityType, Serializable id, String transitionId,
         String comment, String approvedAs, String assignedTo, Map<String, Object> extraParams,
         Object attachment) {
-        registerTxHandler(entityType, id);
+        transactionHandler.registerTxHandler(entityType, id);
 
         SingleTransitionEvent event = new SingleTransitionEvent(entityType, applicationName);
 
@@ -261,20 +238,6 @@ public class MessagingProcessEngineFacade
     /**
      * JAVADOC Method Level Comments
      *
-     * @param arg0
-     *            JAVADOC.
-     */
-    @Override
-    public void onApplicationEvent(ContextRefreshedEvent arg0) {
-        Message<?> message = MessageBuilder.withPayload(new RegistrationEvent(applicationName,
-                    applicationName, "jms://" + myQueue)).build();
-
-        asyncChannel.send(message);
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
      * @param entity
      *            JAVADOC.
      * @param parameters
@@ -302,7 +265,7 @@ public class MessagingProcessEngineFacade
     @Override
     public boolean startWorkflow(String entityType, Serializable id, String workflowId,
         Map<String, Object> parameters) {
-        registerTxHandler(entityType, id);
+        transactionHandler.registerTxHandler(entityType, id);
 
         StartWorkflowEvent event = new StartWorkflowEvent(entityType, applicationName);
 
@@ -323,35 +286,6 @@ public class MessagingProcessEngineFacade
         }
 
         return false;
-    }
-
-    private void handleStatus(int status, String type, Serializable... ids) {
-        Message<?> callmess;
-
-        if (TransactionSynchronization.STATUS_COMMITTED == status) {
-            // TODO make CommitSuccess handle type/ids combo
-            callmess = MessageBuilder.withPayload(new CommitSuccessEvent(ids)).build();
-        } else {
-            CompensateEvent compensateEvent = new CompensateEvent(status);
-
-            compensateEvent.setIds(ids);
-            compensateEvent.setType(type);
-            callmess = MessageBuilder.withPayload(compensateEvent).build();
-            LOG.debug("Compensating for " + type + ":" + Arrays.toString(ids));
-        }
-
-        asyncChannel.send(callmess);
-    }
-
-    private void registerTxHandler(final String entityType, final Serializable... ids) {
-        if (TransactionSynchronizationManager.isSynchronizationActive()) {
-            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
-                    @Override
-                    public void afterCompletion(int status) {
-                        handleStatus(status, entityType, ids);
-                    }
-                });
-        }
     }
 
     @SuppressWarnings("unchecked")
