@@ -1,5 +1,10 @@
 package org.cucina.sample.engine.client.app;
 
+import java.util.Collection;
+import java.util.Map;
+
 public interface ClientService {
-	public Item create();
+	Item create();
+
+	Collection<Map<String,String>> loadTransitionInfo(String processName);
 }

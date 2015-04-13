@@ -1,7 +1,8 @@
 package org.cucina.engine.client.service;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHeaders;
@@ -13,9 +14,7 @@ import org.cucina.engine.server.event.CallbackEvent;
 import org.cucina.engine.server.event.CommitEvent;
 import org.cucina.engine.server.event.EngineEvent;
 import org.cucina.engine.server.event.RollbackEvent;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.cucina.engine.server.event.workflow.ValueEvent;
 
 
 /**
@@ -128,7 +127,7 @@ public class OperativeImpl
                 continue;
             }
 
-            if ((payload instanceof CommitEvent) || (payload instanceof RollbackEvent)) {
+            if ((payload instanceof CommitEvent) || (payload instanceof RollbackEvent)|| (payload instanceof ValueEvent) ) {
                 return reply;
             }
 

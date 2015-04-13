@@ -1,5 +1,8 @@
 package org.cucina.sample.engine.client.app;
 
+import java.util.Collection;
+import java.util.Map;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,5 +49,10 @@ public class ClientServiceImpl
                 item.getId().toString(), null), "Failed to start process");
 
         return item;
+    }
+    
+    @Override
+	public Collection<Map<String,String>> loadTransitionInfo(String processName) {
+    	return processEngineFacade.loadTransitionInfo(processName);
     }
 }
