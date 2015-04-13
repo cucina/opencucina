@@ -45,21 +45,10 @@
 	<si:channel id="unroutableReplyChannel" />
 	<si:logging-channel-adapter channel="unroutableReplyChannel"
 		level="ERROR" logger-name="Unroutable.Reply" log-full-message="true" />
-	<si:payload-type-router input-channel="outputReplyChannel"
-		default-output-channel="unroutableReplyChannel">
-		<si:mapping type="org.cucina.engine.server.event.workflow.ValueEvent"
-			channel="workflowReply" />
-		<si:mapping type="org.cucina.engine.server.event.CallbackEvent"
-			channel="conversationReplyChannel" />
-		<si:mapping type="org.cucina.engine.server.event.CommitEvent"
-			channel="conversationReplyChannel" />
-		<si:mapping type="org.cucina.engine.server.event.RollbackEvent"
-			channel="conversationReplyChannel" />
-	</si:payload-type-router>
 	<si:channel id="unroutableConversationChannel" />
 	<si:logging-channel-adapter channel="unroutableConversationChannel"
 		level="ERROR" logger-name="Unroutable.Conversation" log-full-message="true" />
-	<si:router input-channel="conversationReplyChannel"
+	<si:router input-channel="outputReplyChannel"
 		expression="@operativeFactory.findChannel(headers.get('conversationId'))"
 		default-output-channel="unroutableConversationChannel" />
 
