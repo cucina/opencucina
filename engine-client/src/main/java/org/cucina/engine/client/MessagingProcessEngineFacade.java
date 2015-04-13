@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -20,7 +19,6 @@ import org.springframework.transaction.support.TransactionSynchronizationAdapter
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.Assert;
 
-import org.cucina.engine.server.communication.ConversationContext;
 import org.cucina.engine.server.communication.HistoryRecordDto;
 import org.cucina.engine.server.event.CommitEvent;
 import org.cucina.engine.server.event.CommitSuccessEvent;
@@ -28,8 +26,8 @@ import org.cucina.engine.server.event.CompensateEvent;
 import org.cucina.engine.server.event.RegistrationEvent;
 import org.cucina.engine.server.event.RollbackEvent;
 import org.cucina.engine.server.event.workflow.BulkTransitionEvent;
-import org.cucina.engine.server.event.workflow.ListTransitionsEvent;
 import org.cucina.engine.server.event.workflow.ListProcessPropertiesEvent;
+import org.cucina.engine.server.event.workflow.ListTransitionsEvent;
 import org.cucina.engine.server.event.workflow.LoadTransitionInfoEvent;
 import org.cucina.engine.server.event.workflow.ObtainHistoryEvent;
 import org.cucina.engine.server.event.workflow.ObtainHistorySummaryEvent;
@@ -327,13 +325,6 @@ public class MessagingProcessEngineFacade
         return false;
     }
 
-    private Message<?> buildMessage(Object payload) {
-        String conversationId = UUID.randomUUID().toString();
-
-        return MessageBuilder.withPayload(payload)
-                             .setHeader(ConversationContext.CONVERSATION_ID, conversationId).build();
-    }
-
     private void handleStatus(int status, String type, Serializable... ids) {
         Message<?> callmess;
 
@@ -365,7 +356,7 @@ public class MessagingProcessEngineFacade
 
     @SuppressWarnings("unchecked")
     private <T> T sendForReply(Object obj) {
-        Message<?> reply = sendAndReceiveMessage(buildMessage(obj));
+        Message<?> reply = sendAndReceiveMessage(MessageBuilder.withPayload(obj).build());
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Received " + reply);

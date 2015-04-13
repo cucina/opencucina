@@ -76,7 +76,7 @@ public class OperativeFactoryImpl
     @Override
     public void afterPropertiesSet()
         throws Exception {
-        queuePool = new GenericObjectPool<Operative>(new QueuePoolFactory(applicationContext,
+        queuePool = new GenericObjectPool<Operative>(new OperativePoolFactory(applicationContext,
                     operativeBeanName));
     }
 
@@ -148,12 +148,12 @@ public class OperativeFactoryImpl
         return null;
     }
 
-    private static class QueuePoolFactory
+    private static class OperativePoolFactory
         extends BasePooledObjectFactory<Operative> {
         private ApplicationContext applicationContext;
         private String operativeName = "operative";
 
-        public QueuePoolFactory(ApplicationContext applicationContext, String operativeBeanName) {
+        public OperativePoolFactory(ApplicationContext applicationContext, String operativeBeanName) {
             this.applicationContext = applicationContext;
             this.operativeName = operativeBeanName;
         }

@@ -1,18 +1,21 @@
 package org.cucina.engine.client.service;
 
-import java.util.Collections;
-
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
-import org.springframework.messaging.MessageHeaders;
 
 import org.cucina.engine.server.communication.ConversationContext;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import org.mockito.ArgumentCaptor;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+
 import org.mockito.Mock;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.mockito.MockitoAnnotations;
 
@@ -23,9 +26,8 @@ import org.mockito.MockitoAnnotations;
  * @author vlevine
   */
 public class OrchestratorHandlerTest {
-    private static final String CVAL = "cval";
     @Mock
-    private Message<?> message;
+    private Message<Object> message;
     @SuppressWarnings("rawtypes")
     @Mock
     private Message reply;
@@ -48,22 +50,34 @@ public class OrchestratorHandlerTest {
         throws Exception {
         MockitoAnnotations.initMocks(this);
         handler = new OrchestratorHandler(replyChannel, operativeFactory);
-        when(operativeFactory.createOperative(CVAL)).thenReturn(operative);
-        when(operative.process(message)).thenReturn(reply);
+        when(operativeFactory.createOperative(anyString())).thenReturn(operative);
+        when(operative.process(any(Message.class))).thenReturn(reply);
     }
 
     /**
      *
      */
+    @SuppressWarnings("rawtypes")
     @Test
     public void testHandleMessage() {
-        MessageHeaders headers = new MessageHeaders(Collections.singletonMap(
-                    ConversationContext.CONVERSATION_ID, (Object) CVAL));
-
-        when(message.getHeaders()).thenReturn(headers);
-
+        when(message.getPayload()).thenReturn(new Object());
         handler.handleMessage(message);
         verify(replyChannel).send(reply);
-        verify(operativeFactory).releaseConversation(CVAL);
+
+        ArgumentCaptor<String> acs = ArgumentCaptor.forClass(String.class);
+
+        verify(operativeFactory).createOperative(acs.capture());
+
+        String cval = acs.getValue();
+
+        verify(operativeFactory).releaseConversation(cval);
+
+        ArgumentCaptor<Message> acm = ArgumentCaptor.forClass(Message.class);
+
+        verify(operative).process(acm.capture());
+
+        Message req = acm.getValue();
+
+        assertEquals(cval, req.getHeaders().get(ConversationContext.CONVERSATION_ID));
     }
 }

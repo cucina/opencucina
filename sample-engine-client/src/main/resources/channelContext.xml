@@ -14,10 +14,8 @@
 		level="ERROR" logger-name="Unroutable.Request" />
 	<si:payload-type-router input-channel="workflowRequest"
 		default-output-channel="unroutableRequestChannel">
-		<si:mapping type="org.cucina.engine.server.event.workflow.WorkflowEvent"
-			channel="orchestrateChannel" />
 		<si:mapping type="org.cucina.engine.server.event.EngineEvent"
-			channel="outputChannel" />
+			channel="orchestrateChannel" />
 	</si:payload-type-router>
 	<si:channel id="outputChannel" />
 	<si:channel id="orchestrateChannel" />

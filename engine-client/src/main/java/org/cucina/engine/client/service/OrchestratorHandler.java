@@ -1,5 +1,8 @@
 package org.cucina.engine.client.service;
 
+import java.util.UUID;
+
+import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
@@ -50,19 +53,19 @@ public class OrchestratorHandler
     @Override
     public void handleMessage(Message<?> message)
         throws MessagingException {
-        String conversationId = (String) message.getHeaders()
-                                                .get(ConversationContext.CONVERSATION_ID);
+        String conversationId = UUID.randomUUID().toString();
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("conversationId '" + conversationId + "'");
         }
 
-        Assert.hasLength(conversationId, "conversationId is empty");
-
+        Message<?> cmessage = MessageBuilder.fromMessage(message)
+                                            .setHeader(ConversationContext.CONVERSATION_ID,
+                conversationId).build();
         Operative operative = operativeFactory.createOperative(conversationId);
 
         try {
-            Message<?> reply = operative.process(message);
+            Message<?> reply = operative.process(cmessage);
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("reply=" + reply);
