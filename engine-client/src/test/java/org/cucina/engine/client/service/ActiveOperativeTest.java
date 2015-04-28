@@ -12,14 +12,16 @@ import org.cucina.engine.server.communication.ConversationContext;
 import org.cucina.engine.server.event.CallbackEvent;
 import org.cucina.engine.server.event.CommitEvent;
 import org.cucina.engine.server.event.EngineEvent;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.mockito.MockitoAnnotations;
 
@@ -29,7 +31,8 @@ import org.mockito.MockitoAnnotations;
  *
  * @author vlevine
   */
-public class OperativeImplTest {
+public class ActiveOperativeTest {
+    private ActiveOperative operative;
     @Mock
     private EventHandler<EngineEvent> eventHandler;
     @Mock
@@ -38,9 +41,8 @@ public class OperativeImplTest {
     private MessageChannel callbackReplyChannel;
     @Mock
     private MessageChannel requestChannel;
-    private OperativeImpl operative;
     @Mock
-    private PollableChannel replyChannel;
+    private PollableChannel callbackChannel;
 
     /**
      *
@@ -51,8 +53,10 @@ public class OperativeImplTest {
     public void setUp()
         throws Exception {
         MockitoAnnotations.initMocks(this);
-        operative = new OperativeImpl(requestChannel, callbackReplyChannel, eventHandler);
-        operative.setReplyChannel(replyChannel);
+        operative = new ActiveOperative(requestChannel);
+        operative.setCallbackReplyChannel(callbackReplyChannel);
+        operative.setEventHandler(eventHandler);
+        operative.setCallbackChannel(callbackChannel);
     }
 
     /**
@@ -78,7 +82,7 @@ public class OperativeImplTest {
         CommitEvent coe = new CommitEvent();
 
         when(reply.getPayload()).thenReturn(ce).thenReturn(coe);
-        when(replyChannel.receive(5000)).thenReturn(reply);
+        when(callbackChannel.receive(5000)).thenReturn(reply);
 
         EngineEvent ee = mock(EngineEvent.class);
 
@@ -89,6 +93,50 @@ public class OperativeImplTest {
         ArgumentCaptor<Message> mac = ArgumentCaptor.forClass(Message.class);
 
         verify(callbackReplyChannel).send(mac.capture());
+
+        Message callmess = mac.getValue();
+
+        assertEquals(ee, callmess.getPayload());
+        assertEquals(headers.get(ConversationContext.CONVERSATION_ID),
+            callmess.getHeaders().get(ConversationContext.CONVERSATION_ID));
+    }
+
+    /**
+     *
+     */
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    @Test
+    public void testProcessWithReplyChannel() {
+        Map<String, Object> hs = new HashMap<String, Object>();
+
+        hs.put(ConversationContext.CONVERSATION_ID, "calue");
+
+        MessageHeaders headers = new MessageHeaders(hs);
+
+        when(request.getHeaders()).thenReturn(headers);
+
+        Message reply = mock(Message.class);
+        MessageHeaders replyHeaders = mock(MessageHeaders.class);
+        MessageChannel tempChannel = mock(MessageChannel.class);
+
+        when(replyHeaders.get(MessageHeaders.REPLY_CHANNEL)).thenReturn(tempChannel);
+        when(reply.getHeaders()).thenReturn(replyHeaders);
+
+        CallbackEvent ce = new CallbackEvent();
+        CommitEvent coe = new CommitEvent();
+
+        when(reply.getPayload()).thenReturn(ce).thenReturn(coe);
+        when(callbackChannel.receive(5000)).thenReturn(reply);
+
+        EngineEvent ee = mock(EngineEvent.class);
+
+        when(eventHandler.handleEvent(ce)).thenReturn(ee);
+        operative.process(request);
+        verify(requestChannel).send(request);
+
+        ArgumentCaptor<Message> mac = ArgumentCaptor.forClass(Message.class);
+
+        verify(tempChannel).send(mac.capture());
 
         Message callmess = mac.getValue();
 

@@ -7,12 +7,12 @@
 	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
 	http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.1.xsd
 	http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms-4.1.xsd">
-	<jms:inbound-gateway id="jmsInGateway"
-		request-destination-name="server.queue" request-channel="inboundChannel"
+	<jms:inbound-gateway id="jmsInboundGateway"
+		request-destination-name="server.queue" request-channel="callbackChannel"
 		reply-channel="outboundChannel" message-converter="xmlMessageConverter"
 		connection-factory="jmsConnectionFactory" destination-resolver="myDestinationResolver" />
 	<bean id="xmlMessageConverter" class="org.cucina.engine.server.jms.XmlEncoderDecoderConverter" />
-	<si:channel id="inboundChannel">
+	<si:channel id="callbackChannel">
 		<si:interceptors>
 			<bean class="org.cucina.core.spring.integration.SpelChannelInterceptor"
 				p:expression="@conversationContext.setConversationId(headers['conversationId'])" />
@@ -22,7 +22,7 @@
 	<si:channel id="unroutableChannel" />
 	<si:logging-channel-adapter channel="unroutableChannel"
 		level="WARN" logger-name="Unroutable.Request" />
-	<si:payload-type-router input-channel="inboundChannel"
+	<si:payload-type-router input-channel="callbackChannel"
 		default-output-channel="unroutableChannel">
 		<si:mapping
 			type="org.cucina.engine.server.event.workflow.BulkTransitionEvent"

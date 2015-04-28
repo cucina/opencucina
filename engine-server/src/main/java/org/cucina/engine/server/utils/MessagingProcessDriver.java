@@ -17,7 +17,6 @@ import org.cucina.engine.LocalProcessDriver;
 import org.cucina.engine.ProcessDriver;
 import org.cucina.engine.definition.Check;
 import org.cucina.engine.definition.Operation;
-import org.cucina.engine.server.communication.ConversationContext;
 import org.cucina.engine.server.definition.AbstractElementDescriptor;
 import org.cucina.engine.server.definition.CheckDescriptor;
 import org.cucina.engine.server.definition.OperationDescriptor;
@@ -42,21 +41,15 @@ public class MessagingProcessDriver
     extends MessagingGatewaySupport
     implements ProcessDriver {
     private static final Logger LOG = LoggerFactory.getLogger(MessagingProcessDriver.class);
-    private ConversationContext conversationContext;
     private ConversionService conversionService;
     private ProcessDriver localDriver;
 
     /**
-    * Creates a new MessagingWorkflowDriver object.
-    *
-    * @param conversationContext JAVADOC.
-    * @param localDriver JAVADOC.
-    * @param applicationName JAVADOC.
-    */
-    public MessagingProcessDriver(ConversationContext conversationContext,
-        ConversionService conversionService) {
-        Assert.notNull(conversationContext, "conversationContext is null");
-        this.conversationContext = conversationContext;
+     * Creates a new MessagingProcessDriver object.
+     *
+     * @param conversionService .
+     */
+    public MessagingProcessDriver(ConversionService conversionService) {
         Assert.notNull(conversionService, "conversionService is null");
         this.conversionService = conversionService;
     }
@@ -73,10 +66,8 @@ public class MessagingProcessDriver
     /**
      * JAVADOC Method Level Comments
      *
-     * @param actions
-     *            JAVADOC.
-     * @param executionContext
-     *            JAVADOC.
+     * @param actions JAVADOC.
+     * @param executionContext JAVADOC.
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -109,10 +100,8 @@ public class MessagingProcessDriver
     /**
      * JAVADOC Method Level Comments
      *
-     * @param condition
-     *            JAVADOC.
-     * @param executionContext
-     *            JAVADOC.
+     * @param condition JAVADOC.
+     * @param executionContext JAVADOC.
      *
      * @return JAVADOC.
      */
@@ -174,7 +163,7 @@ public class MessagingProcessDriver
         if (StringUtils.isEmpty(application)) {
             throw new IllegalArgumentException("application is not specified");
 
-            //return testLocal(ced, executionContext);
+            // return testLocal(ced, executionContext);
         }
 
         return sendAndReceive(conversionService.convert(descriptor, WorkflowElementDto.class),

@@ -140,10 +140,9 @@ public class ProcessConfiguration {
 	}
 
 	@Bean
-	public ProcessDriver processDriver(ConversationContext conversationContext,
-			MessageChannel workflowCallbackChannel, MessageChannel workflowCallbackReplyChannel) {
-		MessagingProcessDriver driver = new MessagingProcessDriver(conversationContext,
-				myConversionService());
+	public ProcessDriver processDriver(MessageChannel workflowCallbackChannel,
+			MessageChannel workflowCallbackReplyChannel) {
+		MessagingProcessDriver driver = new MessagingProcessDriver(myConversionService());
 
 		driver.setRequestChannel(workflowCallbackChannel);
 		driver.setReplyChannel(workflowCallbackReplyChannel);
