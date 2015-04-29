@@ -36,6 +36,7 @@ public class PermissionDtoConverter
 
             dd.setDomainObjectId(dimension.getDomainObjectId().longValue());
             dd.setPropertyName(dimension.getPropertyName());
+            ddos.add(dd);
         }
 
         dto.setDimensions(ddos);
