@@ -15,9 +15,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import org.cucina.engine.server.event.CommitEvent;
-import org.cucina.engine.server.event.EngineEvent;
-import org.cucina.engine.server.event.workflow.BulkTransitionEvent;
+import org.cucina.conversation.events.CommitEvent;
+import org.cucina.conversation.events.ConversationEvent;
+import org.cucina.engine.server.event.BulkTransitionEvent;
 import org.cucina.engine.service.ProcessSupportService;
 import org.cucina.i18n.api.ListItemDto;
 import org.cucina.i18n.api.ListItemService;
@@ -68,7 +68,7 @@ public class BulkTransitionHandlerTest {
 			return dto;
 		}).collect(Collectors.toList());
 		when(listItemService.loadByType("reason")).thenReturn(li);
-		EngineEvent result = handler.act(event);
+		ConversationEvent result = handler.act(event);
 		assertTrue(result instanceof CommitEvent);
 		verify(processSupportService).makeBulkTransition(event.getEntities(), event.getType(),
 				event.getTransitionId(), event.getComment(), event.getApprovedAs(),

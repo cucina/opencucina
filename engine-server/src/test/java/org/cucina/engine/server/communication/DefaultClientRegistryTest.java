@@ -1,16 +1,17 @@
 package org.cucina.engine.server.communication;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.management.ObjectName;
 
-import org.cucina.engine.server.event.RegistrationEvent;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import org.cucina.engine.server.event.RegistrationEvent;
 
 
 /**

@@ -1,13 +1,14 @@
 package org.cucina.engine.server.converters;
 
-import java.util.Date;
-
-import org.cucina.engine.model.HistoryRecord;
-import org.cucina.engine.server.communication.HistoryRecordDto;
 import static org.junit.Assert.assertEquals;
+
+import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import org.cucina.engine.model.HistoryRecord;
+import org.cucina.engine.server.definition.HistoryRecordDto;
 
 
 /**

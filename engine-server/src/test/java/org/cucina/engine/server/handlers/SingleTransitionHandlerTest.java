@@ -10,9 +10,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import org.cucina.engine.server.event.CommitEvent;
-import org.cucina.engine.server.event.EngineEvent;
-import org.cucina.engine.server.event.workflow.SingleTransitionEvent;
+import org.cucina.conversation.events.CommitEvent;
+import org.cucina.conversation.events.ConversationEvent;
+import org.cucina.engine.server.event.SingleTransitionEvent;
 import org.cucina.engine.service.ProcessSupportService;
 
 
@@ -39,7 +39,7 @@ public class SingleTransitionHandlerTest {
 		event.setApprovedAs("approvedAs");
 		event.setAssignedTo("assignedTo");
 
-		EngineEvent result = handler.act(event);
+		ConversationEvent result = handler.act(event);
 		assertTrue(result instanceof CommitEvent);
 		verify(processSupportService).makeTransition((Serializable) event.getId(), event.getType(),
 				event.getTransitionId(), event.getComment(), event.getApprovedAs(),

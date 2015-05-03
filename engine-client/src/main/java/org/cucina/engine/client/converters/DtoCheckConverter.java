@@ -2,6 +2,8 @@ package org.cucina.engine.client.converters;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.core.convert.converter.Converter;
@@ -10,10 +12,7 @@ import org.springframework.expression.BeanResolver;
 import org.springframework.util.Assert;
 
 import org.cucina.engine.client.Check;
-import org.cucina.engine.server.definition.WorkflowElementDto;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.cucina.engine.server.definition.ProcessElementDto;
 
 
 /**
@@ -22,7 +21,7 @@ import org.slf4j.LoggerFactory;
  * @author vlevine
   */
 public class DtoCheckConverter
-    implements Converter<WorkflowElementDto, Check> {
+    implements Converter<ProcessElementDto, Check> {
     private static final Logger LOG = LoggerFactory.getLogger(DtoCheckConverter.class);
     private BeanResolver beanResolver;
 
@@ -43,7 +42,7 @@ public class DtoCheckConverter
      * @return .
      */
     @Override
-    public Check convert(WorkflowElementDto source) {
+    public Check convert(ProcessElementDto source) {
         String path = source.getPath();
 
         Object check;

@@ -4,7 +4,7 @@ import org.springframework.core.convert.converter.Converter;
 
 import org.cucina.engine.server.definition.CheckDescriptor;
 import org.cucina.engine.server.definition.CheckDescriptorDto;
-import org.cucina.engine.server.definition.WorkflowElementDto;
+import org.cucina.engine.server.definition.ProcessElementDto;
 
 
 /**
@@ -13,7 +13,7 @@ import org.cucina.engine.server.definition.WorkflowElementDto;
  * @author vlevine
   */
 public class CheckDtoConverter
-    implements Converter<CheckDescriptor, WorkflowElementDto> {
+    implements Converter<CheckDescriptor, ProcessElementDto> {
     /**
      *
      *
@@ -22,7 +22,7 @@ public class CheckDtoConverter
      * @return .
      */
     @Override
-    public WorkflowElementDto convert(CheckDescriptor source) {
+    public ProcessElementDto convert(CheckDescriptor source) {
         CheckDescriptorDto dto = new CheckDescriptorDto();
 
         dto.setApplication((String) source.get("application"));

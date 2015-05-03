@@ -1,17 +1,17 @@
 package org.cucina.engine.server.communication;
 
-import org.cucina.core.service.ContextService;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
-
 import org.mockito.Mock;
-import static org.mockito.Mockito.when;
-
 import org.mockito.MockitoAnnotations;
+
+import org.cucina.conversation.Operative;
+import org.cucina.core.service.ContextService;
 
 
 /**
@@ -44,7 +44,7 @@ public class ConversationContextImplTest {
      */
     @Test
     public void testCreateConversationId() {
-        when(contextService.get(ConversationContextImpl.CONVERSATION_ID)).thenReturn(null);
+        when(contextService.get(Operative.CONVERSATION_ID)).thenReturn(null);
 
         String conversationId = context.getConversationId(true);
 
@@ -59,7 +59,7 @@ public class ConversationContextImplTest {
      */
     @Test
     public void testGetConversationIdExists() {
-        when(contextService.get(ConversationContextImpl.CONVERSATION_ID)).thenReturn("convId");
+        when(contextService.get(Operative.CONVERSATION_ID)).thenReturn("convId");
         assertEquals("incorrect id", "convId", context.getConversationId(false));
     }
 

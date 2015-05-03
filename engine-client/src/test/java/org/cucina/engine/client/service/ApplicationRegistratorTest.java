@@ -1,22 +1,20 @@
 package org.cucina.engine.client.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 
 import org.cucina.engine.server.event.RegistrationEvent;
-import static org.junit.Assert.*;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
-import org.mockito.MockitoAnnotations;
 
 
 /**

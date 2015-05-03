@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import org.cucina.engine.definition.Token;
-import org.cucina.engine.server.event.workflow.StartWorkflowEvent;
+import org.cucina.engine.server.event.StartWorkflowEvent;
 import org.cucina.engine.server.model.EntityDescriptor;
 import org.cucina.engine.service.ProcessSupportService;
 

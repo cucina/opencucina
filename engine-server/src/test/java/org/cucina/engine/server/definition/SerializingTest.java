@@ -1,25 +1,23 @@
 package org.cucina.engine.server.definition;
 
-import java.math.BigInteger;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import java.math.BigInteger;
 import java.util.Random;
 
 import javax.jms.Message;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 
-import org.cucina.engine.server.jms.XmlEncoderDecoderConverter;
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import org.mockito.MockitoAnnotations;
+
+import org.cucina.engine.server.jms.XmlEncoderDecoderConverter;
 
 
 /**

@@ -11,7 +11,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @author vlevine
  */
 public class OperationDescriptorDto
-    implements WorkflowElementDto {
+    implements ProcessElementDto {
     private HashMap<String, Object> properties = new HashMap<String, Object>();
     private Object domainId;
     private String application;

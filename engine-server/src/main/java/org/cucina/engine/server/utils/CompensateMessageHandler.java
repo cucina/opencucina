@@ -1,12 +1,12 @@
 package org.cucina.engine.server.utils;
 
 import java.io.Serializable;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHandler;
@@ -15,13 +15,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import org.cucina.conversation.events.CompensateEvent;
 import org.cucina.engine.model.HistoryRecord;
 import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.repository.TokenRepository;
-import org.cucina.engine.server.event.CompensateEvent;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**

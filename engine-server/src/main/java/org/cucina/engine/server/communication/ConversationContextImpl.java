@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import org.cucina.conversation.Operative;
+
 import org.cucina.core.service.ContextService;
 
 import org.slf4j.Logger;
@@ -51,7 +53,7 @@ public class ConversationContextImpl
      */
     @Override
     public void setConversationId(String conversationId) {
-        contextService.put(CONVERSATION_ID, conversationId);
+        contextService.put(Operative.CONVERSATION_ID, conversationId);
     }
 
     /**
@@ -61,7 +63,7 @@ public class ConversationContextImpl
     */
     @Override
     public String getConversationId(boolean startNew) {
-        String conversationId = contextService.get(CONVERSATION_ID);
+        String conversationId = contextService.get(Operative.CONVERSATION_ID);
 
         if (startNew && StringUtils.isEmpty(conversationId)) {
             conversationId = startConversation();

@@ -1,24 +1,22 @@
 package org.cucina.engine.server.handlers;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
-import org.cucina.engine.server.event.workflow.ListProcessPropertiesEvent;
-import org.cucina.engine.server.event.workflow.ValueEvent;
-import org.cucina.engine.service.ProcessSupportService;
-
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-
-import static org.mockito.Mockito.when;
-
 import org.mockito.MockitoAnnotations;
+
+import org.cucina.engine.server.event.ListProcessPropertiesEvent;
+import org.cucina.engine.server.event.ValueEvent;
+import org.cucina.engine.service.ProcessSupportService;
 
 
 /**

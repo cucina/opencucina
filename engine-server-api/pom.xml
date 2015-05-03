@@ -16,13 +16,13 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jms</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>cucina</groupId>
+			<artifactId>conversation</artifactId>
+			<version>0.2</version>
 		</dependency>
 	</dependencies>
 	<profiles>

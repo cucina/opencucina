@@ -1,9 +1,10 @@
 package org.cucina.engine.server.repository.jpa;
 
+import org.springframework.stereotype.Repository;
+
 import org.cucina.core.model.PersistableEntity;
 import org.cucina.engine.repository.jpa.TokenRepositoryImpl;
 import org.cucina.engine.server.model.EntityDescriptor;
-import org.springframework.stereotype.Repository;
 
 
 /**

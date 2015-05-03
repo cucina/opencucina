@@ -1,7 +1,7 @@
 package org.cucina.engine.server.handlers;
 
-import org.cucina.engine.server.event.EngineEvent;
-import org.cucina.engine.server.event.workflow.ProcessEvent;
+import org.cucina.conversation.events.ConversationEvent;
+import org.cucina.engine.server.event.ProcessEvent;
 
 
 /**
@@ -18,5 +18,5 @@ public interface ProcessEventHandler<T extends ProcessEvent> {
      *
      * @return JAVADOC.
      */
-    EngineEvent act(T event);
+    ConversationEvent act(T event);
 }

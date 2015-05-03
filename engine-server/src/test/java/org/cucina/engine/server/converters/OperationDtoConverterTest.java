@@ -1,11 +1,12 @@
 package org.cucina.engine.server.converters;
 
-import org.cucina.engine.server.definition.OperationDescriptor;
-import org.cucina.engine.server.definition.WorkflowElementDto;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import org.cucina.engine.server.definition.OperationDescriptor;
+import org.cucina.engine.server.definition.ProcessElementDto;
 
 
 /**
@@ -39,7 +40,7 @@ public class OperationDtoConverterTest {
         source.put("domainType", "DT");
         source.put("path", "PA");
 
-        WorkflowElementDto dto = converter.convert(source);
+        ProcessElementDto dto = converter.convert(source);
 
         assertEquals("APP", dto.getApplication());
         assertEquals("DI", dto.getDomainId());

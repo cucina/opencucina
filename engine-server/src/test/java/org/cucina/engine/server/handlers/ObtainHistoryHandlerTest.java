@@ -13,9 +13,9 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.core.convert.ConversionService;
 
 import org.cucina.engine.model.HistoryRecord;
-import org.cucina.engine.server.communication.HistoryRecordDto;
-import org.cucina.engine.server.event.workflow.ObtainHistoryEvent;
-import org.cucina.engine.server.event.workflow.ValueEvent;
+import org.cucina.engine.server.definition.HistoryRecordDto;
+import org.cucina.engine.server.event.ObtainHistoryEvent;
+import org.cucina.engine.server.event.ValueEvent;
 import org.cucina.engine.service.ProcessSupportService;
 
 /**

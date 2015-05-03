@@ -3,7 +3,7 @@ package org.cucina.engine.server.handlers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import org.cucina.engine.server.event.workflow.ListActionableTransitionsEvent;
+import org.cucina.engine.server.event.ListActionableTransitionsEvent;
 import org.cucina.engine.service.ProcessSupportService;
 
 

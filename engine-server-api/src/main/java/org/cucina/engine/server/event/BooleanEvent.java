@@ -1,5 +1,7 @@
 package org.cucina.engine.server.event;
 
+import org.cucina.conversation.events.ConversationEvent;
+
 
 /**
  * JAVADOC for Class Level
@@ -8,7 +10,7 @@ package org.cucina.engine.server.event;
  * @version $Revision: $
   */
 public class BooleanEvent
-    extends EngineEvent {
+    extends ConversationEvent {
     private static final long serialVersionUID = -4576181250796688902L;
     private boolean result;
 

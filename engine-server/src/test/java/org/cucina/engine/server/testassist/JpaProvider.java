@@ -1,9 +1,13 @@
 package org.cucina.engine.server.testassist;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import javax.persistence.EntityManager;
 
 import org.apache.commons.lang3.ClassUtils;
-
+import org.junit.After;
+import org.junit.Before;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -18,14 +22,8 @@ import org.cucina.core.model.Attachment;
 import org.cucina.core.service.ContextService;
 import org.cucina.core.service.ThreadLocalContextService;
 import org.cucina.core.spring.SingletonBeanFactory;
-
 import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.server.model.EntityDescriptor;
-
-import org.junit.After;
-import org.junit.Before;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Base test class that setup data access for an instance of a hypersonic db.

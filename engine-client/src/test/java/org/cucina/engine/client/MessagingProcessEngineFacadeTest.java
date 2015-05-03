@@ -1,7 +1,14 @@
 package org.cucina.engine.client;
 
-import java.io.Serializable;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.verify;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -9,36 +16,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.SubscribableChannel;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import org.cucina.engine.client.service.TransactionHandler;
-import org.cucina.engine.server.communication.HistoryRecordDto;
-import org.cucina.engine.server.event.workflow.BulkTransitionEvent;
-import org.cucina.engine.server.event.workflow.SingleTransitionEvent;
-import org.cucina.engine.server.event.workflow.StartWorkflowEvent;
-import org.cucina.engine.server.event.workflow.ValueEvent;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Before;
-import org.junit.Test;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyLong;
-
-import org.mockito.Mock;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.verify;
-
-import org.mockito.MockitoAnnotations;
-
-import org.mockito.invocation.InvocationOnMock;
-
-import org.mockito.stubbing.Answer;
+import org.cucina.conversation.TransactionHandler;
+import org.cucina.engine.server.definition.HistoryRecordDto;
+import org.cucina.engine.server.event.BulkTransitionEvent;
+import org.cucina.engine.server.event.SingleTransitionEvent;
+import org.cucina.engine.server.event.StartWorkflowEvent;
+import org.cucina.engine.server.event.ValueEvent;
 
 
 /**

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.cucina.conversation.Conversation;
 import org.cucina.sample.engine.client.app.ClientService;
 import org.cucina.sample.engine.client.app.Item;
 

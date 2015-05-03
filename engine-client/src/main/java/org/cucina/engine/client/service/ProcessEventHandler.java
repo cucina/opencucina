@@ -1,21 +1,22 @@
 package org.cucina.engine.client.service;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.util.Assert;
 
+import org.cucina.conversation.EventHandler;
+import org.cucina.conversation.events.CallbackEvent;
+import org.cucina.conversation.events.ConversationEvent;
 import org.cucina.engine.client.Check;
 import org.cucina.engine.client.Operation;
 import org.cucina.engine.server.definition.CheckDescriptorDto;
 import org.cucina.engine.server.definition.OperationDescriptorDto;
-import org.cucina.engine.server.definition.WorkflowElementDto;
+import org.cucina.engine.server.definition.ProcessElementDto;
 import org.cucina.engine.server.event.ActionResultEvent;
 import org.cucina.engine.server.event.BooleanEvent;
-import org.cucina.engine.server.event.CallbackEvent;
-import org.cucina.engine.server.event.EngineEvent;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 /**
  * JAVADOC for Class Level
@@ -23,63 +24,61 @@ import org.slf4j.LoggerFactory;
  * @author $Author: $
  * @version $Revision: $
  */
-public class ProcessEventHandler
-    implements EventHandler<CallbackEvent> {
-    private static final Logger LOG = LoggerFactory.getLogger(ProcessEventHandler.class);
-    private ConversionService conversionService;
-    private DomainFindingService domainFindingService;
+public class ProcessEventHandler implements  EventHandler<ConversationEvent> {
+	private static final Logger LOG = LoggerFactory.getLogger(ProcessEventHandler.class);
+	private ConversionService conversionService;
+	private DomainFindingService domainFindingService;
 
-    /**
-     * Creates a new WorkflowEventHandler object.
-     */
-    public ProcessEventHandler(DomainFindingService domainFindingService,
-        ConversionService conversionService) {
-        Assert.notNull(domainFindingService, "domainFindingService is null");
-        this.domainFindingService = domainFindingService;
-        Assert.notNull(conversionService, "conversionService is null");
-        this.conversionService = conversionService;
-    }
+	/**
+	 * Creates a new WorkflowEventHandler object.
+	 */
+	public ProcessEventHandler(DomainFindingService domainFindingService,
+			ConversionService conversionService) {
+		Assert.notNull(domainFindingService, "domainFindingService is null");
+		this.domainFindingService = domainFindingService;
+		Assert.notNull(conversionService, "conversionService is null");
+		this.conversionService = conversionService;
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param event
-     *            JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    public EngineEvent handleEvent(CallbackEvent event) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Handling event:" + event);
-        }
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param event JAVADOC.
+	 *
+	 * @return JAVADOC.
+	 */
+	@Override
+	public ConversationEvent handleEvent(ConversationEvent event) {
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Handling event:" + event);
+		}
+		// TODO typecheck
+		ProcessElementDto source = (ProcessElementDto) event.getSource();
+		Map<String, Object> parameters = ((CallbackEvent)event).getParameters();
+		Assert.notNull(source, "no dto in event");
 
-        WorkflowElementDto source = event.getWorkflowElementDescriptor();
+		Object pe = loadDomainObject(source.getDomainType(), source.getDomainId());
 
-        Assert.notNull(source, "no descriptor in event");
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Loaded object " + pe);
+		}
 
-        Object pe = loadDomainObject(source.getDomainType(), source.getDomainId());
+		if (source instanceof CheckDescriptorDto) {
+			boolean result = conversionService.convert(source, Check.class).test(pe,
+					parameters);
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Loaded object " + pe);
-        }
+			return new BooleanEvent(event, result);
+		} else if (source instanceof OperationDescriptorDto) {
+			conversionService.convert(source, Operation.class).execute(pe, parameters);
 
-        if (source instanceof CheckDescriptorDto) {
-            boolean result = conversionService.convert(source, Check.class)
-                                              .test(pe, event.getParameters());
+			return new ActionResultEvent(parameters);
+		}
 
-            return new BooleanEvent(event, result);
-        } else if (source instanceof OperationDescriptorDto) {
-            conversionService.convert(source, Operation.class).execute(pe, event.getParameters());
+		// TODO look at the usage
+		throw new IllegalArgumentException("Invalid event has been sent, rolling back");
+	}
 
-            return new ActionResultEvent(event.getParameters());
-        }
-
-        // TODO look at the usage
-        throw new IllegalArgumentException("Invalid event has been sent, rolling back");
-    }
-
-    private Object loadDomainObject(String type, Object id) {
-        return domainFindingService.find(type, id);
-    }
+	private Object loadDomainObject(String type, Object id) {
+		return domainFindingService.find(type, id);
+	}
 }

@@ -13,6 +13,9 @@ import org.apache.commons.beanutils.BeanPropertyValueEqualsPredicate;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.functors.AndPredicate;
 import org.apache.commons.collections.functors.InstanceofPredicate;
+import org.junit.Before;
+import org.junit.Test;
+
 import org.cucina.core.model.PersistableEntity;
 import org.cucina.core.utils.NameUtils;
 import org.cucina.engine.server.model.EntityDescriptor;
@@ -20,8 +23,6 @@ import org.cucina.search.marshall.SearchCriterionMarshaller;
 import org.cucina.search.query.SearchBean;
 import org.cucina.search.query.SearchCriterion;
 import org.cucina.search.query.criterion.JoinCriterion;
-import org.junit.Before;
-import org.junit.Test;
 
 
 /**

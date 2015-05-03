@@ -7,7 +7,7 @@ package org.cucina.engine.server.communication;
  * @version $Revision: $
  */
 public interface ConversationContext {
-	String CONVERSATION_ID = "conversationId";
+	//String CONVERSATION_ID = "conversationId";
 
 	/**
 	 * JAVADOC Method Level Comments

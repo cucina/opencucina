@@ -20,7 +20,6 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourcePatternResolver;
-import org.springframework.messaging.MessageChannel;
 
 import org.cucina.core.CompositeInstanceFactory;
 import org.cucina.core.InstanceFactory;
@@ -29,18 +28,15 @@ import org.cucina.core.model.Attachment;
 import org.cucina.core.service.ContextService;
 import org.cucina.core.service.ThreadLocalContextService;
 import org.cucina.engine.DefaultProcessEnvironment;
-import org.cucina.engine.ProcessDriver;
 import org.cucina.engine.ProcessEnvironment;
 import org.cucina.engine.TokenFactory;
 import org.cucina.engine.definition.config.ProcessDefinitionParser;
 import org.cucina.engine.definition.config.ProcessDefinitionRegistry;
 import org.cucina.engine.definition.config.xml.DigesterModuleProcessDefinitionParser;
 import org.cucina.engine.model.Workflow;
-import org.cucina.engine.server.communication.ConversationContext;
 import org.cucina.engine.server.converters.CheckDtoConverter;
 import org.cucina.engine.server.converters.HistoryRecordDtoConverter;
 import org.cucina.engine.server.converters.OperationDtoConverter;
-import org.cucina.engine.server.utils.MessagingProcessDriver;
 import org.cucina.i18n.api.ListItemService;
 import org.cucina.i18n.api.remote.RemoteListNodeService;
 import org.cucina.security.api.AccessFacade;
@@ -68,27 +64,16 @@ public class ProcessConfiguration {
 	private String processLocation; // = { "classpath:workflows/Item.xml",
 									// "classpath:workflows/Report.xml" };
 
-	/**
-	 *
-	 * @return .
-	 */
 	@Bean
 	public AccessFacade accessFacade() {
 		return new RemoteAccessFacade(accessUrl);
 	}
 
-	/**
-	 *
-	 * @return
-	 */
 	@Bean
 	public ContextService contextService() {
 		return new ThreadLocalContextService();
 	}
 
-	/**
-	 * @return .
-	 */
 	@Bean
 	public InstanceFactory instanceFactory() {
 		return new CompositeInstanceFactory(new PackageBasedInstanceFactory(
@@ -96,37 +81,17 @@ public class ProcessConfiguration {
 				ClassUtils.getPackageName(Attachment.class)));
 	}
 
-	/**
-	 *
-	 * @return .
-	 */
 	@Bean
 	public ListItemService listNodeService() {
 		return new RemoteListNodeService(listnodeUrl);
 	}
 
-	/**
-	 * @param applicationContext .
-	 *
-	 * @return .
-	 */
 	@Bean
 	public ProcessDefinitionParser processDefinitionParser(ApplicationContext applicationContext) {
 		return new DigesterModuleProcessDefinitionParser(
 				applicationContext.getResource(SERVER_PROCESS_RULES));
 	}
 
-	/**
-	 *
-	 *
-	 * @param tokenFactory
-	 * @param applicationContext
-	 * @param definitionRegistry
-	 *
-	 * @return .
-	 *
-	 * @throws IOException .
-	 */
 	@Bean
 	public ProcessEnvironment processEnvironment(TokenFactory tokenFactory,
 			ApplicationContext applicationContext, ProcessDefinitionRegistry definitionRegistry)
@@ -137,16 +102,6 @@ public class ProcessConfiguration {
 		dpe.setDefinitionResources(findResources(applicationContext, processLocation));
 		dpe.setDefinitionRegistry(definitionRegistry);
 		return dpe;
-	}
-
-	@Bean
-	public ProcessDriver processDriver(MessageChannel workflowCallbackChannel,
-			MessageChannel workflowCallbackReplyChannel) {
-		MessagingProcessDriver driver = new MessagingProcessDriver(myConversionService());
-
-		driver.setRequestChannel(workflowCallbackChannel);
-		driver.setReplyChannel(workflowCallbackReplyChannel);
-		return driver;
 	}
 
 	@Bean

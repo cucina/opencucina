@@ -3,10 +3,11 @@ package org.cucina.engine.server.repository.jpa;
 import java.util.Collection;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.junit.Test;
+
 import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.server.model.EntityDescriptor;
 import org.cucina.engine.server.testassist.JpaProvider;
-import org.junit.Test;
 
 
 /**

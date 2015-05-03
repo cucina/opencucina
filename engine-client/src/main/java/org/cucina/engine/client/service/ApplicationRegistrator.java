@@ -7,6 +7,8 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.util.Assert;
 
+import org.cucina.conversation.Operative;
+
 import org.cucina.engine.server.event.RegistrationEvent;
 
 
@@ -45,7 +47,9 @@ public class ApplicationRegistrator
     @Override
     public void onApplicationEvent(ContextRefreshedEvent arg0) {
         Message<?> message = MessageBuilder.withPayload(new RegistrationEvent(applicationName,
-                    applicationName, "jms://" + myQueue)).build();
+                    applicationName, "jms://" + myQueue))
+                                           .setHeader(Operative.DESTINATION_NAME, "server.queue")
+                                           .build();
 
         asyncChannel.send(message);
     }

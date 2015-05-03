@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.cucina.engine.server.communication.HistoryRecordDto;
+import org.cucina.engine.server.definition.HistoryRecordDto;
 
 
 /**

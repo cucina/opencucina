@@ -1,6 +1,7 @@
 package org.cucina.engine.client;
 
 import java.io.Serializable;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -11,19 +12,21 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.ErrorMessage;
 
-import org.cucina.engine.client.service.TransactionHandler;
-import org.cucina.engine.server.communication.HistoryRecordDto;
-import org.cucina.engine.server.event.CommitEvent;
-import org.cucina.engine.server.event.RollbackEvent;
-import org.cucina.engine.server.event.workflow.BulkTransitionEvent;
-import org.cucina.engine.server.event.workflow.ListProcessPropertiesEvent;
-import org.cucina.engine.server.event.workflow.ListTransitionsEvent;
-import org.cucina.engine.server.event.workflow.LoadTransitionInfoEvent;
-import org.cucina.engine.server.event.workflow.ObtainHistoryEvent;
-import org.cucina.engine.server.event.workflow.ObtainHistorySummaryEvent;
-import org.cucina.engine.server.event.workflow.SingleTransitionEvent;
-import org.cucina.engine.server.event.workflow.StartWorkflowEvent;
-import org.cucina.engine.server.event.workflow.ValueEvent;
+import org.cucina.conversation.Operative;
+import org.cucina.conversation.TransactionHandler;
+import org.cucina.conversation.events.CommitEvent;
+import org.cucina.conversation.events.RollbackEvent;
+
+import org.cucina.engine.server.definition.HistoryRecordDto;
+import org.cucina.engine.server.event.BulkTransitionEvent;
+import org.cucina.engine.server.event.ListProcessPropertiesEvent;
+import org.cucina.engine.server.event.ListTransitionsEvent;
+import org.cucina.engine.server.event.LoadTransitionInfoEvent;
+import org.cucina.engine.server.event.ObtainHistoryEvent;
+import org.cucina.engine.server.event.ObtainHistorySummaryEvent;
+import org.cucina.engine.server.event.SingleTransitionEvent;
+import org.cucina.engine.server.event.StartWorkflowEvent;
+import org.cucina.engine.server.event.ValueEvent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -290,7 +293,9 @@ public class MessagingProcessEngineFacade
 
     @SuppressWarnings("unchecked")
     private <T> T sendForReply(Object obj) {
-        Message<?> reply = sendAndReceiveMessage(MessageBuilder.withPayload(obj).build());
+        Message<?> reply = sendAndReceiveMessage(MessageBuilder.withPayload(obj)
+                                                               .setHeader(Operative.DESTINATION_NAME,
+                    "server.queue").build());
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Received " + reply);

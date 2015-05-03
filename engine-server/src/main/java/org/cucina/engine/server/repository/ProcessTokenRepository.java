@@ -2,8 +2,9 @@ package org.cucina.engine.server.repository;
 
 import java.util.Collection;
 
-import org.cucina.engine.model.ProcessToken;
 import org.springframework.data.repository.Repository;
+
+import org.cucina.engine.model.ProcessToken;
 
 
 /**

@@ -3,6 +3,8 @@ package org.cucina.engine.server.event;
 
 import org.springframework.util.Assert;
 
+import org.cucina.conversation.events.ConversationEvent;
+
 
 /**
  * JAVADOC for Class Level
@@ -11,7 +13,7 @@ import org.springframework.util.Assert;
  * @version $Revision: $
  */
 public class RegistrationEvent
-    extends EngineEvent {
+    extends ConversationEvent {
     private static final long serialVersionUID = -3541843386836576243L;
     private String applicationName;
     private String destinationName;

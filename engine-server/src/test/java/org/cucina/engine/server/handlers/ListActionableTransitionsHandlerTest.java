@@ -1,21 +1,20 @@
 package org.cucina.engine.server.handlers;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cucina.engine.definition.Transition;
-import org.cucina.engine.server.event.workflow.ListActionableTransitionsEvent;
-import org.cucina.engine.server.event.workflow.ValueEvent;
-import org.cucina.engine.service.ProcessSupportService;
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import org.mockito.Mock;
-import static org.mockito.Mockito.when;
-
 import org.mockito.MockitoAnnotations;
+
+import org.cucina.engine.definition.Transition;
+import org.cucina.engine.server.event.ListActionableTransitionsEvent;
+import org.cucina.engine.server.event.ValueEvent;
+import org.cucina.engine.service.ProcessSupportService;
 
 
 /**

@@ -12,7 +12,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @version $Revision: $
  */
 public class CheckDescriptorDto
-    implements WorkflowElementDto {
+    implements ProcessElementDto {
     private HashMap<String, Object> properties = new HashMap<String, Object>();
     private Object domainId;
     private String application;

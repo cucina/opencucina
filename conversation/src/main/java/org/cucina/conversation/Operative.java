@@ -1,0 +1,37 @@
+package org.cucina.conversation;
+
+import org.springframework.messaging.Message;
+import org.springframework.messaging.PollableChannel;
+
+
+/**
+ *
+ *
+ * @author vlevine
+  */
+public interface Operative {
+	String CONVERSATION_ID = "_conversationId_";
+	String DESTINATION_NAME = "_destinationName_";
+    /**
+     *
+     *
+     * @param channel .
+     */
+    void setCallbackChannel(PollableChannel channel);
+
+    /**
+     *
+     *
+     * @return .
+     */
+    PollableChannel getCallbackChannel();
+
+    /**
+     *
+     *
+     * @param request .
+     *
+     * @return .
+     */
+    Message<?> process(Message<?> request);
+}

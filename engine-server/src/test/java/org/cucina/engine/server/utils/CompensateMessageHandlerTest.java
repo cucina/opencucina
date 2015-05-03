@@ -1,32 +1,30 @@
 package org.cucina.engine.server.utils;
 
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.messaging.Message;
+
+import org.cucina.conversation.events.CompensateEvent;
 import org.cucina.engine.model.HistoryRecord;
 import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.repository.TokenRepository;
-import org.cucina.engine.server.event.CompensateEvent;
 import org.cucina.engine.server.testassist.Foo;
-import org.cucina.engine.server.utils.CompensateMessageHandler;
-
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-
-import org.mockito.Mock;
-
-import static org.mockito.Mockito.*;
-
-import org.mockito.MockitoAnnotations;
 
 
 /**

@@ -3,7 +3,7 @@ package org.cucina.engine.server.converters;
 import org.springframework.core.convert.converter.Converter;
 
 import org.cucina.engine.model.HistoryRecord;
-import org.cucina.engine.server.communication.HistoryRecordDto;
+import org.cucina.engine.server.definition.HistoryRecordDto;
 
 
 /**

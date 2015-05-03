@@ -16,10 +16,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import org.cucina.conversation.events.CommitEvent;
+import org.cucina.conversation.events.ConversationEvent;
 import org.cucina.engine.definition.Token;
-import org.cucina.engine.server.event.CommitEvent;
-import org.cucina.engine.server.event.EngineEvent;
-import org.cucina.engine.server.event.workflow.StartWorkflowEvent;
+import org.cucina.engine.server.event.StartWorkflowEvent;
 import org.cucina.engine.server.model.EntityDescriptor;
 import org.cucina.engine.service.ProcessSupportService;
 
@@ -44,7 +44,7 @@ public class StartWorkflowHandlerTest {
 		event.setParameters(new HashMap<String, Object>());
 		Token token = mock(Token.class);
 		when(processSupportService.startWorkflow(any(), any(), any())).thenReturn(token);
-		EngineEvent result = handler.act(event);
+		ConversationEvent result = handler.act(event);
 		assertTrue(result instanceof CommitEvent);
 		ArgumentCaptor<EntityDescriptor> acd = ArgumentCaptor.forClass(EntityDescriptor.class);
 		verify(processSupportService).startWorkflow(acd.capture(), eq(event.getType()),

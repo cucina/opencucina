@@ -1,10 +1,20 @@
 package org.cucina.engine.client.service;
 
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.core.convert.ConversionService;
 
+import org.cucina.conversation.events.CallbackEvent;
+import org.cucina.conversation.events.ConversationEvent;
 import org.cucina.engine.client.Check;
 import org.cucina.engine.client.Operation;
 import org.cucina.engine.client.testassist.Foo;
@@ -12,18 +22,6 @@ import org.cucina.engine.server.definition.CheckDescriptorDto;
 import org.cucina.engine.server.definition.OperationDescriptorDto;
 import org.cucina.engine.server.event.ActionResultEvent;
 import org.cucina.engine.server.event.BooleanEvent;
-import org.cucina.engine.server.event.CallbackEvent;
-import org.cucina.engine.server.event.EngineEvent;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import org.mockito.Mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import org.mockito.MockitoAnnotations;
 
 
 /**
@@ -81,7 +79,7 @@ public class ProcessEventHandlerTest {
         when(check.test(foo, parameters)).thenReturn(true);
 
         CallbackEvent event = new CallbackEvent(element, parameters, APPLICATION_NAME);
-        EngineEvent re = handler.handleEvent(event);
+        ConversationEvent re = handler.handleEvent(event);
 
         assertTrue(((BooleanEvent) re).isResult());
         verify(check).test(foo, parameters);
@@ -105,7 +103,7 @@ public class ProcessEventHandlerTest {
 
         Map<String, Object> parameters = new HashMap<String, Object>();
         CallbackEvent event = new CallbackEvent(element, parameters, APPLICATION_NAME);
-        EngineEvent re = handler.handleEvent(event);
+        ConversationEvent re = handler.handleEvent(event);
 
         verify(action).execute(foo, parameters);
         System.err.println(((ActionResultEvent) re).getSource());

@@ -12,8 +12,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import org.cucina.engine.server.event.workflow.ObtainHistorySummaryEvent;
-import org.cucina.engine.server.event.workflow.ValueEvent;
+import org.cucina.engine.server.event.ObtainHistorySummaryEvent;
+import org.cucina.engine.server.event.ValueEvent;
 import org.cucina.engine.service.ProcessSupportService;
 
 /**

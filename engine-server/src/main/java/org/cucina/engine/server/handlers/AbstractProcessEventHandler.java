@@ -1,14 +1,14 @@
 package org.cucina.engine.server.handlers;
 
-import org.cucina.engine.server.event.CommitEvent;
-import org.cucina.engine.server.event.EngineEvent;
-import org.cucina.engine.server.event.RollbackEvent;
-import org.cucina.engine.server.event.workflow.ProcessEvent;
-import org.cucina.engine.service.ProcessSupportService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.integration.annotation.ServiceActivator;
+
+import org.cucina.conversation.events.CommitEvent;
+import org.cucina.conversation.events.ConversationEvent;
+import org.cucina.conversation.events.RollbackEvent;
+import org.cucina.engine.server.event.ProcessEvent;
+import org.cucina.engine.service.ProcessSupportService;
 
 
 /**
@@ -41,7 +41,7 @@ public abstract class AbstractProcessEventHandler<T extends ProcessEvent>
      */
     @Override
     @ServiceActivator
-    public EngineEvent act(T event) {
+    public ConversationEvent act(T event) {
         try {
             doProcess(event);
 

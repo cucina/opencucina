@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import org.cucina.engine.model.HistoryRecord;
-import org.cucina.engine.server.communication.HistoryRecordDto;
-import org.cucina.engine.server.event.workflow.ObtainHistoryEvent;
+import org.cucina.engine.server.definition.HistoryRecordDto;
+import org.cucina.engine.server.event.ObtainHistoryEvent;
 import org.cucina.engine.service.ProcessSupportService;
 
 /**

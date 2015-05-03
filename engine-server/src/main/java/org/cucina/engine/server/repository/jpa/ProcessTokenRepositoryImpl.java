@@ -12,15 +12,14 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.repository.jpa.WorkflowRepositorySupport;
 import org.cucina.engine.server.model.EntityDescriptor;
 import org.cucina.engine.server.repository.ProcessTokenRepository;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**

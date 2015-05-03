@@ -3,6 +3,8 @@ package org.cucina.engine.server.service;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.server.repository.ProcessTokenRepository;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**

@@ -1,7 +1,7 @@
 package org.cucina.engine.server.handlers;
 
-import org.cucina.engine.server.event.workflow.GetValueEvent;
-import org.cucina.engine.server.event.workflow.ValueEvent;
+import org.cucina.engine.server.event.GetValueEvent;
+import org.cucina.engine.server.event.ValueEvent;
 
 
 /**
