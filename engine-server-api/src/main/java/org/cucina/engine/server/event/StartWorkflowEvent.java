@@ -1,4 +1,3 @@
-
 package org.cucina.engine.server.event;
 
 import java.util.Map;
@@ -14,12 +13,13 @@ public class StartWorkflowEvent
     extends ProcessEvent {
     private static final long serialVersionUID = -2588190857865779918L;
     private Map<String, Object> parameters;
+    private String workflow;
 
     /**
-     * Creates a new StartWorkflowEvent object.
-     *
-     * @param source JAVADOC.
-     */
+    * Creates a new StartWorkflowEvent object.
+    *
+    * @param source JAVADOC.
+    */
     public StartWorkflowEvent(Object source, String applicationName) {
         super(source, applicationName);
     }
@@ -46,5 +46,23 @@ public class StartWorkflowEvent
      */
     public Map<String, Object> getParameters() {
         return parameters;
+    }
+
+    /**
+     *
+     *
+     * @param workflow .
+     */
+    public void setWorkflow(String workflow) {
+        this.workflow = workflow;
+    }
+
+    /**
+     *
+     *
+     * @return .
+     */
+    public String getWorkflow() {
+        return workflow;
     }
 }

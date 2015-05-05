@@ -40,8 +40,7 @@ public class TransactionHandlerImpl
     /**
      *
      *
-     * @see
-     * org.cucina.engine.client.service.TransactionHandler#registerTxHandler
+     * @see org.cucina.engine.client.service.TransactionHandler#registerTxHandler
      * (java.lang.String, java.io.Serializable)
      */
     @Override
@@ -59,16 +58,17 @@ public class TransactionHandlerImpl
     private void handleStatus(int status, String type, Serializable... ids) {
         Message<?> callmess;
 
-        // TODO set header Operative.DESTINATION_NAME
         if (TransactionSynchronization.STATUS_COMMITTED == status) {
             // TODO make CommitSuccess handle type/ids combo
-            callmess = MessageBuilder.withPayload(new CommitSuccessEvent(ids)).build();
+            callmess = MessageBuilder.withPayload(new CommitSuccessEvent(ids))
+                                     .setHeader(Operative.DESTINATION_NAME, "server.queue").build();
         } else {
             CompensateEvent compensateEvent = new CompensateEvent(status);
 
             compensateEvent.setIds(ids);
             compensateEvent.setType(type);
-            callmess = MessageBuilder.withPayload(compensateEvent).build();
+            callmess = MessageBuilder.withPayload(compensateEvent)
+                                     .setHeader(Operative.DESTINATION_NAME, "server.queue").build();
             LOG.debug("Compensating for " + type + ":" + Arrays.toString(ids));
         }
 

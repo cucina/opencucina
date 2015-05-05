@@ -36,7 +36,7 @@ public class StartWorkflowHandler
     protected void doProcess(StartWorkflowEvent event) {
         Token token = getProcessSupportService()
                           .startWorkflow(new EntityDescriptor(event.getType(),
-                    event.getId().toString(), event.getApplicationName()), event.getType(),
+                    event.getId().toString(), event.getApplicationName()), event.getWorkflow(),
                 event.getParameters());
 
         if (token == null) {

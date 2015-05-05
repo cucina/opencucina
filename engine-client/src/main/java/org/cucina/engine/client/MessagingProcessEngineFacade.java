@@ -42,7 +42,7 @@ public class MessagingProcessEngineFacade
     extends MessagingGatewaySupport
     implements ProcessEngineFacade {
     private static final Logger LOG = LoggerFactory.getLogger(MessagingProcessEngineFacade.class);
-    private String applicationName = "remove applicatioName from MessagingProcessEngineFacade";
+    private String applicationName = "remove applicationName from MessagingProcessEngineFacade";
     @Autowired
     private TransactionHandler transactionHandler;
 
@@ -275,6 +275,7 @@ public class MessagingProcessEngineFacade
         event.setType(entityType);
         event.setId(id);
         event.setParameters(parameters);
+        event.setWorkflow(workflowId);
 
         Object reply = sendForReply(event);
 

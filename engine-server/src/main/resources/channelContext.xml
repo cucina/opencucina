@@ -89,19 +89,4 @@
 	<si:channel id="compensateChannel" />
 	<si:service-activator input-channel="compensateChannel"
 		output-channel="outboundChannel" ref="compensateHandler" />
-
-	<!-- <si:channel id="workflowCallbackChannel" /> <si:channel id="workflowCallbackReplyChannel" 
-		/> <si:header-enricher input-channel="workflowCallbackChannel" output-channel="workflowCallbackChannelT"> 
-		<si:reply-channel ref="workflowCallbackReplyChannel" /> <si:header name="protocol" 
-		ref="registryUrlExtractor" method="findProtocol" /> <si:header name="destinationName" 
-		ref="registryUrlExtractor" method="findDestinationName" /> <si:header name="conversationId" 
-		expression="@conversationContext.getConversationId(true)" /> </si:header-enricher> 
-		<si:channel id="workflowCallbackChannelT" /> <si:logging-channel-adapter 
-		channel="unsupportedProtocolChannel" level="WARN" /> <si:channel id="unsupportedProtocolChannel" 
-		/> <si:header-value-router input-channel="workflowCallbackChannelT" header-name="protocol" 
-		default-output-channel="unsupportedProtocolChannel"> <si:mapping value="jms" 
-		channel="workflowCallbackChannelJms" /> </si:header-value-router> <jms:outbound-gateway 
-		reply-channel="workflowCallbackReplyChannel" request-channel="workflowCallbackChannelJms" 
-		message-converter="xmlMessageConverter" request-destination-expression="headers.destinationName" 
-		connection-factory="jmsConnectionFactory" /> -->
 </beans>
