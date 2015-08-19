@@ -70,6 +70,7 @@ public class DefaultProcessSessionTest {
         assertEquals("toEndFromCoke", transitionId);
 
         session.signal(session.createExecutionContext(token, null), transitionId);
+        //TODO complete the flow
     }
 
     /**

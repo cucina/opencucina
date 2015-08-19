@@ -16,10 +16,6 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jms</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>cucina</groupId>
 			<artifactId>conversation</artifactId>
 			<version>0.2</version>

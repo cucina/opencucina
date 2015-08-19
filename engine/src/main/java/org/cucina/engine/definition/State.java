@@ -40,11 +40,6 @@ public interface State
     final String ENABLE_EDIT = "enableEdit";
 
     /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    /**
      * Gets all the {@link Transition Transitions} that can be used to leave
      * this <code>Place</code> given no specific workflow instance or
      * {@link org.cucina.engine.ExecutionContext}.
@@ -59,13 +54,6 @@ public interface State
      */
     Transition getDefaultTransition();
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param executionContext JAVADOC.
-     *
-     * @return JAVADOC.
-     */
     /**
      * Gets all enabled {@link Transition Transitions} that can be used to leave
      * this <code>Place</code> for a particular {@link ExecutionContext}. When

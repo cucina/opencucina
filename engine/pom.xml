@@ -15,12 +15,6 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>cucina</groupId>
 			<artifactId>cucina-core</artifactId>
 			<version>0.2</version>
@@ -45,11 +39,6 @@
 			<groupId>cucina</groupId>
 			<artifactId>cucina-security-api</artifactId>
 			<version>0.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-digester3</artifactId>
-			<version>3.2</version>
 		</dependency>
 	</dependencies>
 	<profiles>

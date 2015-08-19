@@ -1,7 +1,6 @@
 
 package org.cucina.engine.operations;
 
-import org.cucina.engine.ExecutionContext;
 import org.cucina.engine.definition.AbstractProcessElement;
 import org.cucina.engine.definition.Operation;
 
@@ -15,11 +14,5 @@ import org.cucina.engine.definition.Operation;
 public abstract class AbstractOperation
     extends AbstractProcessElement
     implements Operation {
-    /**
-     * JAVADOC.
-     *
-     * @param executionContext
-     *            JAVADOC.
-     */
-    public abstract void execute(ExecutionContext executionContext);
+   
 }
