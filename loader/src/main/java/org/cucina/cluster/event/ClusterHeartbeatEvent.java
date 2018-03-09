@@ -1,4 +1,3 @@
-
 package org.cucina.cluster.event;
 
 
@@ -9,23 +8,23 @@ package org.cucina.cluster.event;
  * @version $Revision: $
  */
 public class ClusterHeartbeatEvent
-    extends ClusterControlEvent {
-    private static final long serialVersionUID = -8989354027230694379L;
+		extends ClusterControlEvent {
+	private static final long serialVersionUID = -8989354027230694379L;
 
-    /**
-    * Creates a new ClusterHeartbeatEvent object.
-    *
-    * @param source JAVADOC.
-    * @param nodeId JAVADOC.
-    */
-    public ClusterHeartbeatEvent(String source, String nodeId) {
-        super(source, nodeId);
-    }
+	/**
+	 * Creates a new ClusterHeartbeatEvent object.
+	 *
+	 * @param source JAVADOC.
+	 * @param nodeId JAVADOC.
+	 */
+	public ClusterHeartbeatEvent(String source, String nodeId) {
+		super(source, nodeId);
+	}
 
-    /**
-     * private constructor for the benefit of deserializing.
-     */
-    private ClusterHeartbeatEvent() {
-        super("default");
-    }
+	/**
+	 * private constructor for the benefit of deserializing.
+	 */
+	private ClusterHeartbeatEvent() {
+		super("default");
+	}
 }

@@ -1,5 +1,5 @@
-
 package org.cucina.search;
 
-public enum SearchType {DEFAULT, TASKLIST;
+public enum SearchType {
+	DEFAULT, TASKLIST;
 }

@@ -1,16 +1,15 @@
 package org.cucina.engine.definition.config.xml;
 
+import org.apache.commons.digester3.Digester;
+import org.junit.Test;
+import org.xml.sax.Attributes;
+
 import java.util.Map;
 
-import org.apache.commons.digester3.Digester;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-
-import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import org.xml.sax.Attributes;
 
 
 /**
@@ -18,93 +17,93 @@ import org.xml.sax.Attributes;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public class CreateMapFactoryTest {
-    /**
-     * Creates map and sets it on top stack object.
-     *
-     * @throws Exception.
-     */
-    @Test
-    public void createMap()
-        throws Exception {
-        MapWrapper wrapper = new MapWrapper();
+	/**
+	 * Creates map and sets it on top stack object.
+	 *
+	 * @throws Exception.
+	 */
+	@Test
+	public void createMap()
+			throws Exception {
+		MapWrapper wrapper = new MapWrapper();
 
-        Digester digester = mock(Digester.class);
+		Digester digester = mock(Digester.class);
 
-        when(digester.peek()).thenReturn(wrapper);
+		when(digester.peek()).thenReturn(wrapper);
 
-        Attributes attributes = mock(Attributes.class);
+		Attributes attributes = mock(Attributes.class);
 
-        when(attributes.getValue("name")).thenReturn("map");
+		when(attributes.getValue("name")).thenReturn("map");
 
-        CreateMapFactory factory = new CreateMapFactory();
+		CreateMapFactory factory = new CreateMapFactory();
 
-        factory.setDigester(digester);
+		factory.setDigester(digester);
 
-        Map<Object, Object> map = factory.createObject(attributes);
+		Map<Object, Object> map = factory.createObject(attributes);
 
-        assertNotNull("Should have set map", map);
-        assertEquals("Should have set same list", map, wrapper.getMap());
-    }
+		assertNotNull("Should have set map", map);
+		assertEquals("Should have set same list", map, wrapper.getMap());
+	}
 
-    /**
-     * Barfs if name not correct
-     *
-     * @throws Exception.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void createMapInvalidPropertyName()
-        throws Exception {
-        MapWrapper wrapper = new MapWrapper();
+	/**
+	 * Barfs if name not correct
+	 *
+	 * @throws Exception.
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void createMapInvalidPropertyName()
+			throws Exception {
+		MapWrapper wrapper = new MapWrapper();
 
-        Digester digester = mock(Digester.class);
+		Digester digester = mock(Digester.class);
 
-        when(digester.peek()).thenReturn(wrapper);
+		when(digester.peek()).thenReturn(wrapper);
 
-        Attributes attributes = mock(Attributes.class);
+		Attributes attributes = mock(Attributes.class);
 
-        when(attributes.getValue("name")).thenReturn("rabbitch");
+		when(attributes.getValue("name")).thenReturn("rabbitch");
 
-        CreateMapFactory factory = new CreateMapFactory();
+		CreateMapFactory factory = new CreateMapFactory();
 
-        factory.setDigester(digester);
-        factory.createObject(attributes);
-    }
+		factory.setDigester(digester);
+		factory.createObject(attributes);
+	}
 
-    /**
-     * Barfs if name not set
-     *
-     * @throws Exception.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void createMapNoAttribute()
-        throws Exception {
-        MapWrapper wrapper = new MapWrapper();
+	/**
+	 * Barfs if name not set
+	 *
+	 * @throws Exception.
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void createMapNoAttribute()
+			throws Exception {
+		MapWrapper wrapper = new MapWrapper();
 
-        Digester digester = mock(Digester.class);
+		Digester digester = mock(Digester.class);
 
-        when(digester.peek()).thenReturn(wrapper);
+		when(digester.peek()).thenReturn(wrapper);
 
-        Attributes attributes = mock(Attributes.class);
+		Attributes attributes = mock(Attributes.class);
 
-        when(attributes.getValue("name")).thenReturn(null);
+		when(attributes.getValue("name")).thenReturn(null);
 
-        CreateMapFactory factory = new CreateMapFactory();
+		CreateMapFactory factory = new CreateMapFactory();
 
-        factory.setDigester(digester);
-        factory.createObject(attributes);
-    }
+		factory.setDigester(digester);
+		factory.createObject(attributes);
+	}
 
-    public class MapWrapper {
-        private Map<Object, Object> map;
+	public class MapWrapper {
+		private Map<Object, Object> map;
 
-        public void setMap(Map<Object, Object> map) {
-            this.map = map;
-        }
+		public Map<Object, Object> getMap() {
+			return map;
+		}
 
-        public Map<Object, Object> getMap() {
-            return map;
-        }
-    }
+		public void setMap(Map<Object, Object> map) {
+			this.map = map;
+		}
+	}
 }

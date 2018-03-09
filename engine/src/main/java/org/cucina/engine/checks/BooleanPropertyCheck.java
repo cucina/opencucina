@@ -1,4 +1,3 @@
-
 package org.cucina.engine.checks;
 
 import org.cucina.engine.ExecutionContext;
@@ -11,43 +10,38 @@ import org.cucina.engine.definition.Check;
  * a web page).
  *
  * @author dsyer
- *
  */
 public class BooleanPropertyCheck
-    extends AbstractCheck {
-    private boolean value = false;
+		extends AbstractCheck {
+	private boolean value = false;
 
-    /**
-     * Set the value of the true property.
-     *
-     * @param value
-     */
-    public void setTrue(boolean value) {
-        this.value = value;
-    }
+	/**
+	 * True if this condition will pass, false otherwise. Defaults to false if
+	 * the property is not set.
+	 *
+	 * @return
+	 */
+	public boolean isTrue() {
+		return value;
+	}
 
-    /**
-     * True if this condition will pass, false otherwise. Defaults to false if
-     * the property is not set.
-     *
-     * @return
-     *
-     */
-    public boolean isTrue() {
-        return value;
-    }
+	/**
+	 * Set the value of the true property.
+	 *
+	 * @param value
+	 */
+	public void setTrue(boolean value) {
+		this.value = value;
+	}
 
-    /**
-     * Simply returns isTrue().
-     *
-     * @see Check#test(ExecutionContext)
-     *
-     * @param executionContext
-     *            JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    public boolean test(ExecutionContext executionContext) {
-        return isTrue();
-    }
+	/**
+	 * Simply returns isTrue().
+	 *
+	 * @param executionContext JAVADOC.
+	 * @return JAVADOC.
+	 * @see Check#test(ExecutionContext)
+	 */
+	public boolean test(ExecutionContext executionContext) {
+		return isTrue();
+	}
 }

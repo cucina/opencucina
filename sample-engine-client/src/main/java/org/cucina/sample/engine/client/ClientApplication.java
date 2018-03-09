@@ -1,13 +1,17 @@
 package org.cucina.sample.engine.client;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.jms.ConnectionFactory;
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.Session;
-
+import org.cucina.conversation.ConversationConfiguration;
+import org.cucina.conversation.EventHandler;
+import org.cucina.conversation.events.ConversationEvent;
+import org.cucina.core.spring.ContextPrinter;
+import org.cucina.engine.client.MessagingProcessEngineFacade;
+import org.cucina.engine.client.ProcessEngineFacade;
+import org.cucina.engine.client.converters.DtoCheckConverter;
+import org.cucina.engine.client.converters.DtoOperationConverter;
+import org.cucina.engine.client.service.ApplicationRegistrator;
+import org.cucina.engine.client.service.ProcessEventHandler;
+import org.cucina.engine.server.jms.XmlEncoderDecoderConverter;
+import org.cucina.sample.engine.client.app.ItemRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -33,22 +37,14 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.SubscribableChannel;
 import org.springframework.util.Assert;
 
-import org.cucina.conversation.ConversationConfiguration;
-import org.cucina.conversation.EventHandler;
-import org.cucina.conversation.events.ConversationEvent;
-import org.cucina.core.spring.ContextPrinter;
-import org.cucina.engine.client.MessagingProcessEngineFacade;
-import org.cucina.engine.client.ProcessEngineFacade;
-import org.cucina.engine.client.converters.DtoCheckConverter;
-import org.cucina.engine.client.converters.DtoOperationConverter;
-import org.cucina.engine.client.service.ApplicationRegistrator;
-import org.cucina.engine.client.service.ProcessEventHandler;
-import org.cucina.engine.server.jms.XmlEncoderDecoderConverter;
-import org.cucina.sample.engine.client.app.ItemRepository;
+import javax.jms.ConnectionFactory;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Session;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- *
- *
  * @author vlevine
  */
 @SpringBootApplication
@@ -67,7 +63,7 @@ public class ClientApplication {
 
 	@Bean
 	public EventHandler<ConversationEvent> eventHandler(ApplicationContext applicationContext,
-			final ItemRepository itemRepository) {
+														final ItemRepository itemRepository) {
 		return new ProcessEventHandler((String type, Object id) -> {
 			Assert.notNull(id, "id is null");
 
@@ -99,7 +95,7 @@ public class ClientApplication {
 	/**
 	 * Uses properties to attempt to map a JMS destination name to an actual
 	 * queue/topic name.
-	 * 
+	 *
 	 * @param environment
 	 * @return
 	 */
@@ -110,7 +106,7 @@ public class ClientApplication {
 
 			@Override
 			public Destination resolveDestinationName(Session session, String destinationName,
-					boolean pubSubDomain) throws JMSException {
+													  boolean pubSubDomain) throws JMSException {
 				String dname = environment.getProperty("jms.destination." + destinationName,
 						destinationName);
 

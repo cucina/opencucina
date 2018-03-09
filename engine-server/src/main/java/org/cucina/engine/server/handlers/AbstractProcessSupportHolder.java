@@ -1,37 +1,22 @@
 package org.cucina.engine.server.handlers;
 
-import org.springframework.util.Assert;
-
 import org.cucina.engine.service.ProcessSupportService;
+import org.springframework.util.Assert;
 
 
 /**
- *
- *
- * @author vlevine
-  *
  * @param <T> .
+ * @author vlevine
  */
 public abstract class AbstractProcessSupportHolder {
-    private ProcessSupportService processSupportService;
+	private ProcessSupportService processSupportService;
 
-    /**
-    * Creates a new AbstractProcessSupportHandler object.
-    *
-    * @param processSupportService .
-    */
-    public AbstractProcessSupportHolder(ProcessSupportService processSupportService) {
-        Assert.notNull(processSupportService, "processSupportService is null");
-        this.processSupportService = processSupportService;
-    }
+	public AbstractProcessSupportHolder(ProcessSupportService processSupportService) {
+		Assert.notNull(processSupportService, "processSupportService is null");
+		this.processSupportService = processSupportService;
+	}
 
-    
-    /**
-     *
-     *
-     * @return .
-     */
-    protected ProcessSupportService getProcessSupportService() {
-        return processSupportService;
-    }
+	protected ProcessSupportService getProcessSupportService() {
+		return processSupportService;
+	}
 }

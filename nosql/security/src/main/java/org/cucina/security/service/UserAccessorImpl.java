@@ -1,5 +1,10 @@
 package org.cucina.security.service;
 
+import org.cucina.security.api.CurrentUserAccessor;
+import org.cucina.security.model.User;
+import org.cucina.security.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,12 +15,6 @@ import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.stereotype.Component;
 
 //import org.cucina.core.spring.ActiveProfilesAccessor;
-import org.cucina.security.api.CurrentUserAccessor;
-import org.cucina.security.model.User;
-import org.cucina.security.repository.UserRepository;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -25,63 +24,64 @@ import org.slf4j.LoggerFactory;
  */
 @Component
 public class UserAccessorImpl
-    implements UserAccessor {
-    private static final Logger LOG = LoggerFactory.getLogger(UserAccessorImpl.class);
+		implements UserAccessor {
+	private static final Logger LOG = LoggerFactory.getLogger(UserAccessorImpl.class);
 
-    /*    @Autowired
-        private ActiveProfilesAccessor activeProfilesAccessor;
-    */
-    @Autowired
-    @Qualifier("userRepository")
-    private UserRepository userRepository;
+	/*    @Autowired
+		private ActiveProfilesAccessor activeProfilesAccessor;
+	*/
+	@Autowired
+	@Qualifier("userRepository")
+	private UserRepository userRepository;
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-    @see org.cucina.security.service.UserAccessor#getCurrentUser()     */
-    @Override
-    public User getCurrentUser() {
-        Authentication auth = CurrentUserAccessor.currentAuthentication();
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @return JAVADOC.
+	 * @see org.cucina.security.service.UserAccessor#getCurrentUser()
+	 */
+	@Override
+	public User getCurrentUser() {
+		Authentication auth = CurrentUserAccessor.currentAuthentication();
 
-        if (auth == null) {
-            return null;
-        }
+		if (auth == null) {
+			return null;
+		}
 
-        Object principal = auth.getPrincipal();
+		Object principal = auth.getPrincipal();
 
-        if (!(principal instanceof User)) {
-            LOG.debug("Non-user found in security context: " + principal);
+		if (!(principal instanceof User)) {
+			LOG.debug("Non-user found in security context: " + principal);
 
-            return null;
-        }
+			return null;
+		}
 
-        try {
-            // Get the id of the currently logged-in user.
-            String name = ((User) principal).getUsername();
+		try {
+			// Get the id of the currently logged-in user.
+			String name = ((User) principal).getUsername();
 
-            // Reload the user - normally this should only involve cache access, rather than
-            // a database call.
-            return userRepository.findByUsername(name);
-        } catch (IllegalArgumentException e) {
-            LOG.info(e.getMessage());
+			// Reload the user - normally this should only involve cache access, rather than
+			// a database call.
+			return userRepository.findByUsername(name);
+		} catch (IllegalArgumentException e) {
+			LOG.info(e.getMessage());
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Details:", e);
-            }
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Details:", e);
+			}
 
-            return null;
-        }
-    }
+			return null;
+		}
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    public boolean isSso() {
-        try {
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @return JAVADOC.
+	 */
+	@Override
+	public boolean isSso() {
+		try {
             /*            boolean ret = Arrays.asList(activeProfilesAccessor.getActiveProfiles())
                                             .contains(activeProfilesAccessor.getSsoProfileKey());
 
@@ -92,66 +92,64 @@ public class UserAccessorImpl
                         return ret;
 
             */
-        } catch (IllegalArgumentException e) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Details:", e);
-            } else {
-                LOG.info(e.getMessage());
-            }
-        }
+		} catch (IllegalArgumentException e) {
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Details:", e);
+			} else {
+				LOG.info(e.getMessage());
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param username JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    public User forceUserToContext(String username) {
-        User user = userRepository.findByUsername(username);
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param username JAVADOC.
+	 * @return JAVADOC.
+	 */
+	@Override
+	public User forceUserToContext(String username) {
+		User user = userRepository.findByUsername(username);
 
-        putToContext(user, null);
+		putToContext(user, null);
 
-        return user;
-    }
+		return user;
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param username JAVADOC.
-     * @param password JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    public User forceUserToContext(String username, String password) {
-        User user = userRepository.findByUsername(username);
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param username JAVADOC.
+	 * @param password JAVADOC.
+	 * @return JAVADOC.
+	 */
+	@Override
+	public User forceUserToContext(String username, String password) {
+		User user = userRepository.findByUsername(username);
 
-        // TODO verify password
-        putToContext(user, password);
+		// TODO verify password
+		putToContext(user, password);
 
-        return user;
-    }
+		return user;
+	}
 
-    private void putToContext(User user, String token) {
-        SecurityContext context;
+	private void putToContext(User user, String token) {
+		SecurityContext context;
 
-        if (null == SecurityContextHolder.getContext()) {
-            context = new SecurityContextImpl();
+		if (null == SecurityContextHolder.getContext()) {
+			context = new SecurityContextImpl();
 
-            SecurityContextHolder.setContext(context);
-        }
+			SecurityContextHolder.setContext(context);
+		}
 
-        context = SecurityContextHolder.getContext();
+		context = SecurityContextHolder.getContext();
 
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user,
-                null, null);
+		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user,
+				null, null);
 
-        authToken.setDetails(token);
-        context.setAuthentication(authToken);
-    }
+		authToken.setDetails(token);
+		context.setAuthentication(authToken);
+	}
 }

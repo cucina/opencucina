@@ -1,4 +1,3 @@
-
 package org.cucina.engine.definition;
 
 
@@ -7,24 +6,22 @@ package org.cucina.engine.definition;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public interface ProcessDefinitionHelper {
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param token JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    boolean isEnded(Token token);
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param token JAVADOC.
+	 * @return JAVADOC.
+	 */
+	boolean isEnded(Token token);
 
-    /**
-     * Find the placeId corresponding to this <code>workflowId</code> and <code>transitionId</code>.
-     *
-     * @param workflowId String.
-     * @param transitionId String.
-     *
-     * @return placeId String that has this transition.
-     */
-    String findPlaceId(String workflowId, String transitionId);
+	/**
+	 * Find the placeId corresponding to this <code>workflowId</code> and <code>transitionId</code>.
+	 *
+	 * @param workflowId   String.
+	 * @param transitionId String.
+	 * @return placeId String that has this transition.
+	 */
+	String findPlaceId(String workflowId, String transitionId);
 }

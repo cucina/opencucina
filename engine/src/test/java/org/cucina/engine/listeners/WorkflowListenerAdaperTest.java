@@ -1,4 +1,3 @@
-
 package org.cucina.engine.listeners;
 
 import org.junit.Test;
@@ -9,18 +8,18 @@ import org.junit.Test;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public class WorkflowListenerAdaperTest {
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    public void test() {
-        WorkflowListenerAdapter adapter = new WorkflowListenerAdapter() {
-            };
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Test
+	public void test() {
+		WorkflowListenerAdapter adapter = new WorkflowListenerAdapter() {
+		};
 
-        adapter.enteredState(null, null, null);
-        adapter.leavingState(null, null, null);
-        adapter.startingSession(null);
-    }
+		adapter.enteredState(null, null, null);
+		adapter.leavingState(null, null, null);
+		adapter.startingSession(null);
+	}
 }

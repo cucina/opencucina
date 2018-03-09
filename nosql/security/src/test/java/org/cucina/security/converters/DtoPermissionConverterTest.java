@@ -1,66 +1,62 @@
 package org.cucina.security.converters;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.cucina.security.api.DimensionDto;
 import org.cucina.security.api.PermissionDto;
 import org.cucina.security.model.Dimension;
 import org.cucina.security.model.Permission;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 
 /**
- *
- *
  * @author vlevine
-  */
+ */
 public class DtoPermissionConverterTest {
-    private DtoPermissionConverter converter;
+	private DtoPermissionConverter converter;
 
-    /**
-     *
-     *
-     * @throws Exception .
-     */
-    @Before
-    public void setUp()
-        throws Exception {
-        converter = new DtoPermissionConverter();
-    }
+	/**
+	 * @throws Exception .
+	 */
+	@Before
+	public void setUp()
+			throws Exception {
+		converter = new DtoPermissionConverter();
+	}
 
-    /**
-     *
-     */
-    @Test
-    public void testConvert() {
-        PermissionDto dto = new PermissionDto();
+	/**
+	 *
+	 */
+	@Test
+	public void testConvert() {
+		PermissionDto dto = new PermissionDto();
 
-        dto.setName("name");
+		dto.setName("name");
 
-        Collection<DimensionDto> dimensions = new ArrayList<DimensionDto>();
-        DimensionDto dd = new DimensionDto();
+		Collection<DimensionDto> dimensions = new ArrayList<DimensionDto>();
+		DimensionDto dd = new DimensionDto();
 
-        dd.setDomainObjectId(100L);
-        dd.setPropertyName("propertyName");
-        dimensions.add(dd);
-        dto.setDimensions(dimensions);
+		dd.setDomainObjectId(100L);
+		dd.setPropertyName("propertyName");
+		dimensions.add(dd);
+		dto.setDimensions(dimensions);
 
-        Permission bean = converter.convert(dto);
+		Permission bean = converter.convert(dto);
 
-        assertEquals("name", bean.getName());
+		assertEquals("name", bean.getName());
 
-        Collection<Dimension> dims = bean.getDimensions();
+		Collection<Dimension> dims = bean.getDimensions();
 
-        assertNotNull(dims);
+		assertNotNull(dims);
 
-        Dimension d = dims.iterator().next();
+		Dimension d = dims.iterator().next();
 
-        assertEquals(100L, d.getDomainObjectId().longValue());
-        assertEquals("propertyName", d.getPropertyName());
-    }
+		assertEquals(100L, d.getDomainObjectId().longValue());
+		assertEquals("propertyName", d.getPropertyName());
+	}
 }

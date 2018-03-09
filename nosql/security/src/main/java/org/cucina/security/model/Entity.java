@@ -1,64 +1,56 @@
 package org.cucina.security.model;
 
-import java.math.BigInteger;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 
+import java.math.BigInteger;
+
 
 /**
- *
- *
  * @author vlevine
  */
 public class Entity {
-    @Id
-    private BigInteger id;
-    @Version
-    private Integer version;
+	@Id
+	private BigInteger id;
+	@Version
+	private Integer version;
 
-    /**
-     * Creates a new Entity object.
-     */
-    public Entity() {
-        super();
-    }
+	/**
+	 * Creates a new Entity object.
+	 */
+	public Entity() {
+		super();
+	}
 
-    /**
-     *
-     *
-     * @param id
-     *            .
-     */
-    public void setId(BigInteger id) {
-        this.id = id;
-    }
+	/**
+	 * @return .
+	 */
+	public BigInteger getId() {
+		return id;
+	}
 
-    /**
-     *
-     *
-     * @return .
-     */
-    public BigInteger getId() {
-        return id;
-    }
+	/**
+	 * @param id .
+	 */
+	public void setId(BigInteger id) {
+		this.id = id;
+	}
 
-    /**
-     * Set version
-     *
-     * @param version
-     *            int.
-     */
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
+	/**
+	 * Get version number
+	 *
+	 * @return version.
+	 */
+	public Integer getVersion() {
+		return version;
+	}
 
-    /**
-     * Get version number
-     *
-     * @return version.
-     */
-    public Integer getVersion() {
-        return version;
-    }
+	/**
+	 * Set version
+	 *
+	 * @param version int.
+	 */
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
 }

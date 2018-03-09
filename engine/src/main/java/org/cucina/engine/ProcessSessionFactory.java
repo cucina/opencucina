@@ -1,4 +1,3 @@
-
 package org.cucina.engine;
 
 import org.cucina.engine.definition.ProcessDefinition;
@@ -11,16 +10,16 @@ import org.cucina.engine.definition.ProcessDefinition;
  * @author Rob Harrop
  */
 public interface ProcessSessionFactory {
-    /**
-     * Opens a new {@link ProcessSession} for interacting with the workflow engine. All interactions
-     * are executed against the supplied {@link ProcessDefinition}.
-     */
-    ProcessSession openSession(ProcessDefinition workflowDefinition);
+	/**
+	 * Opens a new {@link ProcessSession} for interacting with the workflow engine. All interactions
+	 * are executed against the supplied {@link ProcessDefinition}.
+	 */
+	ProcessSession openSession(ProcessDefinition workflowDefinition);
 
-    /**
-     * Open a new {@link ProcessSession} for interacting with the workflow engine. All
-     * interactions are executed against the {@link ProcessDefinition} identified by the
-     * supplied workflow definition ID.
-     */
-    ProcessSession openSession(String workflowDefinitionId);
+	/**
+	 * Open a new {@link ProcessSession} for interacting with the workflow engine. All
+	 * interactions are executed against the {@link ProcessDefinition} identified by the
+	 * supplied workflow definition ID.
+	 */
+	ProcessSession openSession(String workflowDefinitionId);
 }

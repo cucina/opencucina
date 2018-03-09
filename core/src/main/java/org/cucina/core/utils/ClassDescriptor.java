@@ -1,33 +1,22 @@
 package org.cucina.core.utils;
 
-import java.beans.PropertyDescriptor;
+import org.apache.commons.collections.CollectionUtils;
+import org.cucina.core.model.projection.DefaultGroup;
+import org.cucina.core.model.projection.ExternalProjectionColumns;
+import org.cucina.core.model.projection.PostProcessProjections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.util.ClassUtils;
 
+import javax.validation.groups.Default;
+import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.validation.groups.Default;
-
-import org.apache.commons.collections.CollectionUtils;
-
-import org.springframework.beans.BeanUtils;
-import org.springframework.util.ClassUtils;
-
-import org.cucina.core.model.projection.DefaultGroup;
-import org.cucina.core.model.projection.ExternalProjectionColumns;
-import org.cucina.core.model.projection.PostProcessProjections;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.*;
 
 /**
  * JAVADOC for Class Level
@@ -38,20 +27,18 @@ import org.slf4j.LoggerFactory;
 public class ClassDescriptor {
 	private static final Logger LOG = LoggerFactory
 			.getLogger(ClassDescriptor.class);
-	private static final Class<?>[] DEFAULT_GROUP_ARRAY = new Class<?>[] { DefaultGroup.class };
+	private static final Class<?>[] DEFAULT_GROUP_ARRAY = new Class<?>[]{DefaultGroup.class};
 
 	/**
 	 * JAVADOC Method Level Comments
 	 *
-	 * @param clazz
-	 *            JAVADOC.
-	 *
-	 * @return JAVADOC. 
-	 * 
+	 * @param clazz JAVADOC.
+	 * @return JAVADOC.
+	 * <p>
 	 * TODO - move to search
 	 */
 	public static Map<String, String> getAdditionalAliases(Class<?> clazz,
-			Class<?>... requiredGroups) {
+														   Class<?>... requiredGroups) {
 		Map<String, String> aliasByType = new HashMap<String, String>();
 
 		// If we required multiple this would obv need to be extended....
@@ -66,7 +53,6 @@ public class ClassDescriptor {
 	}
 
 	/**
-	 *
 	 * @param clazz
 	 * @param property
 	 * @return
@@ -85,15 +71,12 @@ public class ClassDescriptor {
 	}
 
 	/**
-	 *
 	 * @param requiredGroup
 	 * @param currentGroup
-	 * @return
-	 * 
-	 * TODO - move to search
+	 * @return TODO - move to search
 	 */
 	public static boolean isInRequiredGroup(Class<?>[] requiredGroup,
-			Class<?>[] currentGroup) {
+											Class<?>[] currentGroup) {
 		// defaults
 		if ((requiredGroup != null) && (currentGroup != null)
 				&& (requiredGroup.length == 0) && (currentGroup.length == 0)) {
@@ -144,9 +127,7 @@ public class ClassDescriptor {
 	/**
 	 * JAVADOC Method Level Comments
 	 *
-	 * @param clazz
-	 *            JAVADOC.
-	 *
+	 * @param clazz JAVADOC.
 	 * @return JAVADOC.
 	 */
 	public static boolean isPostProcessProjections(Class<?> clazz) {
@@ -159,11 +140,8 @@ public class ClassDescriptor {
 	/**
 	 * JAVADOC Method Level Comments
 	 *
-	 * @param clazz
-	 *            JAVADOC.
-	 * @param property
-	 *            JAVADOC.
-	 *
+	 * @param clazz    JAVADOC.
+	 * @param property JAVADOC.
 	 * @return JAVADOC.
 	 */
 	public static String getPropertyType(Class<?> clazz, String property) {
@@ -207,7 +185,7 @@ public class ClassDescriptor {
 	 * @return
 	 */
 	public static boolean hasAnnotation(Class<?> clazz, String propertyName,
-			Class<? extends Annotation> annotation) {
+										Class<? extends Annotation> annotation) {
 		try {
 			Field f = clazz.getField(propertyName);
 
@@ -232,7 +210,7 @@ public class ClassDescriptor {
 	}
 
 	private static void findInheritedGroups(Class<?> clazz,
-			List<Class<?>> groups) {
+											List<Class<?>> groups) {
 		for (Class<?> inheritedGroup : clazz.getInterfaces()) {
 			groups.add(inheritedGroup);
 			findInheritedGroups(inheritedGroup, groups);

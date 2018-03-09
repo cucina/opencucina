@@ -1,14 +1,14 @@
 package org.cucina.security;
 
-import java.io.UnsupportedEncodingException;
-
-import java.security.GeneralSecurityException;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
+import org.cucina.security.api.remote.RemoteAccessFacade;
+import org.cucina.security.bean.InstanceFactory;
+import org.cucina.security.bean.SimpleInstanceFactory;
+import org.cucina.security.converters.*;
+import org.cucina.security.crypto.AESEncryptor;
+import org.cucina.security.crypto.Encryptor;
+import org.cucina.security.repository.UserRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -21,21 +21,12 @@ import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.core.convert.CustomConversions;
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 
-import com.mongodb.Mongo;
-import com.mongodb.MongoClient;
-
-import org.cucina.security.api.remote.RemoteAccessFacade;
-import org.cucina.security.bean.InstanceFactory;
-import org.cucina.security.bean.SimpleInstanceFactory;
-import org.cucina.security.converters.DtoPermissionConverter;
-import org.cucina.security.converters.DtoUserConverter;
-import org.cucina.security.converters.PasswordReadConverter;
-import org.cucina.security.converters.PasswordWriteConverter;
-import org.cucina.security.converters.PermissionDtoConverter;
-import org.cucina.security.converters.UserDtoConverter;
-import org.cucina.security.crypto.AESEncryptor;
-import org.cucina.security.crypto.Encryptor;
-import org.cucina.security.repository.UserRepository;
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -46,92 +37,86 @@ import org.cucina.security.repository.UserRepository;
 @SpringBootApplication(exclude = RemoteAccessFacade.class)
 @ComponentScan
 public class SecurityApplication {
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param args
-     *            JAVADOC.
-     *
-     * @throws Exception
-     *             JAVADOC.
-     */
-    public static void main(String[] args)
-        throws Exception {
-        SpringApplication.run(SecurityApplication.class, args);
-    }
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param args JAVADOC.
+	 * @throws Exception JAVADOC.
+	 */
+	public static void main(String[] args)
+			throws Exception {
+		SpringApplication.run(SecurityApplication.class, args);
+	}
 
-    /**
-     *
-     * @return .
-     */
-    @Bean
-    public InstanceFactory instanceFactory() {
-        return new SimpleInstanceFactory();
-    }
+	/**
+	 * @return .
+	 */
+	@Bean
+	public InstanceFactory instanceFactory() {
+		return new SimpleInstanceFactory();
+	}
 
-    /**
-     *
-     *
-     * @return .
-     */
-    @Bean
-    public ConversionService myConversionService(UserRepository userRepository) {
-        ConversionServiceFactoryBean bean = new ConversionServiceFactoryBean();
+	/**
+	 * @return .
+	 */
+	@Bean
+	public ConversionService myConversionService(UserRepository userRepository) {
+		ConversionServiceFactoryBean bean = new ConversionServiceFactoryBean();
 
-        bean.setConverters(getConverters(userRepository));
-        bean.afterPropertiesSet();
+		bean.setConverters(getConverters(userRepository));
+		bean.afterPropertiesSet();
 
-        return bean.getObject();
-    }
+		return bean.getObject();
+	}
 
-    @SuppressWarnings("rawtypes")
-    private Set<Converter> getConverters(UserRepository userRepository) {
-        Set<Converter> converters = new HashSet<Converter>();
+	@SuppressWarnings("rawtypes")
+	private Set<Converter> getConverters(UserRepository userRepository) {
+		Set<Converter> converters = new HashSet<Converter>();
 
-        converters.add(new PermissionDtoConverter());
-        converters.add(new DtoPermissionConverter());
-        converters.add(new UserDtoConverter());
-        converters.add(new DtoUserConverter(userRepository));
+		converters.add(new PermissionDtoConverter());
+		converters.add(new DtoPermissionConverter());
+		converters.add(new UserDtoConverter());
+		converters.add(new DtoUserConverter(userRepository));
 
-        return converters;
-    }
+		return converters;
+	}
 
-    @Configuration
-    public static class SecureMongoConfuguration
-        extends AbstractMongoConfiguration {
-        @Bean
-        @Override
-        public MappingMongoConverter mappingMongoConverter()
-            throws Exception {
-            MappingMongoConverter mmc = super.mappingMongoConverter();
+	@Configuration
+	public static class SecureMongoConfuguration
+			extends AbstractMongoConfiguration {
+		@Bean
+		@Override
+		public MappingMongoConverter mappingMongoConverter()
+				throws Exception {
+			MappingMongoConverter mmc = super.mappingMongoConverter();
 
-            mmc.setCustomConversions(conversions());
+			mmc.setCustomConversions(conversions());
 
-            return mmc;
-        }
+			return mmc;
+		}
 
-        @Override
-        public Mongo mongo()
-            throws Exception {
-            return new MongoClient();
-        }
+		@Override
+		public Mongo mongo()
+				throws Exception {
+			return new MongoClient();
+		}
 
-        @Override
-        protected String getDatabaseName() {
-            return "security";
-        }
+		@Override
+		protected String getDatabaseName() {
+			return "security";
+		}
 
-        private CustomConversions conversions()
-            throws UnsupportedEncodingException, GeneralSecurityException {
-            // TODO parameterise seed
-            Encryptor encryptor = new AESEncryptor("CuCiNa");
+		private CustomConversions conversions()
+				throws UnsupportedEncodingException, GeneralSecurityException {
+			// TODO parameterise seed
+			Encryptor encryptor = new AESEncryptor("CuCiNa");
 
-            List<Converter<?, ?>> converters = new ArrayList<Converter<?, ?>>();
+			List<Converter<?, ?>> converters = new ArrayList<Converter<?, ?>>();
 
-            converters.add(new PasswordWriteConverter(encryptor));
-            converters.add(new PasswordReadConverter(encryptor));
+			converters.add(new PasswordWriteConverter(encryptor));
+			converters.add(new PasswordReadConverter(encryptor));
 
-            return new CustomConversions(converters);
-        }
-    }
+			return new CustomConversions(converters);
+		}
+	}
 }

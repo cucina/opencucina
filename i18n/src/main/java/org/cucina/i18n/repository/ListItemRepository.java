@@ -1,9 +1,9 @@
 package org.cucina.i18n.repository;
 
-import java.util.Collection;
-
 import org.cucina.i18n.model.ListItem;
 import org.springframework.data.repository.Repository;
+
+import java.util.Collection;
 
 
 /**
@@ -11,30 +11,33 @@ import org.springframework.data.repository.Repository;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public interface ListItemRepository
-    extends Repository<ListItem, Long> {
-	String LISTNODE_REPOSITORY_ID="listItemRepository";
-  
-    /**
-     * Load <code>ListNode</code> by id.
-     * @param type
-     * @param code
-     * @return
-     */
-    ListItem findById(Long id);
+		extends Repository<ListItem, Long> {
+	String LISTNODE_REPOSITORY_ID = "listItemRepository";
 
-    /**
-     * Loads <code>ListNode</code>s for the provided type.
-     * @param type
-     * @return
-     */
-    Collection<ListItem> findByType(String type);
+	/**
+	 * Load <code>ListNode</code> by id.
+	 *
+	 * @param type
+	 * @param code
+	 * @return
+	 */
+	ListItem findById(Long id);
 
-    /**
-     * Save the node to the data store.
-     * @param node
-     * @return 
-     */
-    ListItem save(ListItem node);
+	/**
+	 * Loads <code>ListNode</code>s for the provided type.
+	 *
+	 * @param type
+	 * @return
+	 */
+	Collection<ListItem> findByType(String type);
+
+	/**
+	 * Save the node to the data store.
+	 *
+	 * @param node
+	 * @return
+	 */
+	ListItem save(ListItem node);
 }

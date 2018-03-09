@@ -1,10 +1,9 @@
-
 package org.cucina.engine.definition.config.xml;
+
+import org.xml.sax.Attributes;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import org.xml.sax.Attributes;
 
 
 /**
@@ -14,14 +13,14 @@ import org.xml.sax.Attributes;
  * @version $Revision: 1.2 $
  */
 public class CreateMapFactory
-    extends AbstractCreateObjectFactory<Map<Object, Object>> {
-    /**
-     * Creates new HashMap
-     *
-     * @return HashMap.
-     */
-    @Override
-    public Map<Object, Object> createObjectImpl(Attributes attributes) {
-        return new HashMap<Object, Object>();
-    }
+		extends AbstractCreateObjectFactory<Map<Object, Object>> {
+	/**
+	 * Creates new HashMap
+	 *
+	 * @return HashMap.
+	 */
+	@Override
+	public Map<Object, Object> createObjectImpl(Attributes attributes) {
+		return new HashMap<Object, Object>();
+	}
 }

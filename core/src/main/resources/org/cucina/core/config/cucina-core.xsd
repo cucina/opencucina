@@ -1,39 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns="http://opencucina.org/schema/cucina-core"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:beans="http://www.springframework.org/schema/beans"
-	xmlns:meringue="http://opencucina.org/schema/cucina-core"
-	targetNamespace="http://opencucina.org/schema/cucina-core"
-	elementFormDefault="qualified" attributeFormDefault="unqualified">
-	<xsd:import namespace="http://www.springframework.org/schema/beans" />
-	<xsd:element name="compositeInstanceFactory">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="instanceFactory" minOccurs="1"
-					maxOccurs="unbounded" />
-			</xsd:sequence>
-			<xsd:attribute name="id" type="xsd:ID" />
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="packageInstanceFactory">
-		<xsd:complexType>
-			<xsd:attribute name="package" type="xsd:string" />
-			<xsd:attribute name="id" type="xsd:ID" />
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="singletonBeanFactory">
-		<xsd:complexType>
-			<xsd:attribute name="id" type="xsd:ID" />
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="contextService">
-		<xsd:complexType>
-			<xsd:attribute name="id" type="xsd:ID" />
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="listNodeRepository">
-		<xsd:complexType>
-			<xsd:attribute name="id" type="xsd:ID" />
-			<xsd:attribute name="i18nService" type="xsd:string" />
-		</xsd:complexType>
-	</xsd:element>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns="http://opencucina.org/schema/cucina-core"
+            targetNamespace="http://opencucina.org/schema/cucina-core"
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <xsd:import namespace="http://www.springframework.org/schema/beans"/>
+    <xsd:element name="compositeInstanceFactory">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="instanceFactory" minOccurs="1"
+                             maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="id" type="xsd:ID"/>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="packageInstanceFactory">
+        <xsd:complexType>
+            <xsd:attribute name="package" type="xsd:string"/>
+            <xsd:attribute name="id" type="xsd:ID"/>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="singletonBeanFactory">
+        <xsd:complexType>
+            <xsd:attribute name="id" type="xsd:ID"/>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="contextService">
+        <xsd:complexType>
+            <xsd:attribute name="id" type="xsd:ID"/>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="listNodeRepository">
+        <xsd:complexType>
+            <xsd:attribute name="id" type="xsd:ID"/>
+            <xsd:attribute name="i18nService" type="xsd:string"/>
+        </xsd:complexType>
+    </xsd:element>
 </xsd:schema>

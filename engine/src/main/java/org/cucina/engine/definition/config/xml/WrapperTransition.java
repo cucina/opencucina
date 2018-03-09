@@ -1,4 +1,3 @@
-
 package org.cucina.engine.definition.config.xml;
 
 import org.cucina.engine.definition.Transition;
@@ -9,22 +8,21 @@ import org.cucina.engine.definition.Transition;
  * "to" property.
  */
 public class WrapperTransition
-    extends Transition {
-    private static final long serialVersionUID = -943323560684135631L;
-    private String to;
+		extends Transition {
+	private static final long serialVersionUID = -943323560684135631L;
+	private String to;
 
-    /**
-     * @param to
-     *            The name of the new place.
-     */
-    public void setTo(String to) {
-        this.to = to;
-    }
+	/**
+	 * @return Returns the to.
+	 */
+	public String getTo() {
+		return to;
+	}
 
-    /**
-     * @return Returns the to.
-     */
-    public String getTo() {
-        return to;
-    }
+	/**
+	 * @param to The name of the new place.
+	 */
+	public void setTo(String to) {
+		this.to = to;
+	}
 }

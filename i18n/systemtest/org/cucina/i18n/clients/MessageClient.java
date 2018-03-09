@@ -1,19 +1,18 @@
 package org.cucina.i18n.clients;
 
-import java.util.Collections;
-import java.util.Locale;
-
+import org.cucina.i18n.api.MessageDto;
+import org.junit.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-import org.cucina.i18n.api.MessageDto;
+
+import java.util.Collections;
+import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-
-import org.junit.Test;
 
 /**
  * JAVADOC for Class Level

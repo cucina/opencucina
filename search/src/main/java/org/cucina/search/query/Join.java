@@ -1,4 +1,3 @@
-
 package org.cucina.search.query;
 
 
@@ -7,26 +6,26 @@ package org.cucina.search.query;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public interface Join {
-    /**
-     * Get join syntax for query language
-     *
-     * @return join String.
-     */
-    String getJoin();
+	/**
+	 * Get join syntax for query language
+	 *
+	 * @return join String.
+	 */
+	String getJoin();
 
-    /**
-     * Get property represents
-     *
-     * @return property String.
-     */
-    String getProperty();
+	/**
+	 * Get property represents
+	 *
+	 * @return property String.
+	 */
+	String getProperty();
 
-    /**
-     *  If this is a unique join, i.e. should have separate join from others
-     *
-     * @return unique.
-     */
-    boolean isUnique();
+	/**
+	 * If this is a unique join, i.e. should have separate join from others
+	 *
+	 * @return unique.
+	 */
+	boolean isUnique();
 }

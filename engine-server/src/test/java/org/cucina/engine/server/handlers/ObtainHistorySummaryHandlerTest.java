@@ -1,24 +1,21 @@
 package org.cucina.engine.server.handlers;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import org.cucina.engine.server.event.ObtainHistorySummaryEvent;
+import org.cucina.engine.server.event.ValueEvent;
+import org.cucina.engine.service.ProcessSupportService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import org.cucina.engine.server.event.ObtainHistorySummaryEvent;
-import org.cucina.engine.server.event.ValueEvent;
-import org.cucina.engine.service.ProcessSupportService;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 /**
- *
- *
  * @author vlevine
  */
 
@@ -29,8 +26,6 @@ public class ObtainHistorySummaryHandlerTest {
 	private ProcessSupportService processSupportService;
 
 	/**
-	 *
-	 *
 	 * @throws Exception .
 	 */
 	@Before
@@ -40,10 +35,7 @@ public class ObtainHistorySummaryHandlerTest {
 	}
 
 	/**
-	 *
-	 *
 	 * @param event .
-	 *
 	 * @return .
 	 */
 	@Test
@@ -53,7 +45,7 @@ public class ObtainHistorySummaryHandlerTest {
 		event.setApplicationType("applicationType");
 		event.setId("id");
 
-		List<Map<Object, Object>> value = new ArrayList<Map<Object,Object>>();
+		List<Map<Object, Object>> value = new ArrayList<Map<Object, Object>>();
 
 		when(processSupportService.obtainHistorySummary("id", "applicationType")).thenReturn(value);
 

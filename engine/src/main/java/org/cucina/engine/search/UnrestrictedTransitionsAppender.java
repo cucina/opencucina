@@ -1,13 +1,4 @@
-
 package org.cucina.engine.search;
-
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
@@ -17,92 +8,96 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
+import java.io.Serializable;
+import java.util.*;
+import java.util.Map.Entry;
+
 
 /**
  * Adds transitionIds to results with no permission checks.
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public class UnrestrictedTransitionsAppender
-    extends AbstractResultSetModifier {
-    private static final Logger LOG = LoggerFactory.getLogger(UnrestrictedTransitionsAppender.class);
+		extends AbstractResultSetModifier {
+	/**
+	 * This is a field JAVADOC
+	 */
+	public static final String PROPERTY_NAME = "transitionIds";
+	private static final Logger LOG = LoggerFactory.getLogger(UnrestrictedTransitionsAppender.class);
+	private ProcessSupportService workflowSupportService;
 
-    /** This is a field JAVADOC */
-    public static final String PROPERTY_NAME = "transitionIds";
-    private ProcessSupportService workflowSupportService;
+	/**
+	 * Creates a new UnrestrictedTransitionsAppender object.
+	 *
+	 * @param workflowSupportService JAVADOC.
+	 */
+	public UnrestrictedTransitionsAppender(ProcessSupportService workflowSupportService) {
+		super();
+		Assert.notNull(workflowSupportService, "workflowSupportService cannot be null");
+		this.workflowSupportService = workflowSupportService;
+	}
 
-    /**
-     * Creates a new UnrestrictedTransitionsAppender object.
-     *
-     * @param workflowSupportService JAVADOC.
-     */
-    public UnrestrictedTransitionsAppender(ProcessSupportService workflowSupportService) {
-        super();
-        Assert.notNull(workflowSupportService, "workflowSupportService cannot be null");
-        this.workflowSupportService = workflowSupportService;
-    }
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param applicationType String.
+	 * @param results         Collection<Map<String, Object>> results.
+	 */
+	@Override
+	public void doModify(String applicationType, Collection<Map<String, Object>> results) {
+		if (CollectionUtils.isEmpty(results)) {
+			LOG.debug("Empty results, not processing and returning");
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param applicationType String.
-     * @param results Collection<Map<String, Object>> results.
-     */
-    @Override
-    public void doModify(String applicationType, Collection<Map<String, Object>> results) {
-        if (CollectionUtils.isEmpty(results)) {
-            LOG.debug("Empty results, not processing and returning");
+			return;
+		}
 
-            return;
-        }
+		Map<Long, Map<String, Object>> resultsById = new HashMap<Long, Map<String, Object>>();
 
-        Map<Long, Map<String, Object>> resultsById = new HashMap<Long, Map<String, Object>>();
+		for (Map<String, Object> result : results) {
+			Long id = (Long) result.get("id");
 
-        for (Map<String, Object> result : results) {
-            Long id = (Long) result.get("id");
+			if (id != null) {
+				resultsById.put(id, result);
+			}
+		}
 
-            if (id != null) {
-                resultsById.put(id, result);
-            }
-        }
+		Map<Serializable, Collection<String>> transitionsById = workflowSupportService.listAllTransitions(new HashSet<Serializable>(
+				resultsById.keySet()), applicationType);
 
-        Map<Serializable, Collection<String>> transitionsById = workflowSupportService.listAllTransitions(new HashSet<Serializable>(
-                    resultsById.keySet()), applicationType);
+		if (MapUtils.isEmpty(transitionsById)) {
+			LOG.debug("NO transitions returned");
 
-        if (MapUtils.isEmpty(transitionsById)) {
-            LOG.debug("NO transitions returned");
+			return;
+		}
 
-            return;
-        }
+		for (Entry<Serializable, Collection<String>> entry : transitionsById.entrySet()) {
+			Map<String, Object> result = resultsById.get(entry.getKey());
 
-        for (Entry<Serializable, Collection<String>> entry : transitionsById.entrySet()) {
-            Map<String, Object> result = resultsById.get(entry.getKey());
+			if (result == null) {
+				LOG.warn("Failed to find result with id=" + entry.getKey());
 
-            if (result == null) {
-                LOG.warn("Failed to find result with id=" + entry.getKey());
+				continue;
+			}
 
-                continue;
-            }
+			result.put(PROPERTY_NAME, entry.getValue());
 
-            result.put(PROPERTY_NAME, entry.getValue());
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Added transitions [" + entry.getValue() + "] for object [" +
+						entry.getKey() + "] of type [" + applicationType + "]");
+			}
+		}
+	}
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Added transitions [" + entry.getValue() + "] for object [" +
-                    entry.getKey() + "] of type [" + applicationType + "]");
-            }
-        }
-    }
-
-    /**
-    * The property that will be added
-    *
-    * @param applicationType String.
-    *
-    * @return list of properties.
-    */
-    @Override
-    public Collection<String> listProperties(String applicationType) {
-        return Arrays.asList(PROPERTY_NAME);
-    }
+	/**
+	 * The property that will be added
+	 *
+	 * @param applicationType String.
+	 * @return list of properties.
+	 */
+	@Override
+	public Collection<String> listProperties(String applicationType) {
+		return Arrays.asList(PROPERTY_NAME);
+	}
 }

@@ -15,35 +15,31 @@ import org.springframework.util.Assert;
  * @version $Revision: $
  */
 public class ProcessorEventMulticaster
-    implements Processor, ApplicationContextAware {
-    private ApplicationContext applicationContext;
+		implements Processor, ApplicationContextAware {
+	private ApplicationContext applicationContext;
 
-    /**
-     * Set {@link ApplicationContext}
-     *
-     * @param applicationContext
-     *            {@link ApplicationContext}.
-     *
-     * @throws BeansException.
-     */
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext)
-        throws BeansException {
-        this.applicationContext = applicationContext;
-    }
+	/**
+	 * Set {@link ApplicationContext}
+	 *
+	 * @param applicationContext {@link ApplicationContext}.
+	 * @throws BeansException.
+	 */
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext)
+			throws BeansException {
+		this.applicationContext = applicationContext;
+	}
 
-    /**
-     * Public InputDataEvent to applicationContext
-     *
-     * @param subject
-     *            Object.
-     *
-     * @return null.
-     */
-    @Override
-    public void process(Object subject) {
-        Assert.notNull(subject, "Cannot provide null subject");
+	/**
+	 * Public InputDataEvent to applicationContext
+	 *
+	 * @param subject Object.
+	 * @return null.
+	 */
+	@Override
+	public void process(Object subject) {
+		Assert.notNull(subject, "Cannot provide null subject");
 
-        applicationContext.publishEvent(new ProcessorEvent(subject));
-    }
+		applicationContext.publishEvent(new ProcessorEvent(subject));
+	}
 }

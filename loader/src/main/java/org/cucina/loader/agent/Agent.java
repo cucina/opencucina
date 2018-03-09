@@ -1,4 +1,3 @@
-
 package org.cucina.loader.agent;
 
 
@@ -7,10 +6,10 @@ package org.cucina.loader.agent;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public interface Agent {
-    /**
-     * JAVADOC Method Level Comments
-     */
-    void execute();
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	void execute();
 }

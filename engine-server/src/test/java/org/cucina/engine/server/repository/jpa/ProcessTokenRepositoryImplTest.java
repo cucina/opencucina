@@ -1,59 +1,54 @@
 package org.cucina.engine.server.repository.jpa;
 
-import java.util.Collection;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.junit.Test;
-
 import org.cucina.engine.model.ProcessToken;
 import org.cucina.engine.server.model.EntityDescriptor;
 import org.cucina.engine.server.testassist.JpaProvider;
+import org.junit.Test;
+
+import java.util.Collection;
 
 
 /**
- * 
- *
  * @author vlevine
-  */
+ */
 public class ProcessTokenRepositoryImplTest
-    extends JpaProvider {
-    private ProcessTokenRepositoryImpl repo;
+		extends JpaProvider {
+	private ProcessTokenRepositoryImpl repo;
 
-    /**
-     *
-     */
-    @Test
-    public void testListAggregated() {
-        Collection<Object[]> coll = repo.countByGroupProcessDefinitionId();
+	/**
+	 *
+	 */
+	@Test
+	public void testListAggregated() {
+		Collection<Object[]> coll = repo.countByGroupProcessDefinitionId();
 
-        System.err.println(ToStringBuilder.reflectionToString(coll.iterator().next()));
-    }
+		System.err.println(ToStringBuilder.reflectionToString(coll.iterator().next()));
+	}
 
-    /**
-     *
-     *
-     * @throws Exception .
-     */
-    @Override
-    protected void onSetUp()
-        throws Exception {
-        super.onSetUp();
-        repo = new ProcessTokenRepositoryImpl();
-        repo.setEntityManager(getEntityManager());
+	/**
+	 * @throws Exception .
+	 */
+	@Override
+	protected void onSetUp()
+			throws Exception {
+		super.onSetUp();
+		repo = new ProcessTokenRepositoryImpl();
+		repo.setEntityManager(getEntityManager());
 
-        EntityDescriptor ed = getInstanceFactory()
-                                  .getBean(EntityDescriptor.class.getSimpleName());
+		EntityDescriptor ed = getInstanceFactory()
+				.getBean(EntityDescriptor.class.getSimpleName());
 
-        ed.setApplicationName("client");
-        ed.setApplicationType("Token");
-        ed.setRemoteId("111");
-        getEntityManager().persist(ed);
+		ed.setApplicationName("client");
+		ed.setApplicationType("Token");
+		ed.setRemoteId("111");
+		getEntityManager().persist(ed);
 
-        ProcessToken token = getInstanceFactory().getBean(ProcessToken.class.getSimpleName());
+		ProcessToken token = getInstanceFactory().getBean(ProcessToken.class.getSimpleName());
 
-        token.setDomainObjectType(EntityDescriptor.class.getSimpleName());
-        token.setDomainObjectId(ed.getId());
-        token.setProcessDefinitionId("process!");
-        getEntityManager().persist(token);
-    }
+		token.setDomainObjectType(EntityDescriptor.class.getSimpleName());
+		token.setDomainObjectId(ed.getId());
+		token.setProcessDefinitionId("process!");
+		getEntityManager().persist(token);
+	}
 }

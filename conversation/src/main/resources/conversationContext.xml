@@ -1,51 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:c="http://www.springframework.org/schema/c"
-	xmlns:p="http://www.springframework.org/schema/p" xmlns:jee="http://www.springframework.org/schema/jee"
-	xmlns:si="http://www.springframework.org/schema/integration" xmlns:jms="http://www.springframework.org/schema/integration/jms"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:si="http://www.springframework.org/schema/integration"
+       xmlns:jms="http://www.springframework.org/schema/integration/jms"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+
 	http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.1.xsd
 	http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms-4.1.xsd">
-	<bean id="xmlMessageConverter" class="org.cucina.engine.server.jms.XmlEncoderDecoderConverter" />
+    <bean id="xmlMessageConverter" class="org.cucina.engine.server.jms.XmlEncoderDecoderConverter"/>
 
-	<si:channel id="conversation" />
-	<si:service-activator input-channel="conversation"
-		ref="orchestratorHandler">
-	</si:service-activator>
+    <si:channel id="conversation"/>
+    <si:service-activator input-channel="conversation"
+                          ref="orchestratorHandler">
+    </si:service-activator>
 
-	<si:channel id="outputPollableChannel">
-		<si:queue />
-	</si:channel>
-	<si:bridge input-channel="outputPollableChannel"
-		output-channel="outputChannel">
-		<si:poller fixed-rate="1" />
-	</si:bridge>
+    <si:channel id="outputPollableChannel">
+        <si:queue/>
+    </si:channel>
+    <si:bridge input-channel="outputPollableChannel"
+               output-channel="outputChannel">
+        <si:poller fixed-rate="1"/>
+    </si:bridge>
 
-	<si:channel id="conversationReply" />
-	<si:channel id="callbackReply" />
-	<si:channel id="outputChannel" />
-	<si:channel id="callbackChannel" />
-	<jms:outbound-gateway request-channel="outputChannel"
-		reply-channel="callbackChannel" message-converter="xmlMessageConverter"
-		request-destination-expression="headers.get(T(org.cucina.conversation.Operative).DESTINATION_NAME)"
-		connection-factory="jmsConnectionFactory" destination-resolver="myDestinationResolver" />
-	<si:channel id="outputAsync" />
-	<jms:outbound-channel-adapter channel="outputAsync"
-		destination-expression="headers.get(T(org.cucina.conversation.Operative).DESTINATION_NAME)"
-		message-converter="xmlMessageConverter" connection-factory="jmsConnectionFactory"
-		destination-resolver="myDestinationResolver" />
-	<jms:inbound-gateway id="jmsInboundGateway"
-		request-channel="callbackChannel" reply-channel="callbackReply"
-		request-destination-name="engine.client.queue" message-converter="xmlMessageConverter"
-		connection-factory="jmsConnectionFactory" destination-resolver="myDestinationResolver" />
-	<si:channel id="unroutableReplyChannel" />
-	<si:logging-channel-adapter channel="unroutableReplyChannel"
-		level="ERROR" logger-name="Unroutable.Reply" log-full-message="true" />
-	<si:channel id="unroutableConversationChannel" />
-	<si:logging-channel-adapter channel="unroutableConversationChannel"
-		level="ERROR" logger-name="Unroutable.Conversation" log-full-message="true" />
-	<si:router input-channel="callbackChannel"
-		expression="@operativeFactory.findChannel(headers.get(T(org.cucina.conversation.Operative).CONVERSATION_ID))"
-		default-output-channel="unroutableConversationChannel" />
+    <si:channel id="conversationReply"/>
+    <si:channel id="callbackReply"/>
+    <si:channel id="outputChannel"/>
+    <si:channel id="callbackChannel"/>
+    <jms:outbound-gateway request-channel="outputChannel"
+                          reply-channel="callbackChannel" message-converter="xmlMessageConverter"
+                          request-destination-expression="headers.get(T(org.cucina.conversation.Operative).DESTINATION_NAME)"
+                          connection-factory="jmsConnectionFactory" destination-resolver="myDestinationResolver"/>
+    <si:channel id="outputAsync"/>
+    <jms:outbound-channel-adapter channel="outputAsync"
+                                  destination-expression="headers.get(T(org.cucina.conversation.Operative).DESTINATION_NAME)"
+                                  message-converter="xmlMessageConverter" connection-factory="jmsConnectionFactory"
+                                  destination-resolver="myDestinationResolver"/>
+    <jms:inbound-gateway id="jmsInboundGateway"
+                         request-channel="callbackChannel" reply-channel="callbackReply"
+                         request-destination-name="engine.client.queue" message-converter="xmlMessageConverter"
+                         connection-factory="jmsConnectionFactory" destination-resolver="myDestinationResolver"/>
+    <si:channel id="unroutableReplyChannel"/>
+    <si:logging-channel-adapter channel="unroutableReplyChannel"
+                                level="ERROR" logger-name="Unroutable.Reply" log-full-message="true"/>
+    <si:channel id="unroutableConversationChannel"/>
+    <si:logging-channel-adapter channel="unroutableConversationChannel"
+                                level="ERROR" logger-name="Unroutable.Conversation" log-full-message="true"/>
+    <si:router input-channel="callbackChannel"
+               expression="@operativeFactory.findChannel(headers.get(T(org.cucina.conversation.Operative).CONVERSATION_ID))"
+               default-output-channel="unroutableConversationChannel"/>
 </beans>

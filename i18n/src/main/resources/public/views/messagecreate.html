@@ -1,13 +1,15 @@
 <div ng-controller="messageController">
-	<ul>
-		<li>Application <input ng-model="application" type="text"
-			style="width: 300px" /></li>
-		<li>Code <input ng-model="code" type="text" style="width: 300px" /></li>
-		<li>Locale <input ng-model="locale" type="text"
-			style="width: 300px" /></li>
-		<li>Text <input ng-model="text" type="textarea"
-			style="width: 300px" /></li>
-		<li><button ng-click="createmessage();" /> Create
-			</button></li>
-	</ul>
+    <ul>
+        <li>Application <input ng-model="application" type="text"
+                               style="width: 300px"/></li>
+        <li>Code <input ng-model="code" type="text" style="width: 300px"/></li>
+        <li>Locale <input ng-model="locale" type="text"
+                          style="width: 300px"/></li>
+        <li>Text <input ng-model="text" type="textarea"
+                        style="width: 300px"/></li>
+        <li>
+            <button ng-click="createmessage();"/>
+            Create
+            </button></li>
+    </ul>
 </div>

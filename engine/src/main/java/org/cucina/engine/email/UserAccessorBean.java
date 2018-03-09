@@ -1,4 +1,3 @@
-
 package org.cucina.engine.email;
 
 
@@ -7,12 +6,12 @@ package org.cucina.engine.email;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public interface UserAccessorBean {
-    /**
-     * Get the currently logged in User
-     *
-     * @return engineUser.
-     */
-    Object getCurrentUser();
+	/**
+	 * Get the currently logged in User
+	 *
+	 * @return engineUser.
+	 */
+	Object getCurrentUser();
 }

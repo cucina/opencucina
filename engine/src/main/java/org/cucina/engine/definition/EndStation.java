@@ -10,12 +10,12 @@ import org.cucina.engine.ExecutionContext;
  * @author Rob Harrop
  */
 public class EndStation
-    extends AbstractState {
-    /**
-     * Throws an {@link IllegalStateException} since you cannot leave the
-     * terminal state of a workflow instance.
-     */
-    protected void leaveInternal(Transition transition, ExecutionContext executionContext) {
-        throw new IllegalStateException("Cannot leave from the EndState");
-    }
+		extends AbstractState {
+	/**
+	 * Throws an {@link IllegalStateException} since you cannot leave the
+	 * terminal state of a workflow instance.
+	 */
+	protected void leaveInternal(Transition transition, ExecutionContext executionContext) {
+		throw new IllegalStateException("Cannot leave from the EndState");
+	}
 }

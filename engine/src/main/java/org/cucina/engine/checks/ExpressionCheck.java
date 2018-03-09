@@ -1,4 +1,3 @@
-
 package org.cucina.engine.checks;
 
 import org.cucina.engine.ExecutionContext;
@@ -12,40 +11,39 @@ import org.springframework.util.Assert;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public class ExpressionCheck
-    extends AbstractCheck {
-    private static final Logger LOG = LoggerFactory.getLogger(ExpressionCheck.class);
-    private String expression;
+		extends AbstractCheck {
+	private static final Logger LOG = LoggerFactory.getLogger(ExpressionCheck.class);
+	private String expression;
 
-    /**
-     * Set expression
-     *
-     * @param expression String.
-     */
-    public void setExpression(String expression) {
-        this.expression = expression;
-    }
+	/**
+	 * Set expression
+	 *
+	 * @param expression String.
+	 */
+	public void setExpression(String expression) {
+		this.expression = expression;
+	}
 
-    /**
-    * Tests the condition
-    *
-    * @param executionContext ExecutionContext.
-    *
-    * @return boolean true or false depending upon outcome of expression.
-    */
-    @Override
-    public boolean test(ExecutionContext executionContext) {
-        Assert.notNull(executionContext, "executionContext cannot be null");
-        Assert.notNull(expression, "expression cannot be null");
+	/**
+	 * Tests the condition
+	 *
+	 * @param executionContext ExecutionContext.
+	 * @return boolean true or false depending upon outcome of expression.
+	 */
+	@Override
+	public boolean test(ExecutionContext executionContext) {
+		Assert.notNull(executionContext, "executionContext cannot be null");
+		Assert.notNull(expression, "expression cannot be null");
 
-        Object result = executionContext.getExpressionExecutor()
-                                        .evaluate(executionContext, expression);
+		Object result = executionContext.getExpressionExecutor()
+				.evaluate(executionContext, expression);
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Result returned for expression [" + expression + "] is [" + result + "]");
-        }
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Result returned for expression [" + expression + "] is [" + result + "]");
+		}
 
-        return (result instanceof Boolean) ? ((Boolean) result).booleanValue() : false;
-    }
+		return (result instanceof Boolean) ? ((Boolean) result).booleanValue() : false;
+	}
 }

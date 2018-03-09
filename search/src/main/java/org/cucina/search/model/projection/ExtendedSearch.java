@@ -7,5 +7,5 @@ package org.cucina.search.model.projection;
  * TODO convert to annotation
  */
 public interface ExtendedSearch
-    extends Search {
+		extends Search {
 }

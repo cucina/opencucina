@@ -1,68 +1,26 @@
 package org.cucina.engine;
 
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.expression.BeanResolver;
-
 import org.cucina.engine.definition.ProcessDefinitionHelper;
 import org.cucina.engine.definition.config.ProcessDefinitionParser;
 import org.cucina.engine.definition.config.ProcessDefinitionRegistry;
 import org.cucina.engine.service.ProcessService;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.expression.BeanResolver;
 
 
-/**
- * Main object to interact to the workflow engine.
- *
- * @author $Author: $
- * @version $Revision: $
-  */
 public interface ProcessEnvironment
-    extends ApplicationContextAware {
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    BeanResolver getBeanResolver();
+		extends ApplicationContextAware {
+	BeanResolver getBeanResolver();
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    ProcessDefinitionParser getDefinitionParser();
+	ProcessDefinitionParser getDefinitionParser();
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    ProcessDefinitionRegistry getDefinitionRegistry();
+	ProcessDefinitionRegistry getDefinitionRegistry();
 
-    /**
-     * Get ProcessDefinitionHelper
-     *
-     * @return ProcessDefinitionHelper
-     */
-    ProcessDefinitionHelper getProcessDefinitionHelper();
+	ProcessDefinitionHelper getProcessDefinitionHelper();
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    ProcessDriverFactory getProcessDriverFactory();
+	ProcessDriverFactory getProcessDriverFactory();
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    ProcessService getService();
+	ProcessService getService();
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    TokenFactory getTokenFactory();
+	TokenFactory getTokenFactory();
 }

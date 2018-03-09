@@ -17,60 +17,57 @@ import org.springframework.util.Assert;
  * @version $Revision: $
  */
 public class ExpressionOperation
-    extends AbstractOperation {
-    private static final Logger LOG = LoggerFactory.getLogger(ExpressionOperation.class);
-    private String expressionFrom;
-    private String expressionTo;
+		extends AbstractOperation {
+	private static final Logger LOG = LoggerFactory.getLogger(ExpressionOperation.class);
+	private String expressionFrom;
+	private String expressionTo;
 
-    /**
-     * Set expressionFrom, the expression to get the property to set to
-     * expressionTo.
-     *
-     * @param expressionFrom
-     *            String.
-     */
-    public void setExpressionFrom(String expressionFrom) {
-        this.expressionFrom = expressionFrom;
-    }
+	/**
+	 * Set expressionFrom, the expression to get the property to set to
+	 * expressionTo.
+	 *
+	 * @param expressionFrom String.
+	 */
+	public void setExpressionFrom(String expressionFrom) {
+		this.expressionFrom = expressionFrom;
+	}
 
-    /**
-     * Set expressionTo, the expression to set the property to returned from
-     * expressionFrom evaluation.
-     *
-     * @param expressionTo
-     *            String.
-     */
-    public void setExpressionTo(String expressionTo) {
-        this.expressionTo = expressionTo;
-    }
+	/**
+	 * Set expressionTo, the expression to set the property to returned from
+	 * expressionFrom evaluation.
+	 *
+	 * @param expressionTo String.
+	 */
+	public void setExpressionTo(String expressionTo) {
+		this.expressionTo = expressionTo;
+	}
 
-    /**
-     * Uses {@link ExpressionExecutor} to get and set properties.
-     *
-     * @param executionContext
-     *            ExecutionContext.
-     */
-    @Override
-    public void execute(ExecutionContext executionContext) {
-        Assert.notNull(executionContext, "executionContext cannot be null");
+	/**
+	 * Uses {@link ExpressionExecutor} to get and set properties.
+	 *
+	 * @param executionContext ExecutionContext.
+	 */
+	@Override
+	public void execute(ExecutionContext executionContext) {
+		Assert.notNull(executionContext, "executionContext cannot be null");
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("expressionFrom [" + expressionFrom + "]");
-        }
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("expressionFrom [" + expressionFrom + "]");
+		}
 
-        Object value = executionContext.getExpressionExecutor()
-                                       .evaluate(executionContext, expressionFrom);
+		Object value = executionContext.getExpressionExecutor()
+				.evaluate(executionContext, expressionFrom);
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("value [" + value + "]");
-        }
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("value [" + value + "]");
+		}
 
-        if (StringUtils.isNotEmpty(expressionTo)) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("expressionFrom [" + expressionTo + "]");
-            }
+		if (StringUtils.isNotEmpty(expressionTo)) {
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("expressionFrom [" + expressionTo + "]");
+			}
 
-            executionContext.getExpressionExecutor().set(executionContext, expressionTo, value);
-        }
-    }
+			executionContext.getExpressionExecutor().set(executionContext, expressionTo, value);
+		}
+	}
 }

@@ -1,15 +1,14 @@
 package org.cucina.core.validation;
 
-import java.util.Locale;
-import java.util.Map;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.util.Assert;
 
 import javax.validation.Configuration;
 import javax.validation.MessageInterpolator;
 import javax.validation.Validation;
-
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
-import org.springframework.util.Assert;
+import java.util.Locale;
+import java.util.Map;
 
 
 /**
@@ -18,9 +17,9 @@ import org.springframework.util.Assert;
  * <code>properties</code> which contains array of property names. Values of the
  * bean's properties will be added to the contraintDescriptor's attributes
  * against the index of the array.
- *
+ * <p>
  * So for message
- *
+ * <p>
  * <pre>Hello {0} and your {1}
  *
  * <pre/>
@@ -30,105 +29,96 @@ import org.springframework.util.Assert;
  * <pre>
  * properties= {&quot;name&quot;, &quot;sibling&quot;}
  * </pre>
- *
+ * <p>
  * with a bean having properties accordingly set as <code>
  *  String name="Jack";
  *  String sibling="sister";
  *  </code>
- *
+ * <p>
  * it'll produce <code>Hello Jack and your sister</code>
- *
+ * <p>
  * If the constraint does not have field <code>properties</code> this
  * interpolator will bind the actual validated value to the key <code>0</code>
- *
+ * <p>
  * It does not work if the implementation of javax.validation is hibernate.
  *
  * @author vlevine
  * @deprecated
  */
 public class BeanMessageInterpolator
-    implements MessageInterpolator {
-    private MessageInterpolator delegate;
+		implements MessageInterpolator {
+	private MessageInterpolator delegate;
 
-    /**
-     * Creates a new BeanMessageInterpolator object. The nested delegator is
-     * pulled from the bootstrap of the validation provider
-     *
-     */
-    public BeanMessageInterpolator() {
-        @SuppressWarnings("rawtypes")
-        Configuration configuration = Validation.byDefaultProvider().configure();
+	/**
+	 * Creates a new BeanMessageInterpolator object. The nested delegator is
+	 * pulled from the bootstrap of the validation provider
+	 */
+	public BeanMessageInterpolator() {
+		@SuppressWarnings("rawtypes")
+		Configuration configuration = Validation.byDefaultProvider().configure();
 
-        delegate = configuration.getDefaultMessageInterpolator();
-    }
+		delegate = configuration.getDefaultMessageInterpolator();
+	}
 
-    /**
-     * Creates a new BeanMessageInterpolator object with provided delegator.
-     *
-     * @param delegate
-     *            JAVADOC.
-     */
-    public BeanMessageInterpolator(MessageInterpolator delegate) {
-        Assert.notNull(delegate, "delegate is null");
-        this.delegate = delegate;
-    }
+	/**
+	 * Creates a new BeanMessageInterpolator object with provided delegator.
+	 *
+	 * @param delegate JAVADOC.
+	 */
+	public BeanMessageInterpolator(MessageInterpolator delegate) {
+		Assert.notNull(delegate, "delegate is null");
+		this.delegate = delegate;
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param message
-     *            JAVADOC.
-     * @param context
-     *            JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    public String interpolate(String message, Context context) {
-        processAttributes(context);
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param message JAVADOC.
+	 * @param context JAVADOC.
+	 * @return JAVADOC.
+	 */
+	@Override
+	public String interpolate(String message, Context context) {
+		processAttributes(context);
 
-        return delegate.interpolate(message, context);
-    }
+		return delegate.interpolate(message, context);
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param message
-     *            JAVADOC.
-     * @param context
-     *            JAVADOC.
-     * @param locale
-     *            JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    public String interpolate(String message, Context context, Locale locale) {
-        processAttributes(context);
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param message JAVADOC.
+	 * @param context JAVADOC.
+	 * @param locale  JAVADOC.
+	 * @return JAVADOC.
+	 */
+	@Override
+	public String interpolate(String message, Context context, Locale locale) {
+		processAttributes(context);
 
-        return delegate.interpolate(message, context, locale);
-    }
+		return delegate.interpolate(message, context, locale);
+	}
 
-    private void processAttributes(Context context) {
-        Map<String, Object> attributes = context.getConstraintDescriptor().getAttributes();
+	private void processAttributes(Context context) {
+		Map<String, Object> attributes = context.getConstraintDescriptor().getAttributes();
 
-        // TODO determine whether attributes are modifiable
-        if (attributes.containsKey("properties")) {
-            Object bean = context.getValidatedValue();
-            BeanWrapper beanWrapper = new BeanWrapperImpl(bean);
+		// TODO determine whether attributes are modifiable
+		if (attributes.containsKey("properties")) {
+			Object bean = context.getValidatedValue();
+			BeanWrapper beanWrapper = new BeanWrapperImpl(bean);
 
-            String[] props = (String[]) attributes.get("properties");
+			String[] props = (String[]) attributes.get("properties");
 
-            for (int i = 0; i < props.length; i++) {
-                if (beanWrapper.isReadableProperty(props[i])) {
-                    Object property = beanWrapper.getPropertyValue(props[i]);
+			for (int i = 0; i < props.length; i++) {
+				if (beanWrapper.isReadableProperty(props[i])) {
+					Object property = beanWrapper.getPropertyValue(props[i]);
 
-                    attributes.put(String.valueOf(i),
-                        (property == null) ? null : property.toString());
-                }
-            }
-        } else {
-            attributes.put("0", context.getValidatedValue());
-        }
-    }
+					attributes.put(String.valueOf(i),
+							(property == null) ? null : property.toString());
+				}
+			}
+		} else {
+			attributes.put("0", context.getValidatedValue());
+		}
+	}
 }

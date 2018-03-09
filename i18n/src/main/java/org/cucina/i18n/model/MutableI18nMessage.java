@@ -1,20 +1,13 @@
 package org.cucina.i18n.model;
 
-import javax.persistence.Cacheable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Version;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import org.cucina.core.model.PersistableEntity;
 import org.cucina.core.model.Versioned;
+
+import javax.persistence.*;
 
 
 /**
@@ -22,166 +15,168 @@ import org.cucina.core.model.Versioned;
  *
  * @author $author$
  * @version $Revision: 1.4 $
-  */
+ */
 @Entity(name = MutableI18nMessage.TABLE)
 @Cacheable
 public class MutableI18nMessage
-    extends PersistableEntity
-    implements Versioned, I18nMessage {
-    private static final long serialVersionUID = 7566394708380189018L;
+		extends PersistableEntity
+		implements Versioned, I18nMessage {
+	/**
+	 * This is a field JAVADOC
+	 */
+	public static final String TABLE = "I_MESSAGE";
+	/**
+	 * message
+	 */
+	public static final String MESSAGE_PROPERTY_NAME = "message";
+	/**
+	 * localeCd
+	 */
+	public static final String LOCALE_PROPERTY_NAME = "localeCd";
+	/**
+	 * messageTx
+	 */
+	public static final String MESSAGE_TX_PROPERTY_NAME = "messageTx";
+	/**
+	 * InternationalisedMessage.
+	 */
+	public static final String TYPE = "MutableI18nMessage";
+	private static final long serialVersionUID = 7566394708380189018L;
+	private Message message;
+	private String localeCd;
+	private String messageTx;
+	private int version;
 
-    /** This is a field JAVADOC */
-    public static final String TABLE = "I_MESSAGE";
+	/**
+	 * JAVADOC.
+	 *
+	 * @return JAVADOC.
+	 */
+	@Column(name = "locale_cd")
+	public String getLocaleCd() {
+		return localeCd;
+	}
 
-    /** message */
-    public static final String MESSAGE_PROPERTY_NAME = "message";
+	/**
+	 * JAVADOC.
+	 *
+	 * @param localeCd JAVADOC.
+	 */
+	public void setLocaleCd(String localeCd) {
+		this.localeCd = localeCd;
+	}
 
-    /** localeCd */
-    public static final String LOCALE_PROPERTY_NAME = "localeCd";
+	/**
+	 * JAVADOC.
+	 *
+	 * @return JAVADOC.
+	 */
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "message")
+	@JsonIgnore
+	public Message getMessage() {
+		return message;
+	}
 
-    /** messageTx */
-    public static final String MESSAGE_TX_PROPERTY_NAME = "messageTx";
+	/**
+	 * JAVADOC.
+	 *
+	 * @param message JAVADOC.
+	 */
+	public void setMessage(Message message) {
+		this.message = message;
+	}
 
-    /**
-    * InternationalisedMessage.
-    */
-    public static final String TYPE = "MutableI18nMessage";
-    private Message message;
-    private String localeCd;
-    private String messageTx;
-    private int version;
+	/**
+	 * JAVADOC.
+	 *
+	 * @return JAVADOC.
+	 */
+	@Column(name = "message_tx", length = 4000)
+	public String getMessageTx() {
+		return messageTx;
+	}
 
-    /**
-    * JAVADOC.
-    *
-    * @param localeCd JAVADOC.
-    */
-    public void setLocaleCd(String localeCd) {
-        this.localeCd = localeCd;
-    }
+	/**
+	 * JAVADOC.
+	 *
+	 * @param messageTx JAVADOC.
+	 */
+	public void setMessageTx(String messageTx) {
+		this.messageTx = messageTx;
+	}
 
-    /**
-     * JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Column(name = "locale_cd")
-    public String getLocaleCd() {
-        return localeCd;
-    }
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @return JAVADOC.
+	 */
+	@Override
+	@Version
+	public int getVersion() {
+		return version;
+	}
 
-    /**
-     * JAVADOC.
-     *
-     * @param message JAVADOC.
-     */
-    public void setMessage(Message message) {
-        this.message = message;
-    }
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param version JAVADOC.
+	 */
+	@Override
+	public void setVersion(int version) {
+		this.version = version;
+	}
 
-    /**
-     * JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "message")
-    @JsonIgnore
-    public Message getMessage() {
-        return message;
-    }
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param obj JAVADOC.
+	 * @return JAVADOC.
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
 
-    /**
-     * JAVADOC.
-     *
-     * @param messageTx JAVADOC.
-     */
-    public void setMessageTx(String messageTx) {
-        this.messageTx = messageTx;
-    }
+		if (!(obj instanceof MutableI18nMessage)) {
+			return false;
+		}
 
-    /**
-     * JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Column(name = "message_tx", length = 4000)
-    public String getMessageTx() {
-        return messageTx;
-    }
+		MutableI18nMessage rhs = (MutableI18nMessage) obj;
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param version JAVADOC.
-     */
-    @Override
-    public void setVersion(int version) {
-        this.version = version;
-    }
+		EqualsBuilder eqB = new EqualsBuilder().append(getLocaleCd(), rhs.getLocaleCd());
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    @Version
-    public int getVersion() {
-        return version;
-    }
+		if ((this.getMessage() != null) && (rhs.getMessage() != null)) {
+			eqB.append(getMessage().getId(), rhs.getMessage().getId());
+		}
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param obj JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
+		return eqB.isEquals();
+	}
 
-        if (!(obj instanceof MutableI18nMessage)) {
-            return false;
-        }
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @return JAVADOC.
+	 */
+	@Override
+	public int hashCode() {
+		HashCodeBuilder hcB = new HashCodeBuilder(17, 37).append(getLocaleCd());
 
-        MutableI18nMessage rhs = (MutableI18nMessage) obj;
+		if (getMessage() != null) {
+			hcB.append(getMessage().getId());
+		}
 
-        EqualsBuilder eqB = new EqualsBuilder().append(getLocaleCd(), rhs.getLocaleCd());
+		return hcB.toHashCode();
+	}
 
-        if ((this.getMessage() != null) && (rhs.getMessage() != null)) {
-            eqB.append(getMessage().getId(), rhs.getMessage().getId());
-        }
-
-        return eqB.isEquals();
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    public int hashCode() {
-        HashCodeBuilder hcB = new HashCodeBuilder(17, 37).append(getLocaleCd());
-
-        if (getMessage() != null) {
-            hcB.append(getMessage().getId());
-        }
-
-        return hcB.toHashCode();
-    }
-
-    /**
-     * Overriden toString implementation.
-     *
-     * @return String description of object.
-     */
-    public String toString() {
-        return new ToStringBuilder(this).append("localeCd", getLocaleCd())
-                                        .append("messageTx", getMessageTx()).toString();
-    }
+	/**
+	 * Overriden toString implementation.
+	 *
+	 * @return String description of object.
+	 */
+	public String toString() {
+		return new ToStringBuilder(this).append("localeCd", getLocaleCd())
+				.append("messageTx", getMessageTx()).toString();
+	}
 }

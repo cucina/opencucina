@@ -1,4 +1,3 @@
-
 package org.cucina.engine.definition;
 
 import org.cucina.engine.ExecutionContext;
@@ -16,12 +15,12 @@ import org.cucina.engine.ExecutionContext;
  * @see Check
  */
 public interface Operation
-    extends ProcessElement {
-    /**
-     * Invokes the <code>Action</code>. <code>Action</code>s have full
-     * access to the {@link ExecutionContext} which contains not only
-     * user supplied data but also the {@link Token} representing the state of
-     * the current workflow.
-     */
-    void execute(ExecutionContext executionContext);
+		extends ProcessElement {
+	/**
+	 * Invokes the <code>Action</code>. <code>Action</code>s have full
+	 * access to the {@link ExecutionContext} which contains not only
+	 * user supplied data but also the {@link Token} representing the state of
+	 * the current workflow.
+	 */
+	void execute(ExecutionContext executionContext);
 }

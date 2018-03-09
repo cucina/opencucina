@@ -8,109 +8,121 @@ import org.springframework.data.domain.Persistable;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public interface Token {
-    /** Token. */
-    String APPLICATION_TYPE = "Token";
+	/**
+	 * Token.
+	 */
+	String APPLICATION_TYPE = "Token";
 
-    /** domainObjectId */
-    String DOMAIN_OBJ_ID_NAME = "domainObjectId";
+	/**
+	 * domainObjectId
+	 */
+	String DOMAIN_OBJ_ID_NAME = "domainObjectId";
 
-    /** domainObjectType */
-    String DOMAIN_OBJ_TYPE_NAME = "domainObjectType";
+	/**
+	 * domainObjectType
+	 */
+	String DOMAIN_OBJ_TYPE_NAME = "domainObjectType";
 
-    /** loadDomainIdsQuery */
-    String LOAD_DOMAIN_IDS_NAMED_QUERY = "loadDomainIdsQuery";
+	/**
+	 * loadDomainIdsQuery
+	 */
+	String LOAD_DOMAIN_IDS_NAMED_QUERY = "loadDomainIdsQuery";
 
-    /** loadTokenQuery */
-    String LOAD_TOKEN_NAMED_QUERY = "loadTokenQuery";
+	/**
+	 * loadTokenQuery
+	 */
+	String LOAD_TOKEN_NAMED_QUERY = "loadTokenQuery";
 
-    /** placeId */
-    String PLACE_ID_PROPERTY_NAME = "placeId";
+	/**
+	 * placeId
+	 */
+	String PLACE_ID_PROPERTY_NAME = "placeId";
 
-    /** workflowDefinitionId */
-    String WFD_ID_PROPERTY_NAME = "workflowDefinitionId";
+	/**
+	 * workflowDefinitionId
+	 */
+	String WFD_ID_PROPERTY_NAME = "workflowDefinitionId";
 
-    /**
-     * Sets the domain object this is linked to
-     *
-     * @param domainObject JAVADOC.
-     */
-    void setDomainObject(Persistable<?> domainObject);
+	/**
+	 * Gets the domain object this is linked to
+	 *
+	 * @return .
+	 */
+	Persistable<?> getDomainObject();
 
-    /**
-     *
-     *
-     * @return .
-     */
-    /**
-     * Gets the domain object this is linked to
-     *
-     * @return .
-     */
-    Persistable<?> getDomainObject();
+	/**
+	 *
+	 *
+	 * @return .
+	 */
 
-    /**
-     * Sets parent token
-     *
-     * @param token JAVADOC.
-     */
-    void setParentToken(Token token);
+	/**
+	 * Sets the domain object this is linked to
+	 *
+	 * @param domainObject JAVADOC.
+	 */
+	void setDomainObject(Persistable<?> domainObject);
 
-    /**
-     * Gets parent token
-     *
-     * @return JAVADOC.
-     */
-    Token getParentToken();
+	/**
+	 * Gets parent token
+	 *
+	 * @return JAVADOC.
+	 */
+	Token getParentToken();
 
-    /**
-     * Sets this token's current place's id
-     *
-     * @param placeId
-     * TODO map it to the real Place
-     */
-    void setPlaceId(final String placeId);
+	/**
+	 * Sets parent token
+	 *
+	 * @param token JAVADOC.
+	 */
+	void setParentToken(Token token);
 
-    /**
-     * Gets this token's current place's id
-     *
-     * @return JAVADOC
-     */
-    String getPlaceId();
+	/**
+	 * Gets this token's current place's id
+	 *
+	 * @return JAVADOC
+	 */
+	String getPlaceId();
 
-    /**
-     * Sets this token's process definition id
-     *
-     * @param processDefinitionId JAVADOC.
-     */
-    void setProcessDefinitionId(String processDefinitionId);
+	/**
+	 * Sets this token's current place's id
+	 *
+	 * @param placeId TODO map it to the real Place
+	 */
+	void setPlaceId(final String placeId);
 
-    /**
-     * Gets this token's process definition id
-     *
-     * @return JAVADOC.
-     */
-    String getProcessDefinitionId();
+	/**
+	 * Gets this token's process definition id
+	 *
+	 * @return JAVADOC.
+	 */
+	String getProcessDefinitionId();
 
-    /**
-     * Adds a child token
-     *
-     * @param child JAVADOC.
-     */
-    void addChild(Token child);
+	/**
+	 * Sets this token's process definition id
+	 *
+	 * @param processDefinitionId JAVADOC.
+	 */
+	void setProcessDefinitionId(String processDefinitionId);
 
-    /**
-     *
-     *
-     * @return whether this has children
-     */
-    boolean hasChildren();
+	/**
+	 * Adds a child token
+	 *
+	 * @param child JAVADOC.
+	 */
+	void addChild(Token child);
 
-    /**
-     * Removes the child from its collection of chidlren
-     *
-     * @param child JAVADOC.
-     */
-    void removeChild(Token child);
+	/**
+	 * @return whether this has children
+	 */
+	boolean hasChildren();
+
+	/**
+	 * Removes the child from its collection of chidlren
+	 *
+	 * @param child JAVADOC.
+	 */
+	void removeChild(Token child);
 }

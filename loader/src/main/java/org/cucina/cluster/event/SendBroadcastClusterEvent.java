@@ -1,4 +1,3 @@
-
 package org.cucina.cluster.event;
 
 /**
@@ -6,22 +5,22 @@ package org.cucina.cluster.event;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public class SendBroadcastClusterEvent
-    extends SendClusterEvent {
+		extends SendClusterEvent {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -4985813100093233448L;
 
 	/**
-     * Creates a new SendBroadcastClusterEvent object.
-     *
-     * @param source JAVADOC.
-     */
-    public SendBroadcastClusterEvent(String source) {
-        super(source);
+	 * Creates a new SendBroadcastClusterEvent object.
+	 *
+	 * @param source JAVADOC.
+	 */
+	public SendBroadcastClusterEvent(String source) {
+		super(source);
 
-    }
+	}
 }

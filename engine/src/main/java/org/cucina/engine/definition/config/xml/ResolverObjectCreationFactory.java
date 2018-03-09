@@ -1,4 +1,3 @@
-
 package org.cucina.engine.definition.config.xml;
 
 import org.apache.commons.digester3.Digester;
@@ -22,66 +21,62 @@ import org.xml.sax.Attributes;
  * @version $Revision: 1.10 $
  */
 public class ResolverObjectCreationFactory
-    implements ObjectCreationFactory<Object> {
-    private static final Logger LOG = LoggerFactory.getLogger(ResolverObjectCreationFactory.class);
+		implements ObjectCreationFactory<Object> {
+	/**
+	 * The default protocol to use to resolve objects. The default is to look
+	 * for a Spring bean with the id specified in "path" attribute.
+	 */
+	public static final String DEFAULT_PROTOCOL = "bean";
+	private static final Logger LOG = LoggerFactory.getLogger(ResolverObjectCreationFactory.class);
+	private BeanResolver beanResolver = DefaultProcessEnvironment.instance().getBeanResolver();
+	private Digester digester;
 
-    /**
-     * The default protocol to use to resolve objects. The default is to look
-     * for a Spring bean with the id specified in "path" attribute.
-     */
-    public static final String DEFAULT_PROTOCOL = "bean";
-    private BeanResolver beanResolver = DefaultProcessEnvironment.instance().getBeanResolver();
-    private Digester digester;
+	/**
+	 * @return Returns the digester.
+	 */
+	public Digester getDigester() {
+		return digester;
+	}
 
-    /**
-     * @param digester
-     *            The digester to set.
-     */
-    public void setDigester(Digester digester) {
-        this.digester = digester;
-    }
+	/**
+	 * @param digester The digester to set.
+	 */
+	public void setDigester(Digester digester) {
+		this.digester = digester;
+	}
 
-    /**
-     * @return Returns the digester.
-     */
-    public Digester getDigester() {
-        return digester;
-    }
+	/**
+	 * Creates either a condition specified by class and, if not present, ref
+	 *
+	 * @param attributes JAVADOC
+	 * @return JAVADOC
+	 */
+	public Object createObject(Attributes attributes) {
+		Assert.notNull(beanResolver, "beanResolver is null");
 
-    /**
-     * Creates either a condition specified by class and, if not present, ref
-     *
-     * @param attributes
-     *            JAVADOC
-     *
-     * @return JAVADOC
-     */
-    public Object createObject(Attributes attributes) {
-        Assert.notNull(beanResolver, "beanResolver is null");
+		try {
+			String path = attributes.getValue("path");
 
-        try {
-            String path = attributes.getValue("path");
+			Object result = beanResolver.resolve(null, path);
 
-            Object result = beanResolver.resolve(null, path);
+			Assert.notNull(result, "Failed to resolve object by path:'" + path + "'");
 
-            Assert.notNull(result, "Failed to resolve object by path:'" + path + "'");
+			// set the id property if it exists to something sensible
+			BeanWrapper wrapper = new BeanWrapperImpl(result);
 
-            // set the id property if it exists to something sensible
-            BeanWrapper wrapper = new BeanWrapperImpl(result);
+			if ((wrapper.isWritableProperty("id")) && (attributes.getValue("id") != null)) {
+				String id = attributes.getValue("id");
 
-            if ((wrapper.isWritableProperty("id")) && (attributes.getValue("id") != null)) {
-                String id = attributes.getValue("id");
+				wrapper.setPropertyValue("id", id);
+			}
 
-                wrapper.setPropertyValue("id", id);
-            }
+			return result;
+		} catch (BeansException e) {
+			LOG.error("Oops", e);
+		} catch (AccessException e) {
+			LOG.error("Oops", e);
+		}
 
-            return result;
-        } catch (BeansException e) {
-            LOG.error("Oops", e);
-        } catch (AccessException e) {
-            LOG.error("Oops", e);
-        }
-
-        return null;
-    }
+		return null;
+	}
 }

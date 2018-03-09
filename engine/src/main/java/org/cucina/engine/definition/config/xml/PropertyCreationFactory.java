@@ -1,4 +1,3 @@
-
 package org.cucina.engine.definition.config.xml;
 
 import org.xml.sax.Attributes;
@@ -11,16 +10,15 @@ import org.xml.sax.Attributes;
  * @version $Revision: $
  */
 public class PropertyCreationFactory
-    extends AbstractCreateObjectFactory<String> {
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param attributes JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    protected String createObjectImpl(Attributes attributes) {
-        return attributes.getValue("value");
-    }
+		extends AbstractCreateObjectFactory<String> {
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param attributes JAVADOC.
+	 * @return JAVADOC.
+	 */
+	@Override
+	protected String createObjectImpl(Attributes attributes) {
+		return attributes.getValue("value");
+	}
 }

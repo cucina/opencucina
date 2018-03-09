@@ -1,37 +1,29 @@
 package org.cucina.core.testassist;
 
-import java.util.Collection;
-import java.util.Date;
+import org.cucina.core.model.PersistableEntity;
+import org.cucina.core.model.Versioned;
+import org.cucina.core.model.projection.ProjectionColumn;
 
-import javax.persistence.Cacheable;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Version;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-
-import org.cucina.core.model.PersistableEntity;
-import org.cucina.core.model.Versioned;
-import org.cucina.core.model.projection.ProjectionColumn;
+import java.util.Collection;
+import java.util.Date;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "foo")
 @XmlRootElement(name = "foo")
 @Entity(name = Foo.TYPE)
-@NamedQueries(value = { @NamedQuery(name = "allFoo", query = "select foo from Foo foo where foo.name = ?1") })
+@NamedQueries(value = {@NamedQuery(name = "allFoo", query = "select foo from Foo foo where foo.name = ?1")})
 @Cacheable
 public class Foo extends PersistableEntity implements Versioned {
-	private static final long serialVersionUID = -3494592002323415751L;
-
-	/** Foo */
+	/**
+	 * Foo
+	 */
 	public static final String TYPE = "Foo";
+	private static final long serialVersionUID = -3494592002323415751L;
 	private Collection<Bar> bars;
 	private Collection<Baz> bazs;
 	private Date date;
@@ -49,22 +41,11 @@ public class Foo extends PersistableEntity implements Versioned {
 	/**
 	 * Creates a new Foo object.
 	 *
-	 * @param id
-	 *            JAVADOC.
+	 * @param id JAVADOC.
 	 */
 	public Foo(Long id) {
 		super();
 		setId(id);
-	}
-
-	/**
-	 * JAVADOC Method Level Comments
-	 *
-	 * @param bars
-	 *            JAVADOC.
-	 */
-	public void setBars(Collection<Bar> bars) {
-		this.bars = bars;
 	}
 
 	/**
@@ -80,11 +61,10 @@ public class Foo extends PersistableEntity implements Versioned {
 	/**
 	 * JAVADOC Method Level Comments
 	 *
-	 * @param bazs
-	 *            JAVADOC.
+	 * @param bars JAVADOC.
 	 */
-	public void setBazs(Collection<Baz> bazs) {
-		this.bazs = bazs;
+	public void setBars(Collection<Bar> bars) {
+		this.bars = bars;
 	}
 
 	/**
@@ -98,10 +78,12 @@ public class Foo extends PersistableEntity implements Versioned {
 	}
 
 	/**
-	 * @param date
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param bazs JAVADOC.
 	 */
-	public void setDate(Date date) {
-		this.date = date;
+	public void setBazs(Collection<Baz> bazs) {
+		this.bazs = bazs;
 	}
 
 	/**
@@ -113,13 +95,10 @@ public class Foo extends PersistableEntity implements Versioned {
 	}
 
 	/**
-	 * JAVADOC Method Level Comments
-	 *
-	 * @param name
-	 *            JAVADOC.
+	 * @param date
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
 	/**
@@ -135,11 +114,10 @@ public class Foo extends PersistableEntity implements Versioned {
 	/**
 	 * JAVADOC Method Level Comments
 	 *
-	 * @param value
-	 *            JAVADOC.
+	 * @param name JAVADOC.
 	 */
-	public void setValue(int value) {
-		this.value = value;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
@@ -155,12 +133,10 @@ public class Foo extends PersistableEntity implements Versioned {
 	/**
 	 * JAVADOC Method Level Comments
 	 *
-	 * @param version
-	 *            JAVADOC.
+	 * @param value JAVADOC.
 	 */
-	@Override
-	public void setVersion(int version) {
-		this.version = version;
+	public void setValue(int value) {
+		this.value = value;
 	}
 
 	/**
@@ -172,5 +148,15 @@ public class Foo extends PersistableEntity implements Versioned {
 	@Version
 	public int getVersion() {
 		return this.version;
+	}
+
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param version JAVADOC.
+	 */
+	@Override
+	public void setVersion(int version) {
+		this.version = version;
 	}
 }

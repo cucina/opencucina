@@ -1,12 +1,5 @@
 package org.cucina.engine.client.service;
 
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.util.Assert;
-
 import org.cucina.conversation.EventHandler;
 import org.cucina.conversation.events.CallbackEvent;
 import org.cucina.conversation.events.ConversationEvent;
@@ -17,6 +10,12 @@ import org.cucina.engine.server.definition.OperationDescriptorDto;
 import org.cucina.engine.server.definition.ProcessElementDto;
 import org.cucina.engine.server.event.ActionResultEvent;
 import org.cucina.engine.server.event.BooleanEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.util.Assert;
+
+import java.util.Map;
 
 /**
  * JAVADOC for Class Level
@@ -24,7 +23,7 @@ import org.cucina.engine.server.event.BooleanEvent;
  * @author $Author: $
  * @version $Revision: $
  */
-public class ProcessEventHandler implements  EventHandler<ConversationEvent> {
+public class ProcessEventHandler implements EventHandler<ConversationEvent> {
 	private static final Logger LOG = LoggerFactory.getLogger(ProcessEventHandler.class);
 	private ConversionService conversionService;
 	private DomainFindingService domainFindingService;
@@ -33,7 +32,7 @@ public class ProcessEventHandler implements  EventHandler<ConversationEvent> {
 	 * Creates a new WorkflowEventHandler object.
 	 */
 	public ProcessEventHandler(DomainFindingService domainFindingService,
-			ConversionService conversionService) {
+							   ConversionService conversionService) {
 		Assert.notNull(domainFindingService, "domainFindingService is null");
 		this.domainFindingService = domainFindingService;
 		Assert.notNull(conversionService, "conversionService is null");
@@ -44,7 +43,6 @@ public class ProcessEventHandler implements  EventHandler<ConversationEvent> {
 	 * JAVADOC Method Level Comments
 	 *
 	 * @param event JAVADOC.
-	 *
 	 * @return JAVADOC.
 	 */
 	@Override
@@ -54,7 +52,7 @@ public class ProcessEventHandler implements  EventHandler<ConversationEvent> {
 		}
 		// TODO typecheck
 		ProcessElementDto source = (ProcessElementDto) event.getSource();
-		Map<String, Object> parameters = ((CallbackEvent)event).getParameters();
+		Map<String, Object> parameters = ((CallbackEvent) event).getParameters();
 		Assert.notNull(source, "no dto in event");
 
 		Object pe = loadDomainObject(source.getDomainType(), source.getDomainId());

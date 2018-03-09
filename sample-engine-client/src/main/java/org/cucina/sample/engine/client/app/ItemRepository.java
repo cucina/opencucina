@@ -4,10 +4,8 @@ import org.springframework.data.repository.CrudRepository;
 
 
 /**
- *
- *
  * @author vlevine
  */
 public interface ItemRepository
-    extends CrudRepository<Item, Long> {
+		extends CrudRepository<Item, Long> {
 }

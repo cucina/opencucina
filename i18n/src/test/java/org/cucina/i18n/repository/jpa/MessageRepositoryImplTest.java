@@ -1,22 +1,5 @@
 package org.cucina.i18n.repository.jpa;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Locale;
-
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
 import org.cucina.core.InstanceFactory;
 import org.cucina.core.spring.SingletonBeanFactory;
 import org.cucina.i18n.model.Message;
@@ -30,6 +13,16 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.data.domain.Pageable;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Locale;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
+
 
 /**
  * JAVADOC for Class Level
@@ -38,273 +31,272 @@ import org.springframework.data.domain.Pageable;
  * @version $Revision: $
  */
 public class MessageRepositoryImplTest {
-    @Mock
-    private BeanFactory beanFactory;
-    @Mock
-    private CriteriaBuilder cb;
-    @Mock
-    private CriteriaQuery<Message> cq;
-    @Mock
-    private EntityManager em;
-    @Mock
-    private I18nService i18nService;
-    @Mock
-    private InstanceFactory instanceFactory;
-    private MessageRepositoryImpl repo;
-    @Mock
-    private TypedQuery<Message> tq;
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @throws Exception
-     *             JAVADOC.
-     */
-    @Before
-    public void setUp()
-        throws Exception {
-        MockitoAnnotations.initMocks(this);
-        repo = new MessageRepositoryImpl(instanceFactory);
-        repo.setEntityManager(em);
-        when(em.getCriteriaBuilder()).thenReturn(cb);
-        when(cb.createQuery(Message.class)).thenReturn(cq);
-        when(em.createQuery(cq)).thenReturn(tq);
-        ((SingletonBeanFactory) SingletonBeanFactory.getInstance()).setBeanFactory(beanFactory);
-        when(beanFactory.getBean(MessageRepository.MESSAGE_REPOSITORY_ID)).thenReturn(repo);
-        when(beanFactory.getBean(I18nService.I18N_SERVICE_ID)).thenReturn(i18nService);
-        when(i18nService.getDefaultLocale()).thenReturn(Locale.ENGLISH);
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    public void testFindAll() {
-        repo.findAll();
-        verify(cq).from(Message.class);
-        verify(tq).getResultList();
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    public void testFindAllPage() {
-        Pageable pageable = mock(Pageable.class);
-
-        when(pageable.getPageNumber()).thenReturn(0);
-        when(pageable.getPageSize()).thenReturn(10);
+	@Mock
+	private BeanFactory beanFactory;
+	@Mock
+	private CriteriaBuilder cb;
+	@Mock
+	private CriteriaQuery<Message> cq;
+	@Mock
+	private EntityManager em;
+	@Mock
+	private I18nService i18nService;
+	@Mock
+	private InstanceFactory instanceFactory;
+	private MessageRepositoryImpl repo;
+	@Mock
+	private TypedQuery<Message> tq;
+
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @throws Exception JAVADOC.
+	 */
+	@Before
+	public void setUp()
+			throws Exception {
+		MockitoAnnotations.initMocks(this);
+		repo = new MessageRepositoryImpl(instanceFactory);
+		repo.setEntityManager(em);
+		when(em.getCriteriaBuilder()).thenReturn(cb);
+		when(cb.createQuery(Message.class)).thenReturn(cq);
+		when(em.createQuery(cq)).thenReturn(tq);
+		((SingletonBeanFactory) SingletonBeanFactory.getInstance()).setBeanFactory(beanFactory);
+		when(beanFactory.getBean(MessageRepository.MESSAGE_REPOSITORY_ID)).thenReturn(repo);
+		when(beanFactory.getBean(I18nService.I18N_SERVICE_ID)).thenReturn(i18nService);
+		when(i18nService.getDefaultLocale()).thenReturn(Locale.ENGLISH);
+	}
+
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Test
+	public void testFindAll() {
+		repo.findAll();
+		verify(cq).from(Message.class);
+		verify(tq).getResultList();
+	}
+
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Test
+	public void testFindAllPage() {
+		Pageable pageable = mock(Pageable.class);
 
-        repo.findAll(pageable);
-        verify(cq).from(Message.class);
-        verify(tq).setFirstResult(0);
-        verify(tq).setMaxResults(10);
-        verify(tq).getResultList();
-    }
+		when(pageable.getPageNumber()).thenReturn(0);
+		when(pageable.getPageSize()).thenReturn(10);
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @SuppressWarnings("unchecked")
-    @Test
-    public void testFindByBasename() {
-        Root<Message> root = mock(Root.class);
-
-        when(cq.from(Message.class)).thenReturn(root);
-
-        Path<Object> pathb = mock(Path.class);
+		repo.findAll(pageable);
+		verify(cq).from(Message.class);
+		verify(tq).setFirstResult(0);
+		verify(tq).setMaxResults(10);
+		verify(tq).getResultList();
+	}
 
-        when(root.get("baseName")).thenReturn(pathb);
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testFindByBasename() {
+		Root<Message> root = mock(Root.class);
+
+		when(cq.from(Message.class)).thenReturn(root);
 
-        Predicate preb = mock(Predicate.class);
+		Path<Object> pathb = mock(Path.class);
 
-        when(cb.equal(pathb, "basename")).thenReturn(preb);
-        when(cq.where(preb)).thenReturn(cq);
+		when(root.get("baseName")).thenReturn(pathb);
 
-        repo.findByBasename("basename");
-        verify(tq).getResultList();
-    }
+		Predicate preb = mock(Predicate.class);
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @SuppressWarnings("unchecked")
-    @Test
-    public void testFindByBasenameAndCode() {
-        Root<Message> root = mock(Root.class);
+		when(cb.equal(pathb, "basename")).thenReturn(preb);
+		when(cq.where(preb)).thenReturn(cq);
 
-        when(cq.from(Message.class)).thenReturn(root);
+		repo.findByBasename("basename");
+		verify(tq).getResultList();
+	}
 
-        Path<Object> pathb = mock(Path.class);
-
-        when(root.get("baseName")).thenReturn(pathb);
-
-        Predicate preb = mock(Predicate.class);
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testFindByBasenameAndCode() {
+		Root<Message> root = mock(Root.class);
 
-        when(cb.equal(pathb, "basename")).thenReturn(preb);
+		when(cq.from(Message.class)).thenReturn(root);
 
-        Path<Object> pathc = mock(Path.class);
+		Path<Object> pathb = mock(Path.class);
+
+		when(root.get("baseName")).thenReturn(pathb);
+
+		Predicate preb = mock(Predicate.class);
 
-        when(root.get("messageCd")).thenReturn(pathc);
+		when(cb.equal(pathb, "basename")).thenReturn(preb);
 
-        Predicate prec = mock(Predicate.class);
+		Path<Object> pathc = mock(Path.class);
 
-        when(cb.equal(pathc, "code")).thenReturn(prec);
+		when(root.get("messageCd")).thenReturn(pathc);
 
-        Predicate and = mock(Predicate.class);
+		Predicate prec = mock(Predicate.class);
 
-        when(cb.and(preb, prec)).thenReturn(and);
-        when(cq.where(and)).thenReturn(cq);
+		when(cb.equal(pathc, "code")).thenReturn(prec);
 
-        repo.findByBasenameAndCode("basename", "code");
-        verify(tq).getSingleResult();
-    }
+		Predicate and = mock(Predicate.class);
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @SuppressWarnings("unchecked")
-    @Test
-    public void testFindByBasenamesAndCode() {
-        Collection<String> basenames = new ArrayList<String>();
+		when(cb.and(preb, prec)).thenReturn(and);
+		when(cq.where(and)).thenReturn(cq);
 
-        basenames.add("a");
-        basenames.add("b");
+		repo.findByBasenameAndCode("basename", "code");
+		verify(tq).getSingleResult();
+	}
 
-        Root<Message> root = mock(Root.class);
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testFindByBasenamesAndCode() {
+		Collection<String> basenames = new ArrayList<String>();
 
-        when(cq.from(Message.class)).thenReturn(root);
+		basenames.add("a");
+		basenames.add("b");
 
-        Path<Object> pathb = mock(Path.class);
+		Root<Message> root = mock(Root.class);
 
-        when(root.get("baseName")).thenReturn(pathb);
+		when(cq.from(Message.class)).thenReturn(root);
 
-        Predicate preb = mock(Predicate.class);
+		Path<Object> pathb = mock(Path.class);
 
-        when(pathb.in(basenames)).thenReturn(preb);
+		when(root.get("baseName")).thenReturn(pathb);
 
-        Path<Object> pathc = mock(Path.class);
+		Predicate preb = mock(Predicate.class);
 
-        when(root.get("messageCd")).thenReturn(pathc);
+		when(pathb.in(basenames)).thenReturn(preb);
 
-        Predicate prec = mock(Predicate.class);
+		Path<Object> pathc = mock(Path.class);
 
-        when(cb.equal(pathc, "code")).thenReturn(prec);
+		when(root.get("messageCd")).thenReturn(pathc);
 
-        Predicate and = mock(Predicate.class);
+		Predicate prec = mock(Predicate.class);
 
-        when(cb.and(preb, prec)).thenReturn(and);
-        when(cq.where(and)).thenReturn(cq);
+		when(cb.equal(pathc, "code")).thenReturn(prec);
 
-        repo.findByBasenamesAndCode(basenames, "code");
-        verify(tq).getResultList();
-    }
+		Predicate and = mock(Predicate.class);
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @SuppressWarnings("unchecked")
-    @Test
-    public void testFindByCode() {
-        Root<Message> root = mock(Root.class);
+		when(cb.and(preb, prec)).thenReturn(and);
+		when(cq.where(and)).thenReturn(cq);
 
-        when(cq.from(Message.class)).thenReturn(root);
+		repo.findByBasenamesAndCode(basenames, "code");
+		verify(tq).getResultList();
+	}
 
-        Path<Object> pathb = mock(Path.class);
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testFindByCode() {
+		Root<Message> root = mock(Root.class);
 
-        when(root.get("messageCd")).thenReturn(pathb);
+		when(cq.from(Message.class)).thenReturn(root);
 
-        Predicate preb = mock(Predicate.class);
+		Path<Object> pathb = mock(Path.class);
 
-        when(cb.equal(pathb, "code")).thenReturn(preb);
-        when(cq.where(preb)).thenReturn(cq);
+		when(root.get("messageCd")).thenReturn(pathb);
 
-        repo.findByCode("code");
-        verify(tq).getResultList();
-    }
+		Predicate preb = mock(Predicate.class);
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    public void testFindById() {
-        repo.findById(11L);
-        verify(em).find(Message.class, 11L);
-    }
+		when(cb.equal(pathb, "code")).thenReturn(preb);
+		when(cq.where(preb)).thenReturn(cq);
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    public void testSaveCollectionOfMessage() {
-        Collection<Message> messages = new ArrayList<Message>();
-        Message mess = new Message();
+		repo.findByCode("code");
+		verify(tq).getResultList();
+	}
 
-        messages.add(mess);
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Test
+	public void testFindById() {
+		repo.findById(11L);
+		verify(em).find(Message.class, 11L);
+	}
 
-        Message old = new Message();
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Test
+	public void testSaveCollectionOfMessage() {
+		Collection<Message> messages = new ArrayList<Message>();
+		Message mess = new Message();
 
-        old.setId(2L);
-        messages.add(old);
-        repo.save(messages);
-        verify(em).persist(mess);
-        verify(em).merge(old);
-    }
+		messages.add(mess);
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    public void testSaveMessage() {
-        Message message = new Message();
+		Message old = new Message();
 
-        repo.save(message);
-        verify(em).persist(message);
-    }
+		old.setId(2L);
+		messages.add(old);
+		repo.save(messages);
+		verify(em).persist(mess);
+		verify(em).merge(old);
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @SuppressWarnings("unchecked")
-    @Test
-    public void testSaveStringStringStringString() {
-        when(beanFactory.getBean(SingletonBeanFactory.INSTANCE_FACTORY_ID))
-            .thenReturn(instanceFactory);
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Test
+	public void testSaveMessage() {
+		Message message = new Message();
 
-        MutableI18nMessage imess = new MutableI18nMessage();
+		repo.save(message);
+		verify(em).persist(message);
+	}
 
-        when(instanceFactory.getBean(MutableI18nMessage.TYPE)).thenReturn(imess);
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testSaveStringStringStringString() {
+		when(beanFactory.getBean(SingletonBeanFactory.INSTANCE_FACTORY_ID))
+				.thenReturn(instanceFactory);
 
-        Root<Message> root = mock(Root.class);
+		MutableI18nMessage imess = new MutableI18nMessage();
 
-        when(cq.from(Message.class)).thenReturn(root);
+		when(instanceFactory.getBean(MutableI18nMessage.TYPE)).thenReturn(imess);
 
-        Path<Object> pathb = mock(Path.class);
+		Root<Message> root = mock(Root.class);
 
-        when(root.get("baseName")).thenReturn(pathb);
+		when(cq.from(Message.class)).thenReturn(root);
 
-        Predicate preb = mock(Predicate.class);
+		Path<Object> pathb = mock(Path.class);
 
-        when(cb.equal(pathb, "basename")).thenReturn(preb);
+		when(root.get("baseName")).thenReturn(pathb);
 
-        Path<Object> pathc = mock(Path.class);
+		Predicate preb = mock(Predicate.class);
 
-        when(root.get("messageCd")).thenReturn(pathc);
+		when(cb.equal(pathb, "basename")).thenReturn(preb);
 
-        Predicate prec = mock(Predicate.class);
+		Path<Object> pathc = mock(Path.class);
 
-        when(cb.equal(pathc, "code")).thenReturn(prec);
+		when(root.get("messageCd")).thenReturn(pathc);
 
-        Predicate and = mock(Predicate.class);
+		Predicate prec = mock(Predicate.class);
 
-        when(cb.and(preb, prec)).thenReturn(and);
-        when(cq.where(and)).thenReturn(cq);
+		when(cb.equal(pathc, "code")).thenReturn(prec);
 
-        Message found = new Message();
+		Predicate and = mock(Predicate.class);
 
-        when(tq.getSingleResult()).thenReturn(found);
-        repo.save("basename", "locale", "code", "msg");
-        assertEquals(imess, found.getInternationalisedMessages().iterator().next());
-        verify(em).persist(found);
-    }
+		when(cb.and(preb, prec)).thenReturn(and);
+		when(cq.where(and)).thenReturn(cq);
+
+		Message found = new Message();
+
+		when(tq.getSingleResult()).thenReturn(found);
+		repo.save("basename", "locale", "code", "msg");
+		assertEquals(imess, found.getInternationalisedMessages().iterator().next());
+		verify(em).persist(found);
+	}
 }

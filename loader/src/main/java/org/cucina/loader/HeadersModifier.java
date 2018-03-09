@@ -1,4 +1,3 @@
-
 package org.cucina.loader;
 
 
@@ -7,15 +6,14 @@ package org.cucina.loader;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public interface HeadersModifier {
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param headers JAVADOC.
-     * @param clazz JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    String[] modifyHeaders(String[] headers, Class<?> clazz);
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param headers JAVADOC.
+	 * @param clazz   JAVADOC.
+	 * @return JAVADOC.
+	 */
+	String[] modifyHeaders(String[] headers, Class<?> clazz);
 }

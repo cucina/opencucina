@@ -1,15 +1,13 @@
 package org.cucina.security.model;
 
-import java.util.Collection;
-import java.util.HashSet;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.cucina.security.validation.UniqueRole;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
-import org.cucina.security.validation.UniqueRole;
+import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * Role contains {@link Privilege}s. Can exist by itself (as a template)
@@ -19,7 +17,9 @@ import org.cucina.security.validation.UniqueRole;
  * @author vlevine
  */
 public class Role extends Entity {
-	/** This is a field JAVADOC */
+	/**
+	 * This is a field JAVADOC
+	 */
 	public static final String ADMINISTRATOR = "ADMINISTRATOR";
 	private Collection<Privilege> privileges = new HashSet<Privilege>();
 	@UniqueRole
@@ -27,16 +27,6 @@ public class Role extends Entity {
 	@NotNull
 	@Pattern(regexp = "[a-zA-Z0-9_\\-]+", message = "error.alphanumeric")
 	private String name;
-
-	/**
-	 * Set name
-	 *
-	 * @param name
-	 *            .
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	/**
 	 * Get name
@@ -48,13 +38,12 @@ public class Role extends Entity {
 	}
 
 	/**
-	 * Set privileges
+	 * Set name
 	 *
-	 * @param privileges
-	 *            Collection<Privilege>.
+	 * @param name .
 	 */
-	public void setPrivileges(Collection<Privilege> privileges) {
-		this.privileges = privileges;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
@@ -64,6 +53,15 @@ public class Role extends Entity {
 	 */
 	public Collection<Privilege> getPrivileges() {
 		return privileges;
+	}
+
+	/**
+	 * Set privileges
+	 *
+	 * @param privileges Collection<Privilege>.
+	 */
+	public void setPrivileges(Collection<Privilege> privileges) {
+		this.privileges = privileges;
 	}
 
 	/**

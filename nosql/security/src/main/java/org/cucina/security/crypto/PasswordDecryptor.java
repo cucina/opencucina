@@ -1,4 +1,3 @@
-
 package org.cucina.security.crypto;
 
 
@@ -7,14 +6,13 @@ package org.cucina.security.crypto;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public interface PasswordDecryptor {
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param password JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    String decrypt(String password);
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param password JAVADOC.
+	 * @return JAVADOC.
+	 */
+	String decrypt(String password);
 }

@@ -1,4 +1,3 @@
-
 package org.cucina.security.service;
 
 
@@ -9,11 +8,11 @@ package org.cucina.security.service;
  * @version $Revision: $
  */
 public interface SystemUserService {
-    /**
-     * Gets either a pre-configured username to be used as a system user or one
-     * of the list returned from persistence.
-     *
-     * @return username.
-     */
-    public String getUsername();
+	/**
+	 * Gets either a pre-configured username to be used as a system user or one
+	 * of the list returned from persistence.
+	 *
+	 * @return username.
+	 */
+	public String getUsername();
 }

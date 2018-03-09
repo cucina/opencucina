@@ -7,12 +7,12 @@ import java.util.Locale;
  * JAVADOC Interface Level
  *
  * @author $Author: $
-  */
+ */
 public interface LocaleService {
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    Locale currentUserLocale();
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @return JAVADOC.
+	 */
+	Locale currentUserLocale();
 }

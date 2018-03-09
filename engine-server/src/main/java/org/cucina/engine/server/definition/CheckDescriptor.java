@@ -11,7 +11,7 @@ import org.cucina.engine.definition.Check;
  * @version $Revision: $
  */
 public class CheckDescriptor
-    extends AbstractElementDescriptor implements Check {
+		extends AbstractElementDescriptor implements Check {
 
 	@Override
 	public boolean test(ExecutionContext executionContext) {

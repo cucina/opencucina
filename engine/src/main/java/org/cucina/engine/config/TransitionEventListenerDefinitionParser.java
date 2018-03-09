@@ -13,32 +13,28 @@ import org.w3c.dom.Element;
  * @version $Revision: $
  */
 public class TransitionEventListenerDefinitionParser
-    extends AbstractSingleBeanDefinitionParser {
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param element
-     *            JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    protected Class<?> getBeanClass(Element element) {
-        return TransitionEventListener.class;
-    }
+		extends AbstractSingleBeanDefinitionParser {
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param element JAVADOC.
+	 * @return JAVADOC.
+	 */
+	@Override
+	protected Class<?> getBeanClass(Element element) {
+		return TransitionEventListener.class;
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param element
-     *            JAVADOC.
-     * @param builder
-     *            JAVADOC.
-     */
-    @Override
-    protected void doParse(Element element, BeanDefinitionBuilder builder) {
-        builder.addConstructorArgReference(element.getAttribute("workflowEnvironment"))
-               .addConstructorArgReference(element.getAttribute("tokenRepository"))
-               .addConstructorArgReference(element.getAttribute("domainRepository"));
-    }
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param element JAVADOC.
+	 * @param builder JAVADOC.
+	 */
+	@Override
+	protected void doParse(Element element, BeanDefinitionBuilder builder) {
+		builder.addConstructorArgReference(element.getAttribute("workflowEnvironment"))
+				.addConstructorArgReference(element.getAttribute("tokenRepository"))
+				.addConstructorArgReference(element.getAttribute("domainRepository"));
+	}
 }

@@ -1,89 +1,90 @@
 <?xml version="1.0"?>
-<!DOCTYPE digester-rules PUBLIC "-//Apache Commons //DTD digester-rules XML V1.0//EN" "http://commons.apache.org/digester/dtds/digester-rules-3.0.dtd">
+<!DOCTYPE digester-rules PUBLIC "-//Apache Commons //DTD digester-rules XML V1.0//EN"
+        "http://commons.apache.org/digester/dtds/digester-rules-3.0.dtd">
 <digester-rules>
-	<pattern value="process-definition">
-		<call-method-rule methodname="createWorkflowDefinition" paramcount="1"/>
-		<call-param-rule paramnumber="0" attrname="name"/>
-	</pattern>
-	<pattern value="*/end-state">
-		<object-create-rule
-			classname="org.cucina.engine.definition.EndStation"/>
-		<set-properties-rule/>
-		<set-next-rule methodname="setEndState"/>
-	</pattern>
-	<pattern value="*/state">
-		<object-create-rule
-			classname="org.cucina.engine.definition.Station"/>
-		<set-properties-rule/>
-		<set-next-rule methodname="addState"/>
-	</pattern>
-	<pattern value="*/split">
-		<object-create-rule
-			classname="org.cucina.engine.definition.Split"/>
-		<set-properties-rule/>
-		<set-next-rule methodname="addState"/>
-	</pattern>
-	<pattern value="*/join">
-		<object-create-rule
-			classname="org.cucina.engine.definition.Join"/>
-		<set-properties-rule/>
-		<set-next-rule methodname="addState"/>
-	</pattern>
-	<pattern value="*/start-state">
-		<object-create-rule
-			classname="org.cucina.engine.definition.StartStation"/>
-		<set-properties-rule/>
-		<set-next-rule methodname="setStartState"/>
-	</pattern>
-	<pattern value="*/decision">
-		<object-create-rule
-			classname="org.cucina.engine.definition.Decision"/>
-		<set-properties-rule/>
-		<set-next-rule methodname="addState"/>
-	</pattern>
-	<pattern value="*/transition">
-		<object-create-rule
-			classname="org.cucina.engine.definition.config.xml.WrapperTransition"/>
-		<set-properties-rule/>
-		<set-next-rule methodname="addTransition"/>
-	</pattern>
-	<pattern value="*/condition">
-		<factory-create-rule
-			classname="org.cucina.engine.definition.config.xml.ResolverObjectCreationFactory"/>
-		<set-next-rule methodname="addCondition"/>
-	</pattern>
-	<pattern value="*/enter-action">
-		<factory-create-rule
-			classname="org.cucina.engine.definition.config.xml.ResolverObjectCreationFactory"/>
-		<set-next-rule methodname="addEnterAction"/>
-	</pattern>
-	<pattern value="*/exit-action">
-		<factory-create-rule
-			classname="org.cucina.engine.definition.config.xml.ResolverObjectCreationFactory"/>
-		<set-next-rule methodname="addLeaveAction"/>
-	</pattern>
-	<pattern value="*/description">
-		<bean-property-setter-rule propertyname="description"/>
-	</pattern>
-	<pattern value="*/property">
-		<factory-create-rule
-			classname="org.cucina.engine.definition.config.xml.PropertyCreationFactory"/>
-	</pattern>
-	<pattern value="*/property-map">
-		<factory-create-rule
-			classname="org.cucina.engine.definition.config.xml.CreateMapFactory"/>
-	</pattern>
-	<pattern value="*/property-map/entry">
-		<call-method-rule methodname="put" paramcount="2"/>
-		<call-param-rule paramnumber="0" attrname="key"/>
-		<call-param-rule paramnumber="1" attrname="value"/>
-	</pattern>
-	<pattern value="*/property-list">
-		<factory-create-rule
-			classname="org.cucina.engine.definition.config.xml.CreateListFactory"/>
-	</pattern>
-	<pattern value="*/property-list/entry">
-		<call-method-rule methodname="add" paramcount="1"/>
-		<call-param-rule paramnumber="0" attrname="value"/>
-	</pattern>
+    <pattern value="process-definition">
+        <call-method-rule methodname="createWorkflowDefinition" paramcount="1"/>
+        <call-param-rule paramnumber="0" attrname="name"/>
+    </pattern>
+    <pattern value="*/end-state">
+        <object-create-rule
+                classname="org.cucina.engine.definition.EndStation"/>
+        <set-properties-rule/>
+        <set-next-rule methodname="setEndState"/>
+    </pattern>
+    <pattern value="*/state">
+        <object-create-rule
+                classname="org.cucina.engine.definition.Station"/>
+        <set-properties-rule/>
+        <set-next-rule methodname="addState"/>
+    </pattern>
+    <pattern value="*/split">
+        <object-create-rule
+                classname="org.cucina.engine.definition.Split"/>
+        <set-properties-rule/>
+        <set-next-rule methodname="addState"/>
+    </pattern>
+    <pattern value="*/join">
+        <object-create-rule
+                classname="org.cucina.engine.definition.Join"/>
+        <set-properties-rule/>
+        <set-next-rule methodname="addState"/>
+    </pattern>
+    <pattern value="*/start-state">
+        <object-create-rule
+                classname="org.cucina.engine.definition.StartStation"/>
+        <set-properties-rule/>
+        <set-next-rule methodname="setStartState"/>
+    </pattern>
+    <pattern value="*/decision">
+        <object-create-rule
+                classname="org.cucina.engine.definition.Decision"/>
+        <set-properties-rule/>
+        <set-next-rule methodname="addState"/>
+    </pattern>
+    <pattern value="*/transition">
+        <object-create-rule
+                classname="org.cucina.engine.definition.config.xml.WrapperTransition"/>
+        <set-properties-rule/>
+        <set-next-rule methodname="addTransition"/>
+    </pattern>
+    <pattern value="*/condition">
+        <factory-create-rule
+                classname="org.cucina.engine.definition.config.xml.ResolverObjectCreationFactory"/>
+        <set-next-rule methodname="addCondition"/>
+    </pattern>
+    <pattern value="*/enter-action">
+        <factory-create-rule
+                classname="org.cucina.engine.definition.config.xml.ResolverObjectCreationFactory"/>
+        <set-next-rule methodname="addEnterAction"/>
+    </pattern>
+    <pattern value="*/exit-action">
+        <factory-create-rule
+                classname="org.cucina.engine.definition.config.xml.ResolverObjectCreationFactory"/>
+        <set-next-rule methodname="addLeaveAction"/>
+    </pattern>
+    <pattern value="*/description">
+        <bean-property-setter-rule propertyname="description"/>
+    </pattern>
+    <pattern value="*/property">
+        <factory-create-rule
+                classname="org.cucina.engine.definition.config.xml.PropertyCreationFactory"/>
+    </pattern>
+    <pattern value="*/property-map">
+        <factory-create-rule
+                classname="org.cucina.engine.definition.config.xml.CreateMapFactory"/>
+    </pattern>
+    <pattern value="*/property-map/entry">
+        <call-method-rule methodname="put" paramcount="2"/>
+        <call-param-rule paramnumber="0" attrname="key"/>
+        <call-param-rule paramnumber="1" attrname="value"/>
+    </pattern>
+    <pattern value="*/property-list">
+        <factory-create-rule
+                classname="org.cucina.engine.definition.config.xml.CreateListFactory"/>
+    </pattern>
+    <pattern value="*/property-list/entry">
+        <call-method-rule methodname="add" paramcount="1"/>
+        <call-param-rule paramnumber="0" attrname="value"/>
+    </pattern>
 </digester-rules>

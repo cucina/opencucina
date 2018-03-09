@@ -11,6 +11,6 @@ import org.cucina.engine.definition.Check;
  * @version $Revision$
  */
 public abstract class AbstractCheck
-    extends AbstractProcessElement
-    implements Check {
+		extends AbstractProcessElement
+		implements Check {
 }

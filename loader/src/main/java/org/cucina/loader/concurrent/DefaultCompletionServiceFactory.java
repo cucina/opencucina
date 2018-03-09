@@ -1,4 +1,3 @@
-
 package org.cucina.loader.concurrent;
 
 import java.util.concurrent.CompletionService;
@@ -11,20 +10,19 @@ import java.util.concurrent.ExecutorCompletionService;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public class DefaultCompletionServiceFactory
-    implements CompletionServiceFactory {
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param <T> JAVADOC.
-     * @param executor JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    public <T> CompletionService<T> create(Executor executor) {
-        // TODO pooling, caching, queueing for the same executorService
-        return new ExecutorCompletionService<T>(executor);
-    }
+		implements CompletionServiceFactory {
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param <T>      JAVADOC.
+	 * @param executor JAVADOC.
+	 * @return JAVADOC.
+	 */
+	@Override
+	public <T> CompletionService<T> create(Executor executor) {
+		// TODO pooling, caching, queueing for the same executorService
+		return new ExecutorCompletionService<T>(executor);
+	}
 }

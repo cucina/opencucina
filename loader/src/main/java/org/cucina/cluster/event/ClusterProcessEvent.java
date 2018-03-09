@@ -1,6 +1,4 @@
-
 package org.cucina.cluster.event;
-
 
 
 /**
@@ -10,26 +8,26 @@ package org.cucina.cluster.event;
  * @version $Revision: $
  */
 public class ClusterProcessEvent
-    extends ClusterPropertiesEvent {
-    private static final long serialVersionUID = -8989354027230694379L;
-   
-    /**
-    * Creates a new ClusterProcessEvent object.
-    *
-    * @param source JAVADOC.
-    */
-    public ClusterProcessEvent(String source) {
-        super(source);
-    }
+		extends ClusterPropertiesEvent {
+	private static final long serialVersionUID = -8989354027230694379L;
 
-    /**
-     * Creates a new ClusterProcessEvent object.
-     *
-     * @param source JAVADOC.
-     * @param nodeId JAVADOC.
-     */
-    public ClusterProcessEvent(String source, String nodeId) {
-        super(source, nodeId);
-    }
+	/**
+	 * Creates a new ClusterProcessEvent object.
+	 *
+	 * @param source JAVADOC.
+	 */
+	public ClusterProcessEvent(String source) {
+		super(source);
+	}
+
+	/**
+	 * Creates a new ClusterProcessEvent object.
+	 *
+	 * @param source JAVADOC.
+	 * @param nodeId JAVADOC.
+	 */
+	public ClusterProcessEvent(String source, String nodeId) {
+		super(source, nodeId);
+	}
 
 }

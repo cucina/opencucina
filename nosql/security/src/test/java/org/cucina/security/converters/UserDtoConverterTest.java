@@ -1,53 +1,48 @@
 package org.cucina.security.converters;
 
-import java.math.BigInteger;
-
 import org.cucina.security.api.UserDto;
 import org.cucina.security.model.User;
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import org.mockito.MockitoAnnotations;
+
+import java.math.BigInteger;
+
+import static org.junit.Assert.assertEquals;
 
 
 /**
- *
- *
  * @author vlevine
-  */
+ */
 public class UserDtoConverterTest {
-    private UserDtoConverter converter;
+	private UserDtoConverter converter;
 
-    /**
-     *
-     *
-     * @throws Exception .
-     */
-    @Before
-    public void setUp()
-        throws Exception {
-        MockitoAnnotations.initMocks(this);
-        converter = new UserDtoConverter();
-    }
+	/**
+	 * @throws Exception .
+	 */
+	@Before
+	public void setUp()
+			throws Exception {
+		MockitoAnnotations.initMocks(this);
+		converter = new UserDtoConverter();
+	}
 
-    /**
-     *
-     */
-    @Test
-    public void testConvert() {
-        User u = new User();
+	/**
+	 *
+	 */
+	@Test
+	public void testConvert() {
+		User u = new User();
 
-        u.setUsername("name");
-        u.setPassword("P");
-        u.setEmail("@");
-        u.setId(BigInteger.valueOf(111L));
+		u.setUsername("name");
+		u.setPassword("P");
+		u.setEmail("@");
+		u.setId(BigInteger.valueOf(111L));
 
-        UserDto bean = converter.convert(u);
+		UserDto bean = converter.convert(u);
 
-        assertEquals("name", bean.getUsername());
-        assertEquals(111L, bean.getId().longValue());
-        assertEquals("@", bean.getEmail());
-    }
+		assertEquals("name", bean.getUsername());
+		assertEquals(111L, bean.getId().longValue());
+		assertEquals("@", bean.getEmail());
+	}
 }

@@ -1,26 +1,6 @@
 package org.cucina.engine.server;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.lang3.ClassUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ConversionServiceFactoryBean;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.ResourcePatternResolver;
-
 import org.cucina.core.CompositeInstanceFactory;
 import org.cucina.core.InstanceFactory;
 import org.cucina.core.PackageBasedInstanceFactory;
@@ -41,6 +21,21 @@ import org.cucina.i18n.api.ListItemService;
 import org.cucina.i18n.api.remote.RemoteListNodeService;
 import org.cucina.security.api.AccessFacade;
 import org.cucina.security.api.remote.RemoteAccessFacade;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ConversionServiceFactoryBean;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.ResourcePatternResolver;
+
+import java.io.IOException;
+import java.util.*;
 
 /**
  * JAVADOC for Class Level
@@ -48,7 +43,7 @@ import org.cucina.security.api.remote.RemoteAccessFacade;
  * @author vlevine
  */
 @Configuration
-@ComponentScan(basePackages = { "org.cucina.engine", "org.cucina.engine.server" })
+@ComponentScan(basePackages = {"org.cucina.engine", "org.cucina.engine.server"})
 public class ProcessConfiguration {
 	private static final String SERVER_PROCESS_RULES = "classpath:org/cucina/engine/server/definition/config/xml/workflow-rules-definitions.xml";
 
@@ -62,7 +57,7 @@ public class ProcessConfiguration {
 
 	@Value("${org.cucina.workflows.resources}")
 	private String processLocation; // = { "classpath:workflows/Item.xml",
-									// "classpath:workflows/Report.xml" };
+	// "classpath:workflows/Report.xml" };
 
 	@Bean
 	public AccessFacade accessFacade() {
@@ -94,7 +89,7 @@ public class ProcessConfiguration {
 
 	@Bean
 	public ProcessEnvironment processEnvironment(TokenFactory tokenFactory,
-			ApplicationContext applicationContext, ProcessDefinitionRegistry definitionRegistry)
+												 ApplicationContext applicationContext, ProcessDefinitionRegistry definitionRegistry)
 			throws IOException {
 		DefaultProcessEnvironment dpe = new DefaultProcessEnvironment();
 

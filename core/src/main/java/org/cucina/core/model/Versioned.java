@@ -1,4 +1,3 @@
-
 package org.cucina.core.model;
 
 import javax.persistence.Version;
@@ -13,21 +12,20 @@ import javax.persistence.Version;
  * @version $Revision: $
  */
 public interface Versioned {
-    String PROPERTY_VERSION = "version";
+	String PROPERTY_VERSION = "version";
 
-    /**
-     * Set version
-     *
-     * @param version
-     *            int.
-     */
-    void setVersion(int version);
+	/**
+	 * Get version
+	 *
+	 * @return version.
+	 */
+	@Version
+	int getVersion();
 
-    /**
-     * Get version
-     *
-     * @return version.
-     */
-    @Version
-    int getVersion();
+	/**
+	 * Set version
+	 *
+	 * @param version int.
+	 */
+	void setVersion(int version);
 }

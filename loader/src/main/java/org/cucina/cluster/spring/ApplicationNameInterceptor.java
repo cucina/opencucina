@@ -12,38 +12,37 @@ import org.springframework.util.Assert;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public class ApplicationNameInterceptor
-    extends ChannelInterceptorAdapter {
-    private String applicationName;
+		extends ChannelInterceptorAdapter {
+	private String applicationName;
 
-    /**
-     * Creates a new ApplicationNameClusterEventPopulator object.
-     */
-    public ApplicationNameInterceptor(String applicationName) {
-        Assert.notNull(applicationName, "applicationName (application.name) is null");
-        Assert.hasLength(applicationName, "applicationName (application.name) is empty");
-        this.applicationName = applicationName;
-    }
+	/**
+	 * Creates a new ApplicationNameClusterEventPopulator object.
+	 */
+	public ApplicationNameInterceptor(String applicationName) {
+		Assert.notNull(applicationName, "applicationName (application.name) is null");
+		Assert.hasLength(applicationName, "applicationName (application.name) is empty");
+		this.applicationName = applicationName;
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param message JAVADOC.
-     * @param channel JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    public Message<?> preSend(Message<?> message, MessageChannel channel) {
-        Object payloadObject = message.getPayload();
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param message JAVADOC.
+	 * @param channel JAVADOC.
+	 * @return JAVADOC.
+	 */
+	@Override
+	public Message<?> preSend(Message<?> message, MessageChannel channel) {
+		Object payloadObject = message.getPayload();
 
-        if (payloadObject instanceof ClusterControlEvent) {
-            ClusterControlEvent event = (ClusterControlEvent) payloadObject;
+		if (payloadObject instanceof ClusterControlEvent) {
+			ClusterControlEvent event = (ClusterControlEvent) payloadObject;
 
-            event.setApplicationName(applicationName);
-        }
+			event.setApplicationName(applicationName);
+		}
 
-        return super.preSend(message, channel);
-    }
+		return super.preSend(message, channel);
+	}
 }

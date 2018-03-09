@@ -1,4 +1,3 @@
-
 package org.cucina.cluster.event;
 
 
@@ -7,27 +6,27 @@ package org.cucina.cluster.event;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public class ClusterRefreshEvent
-    extends ClusterControlEvent {
-    private static final long serialVersionUID = 5621880051490308439L;
+		extends ClusterControlEvent {
+	private static final long serialVersionUID = 5621880051490308439L;
 
-    /**
-     * Creates a new ClusterRefreshEvent object.
-     *
-     * @param source JAVADOC.
-     * @param nodeId JAVADOC.
-     */
-    public ClusterRefreshEvent(String source, String nodeId) {
-        super(source, nodeId);
-    }
+	/**
+	 * Creates a new ClusterRefreshEvent object.
+	 *
+	 * @param source JAVADOC.
+	 * @param nodeId JAVADOC.
+	 */
+	public ClusterRefreshEvent(String source, String nodeId) {
+		super(source, nodeId);
+	}
 
-    /**
-     * Creates a new ClusterRefreshEvent object.
-     *
-     * @param source JAVADOC.
-     */
-    public ClusterRefreshEvent(String source) {
-        super(source);
-    }
+	/**
+	 * Creates a new ClusterRefreshEvent object.
+	 *
+	 * @param source JAVADOC.
+	 */
+	public ClusterRefreshEvent(String source) {
+		super(source);
+	}
 }

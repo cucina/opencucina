@@ -1,4 +1,3 @@
-
 package org.cucina.loader.processor;
 
 /**
@@ -6,15 +5,14 @@ package org.cucina.loader.processor;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public interface Processor {
-   
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param object JAVADOC.
-     *
-     * @return collection of ids of newly created objects if any or null.
-     */
-    void process(Object object);
+
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param object JAVADOC.
+	 * @return collection of ids of newly created objects if any or null.
+	 */
+	void process(Object object);
 }

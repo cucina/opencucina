@@ -16,64 +16,52 @@ import org.springframework.messaging.support.ChannelInterceptorAdapter;
 
 
 /**
- *
- *
  * @author vlevine
  */
 public class SpelChannelInterceptor
-    extends ChannelInterceptorAdapter
-    implements InitializingBean, BeanFactoryAware {
-    private static final ExpressionParser expressionParser = new SpelExpressionParser(new SpelParserConfiguration(
-                true, true));
-    private BeanFactory beanFactory;
-    private Expression expression;
-    private StandardEvaluationContext evaluationContext;
+		extends ChannelInterceptorAdapter
+		implements InitializingBean, BeanFactoryAware {
+	private static final ExpressionParser expressionParser = new SpelExpressionParser(new SpelParserConfiguration(
+			true, true));
+	private BeanFactory beanFactory;
+	private Expression expression;
+	private StandardEvaluationContext evaluationContext;
 
-    /**
-     *
-     *
-     * @param beanFactory .
-     *
-     * @throws BeansException .
-     */
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory)
-        throws BeansException {
-        this.beanFactory = beanFactory;
-    }
+	/**
+	 * @param beanFactory .
+	 * @throws BeansException .
+	 */
+	@Override
+	public void setBeanFactory(BeanFactory beanFactory)
+			throws BeansException {
+		this.beanFactory = beanFactory;
+	}
 
-    /**
-     *
-     *
-     * @param expression .
-     */
-    public void setExpression(String expression) {
-        this.expression = expressionParser.parseExpression(expression);
-    }
+	/**
+	 * @param expression .
+	 */
+	public void setExpression(String expression) {
+		this.expression = expressionParser.parseExpression(expression);
+	}
 
-    /**
-     *
-     *
-     * @throws Exception .
-     */
-    @Override
-    public void afterPropertiesSet()
-        throws Exception {
-        evaluationContext = ExpressionUtils.createStandardEvaluationContext(this.beanFactory);
-    }
+	/**
+	 * @throws Exception .
+	 */
+	@Override
+	public void afterPropertiesSet()
+			throws Exception {
+		evaluationContext = ExpressionUtils.createStandardEvaluationContext(this.beanFactory);
+	}
 
-    /**
-     *
-     *
-     * @param message .
-     * @param channel .
-     *
-     * @return .
-     */
-    @Override
-    public Message<?> preSend(Message<?> message, MessageChannel channel) {
-        expression.getValue(evaluationContext, message, null);
+	/**
+	 * @param message .
+	 * @param channel .
+	 * @return .
+	 */
+	@Override
+	public Message<?> preSend(Message<?> message, MessageChannel channel) {
+		expression.getValue(evaluationContext, message, null);
 
-        return super.preSend(message, channel);
-    }
+		return super.preSend(message, channel);
+	}
 }

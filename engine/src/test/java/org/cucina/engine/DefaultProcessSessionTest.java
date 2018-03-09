@@ -5,109 +5,105 @@ import org.cucina.engine.definition.ProcessDefinition;
 import org.cucina.engine.definition.Token;
 import org.cucina.engine.testadapters.MockProcessDefinitionBuilder;
 import org.cucina.engine.testassist.Foo;
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.Matchers.any;
-
 import org.mockito.Mock;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import org.mockito.MockitoAnnotations;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 
 
 /**
  * @author vlevine
  */
 public class DefaultProcessSessionTest {
-    @Mock
-    private ProcessDriver executor;
-    @Mock
-    private ProcessDriverFactory executorFactory;
-    @Mock
-    private Token tokenX;
-    @Mock
-    private TokenFactory tokenFactory;
+	@Mock
+	private ProcessDriver executor;
+	@Mock
+	private ProcessDriverFactory executorFactory;
+	@Mock
+	private Token tokenX;
+	@Mock
+	private TokenFactory tokenFactory;
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-        when(executorFactory.getTokenFactory()).thenReturn(tokenFactory);
-        when(executorFactory.getExecutor()).thenReturn(executor);
-        when(tokenFactory.createToken((ProcessDefinition) any(), any())).thenReturn(tokenX);
-    }
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Before
+	public void setUp() {
+		MockitoAnnotations.initMocks(this);
+		when(executorFactory.getTokenFactory()).thenReturn(tokenFactory);
+		when(executorFactory.getExecutor()).thenReturn(executor);
+		when(tokenFactory.createToken((ProcessDefinition) any(), any())).thenReturn(tokenX);
+	}
 
-    /**
-     * JAVADOC
-     */
-    @Test
-    public void testChooseASoftDrinkWorkflow() {
-        ProcessDefinition definition = MockProcessDefinitionBuilder.buildChooseADrinkDefinition();
-        DefaultProcessSession session = new DefaultProcessSession(definition, executorFactory, null);
+	/**
+	 * JAVADOC
+	 */
+	@Test
+	public void testChooseASoftDrinkWorkflow() {
+		ProcessDefinition definition = MockProcessDefinitionBuilder.buildChooseADrinkDefinition();
+		DefaultProcessSession session = new DefaultProcessSession(definition, executorFactory, null);
 
-        Foo domainObject = new Foo();
+		Foo domainObject = new Foo();
 
-        domainObject.setValue(90);
-        when(tokenX.getPlaceId()).thenReturn("start").thenReturn("start").thenReturn("decision")
-            .thenReturn("decision").thenReturn("decision").thenReturn("coke");
-        doReturn(domainObject).when(tokenX).getDomainObject();
+		domainObject.setValue(90);
+		when(tokenX.getPlaceId()).thenReturn("start").thenReturn("start").thenReturn("decision")
+				.thenReturn("decision").thenReturn("decision").thenReturn("coke");
+		doReturn(domainObject).when(tokenX).getDomainObject();
 
-        when(executor.test(any(Check.class), any(ExecutionContext.class))).thenReturn(true);
+		when(executor.test(any(Check.class), any(ExecutionContext.class))).thenReturn(true);
 
-        Token token = session.startProcessInstance(domainObject, null, null);
+		Token token = session.startProcessInstance(domainObject, null, null);
 
-        assertEquals("Incorrect state", "coke", token.getPlaceId());
+		assertEquals("Incorrect state", "coke", token.getPlaceId());
 
-        String transitionId = session.getAvailableTransitions(session.createExecutionContext(
-                    token, null)).iterator().next().getId();
+		String transitionId = session.getAvailableTransitions(session.createExecutionContext(
+				token, null)).iterator().next().getId();
 
-        assertEquals("toEndFromCoke", transitionId);
+		assertEquals("toEndFromCoke", transitionId);
 
-        session.signal(session.createExecutionContext(token, null), transitionId);
-        //TODO complete the flow
-    }
+		session.signal(session.createExecutionContext(token, null), transitionId);
+		//TODO complete the flow
+	}
 
-    /**
-     * JAVADOC
-     */
-    @Test
-    public void testChooseAToddlerDrinkWorkflow() {
-        ProcessDefinition definition = MockProcessDefinitionBuilder.buildChooseADrinkDefinition();
-        ProcessSession session = new DefaultProcessSession(definition, executorFactory, null);
+	/**
+	 * JAVADOC
+	 */
+	@Test
+	public void testChooseAToddlerDrinkWorkflow() {
+		ProcessDefinition definition = MockProcessDefinitionBuilder.buildChooseADrinkDefinition();
+		ProcessSession session = new DefaultProcessSession(definition, executorFactory, null);
 
-        Foo domainObject = new Foo();
+		Foo domainObject = new Foo();
 
-        when(tokenX.getPlaceId()).thenReturn("start").thenReturn("start").thenReturn("decision")
-            .thenReturn("decision").thenReturn("decision").thenReturn("coke");
-        doReturn(domainObject).when(tokenX).getDomainObject();
+		when(tokenX.getPlaceId()).thenReturn("start").thenReturn("start").thenReturn("decision")
+				.thenReturn("decision").thenReturn("decision").thenReturn("coke");
+		doReturn(domainObject).when(tokenX).getDomainObject();
 
-        when(executor.test(any(Check.class), any(ExecutionContext.class))).thenReturn(true);
+		when(executor.test(any(Check.class), any(ExecutionContext.class))).thenReturn(true);
 
-        Token token = session.startProcessInstance(domainObject, null, null);
+		Token token = session.startProcessInstance(domainObject, null, null);
 
-        // check drink
-        assertEquals("Incorrect state", "coke", token.getPlaceId());
-    }
+		// check drink
+		assertEquals("Incorrect state", "coke", token.getPlaceId());
+	}
 
-    /**
-     * JAVADOC
-     */
-    @Test
-    public void testHelloWorldWorkflow() {
-        ProcessDefinition definition = MockProcessDefinitionBuilder.buildHelloWorldDefinition();
-        ProcessSession session = new DefaultProcessSession(definition, executorFactory, null);
+	/**
+	 * JAVADOC
+	 */
+	@Test
+	public void testHelloWorldWorkflow() {
+		ProcessDefinition definition = MockProcessDefinitionBuilder.buildHelloWorldDefinition();
+		ProcessSession session = new DefaultProcessSession(definition, executorFactory, null);
 
-        when(tokenX.getPlaceId()).thenReturn("start");
+		when(tokenX.getPlaceId()).thenReturn("start");
 
-        session.startProcessInstance(new Foo(), null, null);
+		session.startProcessInstance(new Foo(), null, null);
 
-        verify(tokenX).setPlaceId("start");
-        verify(tokenX).setPlaceId("helloWorld");
-    }
+		verify(tokenX).setPlaceId("start");
+		verify(tokenX).setPlaceId("helloWorld");
+	}
 }

@@ -1,39 +1,25 @@
 package org.cucina.engine.repository.jpa;
 
-import java.io.Serializable;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.cucina.core.InstanceFactory;
+import org.cucina.engine.model.ProcessToken;
+import org.cucina.engine.testassist.Foo;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.cucina.core.InstanceFactory;
-
-import org.cucina.engine.model.ProcessToken;
-import org.cucina.engine.testassist.Foo;
 import static org.junit.Assert.assertEquals;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import org.mockito.Mock;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import org.mockito.MockitoAnnotations;
-
-import org.mockito.invocation.InvocationOnMock;
-
-import org.mockito.stubbing.Answer;
+import static org.mockito.Mockito.*;
 
 
 /**
@@ -43,263 +29,262 @@ import org.mockito.stubbing.Answer;
  * @version $Revision: $
  */
 public class TokenRepositoryImplTest {
-    @Mock
-    private CriteriaBuilder cb;
-    @Mock
-    private EntityManager em;
-    @Mock
-    private InstanceFactory instF;
-    private TokenRepositoryImpl trepo;
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @throws Exception
-     *             JAVADOC.
-     */
-    @Before
-    public void setUp()
-        throws Exception {
-        MockitoAnnotations.initMocks(this);
-        trepo = new TokenRepositoryImpl(instF);
-        trepo.setEntityManager(em);
-        when(em.getCriteriaBuilder()).thenReturn(cb);
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    public void testCreate() {
-        ProcessToken wf = new ProcessToken();
-        Foo foo = new Foo();
-
-        wf.setDomainObject(foo);
-        doAnswer(new Answer<Object>() {
-                public Void answer(InvocationOnMock invocation)
-                    throws Throwable {
-                    Foo ft = (Foo) invocation.getArguments()[0];
+	@Mock
+	private CriteriaBuilder cb;
+	@Mock
+	private EntityManager em;
+	@Mock
+	private InstanceFactory instF;
+	private TokenRepositoryImpl trepo;
 
-                    ft.setId(111L);
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @throws Exception JAVADOC.
+	 */
+	@Before
+	public void setUp()
+			throws Exception {
+		MockitoAnnotations.initMocks(this);
+		trepo = new TokenRepositoryImpl(instF);
+		trepo.setEntityManager(em);
+		when(em.getCriteriaBuilder()).thenReturn(cb);
+	}
+
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Test
+	public void testCreate() {
+		ProcessToken wf = new ProcessToken();
+		Foo foo = new Foo();
+
+		wf.setDomainObject(foo);
+		doAnswer(new Answer<Object>() {
+			public Void answer(InvocationOnMock invocation)
+					throws Throwable {
+				Foo ft = (Foo) invocation.getArguments()[0];
 
-                    return null;
-                }
-            }).when(em).persist(foo);
-        trepo.save(wf);
-        verify(em).persist(wf);
-        assertEquals("Foo", wf.getDomainObjectType());
-        assertEquals(111L, wf.getDomainObjectId());
-    }
+				ft.setId(111L);
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    public void testCreateExist() {
-        ProcessToken wf = new ProcessToken();
-        Foo foo = new Foo(111L);
+				return null;
+			}
+		}).when(em).persist(foo);
+		trepo.save(wf);
+		verify(em).persist(wf);
+		assertEquals("Foo", wf.getDomainObjectType());
+		assertEquals(111L, wf.getDomainObjectId());
+	}
 
-        wf.setDomainObject(foo);
-        trepo.save(wf);
-        verify(em).merge(foo);
-        verify(em).persist(wf);
-        assertEquals("Foo", wf.getDomainObjectType());
-        assertEquals(111L, wf.getDomainObjectId());
-    }
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Test
+	public void testCreateExist() {
+		ProcessToken wf = new ProcessToken();
+		Foo foo = new Foo(111L);
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @SuppressWarnings("unchecked")
-    @Test
-    public void testLoadDomainIds() {
-        CriteriaQuery<Long> cq = mock(CriteriaQuery.class);
+		wf.setDomainObject(foo);
+		trepo.save(wf);
+		verify(em).merge(foo);
+		verify(em).persist(wf);
+		assertEquals("Foo", wf.getDomainObjectType());
+		assertEquals(111L, wf.getDomainObjectId());
+	}
 
-        when(cb.createQuery(Long.class)).thenReturn(cq);
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testLoadDomainIds() {
+		CriteriaQuery<Long> cq = mock(CriteriaQuery.class);
 
-        Root<ProcessToken> token = mock(Root.class);
+		when(cb.createQuery(Long.class)).thenReturn(cq);
 
-        when(cq.from(ProcessToken.class)).thenReturn(token);
+		Root<ProcessToken> token = mock(Root.class);
 
-        Path<Object> pathdi = mock(Path.class);
+		when(cq.from(ProcessToken.class)).thenReturn(token);
 
-        when(token.get("workflowDefinitionId")).thenReturn(pathdi);
+		Path<Object> pathdi = mock(Path.class);
 
-        Path<Object> pathpi = mock(Path.class);
+		when(token.get("workflowDefinitionId")).thenReturn(pathdi);
 
-        when(token.get("placeId")).thenReturn(pathpi);
+		Path<Object> pathpi = mock(Path.class);
 
-        Path<Object> pathdo = mock(Path.class);
+		when(token.get("placeId")).thenReturn(pathpi);
 
-        when(token.get("domainObjectType")).thenReturn(pathdo);
+		Path<Object> pathdo = mock(Path.class);
 
-        Predicate predi = mock(Predicate.class);
+		when(token.get("domainObjectType")).thenReturn(pathdo);
 
-        when(cb.equal(pathdi, "workflowId")).thenReturn(predi);
+		Predicate predi = mock(Predicate.class);
 
-        Predicate prepi = mock(Predicate.class);
+		when(cb.equal(pathdi, "workflowId")).thenReturn(predi);
 
-        when(cb.equal(pathpi, "placeId")).thenReturn(prepi);
+		Predicate prepi = mock(Predicate.class);
 
-        Predicate predo = mock(Predicate.class);
+		when(cb.equal(pathpi, "placeId")).thenReturn(prepi);
 
-        when(cb.equal(pathdo, "applicationType")).thenReturn(predo);
+		Predicate predo = mock(Predicate.class);
 
-        Predicate preand = mock(Predicate.class);
+		when(cb.equal(pathdo, "applicationType")).thenReturn(predo);
 
-        when(cb.and(predi, prepi, predo)).thenReturn(preand);
+		Predicate preand = mock(Predicate.class);
 
-        TypedQuery<Long> tq = mock(TypedQuery.class);
+		when(cb.and(predi, prepi, predo)).thenReturn(preand);
 
-        when(cq.where(preand)).thenReturn(cq);
-        when(em.createQuery(cq)).thenReturn(tq);
-        trepo.findDomainIdsByWorkflowIdPlaceIdApplicationType("workflowId", "placeId",
-            "applicationType");
+		TypedQuery<Long> tq = mock(TypedQuery.class);
 
-        verify(cq).select(token.<Long>get("domainObjectId"));
-        verify(tq).getResultList();
-    }
+		when(cq.where(preand)).thenReturn(cq);
+		when(em.createQuery(cq)).thenReturn(tq);
+		trepo.findDomainIdsByWorkflowIdPlaceIdApplicationType("workflowId", "placeId",
+				"applicationType");
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @SuppressWarnings("unchecked")
-    @Test
-    public void testLoadToken() {
-        Foo foo = new Foo(1L);
+		verify(cq).select(token.<Long>get("domainObjectId"));
+		verify(tq).getResultList();
+	}
 
-        CriteriaQuery<ProcessToken> cq = mock(CriteriaQuery.class);
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testLoadToken() {
+		Foo foo = new Foo(1L);
 
-        when(cb.createQuery(ProcessToken.class)).thenReturn(cq);
+		CriteriaQuery<ProcessToken> cq = mock(CriteriaQuery.class);
 
-        Root<ProcessToken> token = mock(Root.class);
+		when(cb.createQuery(ProcessToken.class)).thenReturn(cq);
 
-        when(cq.from(ProcessToken.class)).thenReturn(token);
+		Root<ProcessToken> token = mock(Root.class);
 
-        Path<Object> pathdo = mock(Path.class);
+		when(cq.from(ProcessToken.class)).thenReturn(token);
 
-        when(token.get("domainObjectType")).thenReturn(pathdo);
+		Path<Object> pathdo = mock(Path.class);
 
-        Path<Object> pathpi = mock(Path.class);
+		when(token.get("domainObjectType")).thenReturn(pathdo);
 
-        when(token.get("domainObjectId")).thenReturn(pathpi);
+		Path<Object> pathpi = mock(Path.class);
 
-        Predicate predo = mock(Predicate.class);
+		when(token.get("domainObjectId")).thenReturn(pathpi);
 
-        when(cb.equal(pathdo, "Foo")).thenReturn(predo);
+		Predicate predo = mock(Predicate.class);
 
-        Predicate predi = mock(Predicate.class);
+		when(cb.equal(pathdo, "Foo")).thenReturn(predo);
 
-        when(cb.equal(pathpi, 1L)).thenReturn(predi);
+		Predicate predi = mock(Predicate.class);
 
-        Predicate preand = mock(Predicate.class);
+		when(cb.equal(pathpi, 1L)).thenReturn(predi);
 
-        when(cb.and(predo, predi)).thenReturn(preand);
+		Predicate preand = mock(Predicate.class);
 
-        TypedQuery<ProcessToken> tq = mock(TypedQuery.class);
+		when(cb.and(predo, predi)).thenReturn(preand);
 
-        when(em.createQuery(cq)).thenReturn(tq);
+		TypedQuery<ProcessToken> tq = mock(TypedQuery.class);
 
-        ProcessToken tok = new ProcessToken();
+		when(em.createQuery(cq)).thenReturn(tq);
 
-        when(tq.getSingleResult()).thenReturn(tok);
+		ProcessToken tok = new ProcessToken();
 
-        assertEquals(tok, trepo.findByDomain(foo));
-        assertEquals(foo, tok.getDomainObject());
-        verify(cq).where(preand);
-    }
+		when(tq.getSingleResult()).thenReturn(tok);
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    @SuppressWarnings("unchecked")
-    public void testLoadTokens() {
-        Serializable[] ids = new Serializable[] { 1L };
+		assertEquals(tok, trepo.findByDomain(foo));
+		assertEquals(foo, tok.getDomainObject());
+		verify(cq).where(preand);
+	}
 
-        CriteriaQuery<Tuple> tcq = mock(CriteriaQuery.class);
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testLoadTokens() {
+		Serializable[] ids = new Serializable[]{1L};
 
-        when(cb.createTupleQuery()).thenReturn(tcq);
+		CriteriaQuery<Tuple> tcq = mock(CriteriaQuery.class);
 
-        Root<ProcessToken> rt = mock(Root.class);
+		when(cb.createTupleQuery()).thenReturn(tcq);
 
-        when(tcq.from(ProcessToken.class)).thenReturn(rt);
+		Root<ProcessToken> rt = mock(Root.class);
 
-        Path<Object> pathdo = mock(Path.class);
+		when(tcq.from(ProcessToken.class)).thenReturn(rt);
 
-        when(rt.get("domainObjectType")).thenReturn(pathdo);
+		Path<Object> pathdo = mock(Path.class);
 
-        Path<Object> pathpi = mock(Path.class);
+		when(rt.get("domainObjectType")).thenReturn(pathdo);
 
-        when(rt.get("domainObjectId")).thenReturn(pathpi);
+		Path<Object> pathpi = mock(Path.class);
 
-        Predicate predo = mock(Predicate.class);
+		when(rt.get("domainObjectId")).thenReturn(pathpi);
 
-        when(cb.equal(pathdo, "applicationType")).thenReturn(predo);
+		Predicate predo = mock(Predicate.class);
 
-        Predicate predi = mock(Predicate.class);
+		when(cb.equal(pathdo, "applicationType")).thenReturn(predo);
 
-        when(pathpi.in((Object[]) ids)).thenReturn(predi);
+		Predicate predi = mock(Predicate.class);
 
-        Predicate tokp = mock(Predicate.class);
+		when(pathpi.in((Object[]) ids)).thenReturn(predi);
 
-        when(cb.and(predo, predi)).thenReturn(tokp);
+		Predicate tokp = mock(Predicate.class);
 
-        when(instF.<Foo>getClassType("applicationType")).thenReturn(Foo.class);
+		when(cb.and(predo, predi)).thenReturn(tokp);
 
-        Root<Foo> rc = mock(Root.class);
+		when(instF.<Foo>getClassType("applicationType")).thenReturn(Foo.class);
 
-        when(tcq.from(Foo.class)).thenReturn(rc);
+		Root<Foo> rc = mock(Root.class);
 
-        Path<Object> rid = mock(Path.class);
+		when(tcq.from(Foo.class)).thenReturn(rc);
 
-        when(rc.get("id")).thenReturn(rid);
+		Path<Object> rid = mock(Path.class);
 
-        Predicate clap = mock(Predicate.class);
+		when(rc.get("id")).thenReturn(rid);
 
-        when(cb.equal(pathpi, rid)).thenReturn(clap);
+		Predicate clap = mock(Predicate.class);
 
-        Predicate pans = mock(Predicate.class);
+		when(cb.equal(pathpi, rid)).thenReturn(clap);
 
-        when(cb.and(clap, tokp)).thenReturn(pans);
-        when(tcq.multiselect(rt, rc)).thenReturn(tcq);
-        when(tcq.where(pans)).thenReturn(tcq);
+		Predicate pans = mock(Predicate.class);
 
-        TypedQuery<Tuple> tq = mock(TypedQuery.class);
+		when(cb.and(clap, tokp)).thenReturn(pans);
+		when(tcq.multiselect(rt, rc)).thenReturn(tcq);
+		when(tcq.where(pans)).thenReturn(tcq);
 
-        when(em.createQuery(tcq)).thenReturn(tq);
+		TypedQuery<Tuple> tq = mock(TypedQuery.class);
 
-        List<Tuple> list = new ArrayList<Tuple>();
-        Tuple tuple = mock(Tuple.class);
-        ProcessToken token = new ProcessToken();
+		when(em.createQuery(tcq)).thenReturn(tq);
 
-        when(tuple.get(0)).thenReturn(token);
+		List<Tuple> list = new ArrayList<Tuple>();
+		Tuple tuple = mock(Tuple.class);
+		ProcessToken token = new ProcessToken();
 
-        Foo foo = new Foo();
+		when(tuple.get(0)).thenReturn(token);
 
-        when(tuple.get(1)).thenReturn(foo);
-        list.add(tuple);
-        when(tq.getResultList()).thenReturn(list);
-        trepo.findByApplicationTypeAndIds("applicationType", ids);
-        assertEquals(foo, token.getDomainObject());
-    }
+		Foo foo = new Foo();
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    public void testUpdate() {
-        ProcessToken wf = new ProcessToken();
+		when(tuple.get(1)).thenReturn(foo);
+		list.add(tuple);
+		when(tq.getResultList()).thenReturn(list);
+		trepo.findByApplicationTypeAndIds("applicationType", ids);
+		assertEquals(foo, token.getDomainObject());
+	}
 
-        wf.setId(222L);
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Test
+	public void testUpdate() {
+		ProcessToken wf = new ProcessToken();
 
-        Foo foo = new Foo(111L);
+		wf.setId(222L);
 
-        wf.setDomainObject(foo);
-        wf.setDomainObjectId(foo.getId());
-        wf.setDomainObjectType(foo.getApplicationType());
-        trepo.save(wf);
-        verify(em).merge(foo);
-        verify(em).merge(wf);
-    }
+		Foo foo = new Foo(111L);
+
+		wf.setDomainObject(foo);
+		wf.setDomainObjectId(foo.getId());
+		wf.setDomainObjectType(foo.getApplicationType());
+		trepo.save(wf);
+		verify(em).merge(foo);
+		verify(em).merge(wf);
+	}
 }

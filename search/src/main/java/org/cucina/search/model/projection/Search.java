@@ -1,4 +1,3 @@
-
 package org.cucina.search.model.projection;
 
 import javax.validation.groups.Default;
@@ -9,7 +8,7 @@ import javax.validation.groups.Default;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public interface Search
-    extends Default {
+		extends Default {
 }

@@ -1,9 +1,4 @@
-
 package org.cucina.search.query;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -11,10 +6,14 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Contains query and values for a query. values order should match order of
  * substitutions in query. Ummutable.
- * 
+ *
  * @author $Author: $
  * @version $Revision: $
  */
@@ -29,11 +28,9 @@ public class SearchQuery {
 
 	/**
 	 * Creates a new SpriteQuery object.
-	 * 
-	 * @param query
-	 *            String.
-	 * @param values
-	 *            List<Object>.
+	 *
+	 * @param query  String.
+	 * @param values List<Object>.
 	 */
 	public SearchQuery(String query, List<Object> values) {
 		super();
@@ -43,13 +40,10 @@ public class SearchQuery {
 
 	/**
 	 * Creates a new SearchQuery object.
-	 * 
-	 * @param query
-	 *            JAVADOC.
-	 * @param values
-	 *            JAVADOC.
-	 * @param readOnly
-	 *            JAVADOC.
+	 *
+	 * @param query    JAVADOC.
+	 * @param values   JAVADOC.
+	 * @param readOnly JAVADOC.
 	 */
 	public SearchQuery(String query, List<Object> values, boolean readOnly) {
 		super();
@@ -60,14 +54,12 @@ public class SearchQuery {
 
 	/**
 	 * Creates a new SpriteQuery object.
-	 * 
-	 * @param query
-	 *            String.
-	 * @param values
-	 *            List<Object>.
+	 *
+	 * @param query  String.
+	 * @param values List<Object>.
 	 */
 	public SearchQuery(String query, List<String> paramNames,
-			List<Object> values) {
+					   List<Object> values) {
 		super();
 		this.query = query;
 		this.values = values;
@@ -76,16 +68,13 @@ public class SearchQuery {
 
 	/**
 	 * Creates a new SearchQuery object.
-	 * 
-	 * @param query
-	 *            JAVADOC.
-	 * @param values
-	 *            JAVADOC.
-	 * @param readOnly
-	 *            JAVADOC.
+	 *
+	 * @param query    JAVADOC.
+	 * @param values   JAVADOC.
+	 * @param readOnly JAVADOC.
 	 */
 	public SearchQuery(String query, List<String> paramNames,
-			List<Object> values, boolean readOnly) {
+					   List<Object> values, boolean readOnly) {
 		super();
 		this.values = values;
 		this.query = query;
@@ -95,7 +84,7 @@ public class SearchQuery {
 
 	/**
 	 * Creates a new SearchQuery object.
-	 * 
+	 *
 	 * @param query
 	 * @param objects
 	 */
@@ -108,7 +97,7 @@ public class SearchQuery {
 
 	/**
 	 * Creates a new SearchQuery object.
-	 * 
+	 *
 	 * @param query
 	 * @param readOnly
 	 * @param objects
@@ -120,6 +109,7 @@ public class SearchQuery {
 
 	/**
 	 * Create a template string to use as an 'in'
+	 *
 	 * @param length
 	 * @return
 	 */
@@ -144,7 +134,6 @@ public class SearchQuery {
 	}
 
 	/**
-	 * 
 	 * @return parameterNames
 	 */
 	public List<String> getParamNames() {
@@ -153,7 +142,7 @@ public class SearchQuery {
 
 	/**
 	 * Get query
-	 * 
+	 *
 	 * @return query String.
 	 */
 	public String getQuery() {
@@ -161,7 +150,6 @@ public class SearchQuery {
 	}
 
 	/**
-	 * 
 	 * @return readOnly flag
 	 */
 	public boolean isReadOnly() {
@@ -169,18 +157,9 @@ public class SearchQuery {
 	}
 
 	/**
-	 * Sets whether or not we want results to be returned as <code>Map</code>
-	 * 
-	 * @param selectMap
-	 */
-	public void setSelectMap(boolean selectMap) {
-		this.selectMap = selectMap;
-	}
-
-	/**
 	 * Returns whether or not we expect results to be returned as
 	 * <code>Map</code>s.
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean isSelectMap() {
@@ -188,8 +167,17 @@ public class SearchQuery {
 	}
 
 	/**
+	 * Sets whether or not we want results to be returned as <code>Map</code>
+	 *
+	 * @param selectMap
+	 */
+	public void setSelectMap(boolean selectMap) {
+		this.selectMap = selectMap;
+	}
+
+	/**
 	 * Get values
-	 * 
+	 *
 	 * @return values List<Object>.
 	 */
 	public List<Object> getValues() {
@@ -198,10 +186,8 @@ public class SearchQuery {
 
 	/**
 	 * JAVADOC Method Level Comments
-	 * 
-	 * @param obj
-	 *            JAVADOC.
-	 * 
+	 *
+	 * @param obj JAVADOC.
 	 * @return JAVADOC.
 	 */
 	@Override
@@ -229,7 +215,7 @@ public class SearchQuery {
 
 	/**
 	 * Override
-	 * 
+	 *
 	 * @return JAVADOC.
 	 */
 	@Override

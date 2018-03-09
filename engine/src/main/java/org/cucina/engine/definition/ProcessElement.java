@@ -1,4 +1,3 @@
-
 package org.cucina.engine.definition;
 
 
@@ -10,25 +9,25 @@ package org.cucina.engine.definition;
  * @author Rob Harrop
  */
 public interface ProcessElement {
-    /**
-     * Gets the description for this <code>NetworkElement</code>.
-     */
-    String getDescription();
+	/**
+	 * Gets the description for this <code>NetworkElement</code>.
+	 */
+	String getDescription();
 
-    /**
-     * Gets the identity of this <code>NetworkElement</code>.
-     */
-    String getId();
+	/**
+	 * Gets the identity of this <code>NetworkElement</code>.
+	 */
+	String getId();
 
-    /**
-     * Sets the {@link ProcessDefinition} that this <code>NetworkElement</code>
-     * is part of.
-     */
-    void setProcessDefinition(ProcessDefinition worklowDefinition);
+	/**
+	 * Gets the {@link ProcessDefinition} that this <code>NetworkElement</code>
+	 * is part of.
+	 */
+	ProcessDefinition getProcessDefinition();
 
-    /**
-     * Gets the {@link ProcessDefinition} that this <code>NetworkElement</code>
-     * is part of.
-     */
-    ProcessDefinition getProcessDefinition();
+	/**
+	 * Sets the {@link ProcessDefinition} that this <code>NetworkElement</code>
+	 * is part of.
+	 */
+	void setProcessDefinition(ProcessDefinition worklowDefinition);
 }

@@ -1,4 +1,3 @@
-
 package org.cucina.engine.definition;
 
 import org.cucina.engine.ExecutionContext;
@@ -19,11 +18,11 @@ import org.cucina.engine.ExecutionContext;
  * @see Transition
  */
 public interface Check
-    extends ProcessElement {
-    /**
-     * Test this <code>Condition</code> against the supplied
-     * {@link ExecutionContext}. Should return <code>true</code> if
-     * <code>Condition</code> passes otherwise <code>false</code>.
-     */
-    boolean test(ExecutionContext executionContext);
+		extends ProcessElement {
+	/**
+	 * Test this <code>Condition</code> against the supplied
+	 * {@link ExecutionContext}. Should return <code>true</code> if
+	 * <code>Condition</code> passes otherwise <code>false</code>.
+	 */
+	boolean test(ExecutionContext executionContext);
 }

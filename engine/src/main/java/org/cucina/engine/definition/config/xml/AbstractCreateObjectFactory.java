@@ -1,7 +1,5 @@
 package org.cucina.engine.definition.config.xml;
 
-import java.util.Map;
-
 import org.apache.commons.digester3.Digester;
 import org.apache.commons.digester3.ObjectCreationFactory;
 import org.slf4j.Logger;
@@ -11,89 +9,88 @@ import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.util.Assert;
 import org.xml.sax.Attributes;
 
+import java.util.Map;
+
 
 /**
  * Sets created object instance on the item at the top of stack according the the 'name'
  * attribute.
  *
+ * @param <T> class instance that will be created.
  * @author $Author: $
  * @version $Revision: $
-  *
- * @param <T> class instance that will be created.
  */
 public abstract class AbstractCreateObjectFactory<T>
-    implements ObjectCreationFactory<T> {
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractCreateObjectFactory.class);
-    private Digester digester;
+		implements ObjectCreationFactory<T> {
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractCreateObjectFactory.class);
+	private Digester digester;
 
-    /**
-     * Set digester
-     *
-     * @param digester Digester.
-     */
-    @Override
-    public void setDigester(Digester digester) {
-        this.digester = digester;
-    }
+	/**
+	 * Get digester
+	 *
+	 * @return digester Digester.
+	 */
+	@Override
+	public Digester getDigester() {
+		return digester;
+	}
 
-    /**
-     * Get digester
-     *
-     * @return digester Digester.
-     */
-    @Override
-    public Digester getDigester() {
-        return digester;
-    }
+	/**
+	 * Set digester
+	 *
+	 * @param digester Digester.
+	 */
+	@Override
+	public void setDigester(Digester digester) {
+		this.digester = digester;
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param attributes JAVADOC.
-     *
-     * @return JAVADOC.
-     *
-     * @throws Exception JAVADOC.
-     */
-    @SuppressWarnings("unchecked")
-    @Override
-    public T createObject(Attributes attributes)
-        throws Exception {
-        T newObject = createObjectImpl(attributes);
-        String propertyName = attributes.getValue("name");
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param attributes JAVADOC.
+	 * @return JAVADOC.
+	 * @throws Exception JAVADOC.
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public T createObject(Attributes attributes)
+			throws Exception {
+		T newObject = createObjectImpl(attributes);
+		String propertyName = attributes.getValue("name");
 
-        Assert.notNull(propertyName, "Element must have a non-empty attribute 'name'");
+		Assert.notNull(propertyName, "Element must have a non-empty attribute 'name'");
 
-        Object subject = digester.peek();
+		Object subject = digester.peek();
 
-        if (subject == null) {
-            LOG.debug("Empty top object");
+		if (subject == null) {
+			LOG.debug("Empty top object");
 
-            return newObject;
-        }
+			return newObject;
+		}
 
-        BeanWrapper bw = new BeanWrapperImpl(subject);
+		BeanWrapper bw = new BeanWrapperImpl(subject);
 
-        if (bw.isWritableProperty(propertyName)) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Setting '" + propertyName + "' to '" + newObject + "' on " + subject);
-            }
+		if (bw.isWritableProperty(propertyName)) {
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Setting '" + propertyName + "' to '" + newObject + "' on " + subject);
+			}
 
-            bw.setPropertyValue(propertyName, newObject);
-        } else if (subject instanceof Map<?, ?>) {
-            ((Map<String, T>) subject).put(propertyName, newObject);
-        } else {
-            throw new IllegalArgumentException("Property name [" + propertyName +
-                "] does not exist on [" + subject.getClass().getSimpleName() + "]");
-        }
+			bw.setPropertyValue(propertyName, newObject);
+		} else if (subject instanceof Map<?, ?>) {
+			((Map<String, T>) subject).put(propertyName, newObject);
+		} else {
+			throw new IllegalArgumentException("Property name [" + propertyName +
+					"] does not exist on [" + subject.getClass().getSimpleName() + "]");
+		}
 
-        return newObject;
-    }
+		return newObject;
+	}
 
-    /**
-     * For subclasses to override in order to generate object to set on stack top item.
-     *
-     * @return T.
-     */
-    protected abstract T createObjectImpl(Attributes attributes);
+	/**
+	 * For subclasses to override in order to generate object to set on stack top item.
+	 *
+	 * @return T.
+	 */
+	protected abstract T createObjectImpl(Attributes attributes);
 }

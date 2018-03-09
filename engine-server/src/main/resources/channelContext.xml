@@ -1,92 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:c="http://www.springframework.org/schema/c"
-	xmlns:p="http://www.springframework.org/schema/p" xmlns:jee="http://www.springframework.org/schema/jee"
-	xmlns:si="http://www.springframework.org/schema/integration" xmlns:jms="http://www.springframework.org/schema/integration/jms"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:si="http://www.springframework.org/schema/integration"
+       xmlns:jms="http://www.springframework.org/schema/integration/jms"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+
 	http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.1.xsd
 	http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms-4.1.xsd">
-	<jms:inbound-gateway id="jmsInboundGateway"
-		request-destination-name="server.queue" request-channel="inboundChannel"
-		reply-channel="outboundChannel" message-converter="xmlMessageConverter"
-		connection-factory="jmsConnectionFactory" destination-resolver="myDestinationResolver" />
-	<bean id="xmlMessageConverter" class="org.cucina.engine.server.jms.XmlEncoderDecoderConverter" />
-	<si:channel id="inboundChannel">
-		<si:interceptors>
-			<bean class="org.cucina.core.spring.integration.SpelChannelInterceptor"
-				p:expression="@contextService.put(T(org.cucina.conversation.Operative).CONVERSATION_ID, headers[T(org.cucina.conversation.Operative).CONVERSATION_ID])" />
-		</si:interceptors>
-	</si:channel>
-	<si:channel id="outboundChannel" />
-	<si:channel id="unroutableChannel" />
-	<si:logging-channel-adapter channel="unroutableChannel"
-		level="WARN" logger-name="Unroutable.Request" />
-	<si:payload-type-router input-channel="inboundChannel"
-		default-output-channel="unroutableChannel">
-		<si:mapping type="org.cucina.engine.server.event.BulkTransitionEvent"
-			channel="bulkTransitionChannel" />
-		<si:mapping
-			type="org.cucina.engine.server.event.ListActionableTransitionsEvent"
-			channel="listActionableTransitionsChannel" />
-		<si:mapping type="org.cucina.engine.server.event.ListAllTransitionsEvent"
-			channel="listAllTransitionsChannel" />
-		<si:mapping
-			type="org.cucina.engine.server.event.ListProcessPropertiesEvent"
-			channel="listProcessPropertiesChannel" />
-		<si:mapping type="org.cucina.engine.server.event.ListTransitionsEvent"
-			channel="listTransitionsChannel" />
-		<si:mapping type="org.cucina.engine.server.event.LoadTransitionInfoEvent"
-			channel="loadTransitionInfoChannel" />
-		<si:mapping type="org.cucina.engine.server.event.ObtainHistoryEvent"
-			channel="obtainHistoryChannel" />
-		<si:mapping type="org.cucina.engine.server.event.ObtainHistorySummaryEvent"
-			channel="obtainHistorySummaryChannel" />
-		<si:mapping type="org.cucina.engine.server.event.SingleTransitionEvent"
-			channel="singleTransitionChannel" />
-		<si:mapping type="org.cucina.engine.server.event.StartWorkflowEvent"
-			channel="startWorkflowChannel" />
-		<si:mapping type="org.cucina.engine.server.event.RegistrationEvent"
-			channel="registrationChannel" />
-		<si:mapping type="org.cucina.engine.server.event.CompensateEvent"
-			channel="compensateChannel" />
-	</si:payload-type-router>
+    <jms:inbound-gateway id="jmsInboundGateway"
+                         request-destination-name="server.queue" request-channel="inboundChannel"
+                         reply-channel="outboundChannel" message-converter="xmlMessageConverter"
+                         connection-factory="jmsConnectionFactory" destination-resolver="myDestinationResolver"/>
+    <bean id="xmlMessageConverter" class="org.cucina.engine.server.jms.XmlEncoderDecoderConverter"/>
+    <si:channel id="inboundChannel">
+        <si:interceptors>
+            <bean class="org.cucina.core.spring.integration.SpelChannelInterceptor"
+                  p:expression="@contextService.put(T(org.cucina.conversation.Operative).CONVERSATION_ID, headers[T(org.cucina.conversation.Operative).CONVERSATION_ID])"/>
+        </si:interceptors>
+    </si:channel>
+    <si:channel id="outboundChannel"/>
+    <si:channel id="unroutableChannel"/>
+    <si:logging-channel-adapter channel="unroutableChannel"
+                                level="WARN" logger-name="Unroutable.Request"/>
+    <si:payload-type-router input-channel="inboundChannel"
+                            default-output-channel="unroutableChannel">
+        <si:mapping type="org.cucina.engine.server.event.BulkTransitionEvent"
+                    channel="bulkTransitionChannel"/>
+        <si:mapping
+                type="org.cucina.engine.server.event.ListActionableTransitionsEvent"
+                channel="listActionableTransitionsChannel"/>
+        <si:mapping type="org.cucina.engine.server.event.ListAllTransitionsEvent"
+                    channel="listAllTransitionsChannel"/>
+        <si:mapping
+                type="org.cucina.engine.server.event.ListProcessPropertiesEvent"
+                channel="listProcessPropertiesChannel"/>
+        <si:mapping type="org.cucina.engine.server.event.ListTransitionsEvent"
+                    channel="listTransitionsChannel"/>
+        <si:mapping type="org.cucina.engine.server.event.LoadTransitionInfoEvent"
+                    channel="loadTransitionInfoChannel"/>
+        <si:mapping type="org.cucina.engine.server.event.ObtainHistoryEvent"
+                    channel="obtainHistoryChannel"/>
+        <si:mapping type="org.cucina.engine.server.event.ObtainHistorySummaryEvent"
+                    channel="obtainHistorySummaryChannel"/>
+        <si:mapping type="org.cucina.engine.server.event.SingleTransitionEvent"
+                    channel="singleTransitionChannel"/>
+        <si:mapping type="org.cucina.engine.server.event.StartWorkflowEvent"
+                    channel="startWorkflowChannel"/>
+        <si:mapping type="org.cucina.engine.server.event.RegistrationEvent"
+                    channel="registrationChannel"/>
+        <si:mapping type="org.cucina.engine.server.event.CompensateEvent"
+                    channel="compensateChannel"/>
+    </si:payload-type-router>
 
-	<si:channel id="bulkTransitionChannel" />
-	<si:service-activator input-channel="bulkTransitionChannel"
-		output-channel="outboundChannel" ref="bulkTransitionHandler" />
-	<si:channel id="listActionableTransitionsChannel" />
-	<si:service-activator input-channel="listActionableTransitionsChannel"
-		output-channel="outboundChannel" ref="listActionableTransitionsHandler" />
-	<si:channel id="listAllTransitionsChannel" />
-	<si:service-activator input-channel="listAllTransitionsChannel"
-		output-channel="outboundChannel" ref="listAllTransitionsHandler" />
-	<si:channel id="listProcessPropertiesChannel" />
-	<si:service-activator input-channel="listProcessPropertiesChannel"
-		output-channel="outboundChannel" ref="listProcessPropertiesHandler" />
-	<si:channel id="listTransitionsChannel" />
-	<si:service-activator input-channel="listTransitionsChannel"
-		output-channel="outboundChannel" ref="listTransitionsHandler" />
-	<si:channel id="loadTransitionInfoChannel" />
-	<si:service-activator input-channel="loadTransitionInfoChannel"
-		output-channel="outboundChannel" ref="loadTransitionInfoHandler" />
-	<si:channel id="obtainHistoryChannel" />
-	<si:service-activator input-channel="obtainHistoryChannel"
-		output-channel="outboundChannel" ref="obtainHistoryHandler" />
-	<si:channel id="obtainHistorySummaryChannel" />
-	<si:service-activator input-channel="obtainHistorySummaryChannel"
-		output-channel="outboundChannel" ref="obtainHistorySummaryHandler" />
-	<si:channel id="singleTransitionChannel" />
-	<si:service-activator input-channel="singleTransitionChannel"
-		output-channel="outboundChannel" ref="singleTransitionHandler" />
-	<si:channel id="startWorkflowChannel" />
-	<si:service-activator input-channel="startWorkflowChannel"
-		output-channel="outboundChannel" ref="startWorkflowHandler" />
+    <si:channel id="bulkTransitionChannel"/>
+    <si:service-activator input-channel="bulkTransitionChannel"
+                          output-channel="outboundChannel" ref="bulkTransitionHandler"/>
+    <si:channel id="listActionableTransitionsChannel"/>
+    <si:service-activator input-channel="listActionableTransitionsChannel"
+                          output-channel="outboundChannel" ref="listActionableTransitionsHandler"/>
+    <si:channel id="listAllTransitionsChannel"/>
+    <si:service-activator input-channel="listAllTransitionsChannel"
+                          output-channel="outboundChannel" ref="listAllTransitionsHandler"/>
+    <si:channel id="listProcessPropertiesChannel"/>
+    <si:service-activator input-channel="listProcessPropertiesChannel"
+                          output-channel="outboundChannel" ref="listProcessPropertiesHandler"/>
+    <si:channel id="listTransitionsChannel"/>
+    <si:service-activator input-channel="listTransitionsChannel"
+                          output-channel="outboundChannel" ref="listTransitionsHandler"/>
+    <si:channel id="loadTransitionInfoChannel"/>
+    <si:service-activator input-channel="loadTransitionInfoChannel"
+                          output-channel="outboundChannel" ref="loadTransitionInfoHandler"/>
+    <si:channel id="obtainHistoryChannel"/>
+    <si:service-activator input-channel="obtainHistoryChannel"
+                          output-channel="outboundChannel" ref="obtainHistoryHandler"/>
+    <si:channel id="obtainHistorySummaryChannel"/>
+    <si:service-activator input-channel="obtainHistorySummaryChannel"
+                          output-channel="outboundChannel" ref="obtainHistorySummaryHandler"/>
+    <si:channel id="singleTransitionChannel"/>
+    <si:service-activator input-channel="singleTransitionChannel"
+                          output-channel="outboundChannel" ref="singleTransitionHandler"/>
+    <si:channel id="startWorkflowChannel"/>
+    <si:service-activator input-channel="startWorkflowChannel"
+                          output-channel="outboundChannel" ref="startWorkflowHandler"/>
 
-	<si:channel id="registrationChannel" />
-	<si:service-activator input-channel="registrationChannel"
-		expression="@clientRegistry.addRegistration(payload.applicationName, payload.destinationName)" />
-	<si:channel id="compensateChannel" />
-	<si:service-activator input-channel="compensateChannel"
-		output-channel="outboundChannel" ref="compensateHandler" />
+    <si:channel id="registrationChannel"/>
+    <si:service-activator input-channel="registrationChannel"
+                          expression="@clientRegistry.addRegistration(payload.applicationName, payload.destinationName)"/>
+    <si:channel id="compensateChannel"/>
+    <si:service-activator input-channel="compensateChannel"
+                          output-channel="outboundChannel" ref="compensateHandler"/>
 </beans>

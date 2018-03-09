@@ -1,21 +1,21 @@
 package org.cucina.search.query.projection;
 
-import java.util.Locale;
-
 import org.apache.commons.lang3.StringUtils;
-
+import org.cucina.i18n.api.LocaleService;
 import org.springframework.util.Assert;
 
-import org.cucina.i18n.api.LocaleService;
+import java.util.Locale;
 
 /**
  * Implementation of a translated property
- * 
+ *
  * @deprecated since only viable for the local data model, whereas messages are
- *             part of i18n service now and may live in a different db.
+ * part of i18n service now and may live in a different db.
  */
 public class TranslatedPropertyProjection extends AbstractProjection {
-	/** messages.messages */
+	/**
+	 * messages.messages
+	 */
 	public static final String BASENAME = "messages.messages";
 	private LocaleService localeService;
 	private String basename = BASENAME;
@@ -23,15 +23,12 @@ public class TranslatedPropertyProjection extends AbstractProjection {
 	/**
 	 * Creates a new TranslatedPropertyProjection object.
 	 *
-	 * @param name
-	 *            fully qualified field name, e.g. 'bazs.bars.name'.
-	 * @param alias
-	 *            projection alias.
-	 * @param rootAlias
-	 *            alias of 'root' Type.
+	 * @param name      fully qualified field name, e.g. 'bazs.bars.name'.
+	 * @param alias     projection alias.
+	 * @param rootAlias alias of 'root' Type.
 	 */
 	public TranslatedPropertyProjection(String name, String alias,
-			String rootAlias, LocaleService localeService) {
+										String rootAlias, LocaleService localeService) {
 		super(name, alias, rootAlias);
 		Assert.notNull(localeService, "localeService is null");
 		this.localeService = localeService;
@@ -40,16 +37,13 @@ public class TranslatedPropertyProjection extends AbstractProjection {
 	/**
 	 * Creates a new SimplePropertyProjection object.
 	 *
-	 * @param name
-	 *            fully qualified field name, e.g. 'bazs.bars.name'.
-	 * @param alias
-	 *            projection alias.
-	 * @param rootAlias
-	 *            alias of 'root' Type.
+	 * @param name      fully qualified field name, e.g. 'bazs.bars.name'.
+	 * @param alias     projection alias.
+	 * @param rootAlias alias of 'root' Type.
 	 * @param basename
 	 */
 	public TranslatedPropertyProjection(String name, String alias,
-			String rootAlias, String basename, LocaleService localeService) {
+										String rootAlias, String basename, LocaleService localeService) {
 		this(name, alias, rootAlias, localeService);
 		Assert.hasText(basename, "basename is required!");
 		this.basename = basename;
@@ -66,20 +60,19 @@ public class TranslatedPropertyProjection extends AbstractProjection {
 	/**
 	 * JAVADOC Method Level Comments
 	 *
-	 * @param basename
-	 *            JAVADOC.
+	 * @return JAVADOC.
 	 */
-	public void setBasename(String basename) {
-		this.basename = basename;
+	public String getBasename() {
+		return basename;
 	}
 
 	/**
 	 * JAVADOC Method Level Comments
 	 *
-	 * @return JAVADOC.
+	 * @param basename JAVADOC.
 	 */
-	public String getBasename() {
-		return basename;
+	public void setBasename(String basename) {
+		this.basename = basename;
 	}
 
 	/**

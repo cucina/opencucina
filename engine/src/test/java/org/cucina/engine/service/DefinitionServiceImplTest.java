@@ -1,24 +1,20 @@
 package org.cucina.engine.service;
 
-import org.springframework.validation.BindException;
-
 import org.cucina.core.InstanceFactory;
 import org.cucina.core.model.Attachment;
-
 import org.cucina.engine.definition.ProcessDefinition;
 import org.cucina.engine.definition.config.ProcessDefinitionRegistry;
 import org.cucina.engine.model.Workflow;
 import org.cucina.engine.model.WorkflowHistory;
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.validation.BindException;
+
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import org.mockito.MockitoAnnotations;
 
 
 /**
@@ -26,76 +22,78 @@ import org.mockito.MockitoAnnotations;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public class DefinitionServiceImplTest {
-    private DefinitionServiceImpl service;
-    @Mock
-    private InstanceFactory instanceFactory;
-    @Mock
-    private ProcessDefinitionRegistry registry;
+	private DefinitionServiceImpl service;
+	@Mock
+	private InstanceFactory instanceFactory;
+	@Mock
+	private ProcessDefinitionRegistry registry;
 
-    /**
-    * JAVADOC Method Level Comments
-    */
-    @Test
-    public void loadDefinition() {
-        ProcessDefinition definition = new ProcessDefinition();
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Test
+	public void loadDefinition() {
+		ProcessDefinition definition = new ProcessDefinition();
 
-        definition.setId("definition");
-        when(registry.findWorkflowDefinition("definition")).thenReturn(definition);
+		definition.setId("definition");
+		when(registry.findWorkflowDefinition("definition")).thenReturn(definition);
 
-        assertEquals(definition, service.loadDefinition("definition"));
-    }
+		assertEquals(definition, service.loadDefinition("definition"));
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        service = new DefinitionServiceImpl(registry, instanceFactory);
-    }
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
+		service = new DefinitionServiceImpl(registry, instanceFactory);
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     * @throws BindException
-     */
-    @Test
-    public void testCreate()
-        throws BindException {
-        WorkflowHistory wh = new WorkflowHistory();
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @throws BindException
+	 */
+	@Test
+	public void testCreate()
+			throws BindException {
+		WorkflowHistory wh = new WorkflowHistory();
 
-        when(instanceFactory.getBean(WorkflowHistory.class.getSimpleName())).thenReturn(wh);
+		when(instanceFactory.getBean(WorkflowHistory.class.getSimpleName())).thenReturn(wh);
 
-        Workflow w = new Workflow();
+		Workflow w = new Workflow();
 
-        when(instanceFactory.getBean(Workflow.class.getSimpleName())).thenReturn(w);
+		when(instanceFactory.getBean(Workflow.class.getSimpleName())).thenReturn(w);
 
-        Attachment attachment = new Attachment();
+		Attachment attachment = new Attachment();
 
-        when(instanceFactory.getBean(Attachment.class.getSimpleName())).thenReturn(attachment);
+		when(instanceFactory.getBean(Attachment.class.getSimpleName())).thenReturn(attachment);
 
-        byte[] content = "hello".getBytes();
+		byte[] content = "hello".getBytes();
 
-        service.save("hello", "text/xml", content);
-    }
+		service.save("hello", "text/xml", content);
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     * @throws BindException
-     */
-    @Test
-    public void testDelete()
-        throws BindException {
-        service.delete("100L");
-        verify(registry).delete("100L");
-    }
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @throws BindException
+	 */
+	@Test
+	public void testDelete()
+			throws BindException {
+		service.delete("100L");
+		verify(registry).delete("100L");
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @throws BindException JAVADOC.
-     */
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @throws BindException JAVADOC.
+	 */
 
     /*@Test(expected = BindException.class)
     public void testDeleteFailedValidation()
@@ -121,20 +119,21 @@ public class DefinitionServiceImplTest {
         service.delete("100L");
     }*/
 
-    /**
-     * JAVADOC Method Level Comments
-     * @throws BindException
-     */
-    @Test
-    public void testUpdate()
-        throws BindException {
-        Attachment attachment = new Attachment();
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @throws BindException
+	 */
+	@Test
+	public void testUpdate()
+			throws BindException {
+		Attachment attachment = new Attachment();
 
-        when(instanceFactory.getBean(Attachment.class.getSimpleName())).thenReturn(attachment);
+		when(instanceFactory.getBean(Attachment.class.getSimpleName())).thenReturn(attachment);
 
-        byte[] content = "hello".getBytes();
+		byte[] content = "hello".getBytes();
 
-        service.save("hello", "text/xml", content);
-        verify(registry).saveProcess(attachment);
-    }
+		service.save("hello", "text/xml", content);
+		verify(registry).saveProcess(attachment);
+	}
 }

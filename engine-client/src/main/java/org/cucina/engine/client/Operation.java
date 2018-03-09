@@ -4,16 +4,12 @@ import java.util.Map;
 
 
 /**
- * 
- *
  * @author vlevine
-  */
+ */
 public interface Operation {
-    /**
-     *
-     *
-     * @param domain .
-     * @param parameters .
-     */
-    void execute(Object domain, Map<String, Object> parameters);
+	/**
+	 * @param domain     .
+	 * @param parameters .
+	 */
+	void execute(Object domain, Map<String, Object> parameters);
 }

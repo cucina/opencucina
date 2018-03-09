@@ -1,5 +1,7 @@
 package org.cucina.security.authentication;
 
+import org.cucina.security.model.User;
+import org.cucina.security.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -8,12 +10,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import org.cucina.security.model.User;
-import org.cucina.security.repository.UserRepository;
-
 /**
- *
- *
  * @author vlevine
  */
 @Service
@@ -22,18 +19,12 @@ public class RepositoryAuthenticationService implements AuthenticationService {
 	private UserRepository userRepository;
 
 	/**
-	 *
-	 *
-	 * @param username
-	 *            .
-	 * @param password
-	 *            .
-	 *
+	 * @param username .
+	 * @param password .
 	 * @return .
-	 *
-	 * @throws AuthenticationException .
+	 * @throws AuthenticationException   .
 	 * @throws UsernameNotFoundException .
-	 * @throws BadCredentialsException .
+	 * @throws BadCredentialsException   .
 	 */
 	@Override
 	public Authentication authenticate(String username, String password)

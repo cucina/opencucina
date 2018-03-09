@@ -1,4 +1,3 @@
-
 package org.cucina.conversation.events;
 
 
@@ -7,23 +6,23 @@ package org.cucina.conversation.events;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public class CommitEvent
-    extends OriginatedEngineEvent {
-    private static final long serialVersionUID = -3679643248060887457L;
+		extends OriginatedEngineEvent {
+	private static final long serialVersionUID = -3679643248060887457L;
 
-    /**
-     * Creates a new CommitEvent object.
-     *
-     * @param source JAVADOC.
-     */
-    public CommitEvent(Object source) {
-        super(source);
-    }
+	/**
+	 * Creates a new CommitEvent object.
+	 *
+	 * @param source JAVADOC.
+	 */
+	public CommitEvent(Object source) {
+		super(source);
+	}
 
-    /**
-     * Creates a new CommitEvent object.
-     */
-    public CommitEvent() {
-    }
+	/**
+	 * Creates a new CommitEvent object.
+	 */
+	public CommitEvent() {
+	}
 }

@@ -1,4 +1,3 @@
-
 package org.cucina.loader;
 
 
@@ -7,17 +6,17 @@ package org.cucina.loader;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public interface FileLoader {
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    FileLoaderContainer next();
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @return JAVADOC.
+	 */
+	FileLoaderContainer next();
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    void reset();
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	void reset();
 }

@@ -1,9 +1,11 @@
 package org.cucina.engine.server;
 
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.Session;
-
+import org.cucina.conversation.ConversationConfiguration;
+import org.cucina.conversation.EventHandler;
+import org.cucina.conversation.events.ConversationEvent;
+import org.cucina.core.model.Attachment;
+import org.cucina.engine.model.Workflow;
+import org.cucina.engine.server.model.EntityDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -17,12 +19,9 @@ import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.support.destination.DestinationResolver;
 import org.springframework.jms.support.destination.DynamicDestinationResolver;
 
-import org.cucina.conversation.ConversationConfiguration;
-import org.cucina.conversation.EventHandler;
-import org.cucina.conversation.events.ConversationEvent;
-import org.cucina.core.model.Attachment;
-import org.cucina.engine.model.Workflow;
-import org.cucina.engine.server.model.EntityDescriptor;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Session;
 
 /**
  * JAVADOC for Class Level
@@ -33,7 +32,7 @@ import org.cucina.engine.server.model.EntityDescriptor;
 @EnableJms
 @ImportResource(value = "classpath:/channelContext.xml")
 @Import(ConversationConfiguration.class)
-@EntityScan(basePackageClasses = { EntityDescriptor.class, Workflow.class, Attachment.class })
+@EntityScan(basePackageClasses = {EntityDescriptor.class, Workflow.class, Attachment.class})
 public class EngineApplication {
 	private static final Logger LOG = LoggerFactory.getLogger(EngineApplication.class);
 
@@ -41,7 +40,6 @@ public class EngineApplication {
 	 * JAVADOC Method Level Comments
 	 *
 	 * @param args JAVADOC.
-	 *
 	 * @throws Exception JAVADOC.
 	 */
 	public static void main(String[] args) throws Exception {
@@ -60,7 +58,7 @@ public class EngineApplication {
 
 			@Override
 			public Destination resolveDestinationName(Session session, String destinationName,
-					boolean pubSubDomain) throws JMSException {
+													  boolean pubSubDomain) throws JMSException {
 				String dname = environment.getProperty("jms.destination." + destinationName,
 						destinationName);
 

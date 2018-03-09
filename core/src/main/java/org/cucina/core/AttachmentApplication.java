@@ -9,15 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 @SpringBootApplication()
 public class AttachmentApplication {
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param args JAVADOC.
-     */
-    public static void main(String[] args) {
-        SpringApplication.run(AttachmentApplication.class, args);
-    }
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param args JAVADOC.
+	 */
+	public static void main(String[] args) {
+		SpringApplication.run(AttachmentApplication.class, args);
+	}
 }

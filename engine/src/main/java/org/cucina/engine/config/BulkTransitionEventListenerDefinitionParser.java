@@ -1,4 +1,3 @@
-
 package org.cucina.engine.config;
 
 import org.cucina.engine.event.PluralTransitionEventListener;
@@ -12,29 +11,28 @@ import org.w3c.dom.Element;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public class BulkTransitionEventListenerDefinitionParser
-    extends AbstractSingleBeanDefinitionParser {
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param element JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    protected Class<?> getBeanClass(Element element) {
-        return PluralTransitionEventListener.class;
-    }
+		extends AbstractSingleBeanDefinitionParser {
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param element JAVADOC.
+	 * @return JAVADOC.
+	 */
+	@Override
+	protected Class<?> getBeanClass(Element element) {
+		return PluralTransitionEventListener.class;
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param element JAVADOC.
-     * @param builder JAVADOC.
-     */
-    @Override
-    protected void doParse(Element element, BeanDefinitionBuilder builder) {
-        builder.addConstructorArgReference(element.getAttribute("bulkWorkflowService"));
-    }
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param element JAVADOC.
+	 * @param builder JAVADOC.
+	 */
+	@Override
+	protected void doParse(Element element, BeanDefinitionBuilder builder) {
+		builder.addConstructorArgReference(element.getAttribute("bulkWorkflowService"));
+	}
 }

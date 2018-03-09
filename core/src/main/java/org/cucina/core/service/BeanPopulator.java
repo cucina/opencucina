@@ -1,4 +1,3 @@
-
 package org.cucina.core.service;
 
 import java.util.Map;
@@ -10,16 +9,15 @@ import java.util.Map;
  * @author $Author: $
  * @version $Revision: $
  * @deprecated not seemed to be used
-  */
+ */
 public interface BeanPopulator {
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param <T> JAVADOC.
-     * @param entity JAVADOC.
-     * @param params JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    <T> T populate(T entity, Map<String, Object> params);
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param <T>    JAVADOC.
+	 * @param entity JAVADOC.
+	 * @param params JAVADOC.
+	 * @return JAVADOC.
+	 */
+	<T> T populate(T entity, Map<String, Object> params);
 }

@@ -1,13 +1,12 @@
 package org.cucina.engine.server.utils;
 
+import org.cucina.engine.server.communication.ClientRegistry;
+import org.cucina.engine.server.communication.ClientRegistry.DestinationDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
-
-import org.cucina.engine.server.communication.ClientRegistry;
-import org.cucina.engine.server.communication.ClientRegistry.DestinationDescriptor;
 
 /**
  * JAVADOC for Class Level
@@ -36,7 +35,6 @@ public class RegistryUrlExtractor {
 	 * JAVADOC Method Level Comments
 	 *
 	 * @param payload JAVADOC.
-	 *
 	 * @return JAVADOC.
 	 */
 	public String findDestinationName(String applicationName) {
@@ -53,7 +51,6 @@ public class RegistryUrlExtractor {
 	 * JAVADOC Method Level Comments
 	 *
 	 * @param payload JAVADOC.
-	 *
 	 * @return JAVADOC.
 	 */
 	public String findProtocol(String applicationName) {

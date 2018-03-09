@@ -1,26 +1,22 @@
 package org.cucina.engine.listeners;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
-
 import org.cucina.core.InstanceFactory;
 import org.cucina.core.model.Attachment;
-
 import org.cucina.engine.ExecutionContext;
 import org.cucina.engine.definition.Decision;
 import org.cucina.engine.definition.State;
 import org.cucina.engine.definition.Transition;
 import org.cucina.engine.model.HistoryRecord;
 import org.cucina.engine.model.ProcessToken;
-
 import org.cucina.security.api.CurrentUserAccessor;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -30,162 +26,160 @@ import org.slf4j.LoggerFactory;
  * @version $Revision: $
  */
 public class HistoryListener
-    extends WorkflowListenerAdapter {
-    private static final String STATUS = "status";
+		extends WorkflowListenerAdapter {
+	/**
+	 * This is a field JAVADOC
+	 */
+	public static final String HISTORY_RECORD = "historyRecord";
+	/**
+	 * attachment
+	 */
+	public static final String ATTACHMENT_PROPERTY = "attachment";
+	/**
+	 * This is a field JAVADOC
+	 */
+	public static final String APPROVEDBY_PROPERTY = "approvedBy";
+	/**
+	 * This is a field JAVADOC
+	 */
+	public static final String ASSIGNEDTO_PROPERTY = "assignedTo";
+	/**
+	 * This is a field JAVADOC
+	 */
+	public static final String REASON_PROPERTY = "reason";
+	private static final String STATUS = "status";
+	private static final Logger LOG = LoggerFactory.getLogger(HistoryListener.class);
+	private InstanceFactory instanceFactory;
 
-    /** This is a field JAVADOC */
-    public static final String HISTORY_RECORD = "historyRecord";
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param instanceFactory JAVADOC.
+	 */
+	public void setInstanceFactory(InstanceFactory instanceFactory) {
+		this.instanceFactory = instanceFactory;
+	}
 
-    /** attachment */
-    public static final String ATTACHMENT_PROPERTY = "attachment";
+	/**
+	 * Records changes from context into the token histories
+	 *
+	 * @param state            JAVADOC.
+	 * @param from             JAVADOC.
+	 * @param executionContext JAVADOC.
+	 */
+	@Override
+	public void enteredState(State state, Transition from, ExecutionContext executionContext) {
+		HistoryRecord historyRecord = (HistoryRecord) executionContext.getParameters()
+				.get(HISTORY_RECORD);
 
-    /** This is a field JAVADOC */
-    public static final String APPROVEDBY_PROPERTY = "approvedBy";
+		if (historyRecord == null) {
+			return;
+		}
 
-    /** This is a field JAVADOC */
-    public static final String ASSIGNEDTO_PROPERTY = "assignedTo";
+		Map<String, Object> parameters = executionContext.getParameters();
+		BeanWrapper beanWrapper = new BeanWrapperImpl(historyRecord);
 
-    /** This is a field JAVADOC */
-    public static final String REASON_PROPERTY = "reason";
-    private static final Logger LOG = LoggerFactory.getLogger(HistoryListener.class);
-    private InstanceFactory instanceFactory;
+		for (java.util.Map.Entry<String, Object> entry : parameters.entrySet()) {
+			if (!beanWrapper.isWritableProperty(entry.getKey())) {
+				LOG.debug("Property '" + entry.getKey() + "' has no setter on object of type:" +
+						historyRecord.getClass().getName());
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param instanceFactory
-     *            JAVADOC.
-     */
-    public void setInstanceFactory(InstanceFactory instanceFactory) {
-        this.instanceFactory = instanceFactory;
-    }
+				continue;
+			}
 
-    /**
-     * Records changes from context into the token histories
-     *
-     * @param state
-     *            JAVADOC.
-     * @param from
-     *            JAVADOC.
-     * @param executionContext
-     *            JAVADOC.
-     */
-    @Override
-    public void enteredState(State state, Transition from, ExecutionContext executionContext) {
-        HistoryRecord historyRecord = (HistoryRecord) executionContext.getParameters()
-                                                                      .get(HISTORY_RECORD);
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Setting historicalRecord property '" + entry.getKey() + "' to " +
+						entry.getValue());
+			}
 
-        if (historyRecord == null) {
-            return;
-        }
+			beanWrapper.setPropertyValue(entry.getKey(), entry.getValue());
+		}
+	}
 
-        Map<String, Object> parameters = executionContext.getParameters();
-        BeanWrapper beanWrapper = new BeanWrapperImpl(historyRecord);
+	/**
+	 * Create new history only if there are changes, i.e. comments in the
+	 * context parameters.
+	 *
+	 * @param state            JAVADOC.
+	 * @param transition       JAVADOC.
+	 * @param executionContext JAVADOC.
+	 */
+	@Override
+	public void leavingState(State state, Transition transition, ExecutionContext executionContext) {
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Leaving state:" + state.getId() + " by transition " + transition.getId());
+		}
 
-        for (java.util.Map.Entry<String, Object> entry : parameters.entrySet()) {
-            if (!beanWrapper.isWritableProperty(entry.getKey())) {
-                LOG.debug("Property '" + entry.getKey() + "' has no setter on object of type:" +
-                    historyRecord.getClass().getName());
+		ProcessToken token = (ProcessToken) executionContext.getToken();
 
-                continue;
-            }
+		Map<String, Object> parameters = executionContext.getParameters();
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Setting historicalRecord property '" + entry.getKey() + "' to " +
-                    entry.getValue());
-            }
+		boolean changes = parameters.containsKey(HistoryRecord.COMMENTS_PROPERTY);
 
-            beanWrapper.setPropertyValue(entry.getKey(), entry.getValue());
-        }
-    }
+		// If there are no changes or we are going to enter a Decision, ignore
+		if (!changes || transition.getOutput() instanceof Decision) {
+			LOG.debug("No changes");
 
-    /**
-     * Create new history only if there are changes, i.e. comments in the
-     * context parameters.
-     *
-     * @param state
-     *            JAVADOC.
-     * @param transition
-     *            JAVADOC.
-     * @param executionContext
-     *            JAVADOC.
-     */
-    @Override
-    public void leavingState(State state, Transition transition, ExecutionContext executionContext) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Leaving state:" + state.getId() + " by transition " + transition.getId());
-        }
+			// clean up just in case
+			executionContext.getParameters().remove(HISTORY_RECORD);
 
-        ProcessToken token = (ProcessToken) executionContext.getToken();
+			return;
+		}
 
-        Map<String, Object> parameters = executionContext.getParameters();
+		calculateCarryovers(parameters, token);
 
-        boolean changes = parameters.containsKey(HistoryRecord.COMMENTS_PROPERTY);
+		HistoryRecord history = instanceFactory.getBean(HistoryRecord.class.getSimpleName());
 
-        // If there are no changes or we are going to enter a Decision, ignore
-        if (!changes || transition.getOutput() instanceof Decision) {
-            LOG.debug("No changes");
+		history.setToken(token);
+		history.setModifiedBy(CurrentUserAccessor.getCurrentUserName());
+		history.setModifiedDate(new Date());
 
-            // clean up just in case
-            executionContext.getParameters().remove(HISTORY_RECORD);
+		Attachment attachment = (Attachment) parameters.get(ATTACHMENT_PROPERTY);
 
-            return;
-        }
+		if (attachment != null) {
+			history.setAttachment(attachment);
+			parameters.remove(ATTACHMENT_PROPERTY);
+		}
 
-        calculateCarryovers(parameters, token);
+		token.addHistoryRecord(history);
 
-        HistoryRecord history = instanceFactory.getBean(HistoryRecord.class.getSimpleName());
+		executionContext.getParameters().put(HISTORY_RECORD, history);
 
-        history.setToken(token);
-        history.setModifiedBy(CurrentUserAccessor.getCurrentUserName());
-        history.setModifiedDate(new Date());
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Histories=" + token.getHistories());
+		}
+	}
 
-        Attachment attachment = (Attachment) parameters.get(ATTACHMENT_PROPERTY);
+	private void calculateCarryovers(Map<String, Object> parameters, ProcessToken token) {
+		List<HistoryRecord> histories = token.getHistories();
 
-        if (attachment != null) {
-            history.setAttachment(attachment);
-            parameters.remove(ATTACHMENT_PROPERTY);
-        }
+		HistoryRecord last = null;
 
-        token.addHistoryRecord(history);
+		if ((histories != null) && !histories.isEmpty()) {
+			last = histories.get(histories.size() - 1);
+		}
 
-        executionContext.getParameters().put(HISTORY_RECORD, history);
+		if (last == null) {
+			LOG.debug("No previous record");
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Histories=" + token.getHistories());
-        }
-    }
+			return;
+		}
 
-    private void calculateCarryovers(Map<String, Object> parameters, ProcessToken token) {
-        List<HistoryRecord> histories = token.getHistories();
+		carryOverString(last.getStatus(), parameters, STATUS);
+		carryOverString(last.getApprovedBy(), parameters, APPROVEDBY_PROPERTY);
+	}
 
-        HistoryRecord last = null;
+	private void carryOverString(String previous, Map<String, Object> parameters, String key) {
+		String value = (String) parameters.get(key);
 
-        if ((histories != null) && !histories.isEmpty()) {
-            last = histories.get(histories.size() - 1);
-        }
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("previous:" + previous + " value:" + value);
+		}
 
-        if (last == null) {
-            LOG.debug("No previous record");
+		if (value == null) {
+			value = previous;
+		}
 
-            return;
-        }
-
-        carryOverString(last.getStatus(), parameters, STATUS);
-        carryOverString(last.getApprovedBy(), parameters, APPROVEDBY_PROPERTY);
-    }
-
-    private void carryOverString(String previous, Map<String, Object> parameters, String key) {
-        String value = (String) parameters.get(key);
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("previous:" + previous + " value:" + value);
-        }
-
-        if (value == null) {
-            value = previous;
-        }
-
-        parameters.put(key, value);
-    }
+		parameters.put(key, value);
+	}
 }

@@ -1,4 +1,3 @@
-
 package org.cucina.engine.definition;
 
 import org.cucina.engine.SignalFailedException;
@@ -11,15 +10,15 @@ import org.cucina.engine.SignalFailedException;
  * @author robh
  */
 public class TransitionNotFoundException
-    extends SignalFailedException {
-    private static final long serialVersionUID = -2802618240730378221L;
+		extends SignalFailedException {
+	private static final long serialVersionUID = -2802618240730378221L;
 
-    /**
-     * Creates a new TransitionNotFoundException object.
-     *
-     * @param message JAVADOC.
-     */
-    public TransitionNotFoundException(String message) {
-        super(message);
-    }
+	/**
+	 * Creates a new TransitionNotFoundException object.
+	 *
+	 * @param message JAVADOC.
+	 */
+	public TransitionNotFoundException(String message) {
+		super(message);
+	}
 }

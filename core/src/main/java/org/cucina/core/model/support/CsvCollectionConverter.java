@@ -1,13 +1,12 @@
 package org.cucina.core.model.support;
 
-import java.util.Arrays;
-import java.util.Collection;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import java.util.Arrays;
+import java.util.Collection;
 
 
 /**
@@ -16,69 +15,61 @@ import org.apache.commons.lang3.StringUtils;
 @SuppressWarnings("rawtypes")
 @Converter
 public class CsvCollectionConverter
-    implements AttributeConverter<Collection, String> {
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param val
-     *            JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @SuppressWarnings("unchecked")
-    @Override
-    public String convertToDatabaseColumn(Collection val) {
-        if (val == null) {
-            return null;
-        }
+		implements AttributeConverter<Collection, String> {
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param string JAVADOC.
+	 * @return JAVADOC.
+	 */
+	public static Collection<String> fromString(String string) {
+		String[] vals = StringUtils.split(string, ", ");
 
-        return toString(val);
-    }
+		return Arrays.asList(vals);
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param val
-     *            JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    public Collection convertToEntityAttribute(String val) {
-        if (val == null) {
-            return null;
-        }
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param coll JAVADOC.
+	 * @return JAVADOC.
+	 */
+	public static String toString(Collection<String> coll) {
+		if (CollectionUtils.isEmpty(coll)) {
+			return null;
+		}
 
-        return fromString(val);
-    }
+		return StringUtils.join(coll, ',');
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param string
-     *            JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    public static Collection<String> fromString(String string) {
-        String[] vals = StringUtils.split(string, ", ");
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param val JAVADOC.
+	 * @return JAVADOC.
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public String convertToDatabaseColumn(Collection val) {
+		if (val == null) {
+			return null;
+		}
 
-        return Arrays.asList(vals);
-    }
+		return toString(val);
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param coll
-     *            JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    public static String toString(Collection<String> coll) {
-        if (CollectionUtils.isEmpty(coll)) {
-            return null;
-        }
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param val JAVADOC.
+	 * @return JAVADOC.
+	 */
+	@Override
+	public Collection convertToEntityAttribute(String val) {
+		if (val == null) {
+			return null;
+		}
 
-        return StringUtils.join(coll, ',');
-    }
+		return fromString(val);
+	}
 }

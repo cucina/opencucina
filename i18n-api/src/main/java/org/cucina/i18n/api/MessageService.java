@@ -3,8 +3,6 @@ package org.cucina.i18n.api;
 import java.util.Collection;
 import java.util.Locale;
 
-import org.cucina.i18n.api.MessageDto;
-
 /**
  * JAVADOC.
  *
@@ -22,20 +20,16 @@ public interface MessageService {
 	/**
 	 * Load all with paging
 	 *
-	 * @param page
-	 *            JAVADOC.
-	 * @param size
-	 *            JAVADOC.
-	 *
+	 * @param page JAVADOC.
+	 * @param size JAVADOC.
 	 * @return JAVADOC.
 	 */
 	Collection<MessageDto> loadAll(int page, int size);
 
 	/**
 	 * JAVADOC Method Level Comments
-	 * 
-	 * @param id
 	 *
+	 * @param id
 	 * @return JAVADOC.
 	 */
 	MessageDto loadById(Long id, Locale locale);
@@ -47,16 +41,14 @@ public interface MessageService {
 	 * @param code
 	 * @param locale
 	 * @param basename
-	 *
 	 * @return JAVADOC.
 	 */
 	String loadMessage(String code, Locale locale, String basename);
 
 	/**
 	 * Saves a new message
-	 * 
-	 * @param messageDto
 	 *
+	 * @param messageDto
 	 * @return
 	 */
 	Long saveMessage(MessageDto messageDto);

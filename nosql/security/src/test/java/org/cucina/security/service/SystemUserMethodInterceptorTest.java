@@ -1,5 +1,12 @@
 package org.cucina.security.service;
 
+import org.aopalliance.intercept.MethodInvocation;
+import org.cucina.security.api.CurrentUserAccessor;
+import org.cucina.security.model.User;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,20 +16,9 @@ import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
-import org.aopalliance.intercept.MethodInvocation;
-
-import org.cucina.security.api.CurrentUserAccessor;
-import org.cucina.security.model.User;
 import static org.junit.Assert.assertEquals;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import org.mockito.Mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import org.mockito.MockitoAnnotations;
 
 
 /**
@@ -30,115 +26,115 @@ import org.mockito.MockitoAnnotations;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public class SystemUserMethodInterceptorTest {
-    @Mock
-    private BeanFactory beanFactory;
-    @Mock
-    private MethodInvocation methodInvocation;
-    @Mock
-    private SystemUserService systemUserService;
-    @Mock
-    private UserAccessor userAccessor;
-    @Mock
-    private UserDetailsService userDetailsService;
+	@Mock
+	private BeanFactory beanFactory;
+	@Mock
+	private MethodInvocation methodInvocation;
+	@Mock
+	private SystemUserService systemUserService;
+	@Mock
+	private UserAccessor userAccessor;
+	@Mock
+	private UserDetailsService userDetailsService;
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @throws Exception JAVADOC.
-     */
-    @Before
-    public void setUp()
-        throws Exception {
-        MockitoAnnotations.initMocks(this);
-        clearSecurity();
-    }
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @throws Exception JAVADOC.
+	 */
+	@Before
+	public void setUp()
+			throws Exception {
+		MockitoAnnotations.initMocks(this);
+		clearSecurity();
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @throws Throwable JAVADOC.
-     */
-    @Test
-    public void test()
-        throws Throwable {
-        //create authentication
-        User user = new User();
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @throws Throwable JAVADOC.
+	 */
+	@Test
+	public void test()
+			throws Throwable {
+		//create authentication
+		User user = new User();
 
-        user.setUsername("loggedin");
+		user.setUsername("loggedin");
 
-        //set security
-        AbstractAuthenticationToken authToken = setSecurity(user, true);
+		//set security
+		AbstractAuthenticationToken authToken = setSecurity(user, true);
 
-        //mock systemUserService returns username
-        String systemUsername = "ADMIN";
+		//mock systemUserService returns username
+		String systemUsername = "ADMIN";
 
-        when(systemUserService.getUsername()).thenReturn(systemUsername);
+		when(systemUserService.getUsername()).thenReturn(systemUsername);
 
-        SystemUserMethodInterceptor interceptor = new SystemUserMethodInterceptor(userAccessor,
-                systemUserService);
+		SystemUserMethodInterceptor interceptor = new SystemUserMethodInterceptor(userAccessor,
+				systemUserService);
 
-        interceptor.invoke(methodInvocation);
-        //mock authenticatioNService call
-        verify(userAccessor).forceUserToContext(systemUsername);
-        verify(methodInvocation).proceed();
+		interceptor.invoke(methodInvocation);
+		//mock authenticatioNService call
+		verify(userAccessor).forceUserToContext(systemUsername);
+		verify(methodInvocation).proceed();
 
-        //test it switches back
-        assertEquals(CurrentUserAccessor.currentAuthentication(), authToken);
-    }
+		//test it switches back
+		assertEquals(CurrentUserAccessor.currentAuthentication(), authToken);
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @throws Throwable JAVADOC.
-     */
-    @Test
-    public void testWithNull()
-        throws Throwable {
-        if (null == SecurityContextHolder.getContext()) {
-            SecurityContextHolder.setContext(new SecurityContextImpl());
-        }
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @throws Throwable JAVADOC.
+	 */
+	@Test
+	public void testWithNull()
+			throws Throwable {
+		if (null == SecurityContextHolder.getContext()) {
+			SecurityContextHolder.setContext(new SecurityContextImpl());
+		}
 
-        //mock systemUserService returns username
-        String systemUsername = "ADMIN";
+		//mock systemUserService returns username
+		String systemUsername = "ADMIN";
 
-        when(systemUserService.getUsername()).thenReturn(systemUsername);
+		when(systemUserService.getUsername()).thenReturn(systemUsername);
 
-        SystemUserMethodInterceptor interceptor = new SystemUserMethodInterceptor(userAccessor,
-                systemUserService);
+		SystemUserMethodInterceptor interceptor = new SystemUserMethodInterceptor(userAccessor,
+				systemUserService);
 
-        interceptor.invoke(methodInvocation);
-        //mock authenticatioNService call
-        verify(userAccessor).forceUserToContext(systemUsername);
-        verify(methodInvocation).proceed();
+		interceptor.invoke(methodInvocation);
+		//mock authenticatioNService call
+		verify(userAccessor).forceUserToContext(systemUsername);
+		verify(methodInvocation).proceed();
 
-        //test it switches back
-        assertEquals(CurrentUserAccessor.currentAuthentication(), null);
-    }
+		//test it switches back
+		assertEquals(CurrentUserAccessor.currentAuthentication(), null);
+	}
 
-    private AbstractAuthenticationToken setSecurity(User user, boolean isPreAuth) {
-        if (null == SecurityContextHolder.getContext()) {
-            SecurityContextHolder.setContext(new SecurityContextImpl());
-        }
+	private AbstractAuthenticationToken setSecurity(User user, boolean isPreAuth) {
+		if (null == SecurityContextHolder.getContext()) {
+			SecurityContextHolder.setContext(new SecurityContextImpl());
+		}
 
-        SecurityContext context = SecurityContextHolder.getContext();
+		SecurityContext context = SecurityContextHolder.getContext();
 
-        AbstractAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user, null);
+		AbstractAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user, null);
 
-        if (isPreAuth) {
-            authToken = new PreAuthenticatedAuthenticationToken(user, null);
-        }
+		if (isPreAuth) {
+			authToken = new PreAuthenticatedAuthenticationToken(user, null);
+		}
 
-        authToken.setDetails("pipipi");
-        context.setAuthentication(authToken);
+		authToken.setDetails("pipipi");
+		context.setAuthentication(authToken);
 
-        return authToken;
-    }
+		return authToken;
+	}
 
-    private void clearSecurity() {
-        SecurityContext context = SecurityContextHolder.getContext();
+	private void clearSecurity() {
+		SecurityContext context = SecurityContextHolder.getContext();
 
-        context.setAuthentication(null);
-    }
+		context.setAuthentication(null);
+	}
 }

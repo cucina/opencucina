@@ -1,23 +1,18 @@
 package org.cucina.security.service;
 
-import java.lang.reflect.Method;
-
+import org.cucina.security.model.User;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import org.cucina.security.model.User;
+import java.lang.reflect.Method;
 
-import org.junit.Before;
-import org.junit.Test;
 import static org.mockito.Matchers.anyString;
-
-import org.mockito.Mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import org.mockito.MockitoAnnotations;
+import static org.mockito.Mockito.*;
 
 
 /**
@@ -25,72 +20,72 @@ import org.mockito.MockitoAnnotations;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public class CurrentUserSetAdviceTest {
-    private CurrentUserSetAdvice interceptor;
-    @Mock
-    private SystemUserService systemUserService;
-    @Mock
-    private UserAccessor userAccessor;
+	private CurrentUserSetAdvice interceptor;
+	@Mock
+	private SystemUserService systemUserService;
+	@Mock
+	private UserAccessor userAccessor;
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        clearSecurity();
-        interceptor = new CurrentUserSetAdvice(systemUserService, userAccessor);
-    }
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
+		clearSecurity();
+		interceptor = new CurrentUserSetAdvice(systemUserService, userAccessor);
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @throws Throwable JAVADOC.
-     */
-    @Test
-    public void testInvokeInContext()
-        throws Throwable {
-        when(systemUserService.getUsername()).thenReturn("userName");
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @throws Throwable JAVADOC.
+	 */
+	@Test
+	public void testInvokeInContext()
+			throws Throwable {
+		when(systemUserService.getUsername()).thenReturn("userName");
 
-        Method method = this.getClass().getMethod("setup", (Class<?>[]) null);
+		Method method = this.getClass().getMethod("setup", (Class<?>[]) null);
 
-        interceptor.before(method, null, null);
+		interceptor.before(method, null, null);
 
-        verify(userAccessor).forceUserToContext("userName");
-    }
+		verify(userAccessor).forceUserToContext("userName");
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @throws Throwable JAVADOC.
-     */
-    @Test
-    public void testWithCurrentAuth()
-        throws Throwable {
-        setSecurity();
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @throws Throwable JAVADOC.
+	 */
+	@Test
+	public void testWithCurrentAuth()
+			throws Throwable {
+		setSecurity();
 
-        interceptor.before(null, null, null);
-        verify(systemUserService, never()).getUsername();
-        verify(userAccessor, never()).forceUserToContext(anyString());
-    }
+		interceptor.before(null, null, null);
+		verify(systemUserService, never()).getUsername();
+		verify(userAccessor, never()).forceUserToContext(anyString());
+	}
 
-    private void setSecurity() {
-        SecurityContext context = SecurityContextHolder.getContext();
-        User user = new User();
+	private void setSecurity() {
+		SecurityContext context = SecurityContextHolder.getContext();
+		User user = new User();
 
-        user.setUsername("User");
+		user.setUsername("User");
 
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user,
-                null, null);
+		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user,
+				null, null);
 
-        authToken.setDetails("detailsToken");
-        context.setAuthentication(authToken);
-    }
+		authToken.setDetails("detailsToken");
+		context.setAuthentication(authToken);
+	}
 
-    private void clearSecurity() {
-        SecurityContext context = SecurityContextHolder.getContext();
+	private void clearSecurity() {
+		SecurityContext context = SecurityContextHolder.getContext();
 
-        context.setAuthentication(null);
-    }
+		context.setAuthentication(null);
+	}
 }

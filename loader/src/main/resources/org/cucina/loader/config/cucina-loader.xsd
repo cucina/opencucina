@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns="http://opencucina.org/schema/cucina-loader"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:beans="http://www.springframework.org/schema/beans"
-	xmlns:meringue="http://opencucina.org/schema/cucina-loader"
-	targetNamespace="http://opencucina.org/schema/cucina-loader"
-	elementFormDefault="qualified" attributeFormDefault="unqualified">
-	<xsd:import namespace="http://www.springframework.org/schema/beans" />
-	<xsd:element name="processorEventMulticaster">
-		<xsd:complexType>
-			<xsd:attribute name="id" type="xsd:ID" />
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="processorEventListener">
-		<xsd:complexType>
-			<xsd:attribute name="id" type="xsd:ID" />
-			<xsd:attribute name="processor" type="xsd:string" />
-		</xsd:complexType>
-	</xsd:element>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns="http://opencucina.org/schema/cucina-loader"
+            targetNamespace="http://opencucina.org/schema/cucina-loader"
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <xsd:import namespace="http://www.springframework.org/schema/beans"/>
+    <xsd:element name="processorEventMulticaster">
+        <xsd:complexType>
+            <xsd:attribute name="id" type="xsd:ID"/>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="processorEventListener">
+        <xsd:complexType>
+            <xsd:attribute name="id" type="xsd:ID"/>
+            <xsd:attribute name="processor" type="xsd:string"/>
+        </xsd:complexType>
+    </xsd:element>
 </xsd:schema>

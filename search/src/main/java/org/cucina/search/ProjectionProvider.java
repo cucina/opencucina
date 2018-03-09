@@ -8,11 +8,12 @@ import org.cucina.search.query.SearchBean;
  * the projection group.
  */
 public interface ProjectionProvider {
-    /**
-     * Adds the additional <code>Projection</code>s to the projection list.
-     * @param type
-     * @param bean
-     * @param projectionGroup
-     */
-    void provide(String type, SearchBean bean);
+	/**
+	 * Adds the additional <code>Projection</code>s to the projection list.
+	 *
+	 * @param type
+	 * @param bean
+	 * @param projectionGroup
+	 */
+	void provide(String type, SearchBean bean);
 }

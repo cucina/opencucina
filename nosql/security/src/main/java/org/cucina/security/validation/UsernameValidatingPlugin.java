@@ -1,4 +1,3 @@
-
 package org.cucina.security.validation;
 
 
@@ -7,21 +6,20 @@ package org.cucina.security.validation;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public interface UsernameValidatingPlugin {
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param username JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    boolean isValid(String username);
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param username JAVADOC.
+	 * @return JAVADOC.
+	 */
+	boolean isValid(String username);
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    String message();
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @return JAVADOC.
+	 */
+	String message();
 }

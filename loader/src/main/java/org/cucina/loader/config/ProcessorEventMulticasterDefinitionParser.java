@@ -10,28 +10,27 @@ import org.w3c.dom.Element;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public class ProcessorEventMulticasterDefinitionParser
-    extends AbstractDefaultIdBeanDefinitionParser {
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param element JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    protected Class<?> getBeanClass(Element element) {
-        return ProcessorEventMulticaster.class;
-    }
+		extends AbstractDefaultIdBeanDefinitionParser {
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param element JAVADOC.
+	 * @return JAVADOC.
+	 */
+	@Override
+	protected Class<?> getBeanClass(Element element) {
+		return ProcessorEventMulticaster.class;
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    protected String getDefaultId() {
-        return "processorEventMulticaster";
-    }
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @return JAVADOC.
+	 */
+	@Override
+	protected String getDefaultId() {
+		return "processorEventMulticaster";
+	}
 }

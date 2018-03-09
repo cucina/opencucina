@@ -1,4 +1,3 @@
-
 package org.cucina.search.query;
 
 
@@ -8,14 +7,13 @@ package org.cucina.search.query;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public interface SearchQueryGenerator {
-    /**
-     * Generate query.
-     *
-     * @param searchBean SearchBean.
-     *
-     * @return SpriteQuery.
-     */
-    SearchQuery generateQuery(SearchBean searchBean);
+	/**
+	 * Generate query.
+	 *
+	 * @param searchBean SearchBean.
+	 * @return SpriteQuery.
+	 */
+	SearchQuery generateQuery(SearchBean searchBean);
 }

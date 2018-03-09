@@ -1,67 +1,67 @@
 <?xml version="1.0"?>
 <process-definition name="Item">
-	<description>Item processing</description>
-	<start-state id="start">
-		<transition to="isOpen" id="toOpen" default="true" />
-	</start-state>
+    <description>Item processing</description>
+    <start-state id="start">
+        <transition to="isOpen" id="toOpen" default="true"/>
+    </start-state>
 
-	<decision id="isOpen">
-		<transition to="finished" id="nullOrOldDataset">
-			<condition path="bean:elCheck" application="client">
-				<property name="expression" value="status == 'CLOSED' " />
-			</condition>
-			<exit-action path="bean:elOperation"
-				application="client">
-				<property name="expressionTo" value="status" />
-				<property name="expressionFrom" value="'CLOSED_INVALID_DS'" />
-			</exit-action>
-		</transition>
-		<transition to="open" id="toOpen">
-<!-- 			<condition path="bean:conditionFalse" application="client"/> -->
-		
-			<exit-action path="bean:elOperation"
-				application="client">
-				<property name="expressionTo" value="status" />
-				<property name="expressionFrom" value="'OPEN'" />
-			</exit-action>
-		</transition>
-	</decision>
+    <decision id="isOpen">
+        <transition to="finished" id="nullOrOldDataset">
+            <condition path="bean:elCheck" application="client">
+                <property name="expression" value="status == 'CLOSED' "/>
+            </condition>
+            <exit-action path="bean:elOperation"
+                         application="client">
+                <property name="expressionTo" value="status"/>
+                <property name="expressionFrom" value="'CLOSED_INVALID_DS'"/>
+            </exit-action>
+        </transition>
+        <transition to="open" id="toOpen">
+            <!-- 			<condition path="bean:conditionFalse" application="client"/> -->
 
-	<state id="open">
-		<transition to="finished" id="approve">
-			<condition path="bean:elCheck" application="client">
-				<property name="expression" value="status == 'OPEN' " />
-			</condition>
-			<exit-action path="bean:commitItemAction" application="client">
-				<property-map name="attributes">
-					<entry key="authorized" value="T(java.lang.Boolean).TRUE.toString()" />
-					<entry key="authorizer"
-						value="T(org.cucina.security.AcegiUserAccessor).getCurrentUserName()" />
-				</property-map>
-			</exit-action>
-			<exit-action path="bean:elOperation"
-				application="client">
-				<property name="expressionTo" value="status" />
-				<property name="expressionFrom" value="'APPROVED'" />
-			</exit-action>
-		</transition>
-		<transition to="finished" id="reject">
-			<exit-action path="bean:rejectItemAction" application="client">
-				<property-map name="attributes">
-					<entry key="authorized" value="T(java.lang.Boolean).FALSE.toString()" />
-					<entry key="authorizer"
-						value="T(org.cucina.security.AcegiUserAccessor).getCurrentUserName()" />
-				</property-map>
-			</exit-action>
-			<exit-action path="bean:elOperation"
-				application="client">
-				<property name="expressionTo" value="status" />
-				<property name="expressionFrom" value="'REJECTED'" />
-			</exit-action>
-		</transition>
-	</state>
+            <exit-action path="bean:elOperation"
+                         application="client">
+                <property name="expressionTo" value="status"/>
+                <property name="expressionFrom" value="'OPEN'"/>
+            </exit-action>
+        </transition>
+    </decision>
 
-	<state id="finished" />
+    <state id="open">
+        <transition to="finished" id="approve">
+            <condition path="bean:elCheck" application="client">
+                <property name="expression" value="status == 'OPEN' "/>
+            </condition>
+            <exit-action path="bean:commitItemAction" application="client">
+                <property-map name="attributes">
+                    <entry key="authorized" value="T(java.lang.Boolean).TRUE.toString()"/>
+                    <entry key="authorizer"
+                           value="T(org.cucina.security.AcegiUserAccessor).getCurrentUserName()"/>
+                </property-map>
+            </exit-action>
+            <exit-action path="bean:elOperation"
+                         application="client">
+                <property name="expressionTo" value="status"/>
+                <property name="expressionFrom" value="'APPROVED'"/>
+            </exit-action>
+        </transition>
+        <transition to="finished" id="reject">
+            <exit-action path="bean:rejectItemAction" application="client">
+                <property-map name="attributes">
+                    <entry key="authorized" value="T(java.lang.Boolean).FALSE.toString()"/>
+                    <entry key="authorizer"
+                           value="T(org.cucina.security.AcegiUserAccessor).getCurrentUserName()"/>
+                </property-map>
+            </exit-action>
+            <exit-action path="bean:elOperation"
+                         application="client">
+                <property name="expressionTo" value="status"/>
+                <property name="expressionFrom" value="'REJECTED'"/>
+            </exit-action>
+        </transition>
+    </state>
 
-	<end-state id="end" />
+    <state id="finished"/>
+
+    <end-state id="end"/>
 </process-definition>

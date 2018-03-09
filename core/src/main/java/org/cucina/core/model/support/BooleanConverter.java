@@ -9,35 +9,33 @@ import javax.persistence.Converter;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 @Converter
 public class BooleanConverter
-    implements AttributeConverter<Boolean, String> {
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param value JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    public String convertToDatabaseColumn(Boolean value) {
-        if (value) {
-            return "Y";
-        }
+		implements AttributeConverter<Boolean, String> {
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param value JAVADOC.
+	 * @return JAVADOC.
+	 */
+	@Override
+	public String convertToDatabaseColumn(Boolean value) {
+		if (value) {
+			return "Y";
+		}
 
-        return "N";
-    }
+		return "N";
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param value JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    public Boolean convertToEntityAttribute(String value) {
-        return "Y".equals(value);
-    }
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param value JAVADOC.
+	 * @return JAVADOC.
+	 */
+	@Override
+	public Boolean convertToEntityAttribute(String value) {
+		return "Y".equals(value);
+	}
 }

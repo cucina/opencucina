@@ -1,10 +1,9 @@
-
 package org.cucina.engine.definition.config.xml;
+
+import org.xml.sax.Attributes;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.xml.sax.Attributes;
 
 
 /**
@@ -14,14 +13,14 @@ import org.xml.sax.Attributes;
  * @version $Revision: 1.2 $
  */
 public class CreateListFactory
-    extends AbstractCreateObjectFactory<List<Object>> {
-    /**
-     * Creates and returns new ArrayList
-     *
-     * @return ArrayList<Object>.
-     */
-    @Override
-    public List<Object> createObjectImpl(Attributes attributes) {
-        return new ArrayList<Object>();
-    }
+		extends AbstractCreateObjectFactory<List<Object>> {
+	/**
+	 * Creates and returns new ArrayList
+	 *
+	 * @return ArrayList<Object>.
+	 */
+	@Override
+	public List<Object> createObjectImpl(Attributes attributes) {
+		return new ArrayList<Object>();
+	}
 }

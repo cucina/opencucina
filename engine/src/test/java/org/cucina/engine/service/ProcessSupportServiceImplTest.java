@@ -1,24 +1,8 @@
 package org.cucina.engine.service;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-
 import org.cucina.core.model.Attachment;
 import org.cucina.engine.ProcessEnvironment;
-import org.cucina.engine.definition.Decision;
-import org.cucina.engine.definition.EndStation;
-import org.cucina.engine.definition.ProcessDefinition;
-import org.cucina.engine.definition.ProcessDefinitionHelper;
-import org.cucina.engine.definition.StartStation;
-import org.cucina.engine.definition.State;
-import org.cucina.engine.definition.Station;
-import org.cucina.engine.definition.Transition;
+import org.cucina.engine.definition.*;
 import org.cucina.engine.definition.config.ProcessDefinitionRegistry;
 import org.cucina.engine.model.HistoryRecord;
 import org.cucina.engine.model.ProcessToken;
@@ -30,30 +14,20 @@ import org.cucina.search.SearchService;
 import org.cucina.search.query.SearchBean;
 import org.cucina.search.query.SearchResults;
 import org.cucina.security.api.AccessFacade;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
+import java.io.Serializable;
+import java.util.*;
+
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
-
-import org.mockito.Mock;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import org.mockito.MockitoAnnotations;
+import static org.mockito.Mockito.*;
 
 
 /**
@@ -63,507 +37,506 @@ import org.mockito.MockitoAnnotations;
  * @version $Revision: $
  */
 public class ProcessSupportServiceImplTest {
-    private static final String WORKFLOW_ID = "workflowId";
-    @Mock
-    private AccessFacade accessFacade;
-    @Mock
-    private DefinitionService definitionService;
-    @Mock
-    private HistoryRecordRepository historyRecordRepository;
-    @Mock
-    private ProcessDefinitionHelper helper;
-    @Mock
-    private ProcessDefinitionRegistry definitionRegistry;
-    @Mock
-    private ProcessEnvironment processEnvironment;
-    @Mock
-    private ProcessService processService;
-    private ProcessSupportServiceImpl service;
-    @Mock
-    private SearchBeanFactory searchBeanFactory;
-    @Mock
-    private SearchService searchService;
-    @Mock
-    private TokenRepository tokenRepository;
-
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @throws Exception
-     *             JAVADOC.
-     */
-    @Before
-    public void setUp()
-        throws Exception {
-        MockitoAnnotations.initMocks(this);
-        service = new ProcessSupportServiceImpl();
-        service.setHistoryRecordRepository(historyRecordRepository);
-        service.setProcessEnvironment(processEnvironment);
-        service.setTokenRepository(tokenRepository);
-        service.setDefinitionService(definitionService);
-        service.setSearchBeanFactory(searchBeanFactory);
-        service.setSearchService(searchService);
-        service.setAccessRegistry(accessFacade);
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     */
-    public void listWorkflowProperties() {
-        Collection<Serializable> ids = new HashSet<Serializable>();
-
-        ids.add(12L);
-
-        Map<String, Object> params = new HashMap<String, Object>();
-
-        params.put(ProcessToken.DOMAIN_OBJ_ID_NAME, ids);
-
-        SearchBean searchBean = new SearchBean();
-
-        when(searchBeanFactory.buildSearchBean(Foo.TYPE, params)).thenReturn(searchBean);
-
-        SearchResults searchResults = mock(SearchResults.class);
-
-        when(searchService.search(eq(searchBean), eq(params))).thenReturn(searchResults);
-
-        List<Map<String, Object>> results = new ArrayList<Map<String, Object>>();
-
-        when(searchResults.<String, Object>searchMap(0, Integer.MAX_VALUE)).thenReturn(results);
-
-        Collection<Map<String, Object>> actualResults = service.listWorkflowProperties(ids, Foo.TYPE);
-
-        assertSame("Should be same map", results, actualResults);
-
-        verify(searchBeanFactory).addProjections(Foo.TYPE, searchBean);
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    public void loadStatesByTransition() {
-        ProcessDefinition definition = new ProcessDefinition();
-
-        // create the start state
-        StartStation startState = new StartStation();
-
-        startState.setId("start");
-        definition.setStartState(startState);
-
-        // create the Coke state
-        Station coke = new Station();
-
-        coke.setId("coke");
-
-        // create the end state
-        EndStation end = new EndStation();
-
-        end.setId("end");
-
-        Transition toChoose = new Transition();
-
-        toChoose.setId("toCoke");
-        toChoose.setDefault(true);
-        startState.addTransition(toChoose);
-        toChoose.setOutput(coke);
-
-        // create the transition to coke
-        Transition toEnd = new Transition();
-
-        toEnd.setId("toEnd");
-        coke.addTransition(toEnd);
-        toEnd.setOutput(end);
-
-        when(definitionService.loadDefinition(WORKFLOW_ID)).thenReturn(definition);
-
-        Collection<Map<String, String>> results = service.loadTransitionInfo(WORKFLOW_ID);
-
-        assertNotNull("Should have returned results", results);
-
-        boolean foundToCoke = false;
-        boolean foundToEnd = false;
-
-        for (Map<String, String> result : results) {
-            if ("toCoke".equals(result.get("transition"))) {
-                assertEquals("Incorrect stateFrom", "start", result.get("stateFrom"));
-                assertEquals("Incorrect stateTo", "coke", result.get("stateTo"));
-                foundToCoke = true;
-            } else if ("toEnd".equals(result.get("transition"))) {
-                assertEquals("Incorrect stateFrom", "coke", result.get("stateFrom"));
-                assertEquals("Incorrect stateTo", "end", result.get("stateTo"));
-                foundToEnd = true;
-            } else {
-                fail("Should not have any other transition [" + result.get("transition"));
-            }
-        }
-
-        assertTrue("Should have found foundToCoke", foundToCoke);
-        assertTrue("Should have found foundToEnd", foundToEnd);
-    }
-
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    public void startWorkflow() {
-        Foo foo = new Foo();
-        Map<String, Object> params = new HashMap<String, Object>();
-        ProcessToken token = new ProcessToken();
-
-        token.setDomainObject(foo);
-
-        when(processService.startProcess(foo, "Foo", null, params)).thenReturn(token);
-        when(processEnvironment.getService()).thenReturn(processService);
-
-        assertEquals("Should have returned token", token, service.startWorkflow(foo, "Foo", params));
-
-        verify(tokenRepository).save(token);
-    }
+	private static final String WORKFLOW_ID = "workflowId";
+	@Mock
+	private AccessFacade accessFacade;
+	@Mock
+	private DefinitionService definitionService;
+	@Mock
+	private HistoryRecordRepository historyRecordRepository;
+	@Mock
+	private ProcessDefinitionHelper helper;
+	@Mock
+	private ProcessDefinitionRegistry definitionRegistry;
+	@Mock
+	private ProcessEnvironment processEnvironment;
+	@Mock
+	private ProcessService processService;
+	private ProcessSupportServiceImpl service;
+	@Mock
+	private SearchBeanFactory searchBeanFactory;
+	@Mock
+	private SearchService searchService;
+	@Mock
+	private TokenRepository tokenRepository;
+
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @throws Exception JAVADOC.
+	 */
+	@Before
+	public void setUp()
+			throws Exception {
+		MockitoAnnotations.initMocks(this);
+		service = new ProcessSupportServiceImpl();
+		service.setHistoryRecordRepository(historyRecordRepository);
+		service.setProcessEnvironment(processEnvironment);
+		service.setTokenRepository(tokenRepository);
+		service.setDefinitionService(definitionService);
+		service.setSearchBeanFactory(searchBeanFactory);
+		service.setSearchService(searchService);
+		service.setAccessRegistry(accessFacade);
+	}
+
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	public void listWorkflowProperties() {
+		Collection<Serializable> ids = new HashSet<Serializable>();
+
+		ids.add(12L);
+
+		Map<String, Object> params = new HashMap<String, Object>();
+
+		params.put(ProcessToken.DOMAIN_OBJ_ID_NAME, ids);
+
+		SearchBean searchBean = new SearchBean();
+
+		when(searchBeanFactory.buildSearchBean(Foo.TYPE, params)).thenReturn(searchBean);
+
+		SearchResults searchResults = mock(SearchResults.class);
+
+		when(searchService.search(eq(searchBean), eq(params))).thenReturn(searchResults);
+
+		List<Map<String, Object>> results = new ArrayList<Map<String, Object>>();
+
+		when(searchResults.<String, Object>searchMap(0, Integer.MAX_VALUE)).thenReturn(results);
+
+		Collection<Map<String, Object>> actualResults = service.listWorkflowProperties(ids, Foo.TYPE);
+
+		assertSame("Should be same map", results, actualResults);
+
+		verify(searchBeanFactory).addProjections(Foo.TYPE, searchBean);
+	}
+
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Test
+	public void loadStatesByTransition() {
+		ProcessDefinition definition = new ProcessDefinition();
+
+		// create the start state
+		StartStation startState = new StartStation();
+
+		startState.setId("start");
+		definition.setStartState(startState);
+
+		// create the Coke state
+		Station coke = new Station();
+
+		coke.setId("coke");
+
+		// create the end state
+		EndStation end = new EndStation();
+
+		end.setId("end");
+
+		Transition toChoose = new Transition();
+
+		toChoose.setId("toCoke");
+		toChoose.setDefault(true);
+		startState.addTransition(toChoose);
+		toChoose.setOutput(coke);
+
+		// create the transition to coke
+		Transition toEnd = new Transition();
+
+		toEnd.setId("toEnd");
+		coke.addTransition(toEnd);
+		toEnd.setOutput(end);
+
+		when(definitionService.loadDefinition(WORKFLOW_ID)).thenReturn(definition);
+
+		Collection<Map<String, String>> results = service.loadTransitionInfo(WORKFLOW_ID);
+
+		assertNotNull("Should have returned results", results);
+
+		boolean foundToCoke = false;
+		boolean foundToEnd = false;
+
+		for (Map<String, String> result : results) {
+			if ("toCoke".equals(result.get("transition"))) {
+				assertEquals("Incorrect stateFrom", "start", result.get("stateFrom"));
+				assertEquals("Incorrect stateTo", "coke", result.get("stateTo"));
+				foundToCoke = true;
+			} else if ("toEnd".equals(result.get("transition"))) {
+				assertEquals("Incorrect stateFrom", "coke", result.get("stateFrom"));
+				assertEquals("Incorrect stateTo", "end", result.get("stateTo"));
+				foundToEnd = true;
+			} else {
+				fail("Should not have any other transition [" + result.get("transition"));
+			}
+		}
+
+		assertTrue("Should have found foundToCoke", foundToCoke);
+		assertTrue("Should have found foundToEnd", foundToEnd);
+	}
+
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Test
+	public void startWorkflow() {
+		Foo foo = new Foo();
+		Map<String, Object> params = new HashMap<String, Object>();
+		ProcessToken token = new ProcessToken();
+
+		token.setDomainObject(foo);
+
+		when(processService.startProcess(foo, "Foo", null, params)).thenReturn(token);
+		when(processEnvironment.getService()).thenReturn(processService);
+
+		assertEquals("Should have returned token", token, service.startWorkflow(foo, "Foo", params));
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    public void startWorkflowNoneExists() {
-        Foo foo = new Foo();
-        Map<String, Object> params = new HashMap<String, Object>();
+		verify(tokenRepository).save(token);
+	}
 
-        when(processService.startProcess(foo, "Foo", null, params)).thenReturn(null);
-        when(processEnvironment.getService()).thenReturn(processService);
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Test
+	public void startWorkflowNoneExists() {
+		Foo foo = new Foo();
+		Map<String, Object> params = new HashMap<String, Object>();
 
-        assertNull("Should have returned null value", service.startWorkflow(foo, "Foo", params));
-    }
+		when(processService.startProcess(foo, "Foo", null, params)).thenReturn(null);
+		when(processEnvironment.getService()).thenReturn(processService);
 
-    /**
-     * Tests that when the workflow is ended it is deleted
-     */
-    @Test
-    public void testEndedDelete() {
-        final ProcessToken token = new ProcessToken();
-
-        token.setDomainObjectId(100L);
-
-        when(helper.isEnded(token)).thenReturn(true);
-
-        Map<String, Object> parameters = new HashMap<String, Object>();
+		assertNull("Should have returned null value", service.startWorkflow(foo, "Foo", params));
+	}
 
-        parameters.put("comments", "comment");
-        parameters.put("attachment", null);
-        parameters.put("approvedBy", null);
-        parameters.put("assignedTo", null);
-        parameters.put("extraParams", null);
-        when(processService.executeTransition(token, "transitionId", parameters)).thenReturn(token);
-        when(processEnvironment.getProcessDefinitionHelper()).thenReturn(helper);
-        when(processEnvironment.getService()).thenReturn(processService);
+	/**
+	 * Tests that when the workflow is ended it is deleted
+	 */
+	@Test
+	public void testEndedDelete() {
+		final ProcessToken token = new ProcessToken();
 
-        Map<Serializable, Integer> map = new HashMap<Serializable, Integer>();
-
-        map.put(100L, 0);
+		token.setDomainObjectId(100L);
+
+		when(helper.isEnded(token)).thenReturn(true);
 
-        List<ProcessToken> result = new ArrayList<ProcessToken>();
+		Map<String, Object> parameters = new HashMap<String, Object>();
 
-        token.setProcessDefinitionId("workflowDefinitionId");
-        result.add(token);
-        when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Serializable[].class)))
-            .thenReturn(result);
-        service.setTokenRepository(tokenRepository);
-        service.makeBulkTransition(map, "Foo", "transitionId", "comment", null, null, null, null, null);
-    }
+		parameters.put("comments", "comment");
+		parameters.put("attachment", null);
+		parameters.put("approvedBy", null);
+		parameters.put("assignedTo", null);
+		parameters.put("extraParams", null);
+		when(processService.executeTransition(token, "transitionId", parameters)).thenReturn(token);
+		when(processEnvironment.getProcessDefinitionHelper()).thenReturn(helper);
+		when(processEnvironment.getService()).thenReturn(processService);
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    public void testListActionableTransitions() {
-        String systemPrivilege = "SYSTEM_ONLY";
-        String privilegeName = "yourPriv";
-        String definitionId = "wflwDfn";
+		Map<Serializable, Integer> map = new HashMap<Serializable, Integer>();
+
+		map.put(100L, 0);
 
-        final Station place = mock(Station.class);
-        Collection<Transition> transes = new ArrayList<Transition>();
-        Transition transition = new Transition();
+		List<ProcessToken> result = new ArrayList<ProcessToken>();
 
-        transition.setId("approve");
-        transition.setPrivilegeName(privilegeName);
-        transition.setInput(place);
-        transes.add(transition);
+		token.setProcessDefinitionId("workflowDefinitionId");
+		result.add(token);
+		when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Serializable[].class)))
+				.thenReturn(result);
+		service.setTokenRepository(tokenRepository);
+		service.makeBulkTransition(map, "Foo", "transitionId", "comment", null, null, null, null, null);
+	}
 
-        Transition transition2 = new Transition();
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Test
+	public void testListActionableTransitions() {
+		String systemPrivilege = "SYSTEM_ONLY";
+		String privilegeName = "yourPriv";
+		String definitionId = "wflwDfn";
 
-        transition2.setId("reject");
-        transition2.setInput(place);
-        transes.add(transition2);
+		final Station place = mock(Station.class);
+		Collection<Transition> transes = new ArrayList<Transition>();
+		Transition transition = new Transition();
 
-        Transition transition3 = new Transition();
+		transition.setId("approve");
+		transition.setPrivilegeName(privilegeName);
+		transition.setInput(place);
+		transes.add(transition);
 
-        transition3.setId("systemTrans");
-        transition3.setInput(place);
-        transition3.setPrivilegeName(systemPrivilege);
-        transes.add(transition3);
+		Transition transition2 = new Transition();
 
-        when(place.getAllTransitions()).thenReturn(transes);
+		transition2.setId("reject");
+		transition2.setInput(place);
+		transes.add(transition2);
 
-        final Station place2 = mock(Station.class);
-        Collection<Transition> transes2 = new ArrayList<Transition>();
+		Transition transition3 = new Transition();
 
-        Transition transition4 = new Transition();
+		transition3.setId("systemTrans");
+		transition3.setInput(place);
+		transition3.setPrivilegeName(systemPrivilege);
+		transes.add(transition3);
 
-        transition4.setId("approve2");
-        transition4.setPrivilegeName(privilegeName);
-        transition4.setInput(place2);
-        transes2.add(transition4);
+		when(place.getAllTransitions()).thenReturn(transes);
 
-        when(place2.getAllTransitions()).thenReturn(transes2);
+		final Station place2 = mock(Station.class);
+		Collection<Transition> transes2 = new ArrayList<Transition>();
 
-        final Decision dec = mock(Decision.class);
+		Transition transition4 = new Transition();
 
-        verify(dec, times(0)).getAllTransitions();
+		transition4.setId("approve2");
+		transition4.setPrivilegeName(privilegeName);
+		transition4.setInput(place2);
+		transes2.add(transition4);
 
-        @SuppressWarnings("serial")
-        ProcessDefinition definition = new ProcessDefinition() {
-                @Override
-                public State[] getAllPlaces() {
-                    return new State[] { place, place2, dec };
-                }
-            };
+		when(place2.getAllTransitions()).thenReturn(transes2);
 
-        when(definitionService.loadDefinition(definitionId)).thenReturn(definition);
-        when(accessFacade.getSystemPrivilege()).thenReturn("SYSTEM_ONLY");
+		final Decision dec = mock(Decision.class);
 
-        Collection<Transition> ret = service.listActionableTransitions(definitionId);
+		verify(dec, times(0)).getAllTransitions();
 
-        assertNotNull(ret);
-        assertEquals(3, ret.size());
-    }
+		@SuppressWarnings("serial")
+		ProcessDefinition definition = new ProcessDefinition() {
+			@Override
+			public State[] getAllPlaces() {
+				return new State[]{place, place2, dec};
+			}
+		};
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    public void testListActionableTransitionsNoWorkflow() {
-        when(processEnvironment.getDefinitionRegistry()).thenReturn(definitionRegistry);
+		when(definitionService.loadDefinition(definitionId)).thenReturn(definition);
+		when(accessFacade.getSystemPrivilege()).thenReturn("SYSTEM_ONLY");
 
-        when(definitionRegistry.findWorkflowDefinition("xxx")).thenReturn(null);
+		Collection<Transition> ret = service.listActionableTransitions(definitionId);
 
-        Collection<Transition> ret = service.listActionableTransitions("xxx");
+		assertNotNull(ret);
+		assertEquals(3, ret.size());
+	}
 
-        assertNotNull(ret);
-        assertEquals(0, ret.size());
-    }
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Test
+	public void testListActionableTransitionsNoWorkflow() {
+		when(processEnvironment.getDefinitionRegistry()).thenReturn(definitionRegistry);
 
-    /**
-     * Tests that gets transitions for all tokens
-     */
-    @Test
-    public void testListAllTransitions() {
-        Collection<String> transitions1 = new ArrayList<String>();
+		when(definitionRegistry.findWorkflowDefinition("xxx")).thenReturn(null);
 
-        transitions1.add("hello");
+		Collection<Transition> ret = service.listActionableTransitions("xxx");
 
-        ProcessToken token1 = new ProcessToken();
+		assertNotNull(ret);
+		assertEquals(0, ret.size());
+	}
 
-        token1.setDomainObjectId(12L);
+	/**
+	 * Tests that gets transitions for all tokens
+	 */
+	@Test
+	public void testListAllTransitions() {
+		Collection<String> transitions1 = new ArrayList<String>();
 
-        when(processService.listTransitions(token1, null)).thenReturn(transitions1);
+		transitions1.add("hello");
 
-        Collection<String> transitions2 = new ArrayList<String>();
+		ProcessToken token1 = new ProcessToken();
 
-        transitions2.add("tom");
-        transitions2.add("matt");
+		token1.setDomainObjectId(12L);
 
-        ProcessToken token2 = new ProcessToken();
+		when(processService.listTransitions(token1, null)).thenReturn(transitions1);
 
-        token2.setDomainObjectId(13L);
+		Collection<String> transitions2 = new ArrayList<String>();
 
-        when(processService.listTransitions(token2, null)).thenReturn(transitions2);
+		transitions2.add("tom");
+		transitions2.add("matt");
 
-        when(processEnvironment.getService()).thenReturn(processService);
+		ProcessToken token2 = new ProcessToken();
 
-        List<ProcessToken> tokens = new ArrayList<ProcessToken>();
+		token2.setDomainObjectId(13L);
 
-        tokens.add(token1);
-        tokens.add(token2);
-        when(tokenRepository.findByApplicationTypeAndIds(eq(Foo.TYPE), any(Serializable[].class)))
-            .thenReturn(tokens);
+		when(processService.listTransitions(token2, null)).thenReturn(transitions2);
 
-        Map<Serializable, Collection<String>> results = service.listAllTransitions(Collections.<Serializable>singleton(
-                    100L), Foo.TYPE);
+		when(processEnvironment.getService()).thenReturn(processService);
 
-        assertEquals("Incorrect number results", 2, results.size());
+		List<ProcessToken> tokens = new ArrayList<ProcessToken>();
 
-        Collection<String> transIds = results.get(12L);
+		tokens.add(token1);
+		tokens.add(token2);
+		when(tokenRepository.findByApplicationTypeAndIds(eq(Foo.TYPE), any(Serializable[].class)))
+				.thenReturn(tokens);
 
-        assertNotNull("Should have transitions", transIds);
-        assertEquals("Incorrect number transitions", 1, transIds.size());
-        assertTrue("Should contain value", transIds.contains("hello"));
-        transIds = results.get(13L);
-        assertNotNull("Should have transitions", transIds);
-        assertEquals("Incorrect number transitions", 2, transIds.size());
-        assertTrue("Should contain value", transIds.contains("tom"));
-        assertTrue("Should contain value", transIds.contains("matt"));
-    }
+		Map<Serializable, Collection<String>> results = service.listAllTransitions(Collections.<Serializable>singleton(
+				100L), Foo.TYPE);
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    public void testListTransitions() {
-        Collection<String> transes = new ArrayList<String>();
+		assertEquals("Incorrect number results", 2, results.size());
 
-        transes.add("hello");
+		Collection<String> transIds = results.get(12L);
 
-        ProcessToken token = new ProcessToken();
+		assertNotNull("Should have transitions", transIds);
+		assertEquals("Incorrect number transitions", 1, transIds.size());
+		assertTrue("Should contain value", transIds.contains("hello"));
+		transIds = results.get(13L);
+		assertNotNull("Should have transitions", transIds);
+		assertEquals("Incorrect number transitions", 2, transIds.size());
+		assertTrue("Should contain value", transIds.contains("tom"));
+		assertTrue("Should contain value", transIds.contains("matt"));
+	}
 
-        token.setPlaceId("haha");
-        when(processService.listTransitions(token, null)).thenReturn(transes);
-        when(processEnvironment.getService()).thenReturn(processService);
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Test
+	public void testListTransitions() {
+		Collection<String> transes = new ArrayList<String>();
 
-        List<ProcessToken> result = new ArrayList<ProcessToken>();
+		transes.add("hello");
 
-        token.setProcessDefinitionId("workflowDefinitionId");
-        result.add(token);
-        when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Serializable[].class)))
-            .thenReturn(result);
-        assertTrue("Not containing hello",
-            service.listTransitions(Collections.<Serializable>singleton(100L), "Foo").contains("hello"));
-    }
+		ProcessToken token = new ProcessToken();
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    public void testMakeSingleTransition() {
-        Foo foo = new Foo();
+		token.setPlaceId("haha");
+		when(processService.listTransitions(token, null)).thenReturn(transes);
+		when(processEnvironment.getService()).thenReturn(processService);
 
-        foo.setId(100L);
+		List<ProcessToken> result = new ArrayList<ProcessToken>();
 
-        final ProcessToken token = new ProcessToken();
+		token.setProcessDefinitionId("workflowDefinitionId");
+		result.add(token);
+		when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Serializable[].class)))
+				.thenReturn(result);
+		assertTrue("Not containing hello",
+				service.listTransitions(Collections.<Serializable>singleton(100L), "Foo").contains("hello"));
+	}
 
-        token.setDomainObject(foo);
-        token.setVersion(0);
-        token.setId(1L);
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Test
+	public void testMakeSingleTransition() {
+		Foo foo = new Foo();
 
-        when(helper.isEnded(token)).thenReturn(false);
+		foo.setId(100L);
 
-        Map<String, Object> parameters = new HashMap<String, Object>();
+		final ProcessToken token = new ProcessToken();
 
-        parameters.put("comments", "comment");
-        parameters.put("attachment", null);
-        parameters.put("approvedBy", null);
-        parameters.put("assignedTo", null);
-        parameters.put("extraParams", null);
-        when(processService.executeTransition(token, "transitionId", parameters)).thenReturn(token);
+		token.setDomainObject(foo);
+		token.setVersion(0);
+		token.setId(1L);
 
-        when(processEnvironment.getProcessDefinitionHelper()).thenReturn(helper);
-        when(processEnvironment.getService()).thenReturn(processService);
+		when(helper.isEnded(token)).thenReturn(false);
 
-        tokenRepository.save(token);
-        token.setProcessDefinitionId("workflowDefinitionId");
-        when(tokenRepository.findByApplicationTypeAndIds("Foo", 100L))
-            .thenReturn(Collections.singleton(token));
-        service.makeTransition(100L, "Foo", "transitionId", "comment", null, null, null, null);
-        // this one should call for delete caused by helper.isEnded returning true
-        when(helper.isEnded(token)).thenReturn(true);
-        service.makeTransition(100L, "Foo", "transitionId", "comment", null, null, null, null);
-    }
+		Map<String, Object> parameters = new HashMap<String, Object>();
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void testNoToken() {
-        Map<Serializable, Integer> map = new HashMap<Serializable, Integer>();
+		parameters.put("comments", "comment");
+		parameters.put("attachment", null);
+		parameters.put("approvedBy", null);
+		parameters.put("assignedTo", null);
+		parameters.put("extraParams", null);
+		when(processService.executeTransition(token, "transitionId", parameters)).thenReturn(token);
 
-        when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Serializable[].class)))
-            .thenReturn(null);
-        service.makeBulkTransition(map, "Foo", "transitionId", null, null, null, null, null, null);
-    }
+		when(processEnvironment.getProcessDefinitionHelper()).thenReturn(helper);
+		when(processEnvironment.getService()).thenReturn(processService);
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    public void testObtainHistory() {
-        List<HistoryRecord> result = new ArrayList<HistoryRecord>();
+		tokenRepository.save(token);
+		token.setProcessDefinitionId("workflowDefinitionId");
+		when(tokenRepository.findByApplicationTypeAndIds("Foo", 100L))
+				.thenReturn(Collections.singleton(token));
+		service.makeTransition(100L, "Foo", "transitionId", "comment", null, null, null, null);
+		// this one should call for delete caused by helper.isEnded returning true
+		when(helper.isEnded(token)).thenReturn(true);
+		service.makeTransition(100L, "Foo", "transitionId", "comment", null, null, null, null);
+	}
 
-        when(tokenRepository.findHistoryRecordsByDomainObjectIdAndDomainObjectType(1L, "Foo"))
-            .thenReturn(result);
-        assertEquals(result, service.obtainHistory(1L, "Foo"));
-    }
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void testNoToken() {
+		Map<Serializable, Integer> map = new HashMap<Serializable, Integer>();
 
-    /**
-     * Simple test that we utilize searchDao to obtain the history summary and that we
-     * use the Message.getBestMessage to return the reason value.
-     */
-    @Test
-    public void testObtainHistorySummary() {
-        List<HistoryRecord> results = new ArrayList<HistoryRecord>();
-        HistoryRecord historyRec1 = new HistoryRecord();
+		when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Serializable[].class)))
+				.thenReturn(null);
+		service.makeBulkTransition(map, "Foo", "transitionId", null, null, null, null, null, null);
+	}
 
-        historyRec1.setReason("A reason");
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Test
+	public void testObtainHistory() {
+		List<HistoryRecord> result = new ArrayList<HistoryRecord>();
 
-        HistoryRecord historyRec2 = new HistoryRecord();
+		when(tokenRepository.findHistoryRecordsByDomainObjectIdAndDomainObjectType(1L, "Foo"))
+				.thenReturn(result);
+		assertEquals(result, service.obtainHistory(1L, "Foo"));
+	}
 
-        results.add(historyRec1);
-        results.add(historyRec2);
-        when(historyRecordRepository.findByIdAndApplicationType(1L, "Foo")).thenReturn(results);
+	/**
+	 * Simple test that we utilize searchDao to obtain the history summary and that we
+	 * use the Message.getBestMessage to return the reason value.
+	 */
+	@Test
+	public void testObtainHistorySummary() {
+		List<HistoryRecord> results = new ArrayList<HistoryRecord>();
+		HistoryRecord historyRec1 = new HistoryRecord();
 
-        List<Map<Object, Object>> summary = service.obtainHistorySummary(1L, Foo.TYPE);
+		historyRec1.setReason("A reason");
 
-        assertEquals(2, summary.size());
-        assertEquals("A reason", summary.get(0).get("reason"));
-        assertNull(summary.get(1).get("reason"));
-    }
+		HistoryRecord historyRec2 = new HistoryRecord();
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @SuppressWarnings("unchecked")
-    @Test
-    public void testSunnyDay() {
-        final ProcessToken token = new ProcessToken();
+		results.add(historyRec1);
+		results.add(historyRec2);
+		when(historyRecordRepository.findByIdAndApplicationType(1L, "Foo")).thenReturn(results);
 
-        token.setDomainObjectId(100L);
-        token.setVersion(0);
-        token.setId(1L);
+		List<Map<Object, Object>> summary = service.obtainHistorySummary(1L, Foo.TYPE);
 
-        when(helper.isEnded(token)).thenReturn(false);
+		assertEquals(2, summary.size());
+		assertEquals("A reason", summary.get(0).get("reason"));
+		assertNull(summary.get(1).get("reason"));
+	}
 
-        final Attachment attachment = new Attachment();
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testSunnyDay() {
+		final ProcessToken token = new ProcessToken();
 
-        attachment.setFilename("filename");
+		token.setDomainObjectId(100L);
+		token.setVersion(0);
+		token.setId(1L);
 
-        final String comments = "comment";
+		when(helper.isEnded(token)).thenReturn(false);
 
-        when(processService.executeTransition(eq(token), eq("transitionId"),
-                argThat(new ArgumentMatcher<Map<String, Object>>() {
-                public boolean matches(Object params) {
-                    Map<String, Object> mParams = ((Map<String, Object>) params);
+		final Attachment attachment = new Attachment();
 
-                    // Check the comments and attachment but make sure that we've cloned the Attachment
-                    Attachment attachmentParam = (Attachment) mParams.get("attachment");
+		attachment.setFilename("filename");
 
-                    return mParams.get("comments").equals("comment") &&
-                            (attachmentParam != attachment) &&
-                            (attachmentParam.getFilename() == attachment.getFilename());
-                }
-            }))).thenReturn(token);
-        when(processEnvironment.getProcessDefinitionHelper()).thenReturn(helper);
-        when(processEnvironment.getService()).thenReturn(processService);
+		final String comments = "comment";
 
-        Map<Serializable, Integer> map = new HashMap<Serializable, Integer>();
+		when(processService.executeTransition(eq(token), eq("transitionId"),
+				argThat(new ArgumentMatcher<Map<String, Object>>() {
+					public boolean matches(Object params) {
+						Map<String, Object> mParams = ((Map<String, Object>) params);
 
-        map.put(100L, 0);
+						// Check the comments and attachment but make sure that we've cloned the Attachment
+						Attachment attachmentParam = (Attachment) mParams.get("attachment");
 
-        List<ProcessToken> result = new ArrayList<ProcessToken>();
+						return mParams.get("comments").equals("comment") &&
+								(attachmentParam != attachment) &&
+								(attachmentParam.getFilename() == attachment.getFilename());
+					}
+				}))).thenReturn(token);
+		when(processEnvironment.getProcessDefinitionHelper()).thenReturn(helper);
+		when(processEnvironment.getService()).thenReturn(processService);
 
-        token.setProcessDefinitionId("workflowDefinitionId");
-        result.add(token);
+		Map<Serializable, Integer> map = new HashMap<Serializable, Integer>();
 
-        when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Serializable[].class)))
-            .thenReturn(result);
-        tokenRepository.save(token);
-        service.makeBulkTransition(map, "Foo", "transitionId", comments, null, null, null, null,
-            attachment);
-    }
+		map.put(100L, 0);
+
+		List<ProcessToken> result = new ArrayList<ProcessToken>();
+
+		token.setProcessDefinitionId("workflowDefinitionId");
+		result.add(token);
+
+		when(tokenRepository.findByApplicationTypeAndIds(any(String.class), any(Serializable[].class)))
+				.thenReturn(result);
+		tokenRepository.save(token);
+		service.makeBulkTransition(map, "Foo", "transitionId", comments, null, null, null, null,
+				attachment);
+	}
 }

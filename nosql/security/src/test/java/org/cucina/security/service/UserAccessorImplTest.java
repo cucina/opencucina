@@ -1,28 +1,23 @@
 package org.cucina.security.service;
 
+import org.cucina.security.model.User;
+import org.cucina.security.repository.UserRepository;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.test.util.ReflectionTestUtils;
 
-//import org.cucina.core.spring.ActiveProfilesAccessor;
-import org.cucina.security.model.User;
-import org.cucina.security.repository.UserRepository;
-
-import org.junit.After;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import org.mockito.Mock;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import org.mockito.MockitoAnnotations;
+//import org.cucina.core.spring.ActiveProfilesAccessor;
 
 
 /**
@@ -30,102 +25,102 @@ import org.mockito.MockitoAnnotations;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public class UserAccessorImplTest {
-    /*    @Mock
-        private ActiveProfilesAccessor activeProfilesAccessor;
-    */
-    private User user;
-    private UserAccessorImpl accessor;
-    @Mock
-    private UserRepository userRepository;
-    private String[] activeProfiles;
+	/*    @Mock
+		private ActiveProfilesAccessor activeProfilesAccessor;
+	*/
+	private User user;
+	private UserAccessorImpl accessor;
+	@Mock
+	private UserRepository userRepository;
+	private String[] activeProfiles;
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @throws Exception JAVADOC.
-     */
-    @Before
-    public void setUp()
-        throws Exception {
-        MockitoAnnotations.initMocks(this);
-        accessor = new UserAccessorImpl();
-        //ReflectionTestUtils.setField(accessor, "activeProfilesAccessor", activeProfilesAccessor);
-        ReflectionTestUtils.setField(accessor, "userRepository", userRepository);
-        user = new User();
-        user.setUsername("User");
-    }
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @throws Exception JAVADOC.
+	 */
+	@Before
+	public void setUp()
+			throws Exception {
+		MockitoAnnotations.initMocks(this);
+		accessor = new UserAccessorImpl();
+		//ReflectionTestUtils.setField(accessor, "activeProfilesAccessor", activeProfilesAccessor);
+		ReflectionTestUtils.setField(accessor, "userRepository", userRepository);
+		user = new User();
+		user.setUsername("User");
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @After
-    public void tearDown() {
-        SecurityContext context = null;
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@After
+	public void tearDown() {
+		SecurityContext context = null;
 
-        if (null == SecurityContextHolder.getContext()) {
-            context = new SecurityContextImpl();
+		if (null == SecurityContextHolder.getContext()) {
+			context = new SecurityContextImpl();
 
-            SecurityContextHolder.setContext(context);
-        }
+			SecurityContextHolder.setContext(context);
+		}
 
-        context = SecurityContextHolder.getContext();
-        context.setAuthentication(null);
-    }
+		context = SecurityContextHolder.getContext();
+		context.setAuthentication(null);
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    public void testGetCurrentUser() {
-        SecurityContextHolder.clearContext();
-        assertNull(accessor.getCurrentUser());
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Test
+	public void testGetCurrentUser() {
+		SecurityContextHolder.clearContext();
+		assertNull(accessor.getCurrentUser());
 
-        setSecurityContext();
+		setSecurityContext();
 
-        when(userRepository.findByUsername("User")).thenReturn(user);
+		when(userRepository.findByUsername("User")).thenReturn(user);
 
-        User found = accessor.getCurrentUser();
+		User found = accessor.getCurrentUser();
 
-        assertNotNull("No user found", found);
-        assertEquals(user, found);
-        verify(userRepository).findByUsername("User");
-    }
+		assertNotNull("No user found", found);
+		assertEquals(user, found);
+		verify(userRepository).findByUsername("User");
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    public void testGetCurrentUserNoUserDao() {
-        SecurityContext context = SecurityContextHolder.getContext();
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Test
+	public void testGetCurrentUserNoUserDao() {
+		SecurityContext context = SecurityContextHolder.getContext();
 
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(new User(),
-                null, null);
+		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(new User(),
+				null, null);
 
-        context.setAuthentication(authToken);
+		context.setAuthentication(authToken);
 
-        assertNull(accessor.getCurrentUser());
-    }
+		assertNull(accessor.getCurrentUser());
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    public void testGetCurrentUserWithWeirdPrincipal() {
-        SecurityContext context = SecurityContextHolder.getContext();
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Test
+	public void testGetCurrentUserWithWeirdPrincipal() {
+		SecurityContext context = SecurityContextHolder.getContext();
 
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(new Object(),
-                null, null);
+		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(new Object(),
+				null, null);
 
-        context.setAuthentication(authToken);
+		context.setAuthentication(authToken);
 
-        assertNull(accessor.getCurrentUser());
-    }
+		assertNull(accessor.getCurrentUser());
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     */
+	/**
+	 * JAVADOC Method Level Comments
+	 */
 
     /* @Test
      public void testIsSso() {
@@ -149,12 +144,12 @@ public class UserAccessorImplTest {
 
          assertFalse(accessor.isSso());
      }*/
-    private void setSecurityContext() {
-        SecurityContext context = SecurityContextHolder.getContext();
+	private void setSecurityContext() {
+		SecurityContext context = SecurityContextHolder.getContext();
 
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user,
-                null, null);
+		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user,
+				null, null);
 
-        context.setAuthentication(authToken);
-    }
+		context.setAuthentication(authToken);
+	}
 }

@@ -1,4 +1,3 @@
-
 package org.cucina.cluster;
 
 
@@ -9,11 +8,10 @@ package org.cucina.cluster;
  * @version $Revision: $
  */
 public interface PassiveNotificationService {
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param eventName
-     *            JAVADOC.
-     */
-    void notify(String eventName);
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param eventName JAVADOC.
+	 */
+	void notify(String eventName);
 }

@@ -1,9 +1,9 @@
 package org.cucina.engine.checks;
 
+import org.junit.Test;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
 
 
 /**
@@ -13,16 +13,16 @@ import org.junit.Test;
  * @version $Revision: $
  */
 public class BooleanPropertyCheckTest {
-    /**
-     * JAVADOC Method Level Comments
-     */
-    @Test
-    public void testTest() {
-        BooleanPropertyCheck check = new BooleanPropertyCheck();
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	@Test
+	public void testTest() {
+		BooleanPropertyCheck check = new BooleanPropertyCheck();
 
-        assertFalse(check.test(null));
-        assertFalse(check.test(null));
-        check.setTrue(true);
-        assertTrue(check.test(null));
-    }
+		assertFalse(check.test(null));
+		assertFalse(check.test(null));
+		check.setTrue(true);
+		assertTrue(check.test(null));
+	}
 }

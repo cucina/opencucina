@@ -1,9 +1,8 @@
-
 package org.cucina.search.query.modifier;
 
-import java.util.Map;
-
 import org.cucina.search.query.SearchBean;
+
+import java.util.Map;
 
 
 /**
@@ -11,15 +10,14 @@ import org.cucina.search.query.SearchBean;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public interface CriteriaModifier {
-    /**
-     * modify Searchbean with context params
-     *
-     * @param searchBean SearchBean.
-     * @param params Map<String, Object>.
-     *
-     * @return SearchBean.
-     */
-    SearchBean modify(SearchBean searchBean, Map<String, Object> params);
+	/**
+	 * modify Searchbean with context params
+	 *
+	 * @param searchBean SearchBean.
+	 * @param params     Map<String, Object>.
+	 * @return SearchBean.
+	 */
+	SearchBean modify(SearchBean searchBean, Map<String, Object> params);
 }

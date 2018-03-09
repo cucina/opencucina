@@ -16,74 +16,72 @@ import org.springframework.util.Assert;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public class ApplicationNameFilter
-    implements MessageSelector, MessageHandler {
-    private static final Logger LOG = LoggerFactory.getLogger(ApplicationNameFilter.class);
-    private String applicationName;
+		implements MessageSelector, MessageHandler {
+	private static final Logger LOG = LoggerFactory.getLogger(ApplicationNameFilter.class);
+	private String applicationName;
 
-    /**
-     * Creates a new ValidatingClusterEventDelegate object.
-     *
-     * @param applicationName JAVADOC.
-     */
-    public ApplicationNameFilter(String applicationName) {
-        Assert.notNull(applicationName);
-        Assert.hasLength(applicationName);
-        this.applicationName = applicationName;
-    }
+	/**
+	 * Creates a new ValidatingClusterEventDelegate object.
+	 *
+	 * @param applicationName JAVADOC.
+	 */
+	public ApplicationNameFilter(String applicationName) {
+		Assert.notNull(applicationName);
+		Assert.hasLength(applicationName);
+		this.applicationName = applicationName;
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param message JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    @Override
-    public boolean accept(Message<?> message) {
-        Object payloadObject = message.getPayload();
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param message JAVADOC.
+	 * @return JAVADOC.
+	 */
+	@Override
+	public boolean accept(Message<?> message) {
+		Object payloadObject = message.getPayload();
 
-        if (payloadObject instanceof ClusterControlEvent) {
-            ClusterControlEvent event = (ClusterControlEvent) payloadObject;
+		if (payloadObject instanceof ClusterControlEvent) {
+			ClusterControlEvent event = (ClusterControlEvent) payloadObject;
 
-            if (StringUtils.isNotEmpty(event.getApplicationName()) &&
-                    !event.getApplicationName().equals(applicationName)) {
-                //wrong application name, return false
-                if (LOG.isInfoEnabled()) {
-                    LOG.info("Wrong application name " + event.getApplicationName() +
-                        ". Correct one is" + applicationName);
-                }
+			if (StringUtils.isNotEmpty(event.getApplicationName()) &&
+					!event.getApplicationName().equals(applicationName)) {
+				//wrong application name, return false
+				if (LOG.isInfoEnabled()) {
+					LOG.info("Wrong application name " + event.getApplicationName() +
+							". Correct one is" + applicationName);
+				}
 
-                return false;
-            }
+				return false;
+			}
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("New event received. Publishing [" + event + "]");
-            }
-        } else {
-            if (LOG.isInfoEnabled()) {
-                LOG.info("Received something other than a clustercontrolevent over cluster [" +
-                    payloadObject + "]");
-            }
-        }
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("New event received. Publishing [" + event + "]");
+			}
+		} else {
+			if (LOG.isInfoEnabled()) {
+				LOG.info("Received something other than a clustercontrolevent over cluster [" +
+						payloadObject + "]");
+			}
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param message JAVADOC.
-     *
-     * @throws MessagingException JAVADOC.
-     */
-    @Override
-    public void handleMessage(Message<?> message)
-        throws MessagingException {
-        LOG.warn("CHECK CONFIGURATION. " +
-            "Received cluster message from a different application that has been configured with the same cluster.destination jms topic. " +
-            "This is incorrect.  This message will be ignored. This application has application.name " +
-            applicationName + ". Message [" + message + "]");
-    }
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param message JAVADOC.
+	 * @throws MessagingException JAVADOC.
+	 */
+	@Override
+	public void handleMessage(Message<?> message)
+			throws MessagingException {
+		LOG.warn("CHECK CONFIGURATION. " +
+				"Received cluster message from a different application that has been configured with the same cluster.destination jms topic. " +
+				"This is incorrect.  This message will be ignored. This application has application.name " +
+				applicationName + ". Message [" + message + "]");
+	}
 }

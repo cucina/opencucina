@@ -1,26 +1,24 @@
 package org.cucina.security.client;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
 import org.cucina.security.api.DimensionDto;
 import org.cucina.security.api.PermissionDto;
 import org.cucina.security.api.UserDto;
 import org.junit.Test;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
- *
- *
  * @author vlevine
  */
 public class UserClient {
 	private static final String ACCESS_URL = "http://localhost:8080/user";
 
 	/**
-     *
-     */
+	 *
+	 */
 	@SuppressWarnings("rawtypes")
 	@Test
 	public void testCrud() throws Exception {

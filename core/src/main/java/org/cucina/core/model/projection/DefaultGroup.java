@@ -5,9 +5,9 @@ package org.cucina.core.model.projection;
  *
  * @author $Author: $
  * @version $Revision: $
- * 
- * 
- *          TODO - move to search
+ * <p>
+ * <p>
+ * TODO - move to search
  */
 public interface DefaultGroup {
 }

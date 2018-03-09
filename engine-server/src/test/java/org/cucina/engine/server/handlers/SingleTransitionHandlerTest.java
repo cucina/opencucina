@@ -1,20 +1,18 @@
 package org.cucina.engine.server.handlers;
 
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.verify;
-
-import java.io.Serializable;
-
+import org.cucina.conversation.events.CommitEvent;
+import org.cucina.conversation.events.ConversationEvent;
+import org.cucina.engine.server.event.SingleTransitionEvent;
+import org.cucina.engine.service.ProcessSupportService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import org.cucina.conversation.events.CommitEvent;
-import org.cucina.conversation.events.ConversationEvent;
-import org.cucina.engine.server.event.SingleTransitionEvent;
-import org.cucina.engine.service.ProcessSupportService;
+import java.io.Serializable;
 
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.verify;
 
 
 public class SingleTransitionHandlerTest {

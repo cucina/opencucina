@@ -7,10 +7,10 @@ package org.cucina.engine.definition;
  * @author vlevine
  */
 public class Station
-    extends AbstractState {
-    /**
-     * Creates a new instance of the {@link Station} class.
-     */
-    public Station() {
-    }
+		extends AbstractState {
+	/**
+	 * Creates a new instance of the {@link Station} class.
+	 */
+	public Station() {
+	}
 }

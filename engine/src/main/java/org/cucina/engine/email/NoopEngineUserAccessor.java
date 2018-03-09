@@ -1,4 +1,3 @@
-
 package org.cucina.engine.email;
 
 
@@ -7,16 +6,16 @@ package org.cucina.engine.email;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public class NoopEngineUserAccessor
-    implements UserAccessorBean {
-    /**
-     * Returns null {@link engineUser}.
-     *
-     * @return null.
-     */
-    @Override
-    public Object getCurrentUser() {
-        return null;
-    }
+		implements UserAccessorBean {
+	/**
+	 * Returns null {@link engineUser}.
+	 *
+	 * @return null.
+	 */
+	@Override
+	public Object getCurrentUser() {
+		return null;
+	}
 }

@@ -1,9 +1,8 @@
-
 package org.cucina.engine.email;
 
-import static org.junit.Assert.assertNull;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertNull;
 
 
 /**
@@ -11,15 +10,15 @@ import org.junit.Test;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public class NoopEngineUserAccessorTest {
-    /**
-     * Null is the word
-     */
-    @Test
-    public void returnsNull() {
-        NoopEngineUserAccessor accessor = new NoopEngineUserAccessor();
+	/**
+	 * Null is the word
+	 */
+	@Test
+	public void returnsNull() {
+		NoopEngineUserAccessor accessor = new NoopEngineUserAccessor();
 
-        assertNull("Should return null", accessor.getCurrentUser());
-    }
+		assertNull("Should return null", accessor.getCurrentUser());
+	}
 }

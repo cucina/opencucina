@@ -14,41 +14,38 @@ import org.springframework.util.Assert;
  * @version $Revision: $
  */
 public class DomainExpressionCheck
-    extends AbstractCheck {
-    private static final Logger LOG = LoggerFactory.getLogger(DomainExpressionCheck.class);
-    private String expression;
+		extends AbstractCheck {
+	private static final Logger LOG = LoggerFactory.getLogger(DomainExpressionCheck.class);
+	private String expression;
 
-    /**
-     * Set expression
-     *
-     * @param expression
-     *            String.
-     */
-    public void setExpression(String expression) {
-        this.expression = expression;
-    }
+	/**
+	 * Set expression
+	 *
+	 * @param expression String.
+	 */
+	public void setExpression(String expression) {
+		this.expression = expression;
+	}
 
-    /**
-     * Tests the condition on the domainObject
-     *
-     * @param executionContext
-     *            ExecutionContext.
-     *
-     * @return boolean true or false depending upon outcome of expression.
-     */
-    @Override
-    public boolean test(ExecutionContext executionContext) {
-        Assert.notNull(executionContext, "executionContext cannot be null");
-        Assert.notNull(expression, "expression cannot be null");
+	/**
+	 * Tests the condition on the domainObject
+	 *
+	 * @param executionContext ExecutionContext.
+	 * @return boolean true or false depending upon outcome of expression.
+	 */
+	@Override
+	public boolean test(ExecutionContext executionContext) {
+		Assert.notNull(executionContext, "executionContext cannot be null");
+		Assert.notNull(expression, "expression cannot be null");
 
-        Object result = executionContext.getExpressionExecutor()
-                                        .evaluate(executionContext.getToken().getDomainObject(),
-                expression);
+		Object result = executionContext.getExpressionExecutor()
+				.evaluate(executionContext.getToken().getDomainObject(),
+						expression);
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Result returned for expression [" + expression + "] is [" + result + "]");
-        }
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Result returned for expression [" + expression + "] is [" + result + "]");
+		}
 
-        return (result instanceof Boolean) ? ((Boolean) result).booleanValue() : false;
-    }
+		return (result instanceof Boolean) ? ((Boolean) result).booleanValue() : false;
+	}
 }

@@ -5,19 +5,15 @@ import org.cucina.engine.server.event.ValueEvent;
 
 
 /**
- * 
- *
- * @author vlevine
-  *
  * @param <T> .
+ * @author vlevine
  */
 public interface GetValueHandler<T extends GetValueEvent> {
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param event JAVADOC.
-     *
-     * @return JAVADOC.
-     */
-    ValueEvent getValue(T event);
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param event JAVADOC.
+	 * @return JAVADOC.
+	 */
+	ValueEvent getValue(T event);
 }

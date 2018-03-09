@@ -1,4 +1,3 @@
-
 package org.cucina.cluster;
 
 
@@ -9,24 +8,22 @@ package org.cucina.cluster;
  * @version $Revision: $
  */
 public interface HeartbeatService {
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param eventName
-     *            JAVADOC.
-     */
-    void start(String eventName, String nodeId);
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param eventName JAVADOC.
+	 */
+	void start(String eventName, String nodeId);
 
-    /**
-     * JAVADOC Method Level Comments
-     *
-     * @param eventName
-     *            JAVADOC.
-     */
-    void stop(String eventName);
+	/**
+	 * JAVADOC Method Level Comments
+	 *
+	 * @param eventName JAVADOC.
+	 */
+	void stop(String eventName);
 
-    /**
-     * JAVADOC Method Level Comments
-     */
-    void stopAll();
+	/**
+	 * JAVADOC Method Level Comments
+	 */
+	void stopAll();
 }

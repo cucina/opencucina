@@ -1,15 +1,15 @@
 package org.cucina.core.marshal;
 
+import org.cucina.core.testassist.Bar;
+import org.cucina.core.testassist.Foo;
+import org.junit.Before;
+import org.junit.Test;
+
 import java.util.Collection;
 import java.util.HashSet;
 
-import org.cucina.core.testassist.Bar;
-import org.cucina.core.testassist.Foo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-
-import org.junit.Before;
-import org.junit.Test;
 
 
 /**
@@ -19,96 +19,96 @@ import org.junit.Test;
  * @version $Revision: $
  */
 public class JacksonMarshallerTest {
-    private static final String MARSHALLED_FOO = "{\"id\":null,\"bars\":null,\"bazs\":null,\"date\":null,\"name\":\"Mikes\",\"value\":0,\"version\":0}";
-    private JacksonMarshaller marshaller;
+	private static final String MARSHALLED_FOO = "{\"id\":null,\"bars\":null,\"bazs\":null,\"date\":null,\"name\":\"Mikes\",\"value\":0,\"version\":0}";
+	private JacksonMarshaller marshaller;
 
-    /**
-     * Requires graph parameter to be set
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void marshallRequiresGraph() {
-        marshaller.marshall(null);
-    }
+	/**
+	 * Requires graph parameter to be set
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void marshallRequiresGraph() {
+		marshaller.marshall(null);
+	}
 
-    /**
-     * Test barfs if exception
-     */
-    @Test(expected = RuntimeException.class)
-    public void marshallingException() {
-        Collection<Marshaller> marshallers = new HashSet<Marshaller>();
+	/**
+	 * Test barfs if exception
+	 */
+	@Test(expected = RuntimeException.class)
+	public void marshallingException() {
+		Collection<Marshaller> marshallers = new HashSet<Marshaller>();
 
-        marshallers.add(new JacksonMarshaller(null, null));
+		marshallers.add(new JacksonMarshaller(null, null));
 
-        marshaller.marshall(marshallers);
-    }
+		marshaller.marshall(marshallers);
+	}
 
-    /**
-     * Test marshalls
-     *
-     * @throws Exception.
-     */
-    @Test
-    public void marshalls()
-        throws Exception {
-        Foo foo = new Foo();
+	/**
+	 * Test marshalls
+	 *
+	 * @throws Exception.
+	 */
+	@Test
+	public void marshalls()
+			throws Exception {
+		Foo foo = new Foo();
 
-        foo.setName("Mikes");
+		foo.setName("Mikes");
 
-        String result = marshaller.marshall(foo);
+		String result = marshaller.marshall(foo);
 
-        assertNotNull("Should have converted to String", result);
-        assertEquals("Should have converted to String", MARSHALLED_FOO, result);
-    }
+		assertNotNull("Should have converted to String", result);
+		assertEquals("Should have converted to String", MARSHALLED_FOO, result);
+	}
 
-    /**
-     * Set up test
-     */
-    @Before
-    public void setup()
-        throws Exception {
-        marshaller = new JacksonMarshaller(null, null);
-        marshaller.afterPropertiesSet();
-    }
+	/**
+	 * Set up test
+	 */
+	@Before
+	public void setup()
+			throws Exception {
+		marshaller = new JacksonMarshaller(null, null);
+		marshaller.afterPropertiesSet();
+	}
 
-    /**
-     * Test unmarshalls foo correctly
-     */
-    @Test
-    public void unmarshall()
-        throws Exception {
-        marshaller = new JacksonMarshaller(null, null);
-        marshaller.afterPropertiesSet();
+	/**
+	 * Test unmarshalls foo correctly
+	 */
+	@Test
+	public void unmarshall()
+			throws Exception {
+		marshaller = new JacksonMarshaller(null, null);
+		marshaller.afterPropertiesSet();
 
-        Foo foo = marshaller.unmarshall(MARSHALLED_FOO, Foo.class);
+		Foo foo = marshaller.unmarshall(MARSHALLED_FOO, Foo.class);
 
-        assertNotNull("Should have unmarshalled Projection", foo);
-        assertEquals("Incorrect name", "Mikes", foo.getName());
-    }
+		assertNotNull("Should have unmarshalled Projection", foo);
+		assertEquals("Incorrect name", "Mikes", foo.getName());
+	}
 
-    /**
-     * Test unmarshall with Exception
-     *
-     * @throws Exception.
-     */
-    @Test(expected = RuntimeException.class)
-    public void unmarshallException()
-        throws Exception {
-        marshaller.unmarshall(MARSHALLED_FOO, Bar.class);
-    }
+	/**
+	 * Test unmarshall with Exception
+	 *
+	 * @throws Exception.
+	 */
+	@Test(expected = RuntimeException.class)
+	public void unmarshallException()
+			throws Exception {
+		marshaller.unmarshall(MARSHALLED_FOO, Bar.class);
+	}
 
-    /**
-     * Unmarshall requires targetClass parameter
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void unmarshallRequiresClass() {
-        marshaller.unmarshall(MARSHALLED_FOO, (Class<?>) null);
-    }
+	/**
+	 * Unmarshall requires targetClass parameter
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void unmarshallRequiresClass() {
+		marshaller.unmarshall(MARSHALLED_FOO, (Class<?>) null);
+	}
 
-    /**
-     * Unmarshall requires source parameter to be set
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void unmarshallRequiresSource() {
-        marshaller.unmarshall(null, Foo.class);
-    }
+	/**
+	 * Unmarshall requires source parameter to be set
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void unmarshallRequiresSource() {
+		marshaller.unmarshall(null, Foo.class);
+	}
 }

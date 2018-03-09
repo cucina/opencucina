@@ -9,85 +9,82 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @author vlevine
  */
 public abstract class AbstractProcessElement
-    implements ProcessElement {
-    /**
-     * Stores the {@link ProcessDefinition} for this <code>ProcessElement</code>
-     * .
-     */
-    private ProcessDefinition processDefinition;
+		implements ProcessElement {
+	/**
+	 * Stores the {@link ProcessDefinition} for this <code>ProcessElement</code>
+	 * .
+	 */
+	private ProcessDefinition processDefinition;
 
-    /**
-     * Stores the description for this <code>ProcessElement</code>.
-     */
-    private String description;
+	/**
+	 * Stores the description for this <code>ProcessElement</code>.
+	 */
+	private String description;
 
-    /**
-     * Stores the ID for this <code>ProcessElement</code>.
-     */
-    private String id;
+	/**
+	 * Stores the ID for this <code>ProcessElement</code>.
+	 */
+	private String id;
 
-    /**
-     * Sets the description for this <code>ProcessElement</code>.
-     */
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	/**
+	 * Gets the description for this <code>ProcessElement</code>.
+	 */
+	@Override
+	public String getDescription() {
+		return description;
+	}
 
-    /**
-     * Gets the description for this <code>ProcessElement</code>.
-     */
-    @Override
-    public String getDescription() {
-        return description;
-    }
+	/**
+	 * Sets the description for this <code>ProcessElement</code>.
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    /**
-     * Sets the ID for this <code>ProcessElement</code>.
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
+	/**
+	 * Gets the ID for this <code>ProcessElement</code>.
+	 */
+	@Override
+	public String getId() {
+		return id;
+	}
 
-    /**
-     * Gets the ID for this <code>ProcessElement</code>.
-     */
-    @Override
-    public String getId() {
-        return id;
-    }
+	/**
+	 * Sets the ID for this <code>ProcessElement</code>.
+	 */
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    /**
-     * Sets the {@link ProcessDefinition} that contains this
-     * <code>ProcessElement</code>.
-     */
-    @Override
-    public void setProcessDefinition(ProcessDefinition processDefinition) {
-        this.processDefinition = processDefinition;
-    }
+	/**
+	 * Gets the {@link ProcessDefinition} that contains this
+	 * <code>ProcessElement</code>.
+	 */
+	@Override
+	public ProcessDefinition getProcessDefinition() {
+		return processDefinition;
+	}
 
-    /**
-     * Gets the {@link ProcessDefinition} that contains this
-     * <code>ProcessElement</code>.
-     */
-    @Override
-    public ProcessDefinition getProcessDefinition() {
-        return processDefinition;
-    }
+	/**
+	 * Sets the {@link ProcessDefinition} that contains this
+	 * <code>ProcessElement</code>.
+	 */
+	@Override
+	public void setProcessDefinition(ProcessDefinition processDefinition) {
+		this.processDefinition = processDefinition;
+	}
 
-    /**
-     *
-     * @return String
-     */
-    public String toLongString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
+	/**
+	 * @return String
+	 */
+	public String toLongString() {
+		return ToStringBuilder.reflectionToString(this);
+	}
 
-    /**
-     *
-     *
-     * @return JAVADOC.
-     */
-    public String toString() {
-        return new ToStringBuilder(this).append("Id", getId()).toString();
-    }
+	/**
+	 * @return JAVADOC.
+	 */
+	public String toString() {
+		return new ToStringBuilder(this).append("Id", getId()).toString();
+	}
 }

@@ -9,17 +9,15 @@ import org.cucina.engine.definition.Operation;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public class OperationDescriptor
-    extends AbstractElementDescriptor
-    implements Operation {
-    /**
-     *
-     *
-     * @param executionContext .
-     */
-    @Override
-    public void execute(ExecutionContext executionContext) {
-        throw new IllegalArgumentException("Not implemented in OperationDescriptor");
-    }
+		extends AbstractElementDescriptor
+		implements Operation {
+	/**
+	 * @param executionContext .
+	 */
+	@Override
+	public void execute(ExecutionContext executionContext) {
+		throw new IllegalArgumentException("Not implemented in OperationDescriptor");
+	}
 }

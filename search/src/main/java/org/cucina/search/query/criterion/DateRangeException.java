@@ -1,4 +1,3 @@
-
 package org.cucina.search.query.criterion;
 
 
@@ -7,20 +6,20 @@ package org.cucina.search.query.criterion;
  *
  * @author $Author: $
  * @version $Revision: $
-  */
+ */
 public class DateRangeException
-    extends RuntimeException {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+		extends RuntimeException {
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Creates a new DateRangeException object.
-     *
-     * @param message JAVADOC.
-     */
-    public DateRangeException(String message) {
-        super(message);
-    }
+	/**
+	 * Creates a new DateRangeException object.
+	 *
+	 * @param message JAVADOC.
+	 */
+	public DateRangeException(String message) {
+		super(message);
+	}
 }

@@ -5,24 +5,17 @@ import java.util.Map;
 
 
 /**
- * 
- *
  * @author vlevine
-  */
+ */
 public interface ClientService {
-    /**
-     *
-     *
-     * @return .
-     */
-    Item create();
+	/**
+	 * @return .
+	 */
+	Item create();
 
-    /**
-     *
-     *
-     * @param processName .
-     *
-     * @return .
-     */
-    Collection<Map<String, String>> loadTransitionInfo(String processName);
+	/**
+	 * @param processName .
+	 * @return .
+	 */
+	Collection<Map<String, String>> loadTransitionInfo(String processName);
 }
